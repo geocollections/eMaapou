@@ -1,28 +1,8 @@
-<template>
-  <v-autocomplete
-    v-bind="$attrs"
-    hide-details
-    hide-no-data
-    :clearable="clearable"
-    :no-filter="apiSearch"
-    :search-input.sync="search"
-    :loading="isLoading"
-    :items="internalItems"
-    :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
-    :return-object="returnObject"
-    :chips="multiSelect"
-    :deletable-chips="multiSelect"
-    :multiple="multiSelect"
-    :small-chips="multiSelect"
-    v-on="$listeners"
-  >
-  </v-autocomplete>
-</template>
-
 <script>
-import debounce from 'lodash/debounce'
+import debounce from "lodash/debounce";
+
 export default {
-  name: 'InputAutocomplete',
+  name: "InputAutocomplete",
   props: {
     items: {
       type: Array,
@@ -50,38 +30,64 @@ export default {
       search: null,
       isLoading: false,
       internalItems: [],
-    }
+    };
   },
   watch: {
     items(value) {
-      this.isLoading = false
-      this.internalItems = value
+      this.isLoading = false;
+      this.internalItems = value;
     },
     search(newVal, oldVal) {
-      this.handleSearch(newVal, oldVal)
+      this.handleSearch(newVal, oldVal);
     },
   },
   created() {
     if (this.multiSelect && this.$attrs.value)
-      this.internalItems = this.$attrs.value
-    else if (this.$attrs.value) this.internalItems.push(this.$attrs.value)
+      this.internalItems = this.$attrs.value;
+    else if (this.$attrs.value)
+      this.internalItems.push(this.$attrs.value);
   },
   methods: {
     handleSearch: debounce(function (newVal, oldVal) {
-      if (!this.apiSearch) return
-      if (!newVal) return
-      if (newVal.length < 3) return
-      if (newVal === oldVal) return
+      if (!this.apiSearch)
+        return;
+      if (!newVal)
+        return;
+      if (newVal.length < 3)
+        return;
+      if (newVal === oldVal)
+        return;
 
-      const currentValue =
-        this.$attrs.value && this.$attrs.value[this.$attrs['item-text']]
-      if (newVal === currentValue) return
-      this.isLoading = true
-      this.$emit('search:items', newVal)
+      const currentValue
+        = this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]];
+      if (newVal === currentValue)
+        return;
+      this.isLoading = true;
+      this.$emit("search:items", newVal);
     }, 300),
   },
-}
+};
 </script>
+
+<template>
+  <VAutocomplete
+    v-bind="$attrs"
+    v-model:search-input="search"
+    hide-details
+    hide-no-data
+    :clearable="clearable"
+    :no-filter="apiSearch"
+    :loading="isLoading"
+    :items="internalItems"
+    :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
+    :return-object="returnObject"
+    :chips="multiSelect"
+    :closable-chips="multiSelect"
+    :multiple="multiSelect"
+    :small-chips="multiSelect"
+    v-on="$listeners"
+  />
+</template>
 
 <style scoped>
 .whitespace-nowrap {

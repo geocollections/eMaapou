@@ -1,24 +1,13 @@
-<template>
-  <input-autocomplete
-    v-bind="$attrs"
-    :items="items"
-    :label="label"
-    :item-text="itemText"
-    api-search
-    @search:items="handleItemsSearch"
-    v-on="$listeners"
-  />
-</template>
-
 <script>
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
+import InputAutocomplete from "~/components/input/InputAutocomplete.vue";
+
 export default {
-  name: 'InputAutocompleteStratigraphy',
+  name: "InputAutocompleteStratigraphy",
   components: { InputAutocomplete },
   props: {
     label: {
       type: String,
-      default: 'Stratigraphy',
+      default: "Stratigraphy",
     },
     chrono: {
       type: Boolean,
@@ -32,38 +21,52 @@ export default {
   data() {
     return {
       items: [],
-    }
+    };
   },
   computed: {
     itemText() {
-      return this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'
+      return this.$i18n.locale === "et" ? "stratigraphy" : "stratigraphy_en";
     },
   },
   methods: {
     async handleItemsSearch(value) {
-      let query =
-        this.$i18n.locale === 'et'
+      let query
+        = this.$i18n.locale === "et"
           ? `stratigraphy:(*${value}*)`
-          : `stratigraphy_en:(*${value}*)`
-      if (this.chrono) query += ' AND type:1'
-      if (this.litho) query += ' AND type:2'
+          : `stratigraphy_en:(*${value}*)`;
+      if (this.chrono)
+        query += " AND type:1";
+      if (this.litho)
+        query += " AND type:2";
 
-      const autocompleteResponse =
-        await this.$services.sarvSolr.getResourceList('stratigraphy', {
+      const autocompleteResponse
+        = await this.$services.sarvSolr.getResourceList("stratigraphy", {
           search: query,
           defaultParams: {
-            fl: 'id,stratigraphy,stratigraphy_en,hierarchy_string',
+            fl: "id,stratigraphy,stratigraphy_en,hierarchy_string",
           },
           options: {
             page: 1,
             itemsPerPage: 25,
           },
-        })
-      this.items = autocompleteResponse.items
+        });
+      this.items = autocompleteResponse.items;
     },
   },
-}
+};
 </script>
+
+<template>
+  <InputAutocomplete
+    v-bind="$attrs"
+    :items="items"
+    :label="label"
+    :item-text="itemText"
+    api-search
+    @search:items="handleItemsSearch"
+    v-on="$listeners"
+  />
+</template>
 
 <style scoped>
 .whitespace-nowrap {

@@ -1,17 +1,17 @@
 export default (search: string | null): string | null => {
   return (
     search
-      ?.split(' ')
+      ?.split(" ")
       .map((s) => {
         if (
-          !s.startsWith('-') &&
-          s.includes('-') &&
-          !s.startsWith('"') &&
-          !s.endsWith('"')
+          !s.startsWith("-")
+          && s.includes("-")
+          && !s.startsWith("\"")
+          && !s.endsWith("\"")
         )
-          return `"${s}"`
-        return s
+          return `"${s}"`;
+        return s;
       })
-      .join(' ') ?? null
-  )
-}
+      .join(" ") ?? null
+  );
+};

@@ -1,63 +1,46 @@
-<template>
-  <div>
-    <data-table-specimen
-      :show-search="false"
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+const props = defineProps({
+  query: {
+    type: String,
+    required: true,
+  },
+});
 
-<script>
-import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
-import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
+const {
+  options,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+  solrSort,
+} = useDataTable({
+  initOptions: SPECIMEN.options,
+  initHeaders: HEADERS_SPECIMEN,
+});
 
-export default {
-  components: { DataTableSpecimen },
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {
-      options: SPECIMEN.options,
-      items: [],
-      count: 0,
-    }
-  },
-  async fetch() {
-    const analysisResponse = await this.$services.sarvSolr.getResourceList(
-      'specimen',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
-        searchFilters: {},
-      }
-    )
-    this.items = analysisResponse.items
-    this.count = analysisResponse.count
-  },
-  watch: {
-    '$route.query': function (newQuery, oldQuery) {
-      if (
-        !this._inactive &&
-        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
-      ) {
-        this.$fetch()
-      }
-    },
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useSolrFetch<SolrResponse>("/specimen", {
+  query: computed(() => ({
+    q: props.query,
+    rows: options.value.itemsPerPage,
+    start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: solrSort.value,
+  })),
+});
+
+const specimenImageFunction = useSpecimenImageFunction();
 </script>
+
+<template>
+  <DataTableSpecimen
+    :show-search="false"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    :image-func="specimenImageFunction"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

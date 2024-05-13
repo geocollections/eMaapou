@@ -1,146 +1,161 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels accordion flat tile multiple>
-        <filter-input-text
-          v-model="name"
-          :title="$t('filters.name').toString()"
-        />
-        <filter-input-autocomplete-new
-          v-model="county"
-          :title="$t('filters.county').toString()"
-          static
-          :query-field="$i18n.locale == 'et' ? 'maakond' : 'maakond_en'"
-          :query-function="querySuggestionsCounty"
-        />
-        <filter-input-autocomplete-new
-          v-model="type"
-          :title="$t('filters.areaType').toString()"
-          static
-          :query-field="$i18n.locale == 'et' ? 'area_type' : 'area_type_en'"
-          :query-function="querySuggestionsType"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
+<script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
+import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  reactive,
-  ref,
-  toRef,
-  toRefs,
-  useContext,
-  useFetch,
-} from '@nuxtjs/composition-api'
-import SearchActions from '../SearchActions.vue'
-import InputSearch from '~/components/input/InputSearch.vue'
-import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
-import { useFilter } from '~/composables/useFilter'
-import {
-  useHydrateFilterNew,
-  useHydrateStatic,
-} from '~/composables/useHydrateFilter'
-import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
-import { useQuerySuggestionsStatic } from '~/composables/useQuerySuggestions'
-export default defineComponent({
-  name: 'SearchFormArea',
-  components: {
-    SearchActions,
-    InputSearch,
-    FilterInputText,
-    FilterInputAutocompleteNew,
+const emit = defineEmits(["update", "reset", "submit"]);
+
+const areasStore = useAreas();
+const { filters, query, solrQuery, solrFilters } = storeToRefs(areasStore);
+const filterCounty = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterType = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiningPermit = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiningPermitOwner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+function handleReset() {
+  emit("reset");
+}
+function handleUpdate() {
+  nextTick(() => {
+    filterCounty.value?.refreshSuggestions();
+    filterType.value?.refreshSuggestions();
+    filterMiner.value?.refreshSuggestions();
+    filterMiningPermit.value?.refreshSuggestions();
+    filterMiningPermitOwner.value?.refreshSuggestions();
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    filterCounty.value?.refreshSuggestions();
+    filterType.value?.refreshSuggestions();
+    filterMiner.value?.refreshSuggestions();
+    filterMiningPermit.value?.refreshSuggestions();
+    filterMiningPermitOwner.value?.refreshSuggestions();
+    emit("submit");
+  });
+}
+
+const { suggest: suggestCounty, hydrate: hydrateCounty } = useAutocomplete(
+  "/area",
+  {
+    idField: "maakond_id_s",
+    nameField: { et: "maakond", en: "maakond_en" },
+    filterExclude: "county",
+    solrParams: { query: solrQuery, filter: solrFilters },
   },
-  setup(_props, { emit }) {
-    const { $accessor } = useContext()
-    const emitUpdate = ref(true)
-    const handleReset = () => {
-      emit('reset')
-    }
-    const handleUpdate = () => {
-      if (!emitUpdate.value) return
-      emit('update')
-    }
-    const filters = computed(() => $accessor.search.area.filters)
-    const query = computed({
-      get: () => $accessor.search.area.query,
-      set: (val) => {
-        $accessor.search.area.setQuery(val)
-      },
-    })
-    const name = useFilter('area', 'name', handleUpdate)
-    const type = useFilter('area', 'type', handleUpdate)
-    const county = useFilter('area', 'county', handleUpdate)
-    const state = reactive({
-      countySuggestions: [] as any[],
-      typeSuggestions: [] as any[],
-    })
-    useWatchSearchQueryParams(() => fetch())
+);
 
-    const { fetch } = useFetch(async () => {
-      emitUpdate.value = false
-      await Promise.all([
-        hydrateFilter(
-          county,
-          toRef(filters.value, 'county'),
-          'county',
-          hydrateCounty
-        ),
-        hydrateFilter(type, toRef(filters.value, 'type'), 'type', hydrateType),
-      ])
-      emitUpdate.value = true
-    })
-
-    const hydrateFilter = useHydrateFilterNew()
-    const hydrateStatic = useHydrateStatic()
-    const hydrateCounty = hydrateStatic(filters.value.county, query, {
-      pivot: ['maakond_id', 'maakond', 'maakond_en'],
-      countResourceRelatedIdKey: 'maakond_id',
-      countResource: 'area',
-      countHierarchical: false,
-      filters,
-      tagFilterKey: 'county',
-    })
-    const hydrateType = hydrateStatic(filters.value.type, query, {
-      pivot: ['area_type_id', 'area_type', 'area_type_en'],
-      countResourceRelatedIdKey: 'area_type_id',
-      countResource: 'area',
-      countHierarchical: false,
-      filters,
-      tagFilterKey: 'type',
-    })
-    const querySuggestionsStatic = useQuerySuggestionsStatic()
-    const querySuggestionsCounty = querySuggestionsStatic(query, {
-      resource: 'area',
-      excludeFilterKey: 'county',
-      pivot: ['maakond_id', 'maakond', 'maakond_en'],
-      limit: 20,
-      filters,
-    })
-    const querySuggestionsType = querySuggestionsStatic(query, {
-      resource: 'area',
-      excludeFilterKey: 'type',
-      pivot: ['area_type_id', 'area_type', 'area_type_en'],
-      limit: 20,
-      filters,
-    })
-    return {
-      ...toRefs(state),
-      querySuggestionsCounty,
-      querySuggestionsType,
-      query,
-      name,
-      county,
-      type,
-      handleReset,
-      handleUpdate,
-    }
+const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
+  "/area",
+  {
+    idField: "area_type_id_s",
+    nameField: { et: "area_type", en: "area_type_en" },
+    filterExclude: "type",
+    solrParams: { query: solrQuery, filter: solrFilters },
   },
-})
+);
+
+const { suggest: suggestMiner, hydrate: hydrateMiner } = useAutocomplete(
+  "/area",
+  {
+    idField: "kaevandaja",
+    nameField: "kaevandaja",
+    filterExclude: "miner",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+
+const { suggest: suggestMiningPermit, hydrate: hydrateMiningPermit } = useAutocomplete(
+  "/area",
+  {
+    idField: "loa_number",
+    nameField: "loa_number",
+    filterExclude: "miningPermit",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+
+const { suggest: suggestMiningPermitOwner, hydrate: hydrateMiningPermitOwner } = useAutocomplete(
+  "/area",
+  {
+    idField: "loa_omanik",
+    nameField: "loa_omanik",
+    filterExclude: "miningPermitOwner",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
 </script>
+
+<template>
+  <VForm class="pb-10" @submit.prevent="handleSubmit">
+    <SearchFormInput v-model="query" />
+    <SearchActions class="mb-3" @click="handleReset" />
+    <VDivider class="mx-2" />
+    <VExpansionPanels
+      variant="accordion"
+      class="px-2"
+      multiple
+    >
+      <FilterInputText
+        v-model="filters.name.value"
+        :title="$t('filters.name')"
+        value="name"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterCounty"
+        v-model="filters.county.value"
+        :title="$t('filters.county')"
+        :query-function="suggestCounty"
+        :hydration-function="hydrateCounty"
+        value="county"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterType"
+        v-model="filters.type.value"
+        :title="$t('filters.type')"
+        :query-function="suggestType"
+        :hydration-function="hydrateType"
+        value="type"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputRange
+        v-model="filters.size.value"
+        :title="$t('filters.size')"
+        value="size"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterMiningPermit"
+        v-model="filters.miningPermit.value"
+        :title="$t('filters.miningPermit')"
+        :query-function="suggestMiningPermit"
+        :hydration-function="hydrateMiningPermit"
+        value="miningPermit"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterMiningPermitOwner"
+        v-model="filters.miningPermitOwner.value"
+        :title="$t('filters.miningPermitOwner')"
+        :query-function="suggestMiningPermitOwner"
+        :hydration-function="hydrateMiningPermitOwner"
+        value="miningPermitOwner"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterMiner"
+        v-model="filters.miner.value"
+        :title="$t('filters.miner')"
+        :query-function="suggestMiner"
+        :hydration-function="hydrateMiner"
+        value="miner"
+        @update:model-value="handleUpdate"
+      />
+    </VExpansionPanels>
+    <VDivider class="mx-2" />
+  </VForm>
+</template>

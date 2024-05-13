@@ -1,0 +1,14 @@
+<svg id="visual" viewBox="0 0 900 600" width="900" height="600" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <rect x="0" y="0" width="900" height="590" fill="#75757599"></rect>
+  <path
+    d="M0 482L129 435L257 499L386 451L514 448L643 461L771 445L900 451L900 590L771 590L643 590L514 590L386 590L257 590L129 590L0 590Z"
+    fill="#33333399"></path>
+  <path
+    d="M0 512L129 523L257 476L386 481L514 482L643 469L771 476L900 510L900 590L771 590L643 590L514 590L386 590L257 590L129 590L0 590Z"
+    fill="#333333b3"></path>
+  <path
+    d="M0 505L129 519L257 553L386 526L514 531L643 536L771 550L900 542L900 601L771 601L643 601L514 601L386 601L257 601L129 601L0 601Z"
+    fill="#ffffff"></path>
+  <rect x="0" y="590" width="900" height="590" fill="#ffffff"></rect>
+</svg>

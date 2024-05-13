@@ -1,50 +1,44 @@
+<script setup lang="ts">
+import { mdiChevronDown, mdiWeb } from "@mdi/js";
+
+defineProps({
+  color: {
+    type: String,
+    default: "white",
+  },
+});
+</script>
+
 <template>
-  <v-btn
+  <VBtn
     id="lang_switch_btn"
     aria-label="select language"
-    text
+    variant="text"
     class="montserrat text-capitalize"
     :color="color"
   >
-    <v-icon left color="accent lighten-2">{{ icons.mdiWeb }}</v-icon>
+    <VIcon
+      :icon="mdiWeb"
+      start
+      color="accent"
+    />
     {{ $i18n.localeProperties.name }}
-    <v-icon right color="accent lighten-2">{{ icons.mdiChevronDown }}</v-icon>
-    <v-menu
+    <VIcon
+      :icon="mdiChevronDown"
+      end
+      color="accent"
+    />
+    <VMenu
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"
       transition="slide-y-transition"
       offset-y
-      bottom
-      right
+      location="bottom right"
     >
-      <language-list />
-    </v-menu>
-  </v-btn>
+      <LanguageList />
+    </VMenu>
+  </VBtn>
 </template>
-
-<script lang="ts">
-import { mdiWeb, mdiChevronDown } from '@mdi/js'
-import Vue from 'vue'
-import LanguageList from '~/components/language/LanguageList.vue'
-export default Vue.extend({
-  name: 'LanguageSwitcher',
-  components: { LanguageList },
-  props: {
-    color: {
-      type: String,
-      default: 'white',
-    },
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiWeb,
-        mdiChevronDown,
-      }
-    },
-  },
-})
-</script>
 
 <style scoped lang="scss">
 .lang-icon {
@@ -64,14 +58,6 @@ export default Vue.extend({
 }
 
 .flag:before {
-  content: '\A0';
-}
-
-.flag-et {
-  background-image: url('~assets/et.svg');
-}
-
-.flag-en {
-  background-image: url('~assets/en.svg');
+  content: "\A0";
 }
 </style>

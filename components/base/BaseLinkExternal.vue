@@ -1,34 +1,27 @@
+<script setup lang="ts">
+import { mdiArrowTopRight } from "@mdi/js";
+import type { RouteLocationRaw } from "vue-router";
+
+defineProps<{
+  href?: RouteLocationRaw;
+  target?: string;
+}>();
+</script>
+
 <template>
-  <a :href="href" :target="target" class="text-link">
-    <slot> </slot>
+  <NuxtLink
+    :to="href"
+    :target="target"
+    class="text-link"
+  >
+    <slot />
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
-        <v-icon class="open-new-icon" x-small>{{ icons.mdiOpenInNew }}</v-icon>
+        <VIcon class="open-new-icon" size="x-small">{{ mdiArrowTopRight }}</VIcon>
       </slot>
     </span>
-  </a>
+  </NuxtLink>
 </template>
-
-<script>
-import { mdiOpenInNew } from '@mdi/js'
-export default {
-  name: 'BaseLinkExternal',
-  props: {
-    href: {
-      type: String,
-      default: null,
-    },
-    target: { type: String, default: '_blank' },
-  },
-  computed: {
-    icons() {
-      return {
-        mdiOpenInNew,
-      }
-    },
-  },
-}
-</script>
 
 <style scoped>
 .open-new-icon {

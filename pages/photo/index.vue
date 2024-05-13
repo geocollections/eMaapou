@@ -1,230 +1,223 @@
+<script setup lang="ts">
+import { mdiFileImageOutline } from "@mdi/js";
+
+const views = computed(() => ["table", "image", "gallery"]);
+
+const photosStore = usePhotos();
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+} = photosStore;
+const {
+  solrSort,
+  solrQuery,
+  solrFilters,
+  options,
+  headers,
+  searchPosition,
+  resultsCount,
+  currentView,
+} = storeToRefs(photosStore);
+
+const route = useRoute();
+
+setStateFromQueryParams(route);
+
+const {
+  data,
+  pending,
+  refresh: refreshPhotos,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/attachment", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+      sort: solrSort.value ?? "id_sl desc",
+    },
+  })),
+  watch: false,
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshPhotos();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
+}
+
+watch(currentView, () => {
+  setQueryParamsFromState();
+});
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshPhotos();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  // TODO: reset filters
+  setQueryParamsFromState();
+  await refreshPhotos();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshPhotos();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+function handleClickRow(index: number) {
+  searchPosition.value
+    = index + getOffset(options.value.page, options.value.itemsPerPage);
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/attachment", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_PHOTO,
+  })),
+});
+
+useHead({
+  title: t("photo.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('photo.pageTitle').toString()"
-        :count="$accessor.search.image.count"
-        :icon="icons.mdiFileImageOutline"
+      <HeaderSearch
+        :title="$t('photo.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiFileImageOutline"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-photo
-        :markers="mapMarkers"
+      <SearchFormPhoto
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
+        "
         @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+          handleUpdate();
         "
         @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
+          handleReset();
         "
       />
     </template>
 
-    <template #result>
-      <v-tabs
+    <ClientOnly>
+      <VTabs
         v-model="currentView"
-        background-color="transparent"
+        bg-color="white"
         color="accent"
+        density="compact"
       >
-        <v-tab
-          v-for="view in views"
-          :key="view"
+        <!-- <VTab -->
+        <!--   v-for="view in views" -->
+        <!--   :key="view" -->
+        <!--   selected-class="active-tab" -->
+        <!--   class="montserrat text-capitalize" -->
+        <!-- > -->
+        <!--   {{ $t(`common.${view}`) }} -->
+        <!-- </VTab> -->
+        <VTab
+          :value="0"
           active-class="active-tab"
           class="montserrat text-capitalize"
         >
-          {{ $t(`common.${view}`) }}
-        </v-tab>
-      </v-tabs>
-      <v-card class="mt-0">
-        <v-tabs-items v-model="currentView">
-          <v-tab-item :value="0">
-            <data-table-photo
-              flat
-              :show-search="false"
-              :items="$accessor.search.image.items"
-              :count="$accessor.search.image.count"
-              :options="$accessor.search.image.options"
-              dynamic-headers
-              stateful-headers
-              :is-loading="$fetchState.pending"
-              @update="handleDataTableUpdate"
-            />
-          </v-tab-item>
-          <v-tab-item :value="1">
-            <image-view
-              :items="$accessor.search.image.items"
-              :count="$accessor.search.image.count"
-              :options="$accessor.search.image.options"
-              @update="handleDataTableUpdate"
-            />
-          </v-tab-item>
-          <v-tab-item :value="2">
-            <gallery-view
-              :items="$accessor.search.image.items"
-              :count="$accessor.search.image.count"
-              :options="$accessor.search.image.options"
-              @update="handleDataTableUpdate"
-            />
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
-    </template>
-  </search>
+          {{ $t(`common.table`) }}
+        </VTab>
+        <VTab
+          :value="1"
+          active-class="active-tab"
+          class="montserrat text-capitalize"
+        >
+          {{ $t(`common.image`) }}
+        </VTab>
+        <VTab
+          :value="2"
+          active-class="active-tab"
+          class="montserrat text-capitalize"
+        >
+          {{ $t(`common.gallery`) }}
+        </VTab>
+      </VTabs>
+      <VWindow v-model="currentView" :touch="false">
+        <VWindowItem :value="0">
+          <DataTablePhoto
+            class="border-t border-b"
+            flat
+            :show-search="false"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :headers="headers"
+            :options="options"
+            :is-loading="pending"
+            :export-func="exportData"
+            @update="handleDataTableUpdate"
+            @change:headers="handleHeadersChange"
+            @reset:headers="handleHeadersReset(options)"
+            @click:row="handleClickRow"
+          />
+        </VWindowItem>
+        <VWindowItem :value="1">
+          <ImageView
+            class="border-t border-b"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :options="options"
+            @update="handleDataTableUpdate"
+          />
+        </VWindowItem>
+        <VWindowItem :value="2">
+          <GalleryView
+            class="border-t border-b"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :options="options"
+            @update="handleDataTableUpdate"
+          />
+        </VWindowItem>
+      </VWindow>
+    </ClientOnly>
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-  useContext,
-  useMeta,
-  useRoute,
-  // ref,
-} from '@nuxtjs/composition-api'
-import { mdiFileImageOutline } from '@mdi/js'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import Search from '~/templates/Search.vue'
-import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto.vue'
-import DataTablePhoto from '~/components/data-table/DataTablePhoto.vue'
-import ImageView from '~/components/ImageView.vue'
-import GalleryView from '~/components/GalleryView.vue'
-import { HEADERS_PHOTO } from '~/constants'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-import { FilterType, LookupType } from '~/types/enums'
-import { Filter } from '~/types/filters'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-
-export default defineComponent({
-  components: {
-    GalleryView,
-    ImageView,
-    DataTablePhoto,
-    SearchFormPhoto,
-    Search,
-    HeaderSearch,
-  },
-  setup() {
-    const { $accessor, $translate, i18n } = useContext()
-    const route = useRoute()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('attachment', {
-        options: $accessor.search.image.options,
-        search: $accessor.search.image.query,
-        fields: getAPIFieldValues(HEADERS_PHOTO),
-        searchFilters: {
-          ...$accessor.search.image.filters,
-          ...$accessor.search.globalFilters,
-          specimenImageAttachment: {
-            value: '2',
-            type: FilterType.Text,
-            lookUpType: LookupType.Equals,
-            fields: ['specimen_image_attachment'],
-          } as Filter,
-        },
-      })
-      $accessor.search.image.SET_MODULE_ITEMS({ items: response.items })
-      $accessor.search.image.SET_MODULE_COUNT({ count: response.count })
-    })
-
-    const filters = computed(() => $accessor.search.image.filters)
-    const globalFilters = computed(() => $accessor.search.globalFilters)
-    const views = computed(() => ['table', 'image', 'gallery'])
-
-    const currentView = computed({
-      get: () => $accessor.search.image.currentView,
-      set: (val) => $accessor.search.image.setView(val),
-    })
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'image',
-        qParamKey: 'photoQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-    const icons = computed(() => ({ mdiFileImageOutline }))
-    const mapMarkers = computed(() => {
-      if ($accessor.search.image.items?.length > 0) {
-        return $accessor.search.image.items.reduce(
-          (filtered: any[], item: any) => {
-            if (
-              (item.latitude && item.longitude) ||
-              (item.image_latitude && item.image_latitude)
-            ) {
-              const newItem = {
-                latitude: item.image_latitude ?? item.latitude,
-                longitude: item.image_longitude ?? item.longitude,
-                text:
-                  ($translate({
-                    et: item.locality,
-                    en: item.locality_en,
-                  }) ||
-                    item.image_object) ??
-                  `ID: ${item.id}`,
-                routeName: item.locality_id ? 'locality' : 'photo',
-                id: item.locality_id ?? item.id,
-              }
-
-              const isItemInArray = !!filtered.find(
-                (existingItem) =>
-                  existingItem.latitude === newItem.latitude &&
-                  existingItem.longitude === newItem.longitude
-              )
-              if (!isItemInArray) filtered.push(newItem)
-            }
-            return filtered
-          },
-          []
-        )
-      }
-      return []
-    })
-
-    useMeta(() => ({
-      title: i18n.t('photo.pageTitle').toString(),
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: i18n.t('photo.pageTitle').toString(),
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: route.value.path,
-        },
-      ],
-    }))
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-      views,
-      currentView,
-      icons,
-      mapMarkers,
-    }
-  },
-  head: {},
-})
-</script>
 
 <style scoped lang="scss">
 .active-tab {
   // font-weight: bold;
-  color: var(--v-accent-darken1) !important;
+  color: var(--v-theme-accent-darken-1) !important;
+
   &::before {
     opacity: 0.2 !important;
-    background-color: var(--v-accent-base) !important;
+    background-color: var(--v-theme-accent) !important;
 
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;

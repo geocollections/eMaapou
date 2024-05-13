@@ -1,6 +1,15 @@
+<script setup lang="ts">
+import { mdiCheck } from "@mdi/js";
+import type { LocaleObject } from "@nuxtjs/i18n";
+
+const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
+
+const switchLocalePath = useSwitchLocalePath();
+</script>
+
 <template>
-  <v-list class="py-1 px-2">
-    <v-list-item
+  <VList class="py-1 px-2">
+    <VListItem
       v-for="(locale, i) in availableLocales"
       :key="i"
       nuxt
@@ -8,36 +17,18 @@
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       :to="switchLocalePath(locale.code)"
     >
-      <v-list-item-title class="d-flex py-1">
-        <v-icon
+      <VListItemTitle class="d-flex py-1">
+        <VIcon
           v-show="$i18n.locale === locale.code"
-          class="mr-2"
+          :icon="mdiCheck"
+          start
           color="accent"
-        >
-          {{ icons.mdiCheck }}
-        </v-icon>
+        />
         <span class="align-self-center montserrat">{{ locale.name }}</span>
-      </v-list-item-title>
-    </v-list-item>
-  </v-list>
+      </VListItemTitle>
+    </VListItem>
+  </VList>
 </template>
-
-<script>
-import { mdiCheck } from '@mdi/js'
-export default {
-  name: 'LanguageList',
-  computed: {
-    availableLocales() {
-      return this.$i18n.locales
-    },
-    icons() {
-      return {
-        mdiCheck,
-      }
-    },
-  },
-}
-</script>
 
 <style scoped>
 .lang-icon {
@@ -57,14 +48,6 @@ export default {
 }
 
 .flag:before {
-  content: '\A0';
-}
-
-.flag-et {
-  background-image: url('~/assets/et.svg');
-}
-
-.flag-en {
-  background-image: url('~/assets/en.svg');
+  content: "\A0";
 }
 </style>

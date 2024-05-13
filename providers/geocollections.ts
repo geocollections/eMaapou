@@ -1,18 +1,20 @@
-import { joinURL } from 'ufo'
+import { joinURL } from "ufo";
+
 // import {} from '~image'
-import { ProviderGetImage } from '@nuxt/image'
+import type { ProviderGetImage } from "@nuxt/image";
+
 export const getImage: ProviderGetImage = (
   src: string,
   { modifiers, baseURL } = {},
-  _ctx
+  _ctx,
 ) => {
   if (modifiers) {
-    const { size } = modifiers
+    const { size } = modifiers;
     return {
-      url: joinURL(baseURL, size, src),
-    }
+      url: joinURL(baseURL as string, size as string, src),
+    };
   }
   return {
-    url: joinURL(baseURL, src),
-  }
-}
+    url: joinURL(baseURL as string, src),
+  };
+};

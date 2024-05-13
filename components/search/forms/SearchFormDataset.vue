@@ -1,111 +1,187 @@
+<script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
+import FilterInputAutocomplete, { type Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
+
+const emit = defineEmits(["update", "reset", "submit"]);
+
+const filterAnalysedParameter = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const datasetsStore = useDatasets();
+const { filters, query, solrQuery, solrFilters } = storeToRefs(datasetsStore);
+
+function handleReset() {
+  emit("reset");
+}
+function handleUpdate() {
+  nextTick(() => {
+    filterAnalysedParameter.value?.refreshSuggestions();
+    filterInstitution.value?.refreshSuggestions();
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    filterAnalysedParameter.value?.refreshSuggestions();
+    filterInstitution.value?.refreshSuggestions();
+    emit("update");
+  });
+}
+
+const { suggest: suggestInstitution, hydrate: hydrateInstitution }
+  = useAutocomplete("/dataset", {
+    idField: "database_id_s",
+    nameField: "database_acronym",
+    filterExclude: "institution",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+
+const { $solrFetch } = useNuxtApp();
+async function suggestParameter({
+  query,
+  pagination,
+  values,
+}: {
+  query: string;
+  pagination: { page: number; perPage: number };
+  values: string[];
+}): Promise<Suggestion[]> {
+  const pivot = `{!ex=analysedParameter}parameter_index_list`;
+  const filters
+    = query.length > 0
+      ? [...(solrFilters.value ?? []), `parameter_list:*${query}*`]
+      : solrFilters.value ?? [];
+
+  const res = await $solrFetch<any>("/dataset", {
+    query: {
+      "facet": "true",
+      "facet.pivot": pivot,
+      [`f.parameter_index_list.facet.excludeTerms`]: values.join(","),
+      "facet.limit": pagination.perPage,
+      "facet.sort": "count",
+      [`f.parameter_index_list.facet.offset`]:
+        (pagination.page - 1) * pagination.perPage,
+      "json": {
+        query: solrQuery?.value,
+        filter: filters,
+        limit: 0,
+      },
+    },
+  });
+  const ids = res.facet_counts.facet_pivot.parameter_index_list.map(
+    (item: any) => item.value,
+  );
+
+  const nameRes = await $solrFetch<any>("/analysis_parameter", {
+    query: {
+      json: {
+        query: "*",
+        filter: [`parameter_index:(${ids.join(" OR ")})`],
+        limit: ids.length,
+      },
+    },
+  });
+
+  return res.facet_counts.facet_pivot.parameter_index_list.map((item: any) => ({
+    id: item.value,
+    name:
+      nameRes.response.docs.find((doc: any) => doc.parameter_index === item.value)
+        ?.parameter ?? item.value,
+    count: item.count,
+  }));
+}
+async function hydrateParameter(values: string[]) {
+  const facets = values.reduce((prev: { [K: string]: any }, id) => {
+    prev[id] = {
+      type: "query",
+      q: `parameter_index_list:${id}`,
+    };
+    return prev;
+  }, {});
+
+  const res = await $solrFetch<any>("/dataset", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery?.value,
+        filter: solrFilters?.value,
+        facet: {
+          ...facets,
+        },
+      },
+    },
+  });
+  const nameRes = await $solrFetch<any>("/analysis_parameter", {
+    query: {
+      json: {
+        query: "*",
+        filter: [`parameter_index:(${values.join(" OR ")})`],
+        limit: values.length,
+      },
+    },
+  });
+
+  return values.map(id => ({
+    id,
+    name:
+      nameRes.response.docs.find((doc: any) => doc.parameter_index === id)
+        ?.parameter ?? id,
+    count: res.facets[id].count,
+  }));
+}
+</script>
+
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels accordion flat tile multiple>
-        <filter-input-text
-          v-model="name"
-          :title="$t('filters.datasetName').toString()"
+    <VForm class="pb-10" @submit.prevent="handleSubmit">
+      <SearchFormInput v-model="query" />
+      <SearchActions class="mb-3" @click="handleReset" />
+      <VDivider class="mx-2" />
+      <VExpansionPanels
+        variant="accordion"
+        class="px-2"
+        multiple
+      >
+        <FilterInputText
+          v-model="filters.name.value"
+          :title="$t('filters.datasetName')"
+          value="name"
+          @update:model-value="handleUpdate"
         />
-        <filter-analysis-parameter v-model="analysisParameter" />
-        <filter-input-text
-          v-model="owner"
-          :title="$t('filters.owner').toString()"
+        <FilterInputAutocomplete
+          ref="filterAnalysedParameter"
+          v-model="filters.analysedParameter.value"
+          :show-filter="false"
+          :title="$t('filters.analysisParameter')"
+          :query-function="suggestParameter"
+          :hydration-function="hydrateParameter"
+          value="analysisParameter"
+          @update:model-value="handleUpdate"
         />
-
-        <filter-input-text
-          v-model="date"
-          :title="$t('filters.date').toString()"
+        <FilterInputText
+          v-model="filters.owner.value"
+          :title="$t('filters.owner')"
+          value="owner"
+          @update:model-value="handleUpdate"
         />
-        <filter-institution v-model="institution" />
-      </v-expansion-panels>
-    </v-form>
+        <FilterInputText
+          v-model="filters.date.value"
+          :title="$t('filters.date')"
+          value="date"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterInstitution"
+          v-model="filters.institution.value"
+          :title="$t('filters.institution')"
+          :query-function="suggestInstitution"
+          :hydration-function="hydrateInstitution"
+          value="institution"
+          @update:model-value="handleUpdate"
+        />
+      </VExpansionPanels>
+      <VDivider class="mx-2" />
+    </VForm>
   </div>
 </template>
-
-<script lang="ts">
-import isEmpty from 'lodash/isEmpty'
-
-import {
-  computed,
-  defineComponent,
-  ref,
-  useContext,
-  useFetch,
-} from '@nuxtjs/composition-api'
-import SearchActions from '../SearchActions.vue'
-import InputSearch from '~/components/input/InputSearch.vue'
-import FilterAnalysisParameter from '~/components/filter/FilterAnalysisParameter.vue'
-import FilterInstitution from '~/components/filter/FilterInstitution.vue'
-import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import { useHydrateFilterAnalysisParameter } from '~/composables/useHydrateFilter'
-import { useFilter } from '~/composables/useFilter'
-import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
-export default defineComponent({
-  name: 'SearchFormDataset',
-  components: {
-    SearchActions,
-    InputSearch,
-    FilterAnalysisParameter,
-    FilterInstitution,
-    FilterInputText,
-  },
-  setup(_props, { emit }) {
-    const { $accessor } = useContext()
-    const emitUpdate = ref(true)
-    const handleReset = () => {
-      emit('reset')
-    }
-    const handleUpdate = () => {
-      if (!emitUpdate.value) return
-      emit('update')
-    }
-    const query = computed({
-      get: () => $accessor.search.dataset.query,
-      set: (val) => {
-        $accessor.search.dataset.setQuery(val)
-      },
-    })
-    const name = useFilter('dataset', 'name', handleUpdate)
-    const date = useFilter('dataset', 'date', handleUpdate)
-    const owner = useFilter('dataset', 'owner', handleUpdate)
-    const analysisParameter = useFilter(
-      'dataset',
-      'analysisParameter',
-      handleUpdate
-    )
-    const institution = computed({
-      get: () => $accessor.search.globalFilters.institutions.value,
-      set: (val) => {
-        $accessor.search.setInstitutionsFilter(val)
-        handleUpdate()
-      },
-    })
-    const hydrateFilterAnalysisParameter = useHydrateFilterAnalysisParameter()
-
-    useWatchSearchQueryParams(() => fetch())
-
-    const { fetch } = useFetch(async () => {
-      emitUpdate.value = false
-      await hydrateFilterAnalysisParameter(
-        analysisParameter,
-        'analysisParameter'
-      )
-      emitUpdate.value = true
-    })
-
-    return {
-      query,
-      analysisParameter,
-      institution,
-      date,
-      owner,
-      name,
-      isEmpty,
-      handleReset,
-      handleUpdate,
-    }
-  },
-})
-</script>

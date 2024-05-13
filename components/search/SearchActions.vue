@@ -1,24 +1,12 @@
+<script setup lang="ts">
+defineEmits(["click"]);
+</script>
+
 <template>
-  <v-card
-    flat
-    tile
-    color="transparent"
+  <div
     class="mt-2 mr-2 d-flex justify-end align-center"
   >
-    <search-reset-button @click="$emit('click')" />
-    <search-button />
-  </v-card>
+    <SearchResetButton @click="$emit('click')" />
+    <SearchButton />
+  </div>
 </template>
-
-<script>
-import SearchResetButton from '~/components/search/SearchResetButton.vue'
-import SearchButton from '~/components/search/SearchButton.vue'
-
-export default {
-  name: 'SearchActions',
-  components: {
-    SearchResetButton,
-    SearchButton,
-  },
-}
-</script>

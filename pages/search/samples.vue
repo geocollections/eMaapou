@@ -1,63 +1,45 @@
-<template>
-  <div>
-    <data-table-sample
-      :show-search="false"
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+const props = defineProps({
+  query: {
+    type: String,
+    required: true,
+  },
+});
 
-<script>
-import DataTableSample from '~/components/data-table/DataTableSample.vue'
-import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
+const {
+  options,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+  solrSort,
+} = useDataTable({
+  initOptions: SAMPLE.options,
+  initHeaders: HEADERS_SAMPLE,
+});
 
-export default {
-  components: { DataTableSample },
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {
-      options: SAMPLE.options,
-      items: [],
-      count: 0,
-    }
-  },
-  async fetch() {
-    const sampleResponse = await this.$services.sarvSolr.getResourceList(
-      'sample',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
-        searchFilters: {},
-      }
-    )
-    this.items = sampleResponse.items
-    this.count = sampleResponse.count
-  },
-  watch: {
-    '$route.query': function (newQuery, oldQuery) {
-      if (
-        !this._inactive &&
-        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
-      ) {
-        this.$fetch()
-      }
-    },
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useSolrFetch<SolrResponse>("/sample", {
+  query: computed(() => ({
+    q: props.query,
+    rows: options.value.itemsPerPage,
+    start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: solrSort.value,
+  })),
+});
+const sampleImageFunction = useSampleImageFunction();
 </script>
+
+<template>
+  <DataTableSample
+    :show-search="false"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    :image-func="sampleImageFunction"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

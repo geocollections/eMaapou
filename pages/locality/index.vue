@@ -1,124 +1,149 @@
+<script setup lang="ts">
+import type { LocationQueryRaw } from "vue-router";
+import { mdiMapMarker } from "@mdi/js";
+
+const { $translate } = useNuxtApp();
+
+const localitiesStore = useLocalities();
+const { resetFilters, resetDataTable } = localitiesStore;
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+} = localitiesStore;
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(localitiesStore);
+
+const route = useRoute();
+
+setStateFromQueryParams(route);
+
+const {
+  data,
+  pending,
+  refresh: refreshLocalities,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/locality", {
+  query: computed(() => ({
+    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort:
+        solrSort.value
+        ?? $translate({ et: "locality asc", en: "locality_en asc" }),
+    },
+  })),
+  watch: false,
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshLocalities();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() as LocationQueryRaw });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshLocalities();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshLocalities();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({
+  options: newOptions,
+}: {
+  options: DataTableOptions;
+}) {
+  options.value = newOptions;
+
+  setQueryParamsFromState();
+  await refreshLocalities();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "locality-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+    "locality",
+  );
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/locality", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_LOCALITY,
+  })),
+});
+
+useHead({
+  title: t("locality.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('locality.pageTitle').toString()"
-        :count="$accessor.search.locality.count"
-        :icon="icons.mdiMapMarker"
+      <HeaderSearch
+        :title="$t('locality.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiMapMarker"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-locality
-        @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+      <SearchFormLocality
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
         "
-        @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 
-    <template #result>
-      <v-card>
-        <data-table-locality
-          :show-search="false"
-          :items="$accessor.search.locality.items"
-          :count="$accessor.search.locality.count"
-          :options="$accessor.search.locality.options"
-          dynamic-headers
-          :is-loading="$fetchState.pending"
-          stateful-headers
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
-    </template>
-  </search>
+    <DataTableLocality
+      class="border-t border-t"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-} from '@nuxtjs/composition-api'
-import { mdiMapMarker } from '@mdi/js'
-import SearchFormLocality from '~/components/search/forms/SearchFormLocality.vue'
-import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_LOCALITY } from '~/constants'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-import { useAccessor } from '~/composables/useAccessor'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    Search,
-    DataTableLocality,
-    SearchFormLocality,
-    HeaderSearch,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('locality', {
-        options: accessor.search.locality.options,
-        search: accessor.search.locality.query,
-        fields: getAPIFieldValues(HEADERS_LOCALITY),
-        searchFilters: {
-          ...accessor.search.locality.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-      accessor.search.locality.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.locality.SET_MODULE_COUNT({ count: response.count })
-    })
-    const filters = computed(() => accessor.search.locality.filters)
-
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'locality',
-        qParamKey: 'localityQ',
-        filters,
-        fetch,
-      })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('locality.pageTitle') as string,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('locality.pageTitle') as string,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiMapMarker,
-      }
-    },
-  },
-})
-</script>

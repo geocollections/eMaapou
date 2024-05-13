@@ -1,234 +1,198 @@
+<script setup lang="ts">
+import {
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiPageFirst,
+  mdiPageLast,
+} from "@mdi/js";
+
+const props = withDefaults(defineProps<{
+  options: DataTableOptions;
+  pageCount?: number;
+  itemsPerPageOptions?: number[];
+  itemsPerPageText?: string;
+  pageSelectText?: string;
+  goToText?: string;
+  goToButtonText?: string;
+  selectPageId?: string;
+}>(), {
+  pageCount: 0,
+  itemsPerPageText: "Items per page",
+  pageSelectText: `Page 0 / 0`,
+  goToText: "Go to page",
+  goToButtonText: "Go",
+  selectPageId: "page-select-btn",
+  itemsPerPageOptions: () => [],
+});
+
+const emit = defineEmits<{
+  "update:options": [options: DataTableOptions];
+}>();
+
+const goToValue = ref(Number.NaN);
+
+const goToField = ref();
+
+function selectPage() {
+  if (!goToField.value.validate(true))
+    return;
+
+  emit("update:options", {
+    ...props.options,
+    page: goToValue.value,
+  });
+  goToValue.value = Number.NaN;
+}
+
+function first() {
+  emit("update:options", {
+    ...props.options,
+    page: 1,
+  });
+}
+function next() {
+  emit("update:options", {
+    ...props.options,
+    page: props.options.page + 1,
+  });
+}
+
+function previous() {
+  emit("update:options", {
+    ...props.options,
+    page: props.options.page - 1,
+  });
+}
+
+function last() {
+  emit("update:options", {
+    ...props.options,
+    page: props.pageCount,
+  });
+}
+
+function changeRowsPerPage(e: number) {
+  emit("update:options", {
+    ...props.options,
+    itemsPerPage: e,
+    page: 1,
+  });
+}
+
+function pageLimitRule(value: number) {
+  if (Number.isNaN(value))
+    return false;
+  if (value < 1)
+    return false;
+  if (value > props.pageCount)
+    return false;
+  return true;
+}
+</script>
+
 <template>
-  <div class="d-inline-flex justify-end mr-2 mr-sm-3">
-    <div class="d-inline-flex align-center mr-2 mr-sm-3" style="flex: 0 0 0">
-      <div
-        v-show="$vuetify.breakpoint.smAndUp"
-        class="mr-3 text-no-wrap text-caption"
-      >
-        {{ itemsPerPageText }}
-      </div>
-      <v-select
-        class="mt-0 text-caption"
-        style="max-width: 100px"
-        dense
+  <div class="d-inline-flex align-center mr-2 mr-sm-3">
+    <div class="">
+      <VSelect
+        density="compact"
         hide-details
+        variant="outlined"
+        style="min-width: 50px"
         :items="itemsPerPageOptions"
-        :value="options.itemsPerPage"
-        :menu-props="{ bottom: true, offsetY: true, zIndex: 4 }"
-        @change="changeRowsPerPage"
+        :model-value="options.itemsPerPage"
+        :menu-props="{ location: 'bottom', zIndex: 4 }"
+        @update:model-value="changeRowsPerPage"
       />
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
-      <v-btn :disabled="options.page === 1" icon @click="first">
-        <v-icon>{{ icons.mdiPageFirst }}</v-icon>
-      </v-btn>
-      <v-btn :disabled="options.page === 1" icon @click="previous">
-        <v-icon>{{ icons.mdiChevronLeft }}</v-icon>
-      </v-btn>
+      <VBtn
+        :disabled="options.page === 1"
+        variant="text"
+        :icon="mdiPageFirst"
+        @click="first"
+      />
+      <VBtn
+        :disabled="options.page === 1"
+        variant="text"
+        :icon="mdiChevronLeft"
+        @click="previous"
+      />
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
-      <v-menu offset-y :close-on-content-click="false" z-index="4">
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            small
-            text
+      <VMenu
+        location="bottom"
+        :offset="10"
+        :close-on-content-click="false"
+        z-index="4"
+      >
+        <template #activator="{ props: activator }">
+          <VBtn
+            v-bind="activator"
+            variant="text"
             class="text-no-wrap text-caption"
-            v-on="on"
           >
             {{ pageSelectText }}
-          </v-btn>
+          </VBtn>
         </template>
-        <v-card class="px-2 py-2 d-flex align-center">
-          <div class="mr-2 text-no-wrap text-caption">{{ goToText }}</div>
-          <v-text-field
-            ref="go-to-field"
+        <VCard class="px-2 py-2 d-flex align-center">
+          <div class="mr-2 text-no-wrap text-caption">
+            {{ goToText }}
+          </div>
+          <VTextField
+            ref="goToField"
+            v-model.number="goToValue"
             class="mt-0 text-caption"
             style="width: 64px"
-            dense
+            density="compact"
+            variant="underlined"
             hide-details
-            :value="goToValue"
             type="number"
             :rules="[pageLimitRule]"
             @keyup.enter="selectPage"
-            @input="setGoToValue"
-          >
-          </v-text-field>
-          <v-btn
+          />
+          <VBtn
             :disabled="!pageLimitRule(goToValue)"
             class="px-2 ml-2"
-            small
-            text
+            size="small"
+            variant="text"
             @click="selectPage"
           >
             {{ goToButtonText }}
-            <v-icon small>{{ icons.mdiChevronRight }}</v-icon>
-          </v-btn>
-        </v-card>
-      </v-menu>
-      <v-btn
-        :disabled="options.page === pagination.pageCount"
-        icon
+            <VIcon size="small">
+              {{ mdiChevronRight }}
+            </VIcon>
+          </VBtn>
+        </VCard>
+      </VMenu>
+      <VBtn
+        :disabled="options.page === pageCount"
+        :icon="mdiChevronRight"
+        variant="text"
         @click="next"
-      >
-        <v-icon>{{ icons.mdiChevronRight }}</v-icon>
-      </v-btn>
-      <v-btn
-        :disabled="options.page === pagination.pageCount"
-        icon
+      />
+      <VBtn
+        :disabled="options.page === pageCount"
+        variant="text"
+        :icon="mdiPageLast"
         @click="last"
       >
-        <v-icon>{{ icons.mdiPageLast }}</v-icon>
-      </v-btn>
+        <VIcon>{{ mdiPageLast }}</VIcon>
+      </VBtn>
     </div>
   </div>
 </template>
-<script>
-import {
-  mdiPageFirst,
-  mdiPageLast,
-  mdiChevronRight,
-  mdiChevronLeft,
-} from '@mdi/js'
-export default {
-  name: 'BaseDataTablePagination',
-  props: {
-    options: {
-      type: Object,
-      default: () => {
-        return {
-          page: 0,
-          itemsPerPage: 0,
-          sortBy: [],
-          sortDesc: [],
-          groupBy: [],
-          groupDesc: [],
-          multiSort: false,
-          mustSort: false,
-        }
-      },
-    },
-    pagination: {
-      type: Object,
-      default: () => {
-        return {
-          itemsLength: 0,
-          itemsPerPage: 0,
-          page: 1,
-          pageCount: 1,
-          pageStart: 0,
-          pageStop: 0,
-        }
-      },
-    },
-    itemsPerPageOptions: {
-      type: Array,
-      default: () => [],
-    },
-    itemsPerPageText: {
-      type: String,
-      default: 'Items per page',
-    },
-    pageSelectText: {
-      type: String,
-      default: `Page 0 / 0`,
-    },
-    goToText: {
-      type: String,
-      default: 'Go to page',
-    },
-    goToButtonText: {
-      type: String,
-      default: 'Go',
-    },
-    selectPageId: {
-      type: String,
-      default: 'page-select-btn',
-    },
-  },
-  data() {
-    return {
-      goToValue: NaN,
-    }
-  },
-  computed: {
-    pages() {
-      return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    },
-    icons() {
-      return {
-        mdiPageFirst,
-        mdiPageLast,
-        mdiChevronLeft,
-        mdiChevronRight,
-      }
-    },
-  },
-  methods: {
-    setGoToValue(e) {
-      if (isNaN(e)) this.goToValue = e
-      else this.goToValue = parseInt(e)
-    },
-    selectPage() {
-      if (this.$refs['go-to-field'].validate(true)) {
-        this.$emit('update:options', {
-          ...this.options,
-          page: this.goToValue,
-        })
-        this.goToValue = NaN
-      }
-    },
-    next() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: this.options.page + 1,
-      })
-    },
-    previous() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: this.options.page - 1,
-      })
-    },
-    first() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: 1,
-      })
-    },
-    last() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: this.pagination.pageCount,
-      })
-    },
-    changeRowsPerPage(e) {
-      this.$emit('update:options', {
-        ...this.options,
-        itemsPerPage: e,
-        page: 1,
-      })
-    },
-    pageLimitRule(value) {
-      if (isNaN(value)) return false
-      if (parseInt(value) < 1) return false
-      if (parseInt(value) > this.pagination.pageCount) return false
-      return true
-    },
-  },
-}
-</script>
 
 <style lang="scss" scoped>
 // Removes arrows from number input
 /* Chrome, Safari, Edge, Opera */
-::v-deep input::-webkit-outer-spin-button,
-::v-deep input::-webkit-inner-spin-button {
+:deep(input::-webkit-outer-spin-button),
+:deep(input::-webkit-inner-spin-button) {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-::v-deep input[type='number'] {
+:deep(input[type="number"]) {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 </style>

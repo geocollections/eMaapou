@@ -1,63 +1,43 @@
-<template>
-  <div>
-    <data-table-preparation
-      :show-search="false"
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+const props = defineProps({
+  query: {
+    type: String,
+    required: true,
+  },
+});
 
-<script>
-import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
-import { HEADERS_PREPARATION, PREPARATION } from '~/constants'
+const {
+  options,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+  solrSort,
+} = useDataTable({
+  initOptions: PREPARATION.options,
+  initHeaders: HEADERS_PREPARATION,
+});
 
-export default {
-  components: { DataTablePreparation },
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {
-      options: PREPARATION.options,
-      items: [],
-      count: 0,
-    }
-  },
-  async fetch() {
-    const preparationResponse = await this.$services.sarvSolr.getResourceList(
-      'preparation',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_PREPARATION),
-        searchFilters: {},
-      }
-    )
-    this.items = preparationResponse.items
-    this.count = preparationResponse.count
-  },
-  watch: {
-    '$route.query': function (newQuery, oldQuery) {
-      if (
-        !this._inactive &&
-        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
-      ) {
-        this.$fetch()
-      }
-    },
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useSolrFetch<SolrResponse>("/preparation", {
+  query: computed(() => ({
+    q: props.query,
+    rows: options.value.itemsPerPage,
+    start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: solrSort.value,
+  })),
+});
 </script>
+
+<template>
+  <DataTablePreparation
+    :show-search="false"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

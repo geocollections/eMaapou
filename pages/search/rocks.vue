@@ -1,63 +1,43 @@
-<template>
-  <div>
-    <data-table-rock
-      :show-search="false"
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+const props = defineProps({
+  query: {
+    type: String,
+    required: true,
+  },
+});
 
-<script>
-import { HEADERS_ROCK, ROCK } from '~/constants'
-import DataTableRock from '~/components/data-table/DataTableRock.vue'
+const {
+  options,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+  solrSort,
+} = useDataTable({
+  initOptions: ROCK.options,
+  initHeaders: HEADERS_ROCK,
+});
 
-export default {
-  components: { DataTableRock },
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {
-      options: ROCK.options,
-      items: [],
-      count: 0,
-    }
-  },
-  async fetch() {
-    const analysisResponse = await this.$services.sarvSolr.getResourceList(
-      'rock',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_ROCK),
-        searchFilters: {},
-      }
-    )
-    this.items = analysisResponse.items
-    this.count = analysisResponse.count
-  },
-  watch: {
-    '$route.query': function (newQuery, oldQuery) {
-      if (
-        !this._inactive &&
-        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
-      ) {
-        this.$fetch()
-      }
-    },
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useSolrFetch<SolrResponse>("/rock", {
+  query: computed(() => ({
+    q: props.query,
+    rows: options.value.itemsPerPage,
+    start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: solrSort.value,
+  })),
+});
 </script>
+
+<template>
+  <DataTableRock
+    :show-search="false"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,7 +1,96 @@
+<script setup lang="ts">
+import { mdiFileDownloadOutline } from "@mdi/js";
+import { useDisplay } from "vuetify";
+
+const props = defineProps({
+  items: {
+    type: Array as PropType<any[]>,
+    default: () => [],
+  },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Object as PropType<DataTableOptions>,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
+  },
+});
+
+const emit = defineEmits(["update"]);
+const { t } = useI18n();
+const localePath = useLocalePath();
+const img = useImage();
+
+const activeIndex = ref(0);
+const imageSizes = ref(["small", "medium", "large", "original"]);
+const footerProps = {
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+};
+
+const display = useDisplay();
+
+const carouselHeight = computed(() => {
+  if (display.xs.value)
+    return "35vh";
+  else if (display.sm.value)
+    return "40vh";
+  else return "600px";
+});
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+watch(
+  () => props.items,
+  () => {
+    activeIndex.value = 0;
+  },
+);
+
+onBeforeMount(() => {
+  window.addEventListener("keyup", handleKeyup);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keyup", handleKeyup);
+});
+
+function handleThumbnailClick(newIndex: number) {
+  activeIndex.value = newIndex;
+}
+
+function handleKeyup(e: any) {
+  if (props.items?.length > 0) {
+    if (e.keyCode === 37) {
+      // ArrowLeft
+      if (activeIndex.value === 0)
+        activeIndex.value = props.items.length - 1;
+      else activeIndex.value -= 1;
+    }
+    else if (e.keyCode === 39) {
+      // ArrowRight
+      if (activeIndex.value === props.items.length - 1)
+        activeIndex.value = 0;
+      else activeIndex.value += 1;
+    }
+  }
+}
+
+function updateOptions(event: DataTableOptions) {
+  emit("update", { options: event });
+}
+</script>
+
 <template>
-  <v-card v-if="items && items.length > 0" flat>
+  <VCard v-if="items && items.length > 0" flat>
     <div class="d-flex justify-end">
-      <base-data-table-pagination
+      <BaseDataTablePagination
         :options="options"
         :pagination="pagination"
         :items-per-page-options="footerProps['items-per-page-options']"
@@ -19,55 +108,60 @@
       />
     </div>
 
-    <v-card flat>
+    <VCard flat>
       <div class="px-4">
-        <v-card-text v-if="items && items.length > 1" class="px-0 pt-0">
+        <VCardText v-if="items && items.length > 1" class="px-0 pt-0">
           <div class="d-flex align-center" style="overflow-x: auto">
-            <div v-for="(item, index) in items" :key="index" class="my-2 mx-2">
-              <v-hover v-slot="{ hover }">
-                <v-img
+            <div
+              v-for="(item, index) in items"
+              :key="index"
+              class="my-2 mx-2"
+            >
+              <VHover v-slot="{ isHovering, props: hoverProps }">
+                <VImg
+                  v-bind="hoverProps"
                   :src="
-                    $img(
+                    img(
                       `${item.uuid_filename}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
                   :lazy-src="
-                    $img(
+                    img(
                       `${item.uuid_filename}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
-                  max-width="100"
-                  min-width="72"
+                  width="100"
+                  cover
                   aspect-ratio="1"
                   :class="{
-                    'elevation-4': hover,
-                    'elevation-2': !hover,
+                    'elevation-4': isHovering,
+                    'elevation-2': !isHovering,
                     'active-thumbnail': activeIndex === index,
                   }"
                   class="rounded transition-swing cursor-pointer"
                   @click="handleThumbnailClick(index)"
                 >
                   <template #placeholder>
-                    <v-row
+                    <VRow
                       class="fill-height ma-0"
                       align="center"
                       justify="center"
                     >
-                      <v-progress-circular
+                      <VProgressCircular
                         indeterminate
-                        color="grey lighten-5"
-                      ></v-progress-circular>
-                    </v-row>
+                        color="grey-lighten-5"
+                      />
+                    </VRow>
                   </template>
-                </v-img>
-              </v-hover>
+                </VImg>
+              </VHover>
             </div>
           </div>
-          <v-carousel
+          <VCarousel
             v-model="activeIndex"
             style="max-width: 1000px"
             :height="carouselHeight"
@@ -75,20 +169,20 @@
             hide-delimiter-background
             class="mt-2 rounded mx-auto gallery__v-carousel"
           >
-            <v-carousel-item
+            <VCarouselItem
               v-for="(item, index) in items"
               :key="index"
               nuxt
               :to="localePath({ name: 'file-id', params: { id: item.id } })"
               :src="
-                $img(
+                img(
                   `${item.uuid_filename}`,
                   { size: 'medium' },
-                  { provider: 'geocollections' }
+                  { provider: 'geocollections' },
                 )
               "
             />
-          </v-carousel>
+          </VCarousel>
 
           <div
             class="d-flex justify-center flex-column justify-sm-space-between flex-sm-row"
@@ -100,20 +194,19 @@
                   items[activeIndex].agent || items[activeIndex].author_free
                 "
               >
-                <b>{{ $t('photo.author') }}: </b
-                >{{
+                <b>{{ $t("photo.author") }}: </b>{{
                   items[activeIndex].agent || items[activeIndex].author_free
                 }}
               </div>
               <div
                 v-if="
-                  items[activeIndex].date_created ||
-                  items[activeIndex].date_created_free
+                  items[activeIndex].date_created
+                    || items[activeIndex].date_created_free
                 "
               >
-                <b>{{ $t('photo.date') }}: </b>
+                <b>{{ $t("photo.date") }}: </b>
                 <span v-if="items[activeIndex].date_created">{{
-                  items[activeIndex].date_created.split('T')[0]
+                  items[activeIndex].date_created.split("T")[0]
                 }}</span>
                 <span v-else>{{ items[activeIndex].date_created_free }}</span>
               </div>
@@ -126,112 +219,23 @@
                   @click="$openImage(items[activeIndex].uuid_filename, size)"
                 >
                   {{ $t(`common.${size}`) }}
-                  <v-icon
+                  <VIcon
                     v-if="size === 'original'"
-                    small
-                    color="primary darken-2"
+                    size="small"
+                    color="primary-darken-2"
                   >
-                    {{ icons.mdiFileDownloadOutline }}
-                  </v-icon>
+                    {{ mdiFileDownloadOutline }}
+                  </VIcon>
                 </a>
                 <span v-if="index < imageSizes.length - 1">| </span>
               </span>
             </div>
           </div>
-        </v-card-text>
+        </VCardText>
       </div>
-    </v-card>
-  </v-card>
+    </VCard>
+  </VCard>
 </template>
-
-<script>
-import { mdiFileDownloadOutline } from '@mdi/js'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-
-export default {
-  name: 'GalleryView',
-  components: { BaseDataTablePagination },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-      }),
-    },
-  },
-  data() {
-    return {
-      activeIndex: 0,
-      imageSizes: ['small', 'medium', 'large', 'original'],
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
-    }
-  },
-  computed: {
-    carouselHeight() {
-      if (this.$vuetify.breakpoint.xsOnly) return '35vh'
-      else if (this.$vuetify.breakpoint.smOnly) return '40vh'
-      else return '600px'
-    },
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
-    },
-    icons() {
-      return {
-        mdiFileDownloadOutline,
-      }
-    },
-  },
-  watch: {
-    items() {
-      this.activeIndex = 0
-    },
-  },
-  created() {
-    this.$emit('update', { options: { ...this.options } })
-  },
-  beforeMount() {
-    window.addEventListener('keyup', this.handleKeyup)
-  },
-  beforeDestroy() {
-    window.removeEventListener('keyup', this.handleKeyup)
-  },
-  methods: {
-    handleThumbnailClick(newIndex) {
-      this.activeIndex = newIndex
-    },
-
-    handleKeyup(e) {
-      if (this.items?.length > 0) {
-        if (e.keyCode === 37) {
-          // ArrowLeft
-          if (this.activeIndex === 0) this.activeIndex = this.items.length - 1
-          else this.activeIndex -= 1
-        } else if (e.keyCode === 39) {
-          // ArrowRight
-          if (this.activeIndex === this.items.length - 1) this.activeIndex = 0
-          else this.activeIndex += 1
-        }
-      }
-    },
-    updateOptions(event) {
-      this.$emit('update', { options: event })
-    },
-  },
-}
-</script>
 
 <style scoped lang="scss">
 .active-thumbnail {
@@ -239,8 +243,10 @@ export default {
   /*box-shadow: 0 2px 4px -1px rgba(1, 87, 155, 0.8),*/
   /*  0 4px 5px 0 rgba(1, 87, 155, 0.56), 0 1px 10px 0 rgba(1, 87, 155, 0.44) !important;*/
 
-  box-shadow: 0 2px 4px -1px rgba(48, 145, 181, 0.8),
-    0 2px 5px 0 rgba(48, 145, 181, 0.56), 0 1px 5px 0 rgba(48, 145, 181, 0.44) !important;
+  box-shadow:
+    0 2px 4px -1px rgba(48, 145, 181, 0.8),
+    0 2px 5px 0 rgba(48, 145, 181, 0.56),
+    0 1px 5px 0 rgba(48, 145, 181, 0.44) !important;
 
   /* elevation-2 */
   /*box-shadow: 0 3px 1px -2px rgba(62, 163, 202, 0.4),*/
@@ -248,7 +254,7 @@ export default {
 }
 
 /* Overriding default 'cover' setting in order to correctly show portrait images */
-.gallery__v-carousel >>> .v-carousel__item > .v-image__image--cover {
+.gallery__v-carousel :deep(.v-carousel__item) :deep(.v-image__image--cover) {
   background-size: contain;
 }
 </style>

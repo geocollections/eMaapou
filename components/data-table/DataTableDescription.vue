@@ -1,69 +1,70 @@
+<script setup lang="ts">
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import round from "lodash/round";
+
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <base-data-table
-    expandable
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
-    <!-- eslint-disable-next-line vue/no-template-shadow -->
-    <template #expanded-item="{ headers, item }">
-      <td class="py-2" :colspan="headers.length">
-        <v-row no-gutters>
-          <v-col class="pt-2 pb-4 pr-2">
-            <div class="font-weight-bold">
-              {{ $t('drillcore.description') }}
-            </div>
-            <div>
-              {{ item.description }}
-            </div>
-          </v-col>
-          <v-col cols="12" md="6">
-            <base-table>
-              <table-row
-                :title="$t('localityDescription.zeroLevel')"
-                :value="item.zero_level"
-              />
-              <table-row
-                :title="$t('localityDescription.authorFree')"
-                :value="item.author_free"
-              />
-              <table-row-link
-                v-if="item.reference"
-                :title="$t('localityDescription.reference')"
-                :value="item.reference.reference"
-                @link-click="$openGeology('reference', item.reference.id)"
-              />
-              <table-row
-                :title="$t('localityDescription.year')"
-                :value="item.year"
-              />
-              <table-row
-                :title="$t('localityDescription.stratigraphyFree')"
-                :value="item.stratigraphy_free"
-              />
-              <table-row
-                v-if="item.rock"
-                :title="$t('localityDescription.rockEt')"
-                :value="item.rock.name"
-              />
-              <table-row
-                v-if="item.rock"
-                :title="$t('localityDescription.rockEn')"
-                :value="item.rock.name_en"
-              />
-              <table-row
-                :title="$t('localityDescription.remarks')"
-                :value="item.remarks"
-              />
-            </base-table>
-          </v-col>
-        </v-row>
-      </td>
+  <!-- @vue-ignore -->
+  <BaseDataTable expandable v-bind="$attrs">
+    <template #expanded-row="{ columns, item }">
+      <tr>
+        <td class="py-2" :colspan="columns.length">
+          <VRow no-gutters>
+            <VCol class="pt-2 pb-4 pr-2">
+              <template v-if="item.description">
+                <div class="font-weight-bold">
+                  {{ $t("drillcore.description") }}
+                </div>
+                <div>
+                  {{ item.description }}
+                </div>
+              </template>
+            </VCol>
+            <VCol cols="12" md="6">
+              <BaseTable>
+                <TableRow
+                  :title="$t('localityDescription.zeroLevel')"
+                  :value="item.zero_level"
+                />
+                <TableRow
+                  :title="$t('localityDescription.authorFree')"
+                  :value="item.author_free"
+                />
+                <TableRowLink
+                  v-if="item.reference"
+                  :title="$t('localityDescription.reference')"
+                  :value="item.reference.reference"
+                  @link-click="$openGeology('reference', item.reference.id)"
+                />
+                <TableRow
+                  :title="$t('localityDescription.year')"
+                  :value="item.year"
+                />
+                <TableRow
+                  :title="$t('localityDescription.stratigraphyFree')"
+                  :value="item.stratigraphy_free"
+                />
+                <TableRow
+                  v-if="item.rock"
+                  :title="$t('localityDescription.rockEt')"
+                  :value="item.rock.name"
+                />
+                <TableRow
+                  v-if="item.rock"
+                  :title="$t('localityDescription.rockEn')"
+                  :value="item.rock.name_en"
+                />
+                <TableRow
+                  :title="$t('localityDescription.remarks')"
+                  :value="item.remarks"
+                />
+              </BaseTable>
+            </VCol>
+          </VRow>
+        </td>
+      </tr>
     </template>
     <template #item.rock="{ item }">
       <div v-if="item.rock">
@@ -72,13 +73,13 @@
     </template>
     <template #item.thickness="{ item }">
       {{
-        !item.depth_base || !item.depth_top
-          ? null
-          : Math.abs(round(item.depth_base - item.depth_top, 3))
+        item.depth_base !== null && item.depth_top !== null
+          ? Math.abs(round(item.depth_base - item.depth_top, 3)).toFixed(2)
+          : null
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy"
         class="text-link"
         :to="
@@ -94,12 +95,13 @@
             en: item.stratigraphy.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.author="{ item }">
       <a
         v-if="item.reference"
-        :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
+        class="text-link"
+        :class="{ 'is-preferred': !item.is_preferred }"
         @click="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
@@ -114,46 +116,36 @@
         {{ item.author_free }}
       </div>
     </template>
-  </base-data-table>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth_top !== null">
+        {{
+          item.depth_top.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_base !== null">
+        {{
+          item.depth_base.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.data-table-expand="{ item, internalItem, toggleExpand, isExpanded }">
+      <VBtn
+        v-if="item.canExpand"
+        icon
+        variant="text"
+        size="small"
+        @click="toggleExpand(internalItem)"
+      >
+        <VIcon>
+          {{
+            isExpanded(internalItem)
+              ? mdiChevronUp
+              : mdiChevronDown
+          }}
+        </VIcon>
+      </VBtn>
+    </template>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import round from 'lodash/round'
-import { useHeaders } from '~/composables/useHeaders'
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import BaseTable from '~/components/base/BaseTable.vue'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_DESCRIPTION } from '~/constants'
-export default defineComponent({
-  name: 'DataTableDescription',
-  components: { BaseDataTable, TableRow, TableRowLink, BaseTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_DESCRIPTION,
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange, round }
-  },
-})
-</script>

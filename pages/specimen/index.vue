@@ -1,209 +1,230 @@
+<script setup lang="ts">
+import { mdiBug } from "@mdi/js";
+
+const route = useRoute();
+const views = computed(() => ["table", "image"] as const);
+
+const specimensStore = useSpecimens();
+const { resetFilters, resetDataTable } = specimensStore;
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+} = specimensStore;
+const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOptions }
+  = storeToRefs(specimensStore);
+
+setStateFromQueryParams(route);
+if (route.query.view)
+  currentView.value = views.value.indexOf(route.query.view as any);
+
+const {
+  data,
+  pending,
+  refresh: refreshSpecimens,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/specimen", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+const {
+  data: imageData,
+  refresh: refreshSpecimenImages,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/specimen_image", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: imageOptions.value.itemsPerPage,
+      offset: getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
+      filter: solrFilters.value,
+    },
+  })),
+  watch: false,
+});
+
+watch(currentView, () => {
+  setQueryParamsFromState();
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSpecimens();
+  refreshSpecimenImages();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
+}
+
+async function refreshData() {
+  await refreshSpecimens();
+  await refreshSpecimenImages();
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshData();
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshData();
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshData();
+}
+
+async function handleImageUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  imageOptions.value = newOptions;
+  setQueryParamsFromState();
+  await refreshData();
+}
+
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  if (views.value[currentView.value] === "image") {
+    setSearchPosition(
+      { name: "specimen-id", params: { id } },
+      index + getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
+      "specimenImage",
+    );
+  }
+  else {
+    setSearchPosition(
+      { name: "specimen-id", params: { id } },
+      index + getOffset(options.value.page, options.value.itemsPerPage),
+      "specimen",
+    );
+  }
+}
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/specimen", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_SPECIMEN,
+  })),
+});
+
+const specimenImageFunction = useSpecimenImageFunction();
+
+useHead({
+  title: t("specimen.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('specimen.pageTitle').toString()"
-        :count="$accessor.search.specimen.count"
-        :icon="icons.mdiBug"
+      <HeaderSearch
+        :title="$t('specimen.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiBug"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-specimen
+      <SearchFormSpecimen
         :result-view="views[currentView]"
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
+        "
         @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+          handleUpdate();
         "
         @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
+          handleReset();
         "
       />
     </template>
 
-    <template #result>
-      <v-tabs
+    <ClientOnly>
+      <VTabs
         v-model="currentView"
-        background-color="transparent"
+        bg-color="white"
         color="accent"
+        density="compact"
       >
-        <v-tab active-class="active-tab" class="montserrat text-capitalize">
+        <VTab active-class="active-tab" class="montserrat text-capitalize">
           {{ $t(`common.table`) }}
-        </v-tab>
-        <v-tab
-          :disabled="imageCount < 1"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
+        </VTab>
+        <VTab active-class="active-tab" class="montserrat text-capitalize">
           {{ $t(`common.image`) }}
-          <v-chip class="ml-2" small>{{ imageCount }}</v-chip>
-        </v-tab>
-      </v-tabs>
-      <v-card class="mt-0">
-        <v-tabs-items v-model="currentView">
-          <v-tab-item :value="0">
-            <data-table-specimen
-              :show-search="false"
-              :items="$accessor.search.specimen.items"
-              :count="$accessor.search.specimen.count"
-              :options="$accessor.search.specimen.options"
-              dynamic-headers
-              stateful-headers
-              :is-loading="$fetchState.pending"
-              @update="handleDataTableUpdate"
-            />
-          </v-tab-item>
-          <v-tab-item :value="1">
-            <specimen-image-view
-              :items="imageItems"
-              :count="imageCount"
-              :options="$accessor.search.specimen.options"
-              @update="handleImagesUpdate"
-            />
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
-    </template>
-  </search>
+          <VChip class="ml-2" size="small">
+            {{ imageData?.response.numFound ?? 0 }}
+          </VChip>
+        </VTab>
+      </VTabs>
+      <VWindow v-model="currentView" :touch="false">
+        <VWindowItem :value="0">
+          <DataTableSpecimen
+            class="border-t border-b"
+            :show-search="false"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :headers="headers"
+            :options="options"
+            :is-loading="pending"
+            :export-func="exportData"
+            :image-func="specimenImageFunction"
+            @update="handleDataTableUpdate"
+            @change:headers="handleHeadersChange"
+            @reset:headers="handleHeadersReset(options)"
+            @click:row="handleClickRow"
+          />
+        </VWindowItem>
+        <VWindowItem :value="1">
+          <SpecimenImageView
+            class="border-t border-b"
+            :items="imageData?.response.docs ?? []"
+            :count="imageData?.response.numFound ?? 0"
+            :options="imageOptions"
+            @update="handleImageUpdate"
+          />
+        </VWindowItem>
+      </VWindow>
+    </ClientOnly>
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-  ref,
-} from '@nuxtjs/composition-api'
-import { mdiBug } from '@mdi/js'
-import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
-import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import SpecimenImageView from '~/components/SpecimenImageView.vue'
-import { HEADERS_SPECIMEN } from '~/constants'
-import { useAccessor } from '~/composables/useAccessor'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    SpecimenImageView,
-    Search,
-    SearchFormSpecimen,
-    DataTableSpecimen,
-    HeaderSearch,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('specimen', {
-        options: accessor.search.specimen.options,
-        search: accessor.search.specimen.query,
-        fields: getAPIFieldValues(HEADERS_SPECIMEN),
-        searchFilters: {
-          ...accessor.search.specimen.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-      accessor.search.specimen.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.specimen.SET_MODULE_COUNT({ count: response.count })
-    })
-
-    const imageItems = ref([])
-    const imageCount = ref(0)
-    const { fetch: fetchSpecimenImages } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList(
-        'specimen_image',
-        {
-          options: accessor.search.specimen.options,
-          search: accessor.search.specimen.query,
-          fields: getAPIFieldValues(HEADERS_SPECIMEN),
-          searchFilters: {
-            ...accessor.search.specimen.filters,
-            ...accessor.search.globalFilters,
-          },
-        }
-      )
-      imageItems.value = response.items
-      imageCount.value = response.count
-    })
-    const filters = computed(() => accessor.search.specimen.filters)
-    const globalFilters = computed(() => accessor.search.globalFilters)
-    const views = computed(() => ['table', 'image'])
-
-    const currentView = ref(0)
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'specimen',
-        qParamKey: 'specimenQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-    const { handleDataTableUpdate: handleImagesUpdate } = useSearchQueryParams({
-      module: 'specimen',
-      qParamKey: 'specimenQ',
-      filters,
-      globalFilters,
-      fetch: fetchSpecimenImages,
-    })
-    return {
-      currentView,
-      views,
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-      handleImagesUpdate,
-      imageItems,
-      imageCount,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('specimen.pageTitle').toString(),
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('specimen.pageTitle').toString(),
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiBug,
-      }
-    },
-  },
-  watch: {
-    currentView: {
-      handler() {
-        this.handleFormUpdate()
-      },
-    },
-  },
-})
-</script>
 
 <style scoped lang="scss">
 .active-tab {
   // font-weight: bold;
-  color: var(--v-accent-darken1) !important;
+  color: rgb(var(--v-theme-accent-darken-1)) !important;
+
   &::before {
     opacity: 0.2 !important;
-    background-color: var(--v-accent-base) !important;
+    background-color: rgb(var(--v-theme-accent)) !important;
 
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;

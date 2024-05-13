@@ -1,60 +1,43 @@
-<template>
-  <div>
-    <data-table-area
-      :show-search="false"
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+const props = defineProps({
+  query: {
+    type: String,
+    required: true,
+  },
+});
 
-<script>
-import DataTableArea from '~/components/data-table/DataTableArea.vue'
-import { AREA, HEADERS_AREA } from '~/constants'
+const {
+  options,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+  solrSort,
+} = useDataTable({
+  initOptions: AREA.options,
+  initHeaders: HEADERS_AREA,
+});
 
-export default {
-  components: { DataTableArea },
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {
-      options: AREA,
-      items: [],
-      count: 0,
-    }
-  },
-  async fetch() {
-    const areaResponse = await this.$services.sarvSolr.getResourceList('area', {
-      options: this.options,
-      search: this.query,
-      fields: this.$getAPIFieldValues(HEADERS_AREA),
-      searchFilters: {},
-    })
-    this.items = areaResponse.items
-    this.count = areaResponse.count
-  },
-  watch: {
-    '$route.query': function (newQuery, oldQuery) {
-      if (
-        !this._inactive &&
-        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
-      ) {
-        this.$fetch()
-      }
-    },
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useSolrFetch<SolrResponse>("/area", {
+  query: computed(() => ({
+    q: props.query,
+    rows: options.value.itemsPerPage,
+    start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: solrSort.value,
+  })),
+});
 </script>
+
+<template>
+  <DataTableArea
+    :show-search="false"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

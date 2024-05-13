@@ -1,23 +1,103 @@
+<script setup lang="ts">
+import cloneDeep from "lodash/cloneDeep";
+
+const props = defineProps({
+  modelValue: {
+    type: Array as PropType<string[][]>,
+    required: true,
+  },
+  title: {
+    type: String,
+    default: null,
+  },
+});
+
+const emit = defineEmits(["update:model-value"]);
+
+const { locale } = useI18n();
+const panel = ref();
+const currentDatePickerValue = ref<string[]>();
+const internalValue = ref<string[][]>(props.modelValue);
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    internalValue.value = newVal;
+  },
+  { immediate: true },
+);
+
+function handleRemove(i: number) {
+  const cloneItems = cloneDeep(internalValue.value);
+  cloneItems.splice(i, 1);
+  internalValue.value = cloneItems;
+  emit("update:model-value", internalValue.value);
+}
+function handleAdd() {
+  if (currentDatePickerValue.value === undefined)
+    return;
+
+  internalValue.value = [...internalValue.value, currentDatePickerValue.value];
+  emit("update:model-value", internalValue.value);
+  currentDatePickerValue.value = undefined;
+}
+function handleClear() {
+  internalValue.value = [];
+  emit("update:model-value", internalValue.value);
+}
+function handleDatePickerInput(e: string[]) {
+  currentDatePickerValue.value = e.sort();
+}
+function handleChange(i: number) {
+  const cloneItems = cloneDeep(internalValue.value);
+  currentDatePickerValue.value = cloneItems.splice(i, 1)[0];
+  internalValue.value = cloneItems;
+  emit("update:model-value", internalValue.value);
+  if (!panel.value.isActive)
+    panel.value.toggle();
+}
+const isAddActive = computed(() => {
+  return currentDatePickerValue.value !== undefined;
+});
+function getDateStr(dateArray: string[]) {
+  const dateFormat = new Intl.DateTimeFormat(locale.value, {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+  const startDate = new Date(dateArray[0]);
+  if (dateArray.length > 1) {
+    const endDate = new Date(dateArray[1]);
+    return dateFormat.formatRange(startDate, endDate);
+  }
+  return dateFormat.format(startDate);
+}
+const maxDate = computed(() => {
+  return new Date().toISOString().substr(0, 10);
+});
+</script>
+
 <template>
-  <v-expansion-panel ref="panel" style="background-color: transparent">
-    <v-expansion-panel-header
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+  <VExpansionPanel
+    ref="panel"
+    bg-color="transparent"
+    elevation="0"
+    :rounded="0"
+  >
+    <VExpansionPanelTitle
+      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
+      style="min-height: 40px;"
     >
       {{ title }}
-    </v-expansion-panel-header>
+    </VExpansionPanelTitle>
     <div
       v-if="internalValue.length > 0"
-      class="white"
-      style="
-        border-bottom: 1px solid lightgray !important;
-        border-right: 1px solid lightgray !important;
-      "
+      class="bg-white"
     >
       <div
         v-for="(item, i) in internalValue"
         :key="i"
-        class="d-flex py-1 selected-item pl-4 pr-2"
+        class="d-flex selected-item px-2"
         @click="handleChange(i)"
       >
         <span>
@@ -26,7 +106,7 @@
             class="checkbox"
             checked
             @click.prevent.stop="handleRemove(i)"
-          />
+          >
         </span>
         <span
           class="align-self-center text-body-2 font-weight-medium pl-2"
@@ -36,178 +116,63 @@
         </span>
       </div>
     </div>
-    <v-expansion-panel-content
-      class="pt-1"
+    <VExpansionPanelText
       color="white"
-      style="
-        border-bottom: 1px solid lightgray !important;
-        border-right: 1px solid lightgray !important;
-      "
+      :class="{ 'border-t': internalValue.length > 0 }"
     >
-      <v-date-picker
-        :value="currentDatePickerValue"
+      <VDatePicker
+        :model-value="currentDatePickerValue"
         color="accent"
-        full-width
-        range
-        no-title
+        multiple="range"
+        hide-header
         first-day-of-week="1"
         show-adjacent-months
         :max="maxDate"
         :locale="$i18n.locale === 'et' ? 'et-EE' : 'en-US'"
-        @input="handleDatePickerInput"
+        @update:model-value="handleDatePickerInput"
       />
-      <v-row
+      <VRow
         style="border-top: 1px solid lightgray !important"
         no-gutters
         class="py-2 px-4"
       >
-        <v-col cols="6">
-          <v-btn
-            small
-            text
+        <VCol cols="6">
+          <VBtn
+            size="small"
+            variant="text"
             block
             class="text-center"
             color="accent"
             :disabled="internalValue.length < 1"
             @click="handleClear"
           >
-            {{ $t('filter.clear') }}
-          </v-btn>
-        </v-col>
+            {{ $t("filter.clear") }}
+          </VBtn>
+        </VCol>
 
-        <v-col cols="6">
-          <v-btn
-            small
-            text
+        <VCol cols="6">
+          <VBtn
+            size="small"
+            variant="text"
             block
             class="text-center"
             color="accent"
             :disabled="!isAddActive"
             @click="handleAdd"
           >
-            {{ $t('filter.add') }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+            {{ $t("filter.add") }}
+          </VBtn>
+        </VCol>
+      </VRow>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  PropType,
-  reactive,
-  useContext,
-  ref,
-  toRefs,
-  watch,
-} from '@nuxtjs/composition-api'
-import cloneDeep from 'lodash/cloneDeep'
-export default defineComponent({
-  name: 'FilterInputDate',
-  props: {
-    value: {
-      type: Array as PropType<string[][]>,
-      default: () => {
-        return [null, null]
-      },
-    },
-    title: {
-      type: String,
-      default: null,
-    },
-  },
-  setup(props, { emit }) {
-    const { i18n } = useContext()
-    const panel = ref()
-    const state = reactive({
-      currentDatePickerValue: undefined as undefined | string[],
-      internalValue: [] as string[][],
-    })
-
-    watch(
-      () => props.value,
-      (newVal) => {
-        state.internalValue = newVal
-      },
-      { immediate: true }
-    )
-
-    const handleRemove = (i: number) => {
-      const cloneItems = cloneDeep(state.internalValue)
-      cloneItems.splice(i, 1)
-      state.internalValue = cloneItems
-      emit('input', state.internalValue)
-    }
-    const handleAdd = () => {
-      if (state.currentDatePickerValue === undefined) return
-
-      state.internalValue = [
-        ...state.internalValue,
-        state.currentDatePickerValue,
-      ]
-      emit('input', state.internalValue)
-      state.currentDatePickerValue = undefined
-    }
-    const handleClear = () => {
-      state.internalValue = []
-      emit('input', state.internalValue)
-    }
-    const handleDatePickerInput = (e: string[]) => {
-      state.currentDatePickerValue = e.sort()
-    }
-    const handleChange = (i: number) => {
-      const cloneItems = cloneDeep(state.internalValue)
-      state.currentDatePickerValue = cloneItems.splice(i, 1)[0]
-      state.internalValue = cloneItems
-      emit('input', state.internalValue)
-      if (!panel.value.isActive) panel.value.toggle()
-    }
-    const isAddActive = computed(() => {
-      return state.currentDatePickerValue !== undefined
-    })
-    const getDateStr = (dateArray: string[]) => {
-      const dateFormat = new Intl.DateTimeFormat(i18n.locale, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-      })
-      const startDate = new Date(dateArray[0])
-      if (dateArray.length > 1) {
-        const endDate = new Date(dateArray[1])
-        // @ts-ignore
-        return dateFormat.formatRange(startDate, endDate)
-      }
-      return dateFormat.format(startDate)
-    }
-    const maxDate = computed(() => {
-      return new Date().toISOString().substr(0, 10)
-    })
-    return {
-      ...toRefs(state),
-      handleRemove,
-      handleChange,
-      handleClear,
-      handleAdd,
-      handleDatePickerInput,
-      isAddActive,
-      panel,
-      getDateStr,
-      maxDate,
-    }
-  },
-})
-</script>
-
 <style scoped>
-::v-deep .v-expansion-panel-content__wrap {
-  padding-right: 0px;
-  padding-left: 0px;
-  padding-bottom: 0px;
+:deep(.v-expansion-panel-text__wrapper) {
+  padding: 0;
 }
 .checkbox {
-  accent-color: var(--v-accent-base);
+  accent-color: rgb(var(--v-theme-accent));
 }
 </style>

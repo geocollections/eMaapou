@@ -3,14 +3,17 @@ export default ({
   category,
   resultsCount,
 }: {
-  query: string
-  category?: string | boolean
-  resultsCount?: number | boolean
+  query: string;
+  category?: string | boolean;
+  resultsCount?: number | boolean;
 }) => {
-  if (typeof window === 'undefined') return
-  if (!window._paq) return
+  if (typeof window === "undefined")
+    return;
+  if (!window._paq)
+    return;
 
-  const categoryValue = category ?? false
-  const resultsCountValue = resultsCount ?? false
-  window._paq.push(['trackSiteSearch', query, categoryValue, resultsCountValue])
-}
+  const categoryValue = category ?? false;
+  const resultsCountValue = resultsCount ?? false;
+
+  window._paq.push(["trackSiteSearch", query, categoryValue, resultsCountValue]);
+};

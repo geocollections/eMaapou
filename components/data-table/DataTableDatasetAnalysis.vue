@@ -1,24 +1,20 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <!-- @vue-ignore -->
+  <BaseDataTable v-bind="$attrs">
     <template #item.analysis="{ item }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.sample="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.sample_id"
         class="text-link"
         :to="
@@ -29,10 +25,10 @@
         "
       >
         {{ item.sample_id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -43,17 +39,17 @@
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-      <nuxt-link
+      </NuxtLink>
+      <NuxtLink
         v-else-if="item.site_id"
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
       >
         {{ item.site }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy_id"
         class="text-link"
         :to="
@@ -64,7 +60,7 @@
         "
       >
         {{ $translate({ et: item.stratigraphy, en: item.stratigraphy_en }) }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
 
     <template #item.analysis_method="{ item }">
@@ -75,49 +71,5 @@
     <template #item.lab="{ item }">
       {{ $translate({ et: item.lab, en: item.lab_en }) }}
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_DATASET_ANALYSIS } from '~/constants'
-import { useHeaders } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableDatasetAnalysis',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    additionalHeaders: {
-      type: Object,
-      default: () => {
-        return { byIds: {}, allIds: [] }
-      },
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_DATASET_ANALYSIS,
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
-</script>

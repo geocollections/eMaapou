@@ -1,90 +1,128 @@
+<script setup lang="ts">
+import { mdiChartLineVariant } from "@mdi/js";
+
+const props = defineProps<{
+  parameters: any[];
+  initialSelection: any[];
+}>();
+
+const emit = defineEmits(["input"]);
+
+const search = ref("");
+const searchDebounced = refDebounced(search, 200);
+
+const flatParameters = computed(() => props.parameters.flatMap((p) => {
+  return p.children.flatMap((c: any) => {
+    return { ...c, method: p.name, method_en: p.name };
+  });
+}));
+
+const { $translate } = useNuxtApp();
+
+const filteredParameters = computed(() => {
+  return flatParameters.value?.filter((p) => {
+    const name = $translate({ et: p.name, en: p.name_en ?? p.name });
+    const method = $translate({ et: p.method, en: p.method_en });
+    const lowercaseSearch = searchDebounced.value.toLowerCase();
+    return name.toLowerCase().includes(lowercaseSearch)
+      || method.toLowerCase().includes(lowercaseSearch);
+  });
+});
+
+function handleInput(event: any) {
+  if (isParameterSelected(event))
+    emit("input", props.initialSelection.filter(p => p.id !== event.id));
+
+  else
+    emit("input", [...props.initialSelection, event]);
+}
+
+function isParameterSelected(parameter: any) {
+  return props.initialSelection.some(p => p.id === parameter.id);
+}
+</script>
+
 <template>
-  <v-menu
+  <VMenu
     transition="slide-y-transition"
-    offset-y
+    :offset="10"
     content-class="white"
     :close-on-content-click="false"
   >
-    <template #activator="{ on, attrs }">
-      <v-btn
+    <template #activator="{ props: menu }">
+      <VBtn
         color="accent"
         class="montserrat text-none"
-        small
-        dark
-        outlined
-        v-bind="attrs"
-        v-on="on"
+        size="small"
+        variant="outlined"
+        v-bind="menu"
       >
-        <v-icon left dark> {{ icons.mdiChartLineVariant }} </v-icon>
-        {{ $t('common.parameters') }}
-      </v-btn>
+        <VIcon start>
+          {{ mdiChartLineVariant }}
+        </VIcon>
+        {{ $t("common.parameters") }}
+      </VBtn>
     </template>
-    <v-card flat style="min-width: 400px">
-      <v-card-title class="text-body-1 pb-0 px-2">
+    <VCard flat style="min-width: 400px">
+      <VCardTitle class="text-body-1 pb-0 px-2">
         <div class="montserrat">
-          {{ $t('common.parameters') }}
+          {{ $t("common.parameters") }}
         </div>
-      </v-card-title>
-      <v-card-text class="px-2">
-        <v-text-field
+      </VCardTitle>
+      <VCardText class="px-2">
+        <VTextField
           v-model="search"
           :label="$t('common.filter')"
           class="py-2"
-          dense
+          density="compact"
+          variant="outlined"
           hide-details
         />
-        <v-treeview
-          style="max-height: 500px"
-          dense
-          selectable
-          :search="search"
-          return-object
-          :items="parameters"
-          :value="initialSelection"
-          @input="handleInput"
+        <VVirtualScroll
+          :items="filteredParameters"
+          height="500px"
+          item-height="40px"
         >
-          <template #label="{ item }">
-            <div>
-              {{ $translate({ et: item.name, en: item.name_en }) }}
-              <v-chip small>{{ item.count }}</v-chip>
-            </div>
+          <template #default="{ item }">
+            <VListItem
+              @click="handleInput(item)"
+            >
+              <template #prepend>
+                <VListItemAction start>
+                  <VCheckboxBtn :model-value="isParameterSelected(item)" />
+                </VListItemAction>
+              </template>
+              <div>
+                <span class="text-medium-emphasis font-italic">
+                  ({{ $translate({ et: item.method, en: item.method }) }})
+                </span>
+                {{ $translate({ et: item.name, en: item.name_en ?? item.name }) }}
+                <VChip small>
+                  {{ item.count }}
+                </VChip>
+              </div>
+            </VListItem>
           </template>
-        </v-treeview>
-      </v-card-text>
-    </v-card>
-  </v-menu>
+        </VVirtualScroll>
+        <!-- TODO: Reimplement treeview when vuetify 3 adds it -->
+        <!-- <v-treeview -->
+        <!--   style="max-height: 500px" -->
+        <!--   dense -->
+        <!--   selectable -->
+        <!--   :search="search" -->
+        <!--   return-object -->
+        <!--   :items="parameters" -->
+        <!--   :value="initialSelection" -->
+        <!--   @input="handleInput" -->
+        <!-- > -->
+        <!--   <template #label="{ item }"> -->
+        <!--     <div> -->
+        <!--       {{ $translate({ et: item.name, en: item.name_en }) }} -->
+        <!--       <v-chip small>{{ item.count }}</v-chip> -->
+        <!--     </div> -->
+        <!--   </template> -->
+        <!-- </v-treeview> -->
+      </VCardText>
+    </VCard>
+  </VMenu>
 </template>
-
-<script>
-import { mdiChartLineVariant } from '@mdi/js'
-export default {
-  name: 'OptionsParameterTreeView',
-  props: {
-    parameters: {
-      type: Array,
-      required: true,
-    },
-    initialSelection: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  data() {
-    return {
-      search: '',
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiChartLineVariant,
-      }
-    },
-  },
-  methods: {
-    handleInput(event) {
-      this.$emit('input', event)
-    },
-  },
-}
-</script>

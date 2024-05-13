@@ -1,131 +1,192 @@
-<template>
-  <search>
-    <template #title>
-      <header-search
-        :title="$t('analyticalData.pageTitle').toString()"
-        :count="$accessor.search.analyticalData.count"
-        :icon="icons.mdiChartLine"
-      />
-    </template>
+<script setup lang="ts">
+import { mdiChartLine } from "@mdi/js";
+import cloneDeep from "lodash/cloneDeep";
 
+const route = useRoute();
+
+const analyticalDataStore = useAnalyticalData();
+const { resetFilters, resetDataTable } = analyticalDataStore;
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  addHeaders,
+  getQueryParams,
+} = analyticalDataStore;
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filters }
+  = storeToRefs(analyticalDataStore);
+
+setStateFromQueryParams(route);
+
+const {
+  data,
+  pending,
+  refresh: refreshAnalyticalData,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/analytical_data", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshAnalyticalData();
+}, { deep: true });
+
+const { $solrFetch } = useNuxtApp();
+
+const { data: parameterHeaders } = await useAsyncData(async () => {
+  const res = await $solrFetch<SolrResponse>("/analysis_parameter", {
+    query: {
+      json: {
+        query: "*",
+        limit: 1000,
+      },
+    },
+  });
+
+  return res.response.docs.reduce((acc: any, doc: any) => {
+    if (!doc.parameter_index)
+      return acc;
+
+    const showHeader = filters.value.parameter.value.some(value => value.parameter === doc.parameter_index);
+    const correctParameterIndex = doc.parameter_index.replace(
+      /\W/g,
+      "_",
+    );
+
+    acc.byIds[doc.parameter_index] = {
+      title: doc.parameter,
+      value: correctParameterIndex,
+      show: showHeader,
+      titleTranslate: false,
+      parameter: true,
+      ...narrowColumn,
+    };
+    acc.allIds.push(doc.parameter_index);
+    return acc;
+  }, { byIds: {}, allIds: [] });
+});
+
+addHeaders(parameterHeaders.value);
+
+const finalHeaders = computed(() => {
+  const headersClone = cloneDeep(headers.value);
+
+  headersClone.forEach((header: any, i: number) => {
+    if (header.parameter)
+      headersClone[i] = { ...header, ...numberFieldProps };
+  });
+  return headersClone;
+});
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshAnalyticalData();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshAnalyticalData();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshAnalyticalData();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const searchPosition = useSearchPosition();
+const { setSearchPosition } = searchPosition;
+const { searchModule } = storeToRefs(searchPosition);
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  searchModule.value = "analyticalData";
+  setSearchPosition(
+    { name: "analysis-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+  );
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/analytical_data", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+  })),
+});
+
+useSeoMeta({
+  title: t("analyticalData.pageTitle"),
+  ogTitle: t("analyticalData.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
+<template>
+  <NuxtLayout name="search">
     <template #form="{ closeMobileSearch }">
-      <search-form-analytical-data
+      <SearchFormAnalyticalData
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
+        "
         @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+          handleUpdate();
         "
         @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
+          handleReset();
         "
       />
     </template>
-
-    <template #result>
-      <v-card>
-        <data-table-analytical-data
-          :show-search="false"
-          :items="$accessor.search.analyticalData.items"
-          :count="$accessor.search.analyticalData.count"
-          :options="$accessor.search.analyticalData.options"
-          dynamic-headers
-          stateful-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
+    <template #title>
+      <HeaderSearch
+        :title="$t('analyticalData.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiChartLine"
+      />
     </template>
-  </search>
+
+    <DataTableAnalyticalData
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="finalHeaders"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-  useMeta,
-  useContext,
-} from '@nuxtjs/composition-api'
-import { mdiChartLine } from '@mdi/js'
-import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
-import SearchFormAnalyticalData from '~/components/search/forms/SearchFormAnalyticalData.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_ANALYTICAL_DATA } from '~/constants/headers'
-import { useAccessor } from '~/composables/useAccessor'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  name: 'AnalyticalDataSearch',
-  components: {
-    Search,
-    SearchFormAnalyticalData,
-    DataTableAnalyticalData,
-    HeaderSearch,
-  },
-  setup() {
-    const { i18n } = useContext()
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList(
-        'analytical_data',
-        {
-          options: accessor.search.analyticalData.options,
-          search: accessor.search.analyticalData.query,
-          fields: getAPIFieldValues(HEADERS_ANALYTICAL_DATA),
-          searchFilters: {
-            ...accessor.search.analyticalData.filters,
-            ...accessor.search.globalFilters,
-            ...accessor.search.analyticalData.parameterFilters.byId,
-          },
-        }
-      )
-      accessor.search.analyticalData.SET_MODULE_ITEMS({
-        items: response.items,
-      })
-      accessor.search.analyticalData.SET_MODULE_COUNT({
-        count: response.count,
-      })
-    })
-    const filters = computed(() => accessor.search.analyticalData.filters)
-    const globalFilters = computed(() => accessor.search.globalFilters)
-    const icons = computed(() => {
-      return {
-        mdiChartLine,
-      }
-    })
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'analyticalData',
-        qParamKey: 'analyticalDataQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-    useMeta(() => {
-      return {
-        title: i18n.t('analyticalData.pageTitle') as string,
-        meta: [
-          {
-            property: 'og:title',
-            content: i18n.t('analyticalData.pageTitle') as string,
-            hid: 'og:title',
-          },
-        ],
-      }
-    })
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-      icons,
-    }
-  },
-  head: {},
-})
-</script>

@@ -1,124 +1,145 @@
+<script setup lang="ts">
+import { mdiMapMarkerOutline } from "@mdi/js";
+import type { DataTableOptions } from "~/constants";
+
+const sitesStore = useSites();
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+  resetFilters,
+  resetDataTable,
+} = sitesStore;
+const {
+  solrSort,
+  solrQuery,
+  solrFilters,
+  options,
+  headers,
+  resultsCount,
+} = storeToRefs(sitesStore);
+
+const {
+  data,
+  pending,
+  refresh: refreshSites,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/site", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+const route = useRoute();
+
+setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSites();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshSites();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshSites();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshSites();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "site-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+    "site",
+  );
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/site", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_SITE,
+  })),
+});
+
+useHead({
+  title: t("site.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('site.pageTitle').toString()"
-        :count="$accessor.search.site.count"
-        :icon="icons.mdiMapMarkerOutline"
+      <HeaderSearch
+        :title="$t('site.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiMapMarkerOutline"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-site
-        @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+      <SearchFormSite
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
         "
-        @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 
-    <template #result>
-      <v-card>
-        <data-table-site
-          :show-search="false"
-          :items="$accessor.search.site.items"
-          :count="$accessor.search.site.count"
-          :options="$accessor.search.site.options"
-          dynamic-headers
-          stateful-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
-    </template>
-  </search>
+    <DataTableSite
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-} from '@nuxtjs/composition-api'
-import { mdiMapMarkerOutline } from '@mdi/js'
-import SearchFormSite from '~/components/search/forms/SearchFormSite.vue'
-import DataTableSite from '~/components/data-table/DataTableSite.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_SITE } from '~/constants'
-import { useAccessor } from '~/composables/useAccessor'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    Search,
-    SearchFormSite,
-    DataTableSite,
-    HeaderSearch,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('site', {
-        options: accessor.search.site.options,
-        search: accessor.search.site.query,
-        fields: getAPIFieldValues(HEADERS_SITE),
-        searchFilters: {
-          ...accessor.search.site.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-      accessor.search.site.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.site.SET_MODULE_COUNT({ count: response.count })
-    })
-    const filters = computed(() => accessor.search.site.filters)
-
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'site',
-        qParamKey: 'siteQ',
-        filters,
-        fetch,
-      })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('site.pageTitle').toString(),
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('site.pageTitle').toString(),
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiMapMarkerOutline,
-      }
-    },
-  },
-})
-</script>

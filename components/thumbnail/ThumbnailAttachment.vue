@@ -1,42 +1,13 @@
-<template>
-  <div class="py-2 d-flex justify-center">
-    <thumbnail-image
-      v-if="isImage && src && previewSrc"
-      :src="src"
-      :preview-src="previewSrc"
-      @click="$emit('click:image')"
-    />
-    <v-icon
-      v-else-if="isImage"
-      color="primary darken-2"
-      large
-      @click="$emit('click')"
-    >
-      {{ icons.mdiFileImageOutline }}
-    </v-icon>
-    <v-icon
-      v-else-if="isVideo"
-      color="primary darken-2"
-      large
-      @click="$emit('click')"
-    >
-      {{ icons.mdiFileVideoOutline }}
-    </v-icon>
-    <v-icon v-else color="primary darken-2" large @click="$emit('click')">
-      {{ icons.mdiFileOutline }}
-    </v-icon>
-  </div>
-</template>
-
 <script>
 import {
-  mdiFileVideoOutline,
-  mdiFileOutline,
   mdiFileImageOutline,
-} from '@mdi/js'
-import ThumbnailImage from './ThumbnailImage.vue'
+  mdiFileOutline,
+  mdiFileVideoOutline,
+} from "@mdi/js";
+import ThumbnailImage from "./ThumbnailImage.vue";
+
 export default {
-  name: 'ThumbnailAttachment',
+  name: "ThumbnailAttachment",
   components: { ThumbnailImage },
   props: {
     src: {
@@ -59,14 +30,49 @@ export default {
         mdiFileVideoOutline,
         mdiFileOutline,
         mdiFileImageOutline,
-      }
+      };
     },
     isImage() {
-      return this.type?.startsWith('image')
+      return this.type?.startsWith("image");
     },
     isVideo() {
-      return this.type?.startsWith('video')
+      return this.type?.startsWith("video");
     },
   },
-}
+};
 </script>
+
+<template>
+  <div class="py-2 d-flex justify-center">
+    <ThumbnailImage
+      v-if="isImage && src && previewSrc"
+      :src="src"
+      :preview-src="previewSrc"
+      @click="$emit('click:image')"
+    />
+    <VIcon
+      v-else-if="isImage"
+      color="primary-darken-2"
+      size="large"
+      @click="$emit('click')"
+    >
+      {{ icons.mdiFileImageOutline }}
+    </VIcon>
+    <VIcon
+      v-else-if="isVideo"
+      color="primary-darken-2"
+      size="large"
+      @click="$emit('click')"
+    >
+      {{ icons.mdiFileVideoOutline }}
+    </VIcon>
+    <VIcon
+      v-else
+      color="primary-darken-2"
+      size="large"
+      @click="$emit('click')"
+    >
+      {{ icons.mdiFileOutline }}
+    </VIcon>
+  </div>
+</template>

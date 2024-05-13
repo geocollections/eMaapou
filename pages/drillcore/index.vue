@@ -1,126 +1,140 @@
+<script setup lang="ts">
+import { mdiScrewMachineFlatTop } from "@mdi/js";
+
+const drillcoresStore = useDrillcores();
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+  resetFilters,
+  resetDataTable,
+} = drillcoresStore;
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(drillcoresStore);
+
+const route = useRoute();
+
+setStateFromQueryParams(route);
+
+const {
+  data,
+  pending,
+  refresh: refreshDrillcores,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/drillcore", {
+  query: computed(() => ({
+    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshDrillcores();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshDrillcores();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshDrillcores();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshDrillcores();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "drillcore-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+    "drillcore",
+  );
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/drillcore", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_DRILLCORE,
+  })),
+});
+
+useHead({
+  title: t("drillcore.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('drillcore.pageTitle').toString()"
-        :count="$accessor.search.drillcore.count"
-        :icon="icons.mdiScrewMachineFlatTop"
+      <HeaderSearch
+        :title="$t('drillcore.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiScrewMachineFlatTop"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-drillcore
-        @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+      <SearchFormDrillcore
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
         "
-        @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 
-    <template #result>
-      <v-card>
-        <data-table-drillcore
-          :show-search="false"
-          :items="$accessor.search.drillcore.items"
-          :count="$accessor.search.drillcore.count"
-          :options="$accessor.search.drillcore.options"
-          :flat="false"
-          dynamic-headers
-          stateful-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
-    </template>
-  </search>
+    <DataTableDrillcore
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-} from '@nuxtjs/composition-api'
-import { mdiScrewMachineFlatTop } from '@mdi/js'
-import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
-import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_DRILLCORE } from '~/constants'
-import { useAccessor } from '~/composables/useAccessor'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    Search,
-    SearchFormDrillcore,
-    HeaderSearch,
-    DataTableDrillcore,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('drillcore', {
-        options: accessor.search.drillcore.options,
-        search: accessor.search.drillcore.query,
-        fields: getAPIFieldValues(HEADERS_DRILLCORE),
-        searchFilters: {
-          ...accessor.search.drillcore.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-      accessor.search.drillcore.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.drillcore.SET_MODULE_COUNT({ count: response.count })
-    })
-    const filters = computed(() => accessor.search.drillcore.filters)
-    const globalFilters = computed(() => accessor.search.globalFilters)
-
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'drillcore',
-        qParamKey: 'drillcoreQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('drillcore.pageTitle') as string,
-      meta: [
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: this.$t('drillcore.pageTitle') as string,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiScrewMachineFlatTop,
-      }
-    },
-  },
-})
-</script>

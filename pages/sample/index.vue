@@ -1,126 +1,142 @@
-<template>
-  <search>
-    <template #title>
-      <header-search
-        :title="$t('sample.pageTitle').toString()"
-        :count="$accessor.search.sample.count"
-        :icon="icons.mdiImageFilterHdr"
-      />
-    </template>
+<script setup lang="ts">
+import { mdiImageFilterHdr } from "@mdi/js";
 
+const { t } = useI18n();
+const route = useRoute();
+
+useSeoMeta({
+  title: t("sample.pageTitle"),
+});
+
+const samplesStore = useSamples();
+const { resetFilters, resetDataTable } = samplesStore;
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+} = samplesStore;
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(samplesStore);
+
+setStateFromQueryParams(route);
+
+const {
+  data,
+  pending,
+  refresh: refreshSamples,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/sample", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSamples();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshSamples();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshSamples();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshSamples();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "sample-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+    "sample",
+  );
+}
+
+const { exportData } = useExportSolr("/sample", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_SAMPLE,
+  })),
+});
+
+definePageMeta({
+  layout: false,
+});
+
+const sampleImageFunction = useSampleImageFunction();
+</script>
+
+<template>
+  <NuxtLayout name="search">
     <template #form="{ closeMobileSearch }">
-      <search-form-sample
+      <SearchFormSample
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
+        "
         @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+          handleUpdate();
         "
         @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
+          handleReset();
         "
       />
     </template>
-
-    <template #result>
-      <v-card>
-        <data-table-sample
-          :show-search="false"
-          :items="$accessor.search.sample.items"
-          :count="$accessor.search.sample.count"
-          :options="$accessor.search.sample.options"
-          dynamic-headers
-          stateful-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
+    <template #title>
+      <HeaderSearch
+        :title="$t('sample.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiImageFilterHdr"
+      />
     </template>
-  </search>
+    <DataTableSample
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      :image-func="sampleImageFunction"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-} from '@nuxtjs/composition-api'
-import { mdiImageFilterHdr } from '@mdi/js'
-import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
-import DataTableSample from '~/components/data-table/DataTableSample.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_SAMPLE } from '~/constants'
-import { useAccessor } from '~/composables/useAccessor'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    Search,
-    SearchFormSample,
-    DataTableSample,
-    HeaderSearch,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('sample', {
-        options: accessor.search.sample.options,
-        search: accessor.search.sample.query,
-        fields: getAPIFieldValues(HEADERS_SAMPLE),
-        searchFilters: {
-          ...accessor.search.sample.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-      accessor.search.sample.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.sample.SET_MODULE_COUNT({ count: response.count })
-    })
-    const filters = computed(() => accessor.search.sample.filters)
-    const globalFilters = computed(() => accessor.search.globalFilters)
-
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'sample',
-        qParamKey: 'sampleQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('sample.pageTitle') as string,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('sample.pageTitle') as string,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiImageFilterHdr,
-      }
-    },
-  },
-})
-</script>

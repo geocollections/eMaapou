@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   package-version:
     type: string
-    default: '1.0.5'
+    default: 1.0.5
 
 executors:
   docker-publisher:
@@ -48,40 +48,22 @@ jobs:
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker push $IMAGE_NAME
-  run_dev_container:
+  run_container:
     executor: docker-publisher
     steps:
       - run:
-          name: Run dev container
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_staging.sh"
-  run_production_container:
-    executor: docker-publisher
-    steps:
-      - run:
-          name: Run production container
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_production.sh"
+          name: Run next container
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_next.sh"
 workflows:
-  build_deploy_dev:
+  build_next:
     when:
-      equal: [develop, << pipeline.git.branch >>]
+      equal: [refactor/nuxt3, << pipeline.git.branch >>]
     jobs:
       - build_image:
-          tags: -t $IMAGE_NAME:dev
+          tags: -t $IMAGE_NAME:next
       - publish_image:
           requires:
             - build_image
-      - run_dev_container:
-          requires:
-            - publish_image
-  build_test_approve_deploy:
-    when:
-      equal: [main, << pipeline.git.branch >>]
-    jobs:
-      - build_image:
-          tags: -t $IMAGE_NAME:latest -t $IMAGE_NAME:<< pipeline.parameters.package-version >>
-      - publish_image:
-          requires:
-            - build_image
-      - run_production_container:
+      - run_container:
           requires:
             - publish_image

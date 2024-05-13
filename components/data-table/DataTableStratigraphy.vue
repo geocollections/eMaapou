@@ -1,36 +1,30 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <base-data-table
+  <!-- @vue-ignore -->
+  <BaseDataTable
     v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
+    :item-to="(item) => localePath({ name: 'stratigraphy-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
   >
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="
-          localePath({
-            name: 'stratigraphy-id',
-            params: { id: item.id },
-          })
-        "
-      >
-        {{
-          $translate({
-            et: item.stratigraphy,
-            en: item.stratigraphy_en,
-          })
-        }}
-      </nuxt-link>
+      {{
+        $translate({
+          et: item.stratigraphy,
+          en: item.stratigraphy_en,
+        })
+      }}
     </template>
 
     <template #item.index_main="{ item }">
       <div v-if="item.index_main_html" v-html="item.index_main_html" />
-      <div v-else>{{ item.index_main }}</div>
+      <div v-else>
+        {{ item.index_main }}
+      </div>
     </template>
 
     <template #item.index_additional="{ item }">
@@ -38,7 +32,9 @@
         v-if="item.index_additional_html"
         v-html="item.index_additional_html"
       />
-      <div v-else>{{ item.index_additional }}</div>
+      <div v-else>
+        {{ item.index_additional }}
+      </div>
     </template>
 
     <template #item.stratigraphy_type="{ item }">
@@ -86,14 +82,18 @@
     </template>
 
     <template #item.ageBase="{ item }">
-      {{ item.age_base }}
+      <span v-if="item.age_base">
+        {{ item.age_base.toFixed(1) }}
+      </span>
     </template>
     <template #item.ageTop="{ item }">
-      {{ item.age_top }}
+      <span v-if="item.age_top">
+        {{ item.age_top.toFixed(1) }}
+      </span>
     </template>
 
     <template #item.parent_stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.parent_id"
         class="text-link"
         :to="
@@ -109,52 +109,7 @@
             en: item.parent_stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_STRATIGRAPHY } from '~/constants'
-import { useHeadersWithState } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableStratigraphy',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersReset, handleHeadersChange } =
-      useHeadersWithState({
-        module: 'stratigraphy',
-        localHeaders: HEADERS_STRATIGRAPHY,
-        statefulHeaders: props.statefulHeaders,
-        options: toRef(props, 'options'),
-      })
-    return { headers, handleHeadersChange, handleHeadersReset }
-  },
-})
-</script>

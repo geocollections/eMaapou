@@ -1,127 +1,131 @@
+<script setup lang="ts">
+import { mdiFamilyTree } from "@mdi/js";
+
+const route = useRoute();
+
+const taxaStore = useTaxa();
+const { resetFilters, resetDataTable } = taxaStore;
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+} = taxaStore;
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(taxaStore);
+
+const {
+  data,
+  pending,
+  refresh: refreshTaxa,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/taxon", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshTaxa();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshTaxa();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshTaxa();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshTaxa();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/taxon", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_TAXON,
+  })),
+});
+
+useHead({
+  title: t("taxon.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('taxon.pageTitle').toString()"
-        :count="$accessor.search.taxon.count"
-        :icon="icons.mdiFamilyTree"
+      <HeaderSearch
+        :title="$t('taxon.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiFamilyTree"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-taxon
+      <SearchFormTaxon
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
+        "
         @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+          handleUpdate();
         "
         @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
+          handleReset();
         "
       />
     </template>
 
-    <template #result>
-      <v-card>
-        <data-table-taxon
-          :show-search="false"
-          :items="$accessor.search.taxon.items"
-          :count="$accessor.search.taxon.count"
-          :options="$accessor.search.taxon.options"
-          stateful-headers
-          dynamic-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
-    </template>
-  </search>
+    <DataTableTaxon
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-} from '@nuxtjs/composition-api'
-import { mdiFamilyTree } from '@mdi/js'
-import Search from '~/templates/Search.vue'
-import SearchFormTaxon from '~/components/search/forms/SearchFormTaxon.vue'
-import DataTableTaxon from '~/components/data-table/DataTableTaxon.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_TAXON } from '~/constants'
-import { useAccessor } from '~/composables/useAccessor'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    Search,
-    SearchFormTaxon,
-    DataTableTaxon,
-    HeaderSearch,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('taxon', {
-        options: accessor.search.taxon.options,
-        search: accessor.search.taxon.query,
-        fields: getAPIFieldValues(HEADERS_TAXON),
-        searchFilters: {
-          ...accessor.search.taxon.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-
-      accessor.search.taxon.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.taxon.SET_MODULE_COUNT({ count: response.count })
-    })
-    const filters = computed(() => accessor.search.taxon.filters)
-    const globalFilters = computed(() => accessor.search.globalFilters)
-
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'taxon',
-        qParamKey: 'taxonQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('taxon.pageTitle').toString(),
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('taxon.pageTitle').toString(),
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiFamilyTree,
-      }
-    },
-  },
-})
-</script>

@@ -1,33 +1,23 @@
+<script setup lang="ts">
+import isNil from "lodash/isNil";
+
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <base-data-table
+  <!-- @vue-ignore -->
+  <BaseDataTable
     v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
+    :item-to="(item) => localePath({ name: 'sample-id', params: { id: item.id } })"
   >
     <template #item.sample="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
-      >
-        {{ item.sample_number }}
-      </nuxt-link>
+      {{ item.sample_number }}
     </template>
     <template #item.number="{ item }">
-      <nuxt-link
-        v-if="item.number"
-        class="text-link"
-        :to="localePath({ name: 'sample-id', params: { id: item.id } })"
-      >
-        {{ item.number }}
-      </nuxt-link>
+      {{ item.number }}
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -35,17 +25,31 @@
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-      <nuxt-link
+      </NuxtLink>
+      <NuxtLink
         v-else-if="item.site_id"
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
       >
         {{ item.site }}
-      </nuxt-link>
+      </NuxtLink>
+    </template>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
+        {{
+          item.depth.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
+        }}
+      </span>
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy_id"
         class="text-link"
         :to="
@@ -61,10 +65,10 @@
             en: item.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.lithostratigraphy"
         class="text-link"
         :to="
@@ -80,71 +84,15 @@
             en: item.lithostratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
-  </base-data-table>
+    <template #item.coordinates="{ item }">
+      <span v-if="!isNil(item.latitude) && !isNil(item.longitude)">
+        {{ getCoordinatesStr(item.latitude, item.longitude) }}
+      </span>
+    </template>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import cloneDeep from 'lodash/cloneDeep'
-import { useHeaders } from '~/composables/useHeaders'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_SAMPLE_DATA } from '~/constants'
-
-export default defineComponent({
-  name: 'DataTableSampleData',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    additionalHeaders: {
-      type: Object,
-      default: () => {
-        return { byIds: {}, allIds: [] }
-      },
-    },
-  },
-  setup(props) {
-    const getHeaders = () => {
-      const defaultHeaders = cloneDeep(HEADERS_SAMPLE_DATA)
-      return {
-        byIds: {
-          ...defaultHeaders.byIds,
-          ...Object.entries(props.additionalHeaders.byIds).reduce(
-            (prev, [key, value]) => {
-              // @ts-ignore
-              return { ...prev, [key]: { ...value, translate: false } }
-            },
-            {}
-          ),
-        },
-        allIds: [...defaultHeaders.allIds, ...props.additionalHeaders.allIds],
-      }
-    }
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: getHeaders(),
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
-</script>

@@ -1,106 +1,48 @@
-import { computed, reactive, Ref, useContext } from '@nuxtjs/composition-api'
-import cloneDeep from 'lodash/cloneDeep'
-import { Headers, Header } from '~/constants'
-import { IOptions } from '~/services'
-import { HeadersState } from '~/store/headers/state'
+import cloneDeep from "lodash/cloneDeep";
+import type { DataTableOptions, Header, Headers } from "~/constants";
 
-export const useHeaders = ({
-  localHeaders,
-  options,
-}: {
-  localHeaders: Headers
-  options: Ref<IOptions>
-}) => {
-  const { i18n } = useContext()
-  const state = reactive({
-    localHeaders: cloneDeep(localHeaders),
-  })
+export function useHeaders(initHeaders: Headers) {
+  const { t } = useI18n({ useScope: "global" });
 
-  const translateHeader = (header: Header) => {
-    if (header.translate === undefined || header.translate) {
-      header.text = i18n.t(header.text).toString()
-    }
-    return header
-  }
+  const headersMap = ref(cloneDeep(initHeaders));
+
+  const translateHeader = (header: Header | ChildHeader) => {
+    if (header.titleTranslate === undefined || header.titleTranslate === true)
+      return t(header.title);
+
+    return header.title;
+  };
 
   const headers = computed(() => {
-    return state.localHeaders.allIds.map((id: string) =>
-      translateHeader(state.localHeaders.byIds[id])
-    )
-  })
+    return headersMap.value.allIds.map((id: string) => {
+      const header = headersMap.value.byIds[id];
+      return {
+        ...header,
+        sortable: header.sortable !== undefined ? header.sortable : true,
+        title: translateHeader(header),
+        children: header.children?.map((child) => {
+          return {
+            ...child,
+            title: translateHeader(child),
+          };
+        }),
+      };
+    });
+  });
 
   const handleHeadersChange = (e: string) => {
-    state.localHeaders.byIds[e].show = !state.localHeaders.byIds[e].show
-  }
-  const handleHeadersReset = () => {
-    state.localHeaders = cloneDeep(localHeaders)
-    options.value.sortBy?.forEach((headerId: string) => {
-      state.localHeaders.byIds[headerId].show = true
-    })
-  }
+    headersMap.value.byIds[e].show = !headersMap.value.byIds[e].show;
+  };
+  const handleHeadersReset = (options: DataTableOptions) => {
+    headersMap.value = cloneDeep(initHeaders);
+    options.sortBy?.forEach((sortItem) => {
+      headersMap.value.byIds[sortItem.key].show = true;
+    });
+  };
 
-  return { headers, handleHeadersChange, handleHeadersReset }
-}
-
-export const useHeadersWithState = ({
-  module,
-  localHeaders,
-  statefulHeaders,
-  options,
-}: {
-  module: keyof HeadersState
-  localHeaders: Headers
-  statefulHeaders: boolean
-  options: Ref<IOptions>
-}) => {
-  const { i18n, $accessor } = useContext()
-  const state = reactive({
-    localHeaders: cloneDeep(localHeaders),
-  })
-
-  const translateHeaderFromState = (header: Header) => {
-    return {
-      ...header,
-      text:
-        header.translate === undefined || header.translate
-          ? i18n.t(header.text).toString()
-          : header.text,
-    }
+  function addHeaders(headers: Headers) {
+    headersMap.value.byIds = { ...headersMap.value.byIds, ...headers.byIds };
+    headersMap.value.allIds = [...headersMap.value.allIds, ...headers.allIds];
   }
-  const translateHeader = (header: Header) => {
-    if (header.translate === undefined || header.translate) {
-      header.text = i18n.t(header.text).toString()
-    }
-    return header
-  }
-
-  const headers = computed(() => {
-    if (statefulHeaders)
-      return $accessor.headers[module].allIds.map((id: string) =>
-        translateHeaderFromState($accessor.headers[module].byIds[id])
-      )
-    return state.localHeaders.allIds.map((id: string) =>
-      translateHeader(state.localHeaders.byIds[id])
-    )
-  })
-
-  const handleHeadersChange = (e: string) => {
-    if (statefulHeaders) $accessor.headers.toggleHeader({ module, headerId: e })
-    else state.localHeaders.byIds[e].show = !state.localHeaders.byIds[e].show
-  }
-  const handleHeadersReset = () => {
-    if (statefulHeaders)
-      $accessor.headers.resetHeaders({
-        module,
-        options: options.value,
-      })
-    else {
-      state.localHeaders = cloneDeep(localHeaders)
-      options.value.sortBy?.forEach((headerId: string) => {
-        state.localHeaders.byIds[headerId].show = true
-      })
-    }
-  }
-
-  return { headers, handleHeadersChange, handleHeadersReset }
+  return { headers, handleHeadersChange, handleHeadersReset, addHeaders };
 }

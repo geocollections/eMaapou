@@ -1,41 +1,25 @@
-<template>
-  <v-btn
-    outlined
-    color="grey"
-    class="reset-search mr-2 px-3 montserrat rounded text-body-1 text-capitalize"
-    :icon="$vuetify.breakpoint.mdOnly"
-    @click="$emit('click')"
-  >
-    <v-tooltip v-if="$vuetify.breakpoint.mdOnly" bottom>
-      <template #activator="{ on }">
-        <v-icon :right="!$vuetify.breakpoint.mdOnly" v-on="on">
-          {{ icons.mdiEraser }}
-        </v-icon>
-      </template>
+<script setup lang="ts">
+import { mdiEraser } from "@mdi/js";
 
-      <span>
-        {{ $t('common.resetSearchLong') }}
-      </span>
-    </v-tooltip>
-    <v-icon v-else left>{{ icons.mdiEraser }}</v-icon>
-    <span class="hidden-md-only montserrat">
-      {{ $t('common.resetSearch') }}
-    </span>
-  </v-btn>
-</template>
-<script>
-import { mdiEraser } from '@mdi/js'
-export default {
-  name: 'SearchResetButton',
-  computed: {
-    icons() {
-      return {
-        mdiEraser,
-      }
-    },
-  },
-}
+const emit = defineEmits(["click"]);
 </script>
+
+<template>
+  <VBtn
+    variant="text"
+    color="grey-darken-1"
+    class="reset-search mr-2 montserrat rounded text-capitalize"
+    @click="emit('click')"
+  >
+    <VIcon
+      :icon="mdiEraser"
+      start
+    />
+    <span class="montserrat">
+      {{ $t("common.resetSearch") }}
+    </span>
+  </VBtn>
+</template>
 
 <style scoped>
 .reset-search {

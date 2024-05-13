@@ -1,43 +1,57 @@
+<script setup lang="ts">
+import type { Image } from "../ImageBar.vue";
+
+type AttachmentImage = Image<undefined>;
+
+const { t } = useI18n();
+const img = useImage();
+const localePath = useLocalePath();
+const showOverlay = ref(false);
+const images = ref<AttachmentImage[]>([]);
+function openOverlay(image: AttachmentImage) {
+  showOverlay.value = true;
+  images.value = [image];
+}
+function getAttachmentType(type: number) {
+  switch (type) {
+    case 1:
+      return t("attachment.typeSpecimen");
+    case 2:
+      return t("attachment.typeImage");
+    case 4:
+      return t("attachment.typeReference");
+    default:
+      return t("attachment.typeOther");
+  }
+}
+</script>
+
 <template>
   <div>
-    <base-data-table
+    <!-- @vue-ignore -->
+    <BaseDataTable
       v-bind="$attrs"
-      :headers="headers"
-      :items="items"
-      :options="options"
-      :count="count"
-      v-on="$listeners"
-      @change:headers="handleHeadersChange"
-      @reset:headers="handleHeadersReset"
+      :item-to="(item) => localePath({ name: 'file-id', params: { id: item.id } })"
     >
       <template #item.id="{ item }">
-        <nuxt-link
-          v-if="item.attachment_id"
-          class="text-link"
-          :to="
-            localePath({
-              name: 'file-id',
-              params: { id: item.attachment_id },
-            })
-          "
-        >
-          {{ item.attachment_id }}
-        </nuxt-link>
+        {{ item.attachment_id }}
       </template>
       <template #item.date="{ item }">
         <div v-if="item.date_created">
           {{ $formatDate(item.date_created) }}
         </div>
-        <div v-else>{{ item.date_created_free }}</div>
+        <div v-else>
+          {{ item.date_created_free }}
+        </div>
       </template>
 
       <template #item.reference="{ item }">
-        <base-link-external
+        <BaseLinkExternal
           v-if="item.reference_id"
-          @click.native="$openGeology('reference', item.reference_id)"
+          @click="$openGeology('reference', item.reference_id)"
         >
           {{ item.reference }}
-        </base-link-external>
+        </BaseLinkExternal>
       </template>
 
       <template #item.type="{ item }">
@@ -45,101 +59,31 @@
       </template>
 
       <template #item.image="{ item }">
-        <thumbnail-image
+        <ThumbnailImage
           v-if="item.uuid_filename"
           class="my-1"
           :src="
-            $img(
+            img(
               `${item.uuid_filename}`,
               { size: 'small' },
-              { provider: 'geocollections' }
+              { provider: 'geocollections' },
             )
           "
           @click="
             openOverlay({
-              src: item.uuid_filename,
-              modifiers: { size: 'large' },
-              options: { provider: 'geocollections' },
+              filename: item.uuid_filename,
               id: item.id,
+              info: undefined,
             })
           "
         />
       </template>
-    </base-data-table>
-    <image-overlay v-model="showOverlay" :image="overlayImage" />
+    </BaseDataTable>
+    <ImageOverlay
+      v-model="showOverlay"
+      :initial-slide="0"
+      :images="images"
+      :total="1"
+    />
   </div>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  ref,
-  toRef,
-  useContext,
-} from '@nuxtjs/composition-api'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
-import ImageOverlay, { OverlayImage } from '~/components/ImageOverlay.vue'
-import { useHeaders } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableAttachmentSolr',
-  components: { BaseLinkExternal, BaseDataTable, ThumbnailImage, ImageOverlay },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { i18n } = useContext()
-    const showOverlay = ref(false)
-    const overlayImage = ref<OverlayImage>()
-    const openOverlay = (image: OverlayImage) => {
-      overlayImage.value = image
-      showOverlay.value = true
-    }
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_ATTACHMENT_SOLR,
-      options: toRef(props, 'options'),
-    })
-
-    const getAttachmentType = (type: number) => {
-      switch (type) {
-        case 1:
-          return i18n.t('attachment.typeSpecimen')
-        case 2:
-          return i18n.t('attachment.typeImage')
-        case 4:
-          return i18n.t('attachment.typeReference')
-        default:
-          return i18n.t('attachment.typeOther')
-      }
-    }
-    return {
-      showOverlay,
-      overlayImage,
-      openOverlay,
-      headers,
-      handleHeadersReset,
-      handleHeadersChange,
-      getAttachmentType,
-    }
-  },
-})
-</script>

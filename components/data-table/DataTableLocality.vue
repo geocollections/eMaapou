@@ -1,29 +1,39 @@
+<script setup lang="ts">
+import isNil from "lodash/isNil";
+
+const emit = defineEmits(["click:row"]);
+
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <base-data-table
+  <!-- @vue-ignore -->
+  <BaseDataTable
     v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
+    :item-to="(item) => localePath({ name: 'locality-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
   >
     <template #item.id="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'locality-id', params: { id: item.id } })"
-      >
-        {{ item.id }}
-      </nuxt-link>
+      {{ item.id }}
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'locality-id', params: { id: item.id } })"
-      >
-        {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
+      {{ $translate({ et: item.locality, en: item.locality_en }) }}
+    </template>
+
+    <template #item.coordinates="{ item }">
+      <span v-if="!isNil(item.latitude) && !isNil(item.longitude)">
+        {{ getCoordinatesStr(item.latitude, item.longitude) }}
+      </span>
+    </template>
+    <template #item.latitude="{ item }">
+      <span v-if="item.latitude">
+        {{ item.latitude.toFixed(6) }}
+      </span>
+    </template>
+    <template #item.longitude="{ item }">
+      <span v-if="item.longitude">
+        {{ item.longitude.toFixed(6) }}
+      </span>
     </template>
     <template #item.country="{ item }">
       {{ $translate({ et: item.country, en: item.country_en }) }}
@@ -55,50 +65,5 @@
     <template #item.taxonOccurrences="{ item }">
       {{ item.related_taxon_occurrences }}
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { toRef, defineComponent, PropType } from '@nuxtjs/composition-api'
-import { useHeadersWithState } from '~/composables/useHeaders'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_LOCALITY } from '~/constants'
-import { IOptions } from '~/services'
-export default defineComponent({
-  name: 'DataTableLocality',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object as PropType<IOptions>,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } =
-      useHeadersWithState({
-        module: 'locality',
-        localHeaders: HEADERS_LOCALITY,
-        statefulHeaders: props.statefulHeaders,
-        options: toRef(props, 'options'),
-      })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
-</script>

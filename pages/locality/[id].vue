@@ -1,0 +1,485 @@
+<script setup lang="ts">
+import {
+  mdiBookOpenPageVariantOutline,
+  mdiChartScatterPlot,
+  mdiEarth,
+  mdiMapMarker,
+  mdiOpenInNew,
+  mdiScrewMachineFlatTop,
+} from "@mdi/js";
+import type { Tab } from "~/composables/useTabs";
+
+const { $solrFetch, $translate, $geoloogiaFetch } = useNuxtApp();
+
+const localePath = useLocalePath();
+const { t } = useI18n();
+const route = useRoute();
+
+const localitiesStore = useLocalities();
+const { getQueryParams } = localitiesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
+
+const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
+
+const {
+  data: localitiesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/locality", {
+  routeName: "locality-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: computed(
+      () =>
+        solrSort.value
+        ?? $translate({ et: "locality asc", en: "locality_en asc" }),
+    ),
+  },
+});
+
+const similarLocalities = computed(
+  () => localitiesRes.value?.response.docs ?? [],
+);
+
+const tabs = {
+  general: {
+    type: "static",
+    routeName: "locality-id",
+    title: "locality.general",
+    props: {},
+  } satisfies Tab,
+  locality_reference: {
+    type: "dynamic",
+    routeName: "locality-id-references",
+    title: "locality.references",
+    count: async () => {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+        query: {
+          locality: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  locality_description: {
+    type: "dynamic",
+    routeName: "locality-id-descriptions",
+    title: "locality.descriptions",
+    count: async () => {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+        query: {
+          locality: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  attachment_link: {
+    type: "dynamic",
+    routeName: "locality-id-attachments",
+    title: "locality.attachments",
+    count: async () => {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+        query: {
+          locality: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  sample: {
+    type: "dynamic",
+    routeName: "locality-id-samples",
+    title: "locality.samples",
+    count: async () => {
+      const res = await $solrFetch<SolrResponse>("/sample", {
+        query: {
+          q: `locality_id:${route.params.id}`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  boxes: {
+    type: "dynamic",
+    routeName: "locality-id-drillcore-boxes",
+    title: "locality.drillcoreBoxes",
+    count: async (ctx) => {
+      if (!ctx?.drillcore)
+        return 0;
+      return ctx.drillcore.boxes;
+    },
+    props: {},
+  } satisfies Tab,
+  fossils: {
+    type: "dynamic",
+    routeName: "locality-id-fossils",
+    title: "locality.fossils",
+    count: async () => {
+      const res = await $solrFetch<SolrResponse>("/taxon_search", {
+        query: {
+          q: `locality_id:${route.params.id} AND rank:[14 TO 18]`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  specimen: {
+    type: "dynamic",
+    routeName: "locality-id-specimens",
+    title: "locality.specimens",
+    count: async () => {
+      const res = await $solrFetch<SolrResponse>("/specimen", {
+        query: {
+          q: `locality_id:${route.params.id}`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  locality_synonym: {
+    type: "dynamic",
+    routeName: "locality-id-synonyms",
+    title: "locality.synonyms",
+    count: async () => {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_synonym/", {
+        query: {
+          locality: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  stratigraphy_stratotype: {
+    type: "dynamic",
+    routeName: "locality-id-stratotypes",
+    title: "locality.stratotypes",
+    count: async () => {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_stratotype/", {
+        query: {
+          locality: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  analysis: {
+    type: "dynamic",
+    routeName: "locality-id-analyses",
+    title: "locality.analyses",
+    count: async () => {
+      const res = await $solrFetch<SolrResponse>("/analysis", {
+        query: {
+          q: `locality_id:${route.params.id}`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  analysis_results: {
+    type: "dynamic",
+    routeName: "locality-id-graphs",
+    title: "locality.graphs",
+    count: async () => {
+      const res = await $solrFetch<SolrResponse>("/analysis_results", {
+        query: {
+          q: `locality_id:${route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+};
+
+const { data } = await useAsyncData("locality", async () => {
+  const locality = await $geoloogiaFetch<any>(`/locality/${route.params.id}/`, {
+    query: {
+      nest: 1,
+    },
+    onResponseError: (_error) => {
+      showError({
+        statusCode: 404,
+        message: t("error.notFound"),
+      });
+    },
+  });
+
+  const drillcorePromise = $geoloogiaFetch<any>("/drillcore/", {
+    query: {
+      locality: route.params.id,
+    },
+  });
+  // Checking if locality has a related .las file to show in graph tab
+  const lasFilePromise = $geoloogiaFetch<any>("/attachment_link/", {
+    query: {
+      attachment__uuid_filename__iendswith: ".las",
+      locality: route.params.id,
+      fields: "attachment",
+    },
+  });
+
+  const [drillcoreResponse, lasFileResponse] = await Promise.all([
+    drillcorePromise,
+    lasFilePromise,
+  ]);
+  const drillcore
+    = drillcoreResponse.results.length > 0 ? drillcoreResponse.results[0] : null;
+
+  const hydratedTabs = await hydrateTabs(tabs, {
+    props: {
+      general: { locality },
+      boxes: { drillcore: drillcore?.id },
+      analysis_results: {
+        localityObject: locality,
+        attachment: lasFileResponse?.results?.[0]?.attachment,
+      },
+    },
+    ctx: { drillcore },
+  });
+
+  hydratedTabs.analysis_results.count
+    = hydratedTabs.analysis_results.count
+    + hydratedTabs.locality_description.count
+    + hydratedTabs.sample.count
+    + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
+
+  const imagesRes = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_image/", {
+    query: {
+      locality: route.params.id,
+      nest: 1,
+      limit: 1,
+      ordering: "sort",
+    },
+  });
+
+  return {
+    locality,
+    drillcore,
+    analysisResultsCount: hydratedTabs.analysis_results.count,
+    referenceCount: hydratedTabs.locality_reference.count,
+    tabs: filterHydratedTabs(hydratedTabs, [
+      "general",
+      "locality_reference",
+      "locality_description",
+      "attachment_link",
+      "sample",
+      "boxes",
+      "fossils",
+      "specimen",
+      "locality_synonym",
+      "stratigraphy_stratotype",
+      "analysis",
+      "analysis_results",
+    ]),
+    images: imagesRes.results,
+  };
+}, {
+  default: () => ({
+    locality: null,
+    drillcore: null,
+    analysisResultsCount: 0,
+    referenceCount: 0,
+    tabs: [] as HydratedTab[],
+    images: [],
+  }),
+});
+
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+
+const title = computed(() =>
+  $translate({
+    et: data.value?.locality.locality,
+    en: data.value?.locality.locality_en,
+  }),
+);
+redirectInvalidTab({
+  redirectRoute: localePath({
+    name: "locality-id",
+    params: { id: route.params.id },
+  }),
+  tabs: data.value?.tabs ?? [],
+});
+
+const img = useImage();
+
+useHead({
+  title: `${title.value} | ${t("locality.pageTitle")}`,
+});
+
+useSeoMeta({
+  ogImage: data.value?.images[0]?.attachment?.filename
+    ? img(
+        `${data.value.images[0].attachment.filename}`,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+    )
+    : null,
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
+<template>
+  <NuxtLayout name="detail" :show-similar="showDrawer">
+    <template #title>
+      <HeaderDetailNew
+        :title="
+          $translate({
+            et: data?.locality.locality,
+            en: data?.locality.locality_en,
+          })
+        "
+      >
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/locality', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiMapMarker }}
+            </VIcon>
+            {{ $t("common.locality") }}
+          </VChip>
+        </template>
+        <template #sub>
+          <VBtn
+            v-if="data?.drillcore"
+            size="small"
+            rounded
+            flat
+            color="accent"
+            class="mt-2 mr-2 montserrat text-none"
+            @click="
+              $router.push(
+                localePath({
+                  name: 'drillcore-id',
+                  params: { id: data?.drillcore.id },
+                }),
+              )
+            "
+          >
+            <VIcon start>
+              {{ mdiScrewMachineFlatTop }}
+            </VIcon>
+            {{
+              $translate({
+                et: data?.drillcore.drillcore,
+                en: data?.drillcore.drillcore_en,
+              })
+            }}
+          </VBtn>
+          <VBtn
+            v-if="data?.analysisResultsCount > 0"
+            size="small"
+            rounded
+            flat
+            color="accent"
+            class="mt-2 mr-2 montserrat text-none"
+            :to="
+              localePath({
+                path: '/analytical-data',
+                query: { locality: route.params.id },
+              })
+            "
+          >
+            <VIcon start>
+              {{ mdiChartScatterPlot }}
+            </VIcon>
+            {{ $t("locality.linkToAnalyticalData") }}
+          </VBtn>
+          <VBtn
+            v-if="data?.referenceCount > 0"
+            size="small"
+            rounded
+            flat
+            color="accent"
+            class="mt-2 montserrat text-none"
+            :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
+          >
+            <VIcon start>
+              {{ mdiBookOpenPageVariantOutline }}
+            </VIcon>
+            {{ $t("locality.linkGeoscienceLiterature") }}
+            <VIcon end>
+              {{ mdiOpenInNew }}
+            </VIcon>
+          </VBtn>
+        </template>
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </HeaderDetailNew>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarLocalities"
+        :total-results="localitiesRes?.response.numFound ?? 0"
+        :search-route="
+          localePath({ path: '/locality', query: getQueryParams() })
+        "
+        :get-result-route="
+          (item) => localePath({ name: 'locality-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: locality }">
+          <div class="font-weight-medium text-wrap">
+            {{
+              $translate({ et: locality.locality, en: locality.locality_en })
+            }}
+          </div>
+        </template>
+        <template #itemSubtitle="{ item: locality }">
+          <div v-if="locality.country_id" class="d-flex align-center">
+            <VIcon start size="small">
+              {{ mdiEarth }}
+            </VIcon>
+            <span class="text--secondary">
+              {{
+                $translate({
+                  et: locality.country,
+                  en: locality.country_en,
+                })
+              }}
+            </span>
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
+    <NuxtPage v-bind="activeTabProps" />
+  </NuxtLayout>
+</template>

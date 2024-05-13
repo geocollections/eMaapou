@@ -1,17 +1,16 @@
-import { Plugin } from '@nuxt/types'
-
-export interface ITranslations {
-  et: string
-  en: string
+interface Translation {
+  et: string;
+  en: string;
 }
 
-const plugin: Plugin = ({ i18n }, inject) => {
-  const translate = (translations: ITranslations): string => {
-    return i18n.locale === 'et'
-      ? translations.et
-      : translations.en ?? translations.et
+export default defineNuxtPlugin(({ $i18n }) => {
+  function translate(translations: Translation) {
+    // eslint-disable-next-line ts/no-unsafe-member-access
+    return (($i18n as any).locale.value) === "et" ? translations.et : translations.en;
   }
-  inject('translate', translate)
-}
-
-export default plugin
+  return {
+    provide: {
+      translate,
+    },
+  };
+});

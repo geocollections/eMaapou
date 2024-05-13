@@ -1,126 +1,70 @@
+<script setup lang="ts">
+const page = ref(1);
+const newsList = ref<any[]>([]);
+const complete = ref(false);
+const loading = ref(false);
+
+const localePath = useLocalePath();
+const { $geoloogiaFetch } = useNuxtApp();
+
+async function infiniteHandler(isIntersecting: boolean) {
+  if (!isIntersecting)
+    return;
+  if (complete.value)
+    return;
+
+  loading.value = true;
+
+  const res = await $geoloogiaFetch<GeoloogiaListResponse>("/web_news/", {
+    query: {
+      offset: (page.value - 1) * 5,
+      limit: 5,
+      ordering: "-date_added",
+    },
+  });
+
+  if (!res.next) {
+    newsList.value.push(...res.results);
+    loading.value = false;
+    complete.value = true;
+  }
+  else {
+    page.value += 1;
+    newsList.value.push(...res.results);
+    loading.value = false;
+  }
+};
+
+const { t } = useI18n();
+
+await infiniteHandler(true);
+
+useHead({
+  title: t("news.pageTitle"),
+});
+</script>
+
 <template>
-  <v-main>
-    <v-container
-      class="pt-1 pb-10"
-      style="min-height: 100vh"
-      :fluid="$vuetify.breakpoint.lgAndDown"
+  <VMain>
+    <VContainer
+      class="pt-1 pb-10 mx-auto"
+      style="min-height: 100vh; max-width: 800px;"
+      :fluid="$vuetify.display.lgAndDown"
     >
       <div>
-        <base-header class="py-4" :title="$t('common.news')" />
-        <!-- <v-btn @click="nextPage">next</v-btn> -->
-        <client-only>
-          <div>
-            <stack
-              v-if="newsList.length > 0"
-              ref="stacker"
-              :column-min-width="400"
-              :gutter-width="15"
-              :gutter-height="15"
-              monitor-images-loaded
-            >
-              <stack-item v-for="(news, i) in newsList" :key="i">
-                <news-preview-card
-                  :preview-lenght="500"
-                  :date="news.date_added"
-                  :title="$translate({ et: news.title_et, en: news.title_en })"
-                  :content="$translate({ et: news.text_et, en: news.text_en })"
-                  @click="openNews(news)"
-                />
-              </stack-item>
-            </stack>
-            <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
-              <template #spinner>
-                <v-progress-circular color="primary darken-2" indeterminate />
-              </template>
-              <template #no-more>{{ $t('infinite.noMore') }}</template>
-              <template #error="{ trigger }">
-                <div>
-                  {{ $t('infinite.error') }}
-                </div>
-                <br />
-                <v-btn outlined color="primary darken-2" @click="trigger">
-                  {{ $t('infinite.retry') }}
-                </v-btn>
-              </template>
-            </infinite-loading>
-          </div>
-        </client-only>
+        <BaseHeader class="py-4" :title="$t('common.news')" />
+        <div v-for="(news, i) in newsList" :key="i">
+          <NewsPreviewCard
+            :preview-lenght="500"
+            :date="news.date_added"
+            :title="$translate({ et: news.title_et, en: news.title_en })"
+            :content="$translate({ et: news.text_et, en: news.text_en })"
+            :to="localePath({ name: 'news-id', params: { id: news.id } })"
+          />
+          <div />
+        </div>
+        <div v-intersect="infiniteHandler" />
       </div>
-    </v-container>
-  </v-main>
+    </VContainer>
+  </VMain>
 </template>
-
-<script>
-import NewsPreviewCard from '~/components/NewsPreviewCard.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
-export default {
-  components: {
-    BaseHeader,
-    NewsPreviewCard,
-  },
-  data() {
-    return {
-      page: 1,
-      newsList: [],
-    }
-  },
-  head() {
-    return {
-      title: this.$t('news.pageTitle'),
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('news.pageTitle'),
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  methods: {
-    infiniteHandler($state) {
-      this.$services.sarvREST
-        .getResourceList('web_news', {
-          options: {
-            page: this.page,
-            itemsPerPage: 5,
-            sortBy: ['date_added'],
-            sortDesc: [true],
-          },
-          fields: { date_added: 'date_added' },
-        })
-        .then((res) => {
-          if (!res.next) {
-            this.newsList.push(...res.items)
-            setTimeout(() => {
-              this.$refs.stacker.reflow()
-            }, 50)
-
-            $state.loaded()
-            $state.complete()
-          } else {
-            this.page += 1
-            this.newsList.push(...res.items)
-            setTimeout(() => {
-              this.$refs.stacker.reflow()
-            }, 50)
-
-            $state.loaded()
-          }
-        })
-        .catch(() => {
-          $state.error()
-        })
-    },
-    openNews(news) {
-      this.$router.push(
-        this.localePath({ name: 'news-id', params: { id: news.id } })
-      )
-    },
-  },
-}
-</script>

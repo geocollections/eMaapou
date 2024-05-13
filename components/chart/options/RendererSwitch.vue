@@ -1,47 +1,44 @@
+<script setup lang="ts">
+import { Renderer } from "~/types/enums";
+
+defineProps({
+  renderer: {
+    type: String,
+    default: Renderer.Canvas,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["update"]);
+</script>
+
 <template>
   <div>
     <div class="text-caption" v-text="$t('common.render')" />
-    <v-btn-toggle
-      dense
+    <VBtnToggle
+      density="compact"
       color="accent"
-      :value="renderer"
-      @change="$emit('update', $event)"
+      :model-value="renderer"
+      @update:model-value="emit('update', $event)"
     >
-      <v-btn
+      <VBtn
         width="65"
-        small
+        size="small"
         class="text-none montserrat"
-        :outlined="renderer !== 'canvas'"
+        :variant="renderer !== 'canvas' ? 'outlined' : undefined"
         value="canvas"
       >
         Canvas
-      </v-btn>
-      <v-btn
+      </VBtn>
+      <VBtn
         width="65"
-        small
+        size="small"
         class="text-none montserrat"
-        :outlined="renderer !== 'svg'"
+        :variant="renderer !== 'svg' ? 'outlined' : undefined"
         value="svg"
       >
         SVG
-      </v-btn>
-    </v-btn-toggle>
+      </VBtn>
+    </VBtnToggle>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import { Renderer } from '~/types/enums'
-export default defineComponent({
-  name: 'RendererSwitch',
-  props: {
-    renderer: {
-      type: String,
-      default: Renderer.Canvas,
-      required: true,
-    },
-  },
-})
-</script>
-
-<style scoped></style>

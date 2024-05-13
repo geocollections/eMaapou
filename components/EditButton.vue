@@ -1,41 +1,31 @@
-<template>
-  <v-btn
-    id="edit-btn"
-    icon
-    dark
-    small
-    color="deep-orange darken-2"
-    @click="handleClick"
-  >
-    <v-icon small>{{ icons.mdiSquareEditOutline }}</v-icon>
-    <v-tooltip bottom activator="#edit-btn">
-      <span>{{ $t('common.linkToEdit') }}</span>
-    </v-tooltip>
-  </v-btn>
-</template>
+<script setup lang="ts">
+import { mdiSquareEditOutline } from "@mdi/js";
 
-<script lang="ts">
-import { mdiSquareEditOutline } from '@mdi/js'
-import { defineComponent } from '@nuxtjs/composition-api'
+const { $openEdit } = useNuxtApp();
+const route = useRoute();
 
-export default defineComponent({
-  name: 'EditButton',
-  computed: {
-    icons() {
-      return {
-        mdiSquareEditOutline,
-      }
-    },
-    table() {
-      return this.$route.name?.substring(0, this.$route.name.indexOf('-')) ?? ''
-    },
-  },
-  methods: {
-    handleClick() {
-      let table = this.table
-      if (table === 'photo' || table === 'file') table = 'attachment'
-      this.$openEdit(table, this.$route.params.id)
-    },
-  },
-})
+const module = computed(() => {
+  return route.name?.toString().substring(0, route.name.toString().indexOf("-")) ?? "";
+});
+
+function handleClick() {
+  let editModule = module.value;
+  if (module.value === "photo" || module.value === "file")
+    editModule = "attachment";
+  $openEdit(editModule, route.params.id as string);
+}
 </script>
+
+<template>
+  <VBtn
+    id="edit-btn"
+    :icon="mdiSquareEditOutline"
+    size="small"
+    variant="text"
+    color="deep-orange-darken-2"
+    @click="handleClick"
+  />
+  <VTooltip location="bottom" activator="#edit-btn">
+    <span>{{ $t("common.linkToEdit") }}</span>
+  </VTooltip>
+</template>

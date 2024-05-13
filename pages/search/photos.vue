@@ -1,70 +1,44 @@
-<template>
-  <div>
-    <data-table-attachment-solr
-      :show-search="false"
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+const props = defineProps({
+  query: {
+    type: String,
+    required: true,
+  },
+});
 
-<script>
-import { HEADERS_PHOTO, IMAGE } from '~/constants'
-import DataTableAttachmentSolr from '~/components/data-table/DataTableAttachmentSolr.vue'
+const {
+  options,
+  handleUpdate,
+  headers,
+  solrSort,
+  handleHeadersReset,
+  handleHeadersChange,
+} = useDataTable({
+  initOptions: IMAGE.options,
+  initHeaders: HEADERS_PHOTO,
+});
 
-export default {
-  components: { DataTableAttachmentSolr },
-  props: {
-    query: {
-      type: String,
-      default: '',
-    },
-  },
-  data() {
-    return {
-      options: IMAGE.options,
-      items: [],
-      count: 0,
-    }
-  },
-  async fetch() {
-    const response = await this.$services.sarvSolr.getResourceList(
-      'attachment',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_PHOTO),
-        searchFilters: {
-          specimenImageAttachment: {
-            value: '2',
-            type: 'text',
-            lookUpType: 'equals',
-            fields: ['specimen_image_attachment'],
-          },
-        },
-      }
-    )
-    this.items = response.items
-    this.count = response.count
-  },
-  watch: {
-    '$route.query': function (newQuery, oldQuery) {
-      if (
-        !this._inactive &&
-        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
-      ) {
-        this.$fetch()
-      }
-    },
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useSolrFetch<SolrResponse>("/attachment", {
+  query: computed(() => ({
+    q: props.query,
+    rows: options.value.itemsPerPage,
+    start: getOffset(options.value.page, options.value.itemsPerPage),
+    fq: "specimen_image_attachment:2",
+    sort: solrSort.value,
+  })),
+});
 </script>
+
+<template>
+  <DataTableAttachmentSolr
+    :show-search="false"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

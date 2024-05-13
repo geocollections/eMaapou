@@ -1,31 +1,22 @@
-FROM node:16.18.0-bullseye-slim AS build-stage
+FROM node:20.10.0-bullseye-slim AS base
 
-# create destination directory
-RUN mkdir -p /src
-WORKDIR /src
+ENV NODE_ENV=production
 
-COPY package*.json ./
-RUN npm ci && npm cache clean --force
+WORKDIR /code
 
-COPY . .
+FROM base as build
 
-RUN npm run build
-RUN rm -Rf node_modules
+COPY --link package*.json ./
 
-FROM node:16.18.0-bullseye-slim AS production-stage
+RUN npm install --production=false
 
-WORKDIR /app
+COPY --link . .
 
-COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
-COPY --from=build-stage /src/ .
+RUN npm run build && npm prune
 
-# set app serving to permissive / assigned
-ENV NUXT_HOST=0.0.0.0
-# set app port
-ENV NUXT_PORT=5000
+FROM base
 
-# start the app
-CMD [ "npm", "start" ]
-# expose 5000 on container
-EXPOSE 5000
+COPY --from=build /code/.output /code/.output
+
+CMD [ "node", "./.output/server/index.mjs" ]
+

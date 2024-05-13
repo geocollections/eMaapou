@@ -1,29 +1,97 @@
+<script setup lang="ts">
+import { mdiMagnify } from "@mdi/js";
+import type { DataTableOptions } from "~/constants";
+
+const props = withDefaults(
+  defineProps<{
+    items: any[];
+    options: DataTableOptions;
+    count?: number;
+    showSearch?: boolean;
+  }>(),
+  { count: 0, showSearch: true },
+);
+
+const emit = defineEmits(["update"]);
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+const localeRoute = useLocaleRoute();
+const img = useImage();
+
+const search = ref("");
+const searchDebounced = useDebounce(search, 250);
+const isLoading = ref(false);
+const footerProps = ref({
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+});
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+watch(
+  () => props.items,
+  () => {
+    isLoading.value = false;
+  },
+);
+
+watch(searchDebounced, () => {
+  handleSearch();
+});
+
+function boxHasInfo(box: any) {
+  return (
+    box.drillcore_box?.depth_start
+    || box.drillcore_box?.depth_end
+    || box.drillcore_box?.stratigraphy_top
+    || box.drillcore_box?.stratigraphy_base
+    || box.drillcore_box?.depth_other
+    || box.drillcore_box?.remarks
+  );
+}
+
+function handleChange(options: DataTableOptions) {
+  emit("update", { options, search: search.value });
+}
+
+function handleSearch() {
+  const options = { ...props.options, page: 1 };
+  isLoading.value = true;
+  emit("update", { options, search: search.value });
+}
+</script>
+
 <template>
   <div>
-    <v-row class="py-2" no-gutters>
-      <v-col
+    <VRow class="py-2" no-gutters>
+      <VCol
         v-if="showSearch"
         align-self="center"
         cols="12"
         sm="4"
         class="px-3"
       >
-        <v-text-field
+        <VTextField
           v-model="search"
           class="pt-0 mt-0"
-          color="primary darken-2"
-          :append-icon="icons.mdiMagnify"
+          color="primary-darken-2"
           :label="$t('common.search')"
+          :prepend-inner-icon="mdiMagnify"
+          variant="underlined"
+          density="compact"
           single-line
           hide-details
           clearable
-          @input="handleSearch"
-        ></v-text-field>
-      </v-col>
-      <v-col class="d-flex justify-end" align-self="center">
-        <base-data-table-pagination
+        />
+      </VCol>
+      <VCol class="d-flex justify-end" align-self="center">
+        <BaseDataTablePagination
           :options="options"
-          :pagination="pagination"
+          :page-count="pagination.pageCount"
           :items-per-page-options="footerProps['items-per-page-options']"
           :items-per-page-text="footerProps['items-per-page-text']"
           :page-select-text="
@@ -37,101 +105,103 @@
           select-page-id="header-select-btn"
           @update:options="handleChange"
         />
-      </v-col>
-    </v-row>
-    <v-row no-gutters>
-      <v-col
+      </VCol>
+    </VRow>
+    <VRow no-gutters>
+      <VCol
         v-for="box in items"
         :key="box.id"
         cols="12"
         class="pa-0 drillcore-box"
       >
-        <v-divider />
-        <v-hover v-slot="{ hover }">
-          <v-card
+        <VDivider />
+        <VHover v-slot="{ isHovering, props: hoverProps }">
+          <VCard
+            v-bind="hoverProps"
             flat
-            tile
             :ripple="false"
-            @click="
-              $openNuxtWindow(
-                localeLocation({
-                  name: 'drillcore-box-id',
-                  params: { id: box.drillcore_box.id },
-                })
-              )
+            :to="
+              localeRoute({
+                name: 'drillcore-box-id',
+                params: { id: box.drillcore_box.id },
+              })
             "
           >
-            <v-card-text class="drillcore-box__card">
-              <v-row v-if="box.drillcore_box" align="start">
-                <v-col cols="12" sm="8" align-self="center">
-                  <client-only>
-                    <v-img
+            <VCardText class="drillcore-box__card">
+              <VRow v-if="box.drillcore_box" align="start">
+                <VCol
+                  cols="12"
+                  sm="8"
+                  align-self="center"
+                >
+                  <ClientOnly>
+                    <VImg
                       class="mx-auto rounded transition-swing"
                       :class="{
-                        'elevation-2': hover,
-                        'elevation-0': !hover,
+                        'elevation-2': isHovering,
+                        'elevation-0': !isHovering,
                       }"
                       max-width="1000"
                       max-height="800"
                       eager
                       :lazy-src="
-                        $img(
+                        img(
                           box.attachment.filename,
                           { size: 'small' },
-                          { provider: 'geocollections' }
+                          { provider: 'geocollections' },
                         )
                       "
                       :src="
-                        $img(
+                        img(
                           box.attachment.filename,
                           { size: 'medium' },
-                          { provider: 'geocollections' }
+                          { provider: 'geocollections' },
                         )
                       "
                     >
                       <template #placeholder>
-                        <v-row
+                        <VRow
                           class="fill-height ma-0"
                           align="center"
                           justify="center"
                         >
-                          <v-progress-circular
+                          <VProgressCircular
                             indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
+                            color="grey-lighten-5"
+                          />
+                        </VRow>
                       </template>
-                    </v-img>
-                  </client-only>
-                </v-col>
-                <v-col cols="12" sm="4">
-                  <v-card-title class="px-0 pt-0 montserrat">
+                    </VImg>
+                  </ClientOnly>
+                </VCol>
+                <VCol cols="12" sm="4">
+                  <VCardTitle class="px-0 pt-0 montserrat">
                     {{
-                      $t('drillcoreBox.nr', {
+                      $t("drillcoreBox.nr", {
                         number: box.drillcore_box.number,
                       })
                     }}
-                  </v-card-title>
-                  <base-table
+                  </VCardTitle>
+                  <BaseTable
                     v-if="boxHasInfo(box)"
                     class="transition-swing"
                     :class="{
-                      'elevation-2': hover,
-                      'elevation-0': !hover,
+                      'elevation-2': isHovering,
+                      'elevation-0': !isHovering,
                     }"
                     :style="{
-                      'background-color': hover ? 'white' : 'transparent',
+                      'background-color': isHovering ? 'white' : 'transparent',
                     }"
                   >
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.depthStart')"
                       :value="box.drillcore_box.depth_start"
                     />
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.depthEnd')"
                       :value="box.drillcore_box.depth_end"
                     />
-                    <table-row-link
+                    <TableRowLink
                       v-if="box.drillcore_box.stratigraphy_top"
                       :title="$t('drillcoreBox.stratigraphyTop')"
                       :value="
@@ -151,7 +221,7 @@
                         })
                       "
                     />
-                    <table-row-link
+                    <TableRowLink
                       v-if="box.drillcore_box.stratigraphy_base"
                       :title="$t('drillcoreBox.stratigraphyBase')"
                       :value="
@@ -171,104 +241,24 @@
                         })
                       "
                     />
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.depthOther')"
                       :value="box.drillcore_box.depth_other"
                     />
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.remarks')"
                       :value="box.drillcore_box.remarks"
                     />
-                  </base-table>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-hover>
-      </v-col>
-    </v-row>
+                  </BaseTable>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VHover>
+      </VCol>
+    </VRow>
   </div>
 </template>
-
-<script>
-import debounce from 'lodash/debounce'
-import { mdiMagnify } from '@mdi/js'
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import BaseTable from '~/components/base/BaseTable.vue'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-export default {
-  name: 'ListDrillcoreBox',
-  components: { BaseDataTablePagination, TableRow, TableRowLink, BaseTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    options: {
-      type: Object,
-      default: () => {},
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      search: '',
-      isLoading: false,
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
-    }
-  },
-  computed: {
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
-    },
-    icons() {
-      return {
-        mdiMagnify,
-      }
-    },
-  },
-  watch: {
-    items() {
-      this.isLoading = false
-    },
-  },
-  methods: {
-    boxHasInfo(box) {
-      return (
-        box.drillcore_box?.depth_start ||
-        box.drillcore_box?.depth_end ||
-        box.drillcore_box?.stratigraphy_top ||
-        box.drillcore_box?.stratigraphy_base ||
-        box.drillcore_box?.depth_other ||
-        box.drillcore_box?.remarks
-      )
-    },
-    handleChange: debounce(function (options) {
-      this.$emit('update', { options, search: this.search })
-    }, 250),
-    handleSearch: debounce(function () {
-      const options = { ...this.options, page: 1 }
-      this.isLoading = true
-      this.$emit('update', {
-        options,
-        search: this.search,
-      })
-    }, 400),
-  },
-}
-</script>
 
 <style scoped>
 .drillcore-box:nth-of-type(odd) > .v-card > .drillcore-box__card {

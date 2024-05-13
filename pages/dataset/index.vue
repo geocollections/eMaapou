@@ -1,123 +1,138 @@
+<script setup lang="ts">
+import { mdiDatabaseOutline } from "@mdi/js";
+
+const datasetsStore = useDatasets();
+const { resetFilters, resetDataTable } = datasetsStore;
+const {
+  handleHeadersReset,
+  handleHeadersChange,
+  setStateFromQueryParams,
+  getQueryParams,
+} = datasetsStore;
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(datasetsStore);
+
+const route = useRoute();
+
+setStateFromQueryParams(route);
+
+const {
+  data,
+  pending,
+  refresh: refreshDatasets,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/dataset", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshDatasets();
+}, { deep: true });
+
+const router = useRouter();
+function setQueryParamsFromState() {
+  router.push({ query: getQueryParams() });
+}
+
+async function handleUpdate() {
+  options.value.page = 1;
+  setQueryParamsFromState();
+  await refreshDatasets();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleReset() {
+  resetFilters();
+  resetDataTable();
+  setQueryParamsFromState();
+  await refreshDatasets();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
+  options.value = newOptions;
+  setQueryParamsFromState();
+  await refreshDatasets();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}
+
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "dataset-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+    "dataset",
+  );
+}
+
+const { t } = useI18n();
+
+const { exportData } = useExportSolr("/dataset", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    fields: EXPORT_SOLR_DATASET,
+  })),
+});
+
+useHead({
+  title: t("dataset.pageTitle"),
+});
+
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <search>
+  <NuxtLayout name="search">
     <template #title>
-      <header-search
-        :title="$t('dataset.pageTitle').toString()"
-        :count="$accessor.search.dataset.count"
-        :icon="icons.mdiDatabaseOutline"
+      <HeaderSearch
+        :title="$t('dataset.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiDatabaseOutline"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-dataset
-        @update="
-          handleFormUpdate()
-          closeMobileSearch && closeMobileSearch()
+      <SearchFormDataset
+        @submit="
+          handleUpdate();
+          closeMobileSearch();
         "
-        @reset="
-          handleFormReset()
-          closeMobileSearch && closeMobileSearch()
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 
-    <template #result>
-      <v-card>
-        <data-table-dataset
-          :show-search="false"
-          :items="$accessor.search.dataset.items"
-          :count="$accessor.search.dataset.count"
-          :options="$accessor.search.dataset.options"
-          stateful-headers
-          dynamic-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-      </v-card>
-    </template>
-  </search>
+    <DataTableDataset
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      :export-func="exportData"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>
-
-<script lang="ts">
-import {
-  defineComponent,
-  useFetch,
-  wrapProperty,
-  computed,
-} from '@nuxtjs/composition-api'
-import { mdiDatabaseOutline } from '@mdi/js'
-import DataTableDataset from '~/components/data-table/DataTableDataset.vue'
-import SearchFormDataset from '~/components/search/forms/SearchFormDataset.vue'
-import Search from '~/templates/Search.vue'
-import HeaderSearch from '~/components/HeaderSearch.vue'
-import { HEADERS_DATASET } from '~/constants'
-import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-import { useAccessor } from '~/composables/useAccessor'
-
-const useServices = wrapProperty('$services', false)
-const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-export default defineComponent({
-  components: {
-    Search,
-    SearchFormDataset,
-    DataTableDataset,
-    HeaderSearch,
-  },
-  setup() {
-    const accessor = useAccessor()
-    const services = useServices()
-    const getAPIFieldValues = useGetAPIFieldValues()
-    const { fetch } = useFetch(async () => {
-      const response = await services.sarvSolr.getResourceList('dataset', {
-        options: accessor.search.dataset.options,
-        search: accessor.search.dataset.query,
-        fields: getAPIFieldValues(HEADERS_DATASET),
-        searchFilters: {
-          ...accessor.search.dataset.filters,
-          ...accessor.search.globalFilters,
-        },
-      })
-      accessor.search.dataset.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.dataset.SET_MODULE_COUNT({ count: response.count })
-    })
-    const filters = computed(() => accessor.search.dataset.filters)
-    const globalFilters = computed(() => {
-      return { institutions: accessor.search.globalFilters.institutions }
-    })
-
-    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
-      useSearchQueryParams({
-        module: 'dataset',
-        qParamKey: 'datasetQ',
-        filters,
-        globalFilters,
-        fetch,
-      })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('dataset.pageTitle') as string,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('dataset.pageTitle') as string,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiDatabaseOutline,
-      }
-    },
-  },
-})
-</script>

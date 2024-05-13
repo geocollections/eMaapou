@@ -1,18 +1,50 @@
+<script setup lang="ts">
+import { mdiFileImageOutline } from "@mdi/js";
+
+const props = defineProps({
+  items: {
+    type: Array as PropType<any[]>,
+    default: () => [],
+  },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Object as PropType<DataTableOptions>,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
+  },
+});
+const emit = defineEmits(["update"]);
+const localePath = useLocalePath();
+const img = useImage();
+const { t } = useI18n();
+
+const footerProps = ref({
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+});
+
+const cropImages = ref(true);
+
+const pagination = computed(() => {
+  return { pageCount: Math.ceil(props.count / props.options.itemsPerPage) };
+});
+
+function updateOptions(event: DataTableOptions) {
+  emit("update", { options: event });
+}
+</script>
+
 <template>
-  <v-card flat>
-    <v-row no-gutters>
-      <v-col cols="12" sm="auto" class="px-3 my-1 my-sm-4" align-self="center">
-        <v-switch
-          v-model="cropImages"
-          dense
-          class="mt-0 montserrat"
-          hide-details
-          color="header"
-          :label="$t('common.containImages')"
-        />
-      </v-col>
-      <v-col class="d-flex justify-end">
-        <base-data-table-pagination
+  <div class="bg-white">
+    <VRow class="border-b" no-gutters>
+      <VCol class="d-flex justify-end">
+        <BaseDataTablePagination
           :options="options"
           :pagination="pagination"
           :items-per-page-options="footerProps['items-per-page-options']"
@@ -28,11 +60,15 @@
           select-page-id="header-select-btn"
           @update:options="updateOptions"
         />
-      </v-col>
-    </v-row>
-    <v-card flat>
-      <v-row v-if="count > 0" no-gutters class="px-2">
-        <v-col
+      </VCol>
+    </VRow>
+    <div class="py-2">
+      <VRow
+        v-if="count > 0"
+        no-gutters
+        class="px-2"
+      >
+        <VCol
           v-for="(image, index) in items"
           :key="index"
           class="pt-0 px-2 pb-4"
@@ -41,7 +77,7 @@
           md="3"
           lg="2"
         >
-          <nuxt-link
+          <NuxtLink
             class="text-link"
             :to="
               localePath({
@@ -51,141 +87,91 @@
             "
           >
             {{ image.specimen_full_name }}
-          </nuxt-link>
-          <v-tooltip bottom color="header" z-index="51000" max-width="250">
-            <template #activator="{ on }">
-              <v-card
+          </NuxtLink>
+          <VTooltip
+            location="bottom"
+            color="header"
+            z-index="51000"
+            max-width="250"
+          >
+            <template #activator="{ props: tooltipProps }">
+              <VCard
                 flat
                 class="d-flex image-hover"
                 color="transparent"
                 hover
-                nuxt
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
-                :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
-                v-on="on"
+                :class="{ 'image-hover-elevation': !!cropImages }"
+                v-bind="tooltipProps"
               >
-                <v-img
+                <VImg
                   v-if="image.image"
-                  max-height="400"
-                  min-width="72"
+                  position="top"
                   :contain="!cropImages"
-                  aspect-ratio="1"
                   :lazy-src="
-                    $img(
+                    img(
                       `${image.image}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
                   :src="
-                    $img(
+                    img(
                       `${image.image}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
                 >
                   <template #placeholder>
-                    <v-row
+                    <VRow
                       class="fill-height ma-0"
                       align="center"
                       justify="center"
                     >
-                      <v-progress-circular
+                      <VProgressCircular
                         indeterminate
-                        color="grey lighten-5"
+                        color="grey-lighten-5"
                       />
-                    </v-row>
+                    </VRow>
                   </template>
-                </v-img>
+                </VImg>
 
-                <v-row v-else align="center">
-                  <v-col class="text-center">
+                <VRow v-else align="center">
+                  <VCol class="text-center">
                     <div class="py-3">
-                      <v-icon style="font-size: 6rem" class="grey--text">
+                      <VIcon style="font-size: 6rem" class="text-grey">
                         {{ mdiFileImageOutline }}
-                      </v-icon>
+                      </VIcon>
                     </div>
-                  </v-col>
-                </v-row>
-              </v-card>
+                  </VCol>
+                </VRow>
+              </VCard>
             </template>
 
             <span>
-              <b>{{ $t('photo.id') }}: </b> {{ image.id }}<br />
+              <b>{{ $t('photo.id') }}: </b> {{ image.id }}<br>
               <span v-if="image.date_created || image.date_created_free">
                 <b>{{ $t('photo.date') }}: </b>
                 <span v-if="image.date_created">{{
                   image.date_created.split('T')[0]
                 }}</span>
                 <span v-else>{{ image.date_created_free }}</span>
-                <br />
+                <br>
               </span>
               <span v-if="image.agent || image.author_free">
-                <b>{{ $t('photo.author') }}: </b
-                >{{ image.agent || image.author_free }}
-                <br />
+                <b>{{ $t('photo.author') }}: </b>{{ image.agent || image.author_free }}
+                <br>
               </span>
               <span v-if="image.image_number">
                 <b>{{ $t('photo.number') }}: </b>
                 {{ image.image_number }}
-                <br />
+                <br>
               </span>
             </span>
-          </v-tooltip>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-card>
+          </VTooltip>
+        </VCol>
+      </VRow>
+    </div>
+  </div>
 </template>
-
-<script>
-import { mdiFileImageOutline } from '@mdi/js'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-export default {
-  name: 'SpecimenImageView',
-  components: { BaseDataTablePagination },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-      }),
-    },
-  },
-  data() {
-    return {
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
-      cropImages: true,
-    }
-  },
-  computed: {
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
-    },
-    icons() {
-      return {
-        mdiFileImageOutline,
-      }
-    },
-  },
-  methods: {
-    updateOptions(event) {
-      this.$emit('update', { options: event })
-    },
-  },
-}
-</script>

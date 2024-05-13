@@ -1,16 +1,12 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <!-- @vue-ignore -->
+  <BaseDataTable v-bind="$attrs">
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy"
         class="text-link"
         :to="
@@ -26,7 +22,7 @@
             en: item.stratigraphy.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.type="{ item }">
       <div v-if="item.stratotype_type">
@@ -39,50 +35,26 @@
       </div>
     </template>
     <template #item.reference="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.reference"
-        @click.native="$openGeology('reference', item.reference.id)"
+        @click="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
-  </base-data-table>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth_top">
+        {{
+          item.depth_top.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_base">
+        {{
+          item.depth_base.toFixed(2)
+        }}
+      </span>
+    </template>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { toRef, defineComponent } from '@nuxtjs/composition-api'
-import { useHeaders } from '~/composables/useHeaders'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import { HEADERS_STRATOTYPE } from '~/constants'
-export default defineComponent({
-  name: 'DataTableStratotype',
-  components: { BaseLinkExternal, BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_STRATOTYPE,
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
-</script>

@@ -1,32 +1,34 @@
+<script setup lang="ts">
+defineProps<{
+  title: string;
+  icon: string;
+  count: number;
+}>();
+</script>
+
 <template>
-  <div class="d-sm-flex align-center my-4">
-    <base-header :title="title" :icon="icon" />
-    <v-divider v-if="$vuetify.breakpoint.smAndUp" vertical />
-    <div class="ml-sm-3 text-h6">
-      {{ $tc('common.count', count) }}
+  <div class="my-4 my-md-6 mx-2 mx-md-4">
+    <div
+      style="word-break: normal"
+      class="d-flex align-center text-md-h3 text-h4"
+    >
+      <VIcon
+        v-if="icon"
+        start
+        color="accent"
+      >
+        {{ icon }}
+      </VIcon>
+      <span
+        class="montserrat font-weight-medium"
+      >
+        <slot name="title">
+          {{ title }}
+        </slot>
+        <div class="mt-1 text-h6 text-md-h5">
+          {{ $t("common.count", { count }) }}
+        </div>
+      </span>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import BaseHeader from '~/components/base/BaseHeader.vue'
-export default defineComponent({
-  name: 'HeaderSearch',
-  components: { BaseHeader },
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
-    count: {
-      type: Number,
-      required: true,
-    },
-  },
-})
-</script>

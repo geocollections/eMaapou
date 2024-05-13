@@ -1,46 +1,39 @@
+<script setup lang="ts">
+import { mdiOpenInNew } from "@mdi/js";
+
+defineProps({
+  route: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
+
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-card
+  <VHover v-slot="{ isHovering, props: hoverProps }">
+    <VCard
+      v-bind="hoverProps"
       :href="route.href"
-      class="d-flex py-2"
-      :elevation="hover ? 2 : 1"
-      :color="hover ? 'grey lighten-2' : 'grey lighten-3'"
+      class="d-flex py-2 border"
+      :elevation="0"
+      :color="isHovering ? 'grey-lighten-2' : 'grey-lighten-3'"
     >
       <div>
-        <v-card-title
+        <VCardTitle
           style="width: 100%"
-          class="text-h6"
-          :class="{ 'py-0': true }"
+          class="text-h6 py-0"
         >
           {{ $t(route.title) }}
-        </v-card-title>
-        <v-card-text class="py-0 montserrat text--secondary">
+        </VCardTitle>
+        <VCardText class="py-0  text-grey">
           {{ $t(route.description) }}
-        </v-card-text>
+        </VCardText>
       </div>
-      <v-icon small class="ml-auto mr-2 align-self-baseline">
-        {{ icons.mdiOpenInNew }}
-      </v-icon>
-    </v-card>
-  </v-hover>
+      <VIcon
+        :icon="mdiOpenInNew"
+        size="x-small"
+        class="ml-auto mr-2 align-self-baseline"
+      />
+    </VCard>
+  </VHover>
 </template>
-
-<script>
-import { mdiOpenInNew } from '@mdi/js'
-export default {
-  name: 'CardExternalService',
-  props: {
-    route: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    icons() {
-      return {
-        mdiOpenInNew,
-      }
-    },
-  },
-}
-</script>

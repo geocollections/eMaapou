@@ -1,23 +1,82 @@
+<script setup lang="ts">
+import cloneDeep from "lodash/cloneDeep";
+
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  modelValue: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+});
+
+const emit = defineEmits(["update:model-value"]);
+
+const internalValue = ref("");
+const selectedItems = ref(props.modelValue);
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    selectedItems.value = newVal;
+  },
+  { immediate: true },
+);
+function handleAdd() {
+  if (internalValue.value === "")
+    return;
+  selectedItems.value = [...selectedItems.value, internalValue.value];
+  internalValue.value = "";
+  emit("update:model-value", selectedItems.value);
+}
+function handleRemove(i: number) {
+  const cloneItems = cloneDeep(selectedItems.value);
+  cloneItems.splice(i, 1);
+  selectedItems.value = cloneItems;
+  emit("update:model-value", selectedItems.value);
+}
+function handleChange(i: number) {
+  const cloneItems = cloneDeep(selectedItems.value);
+  internalValue.value = cloneItems.splice(i, 1)[0];
+  selectedItems.value = cloneItems;
+  emit("update:model-value", selectedItems.value);
+  // if (!panel.value.isActive) panel.value.toggle();
+}
+
+const input = ref();
+
+function handleOpen(value: { value: boolean }) {
+  if (!value.value)
+    return;
+
+  nextTick(() => {
+    input.value.focus();
+  });
+}
+</script>
+
 <template>
-  <v-expansion-panel ref="panel" style="background-color: transparent">
-    <v-expansion-panel-header
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+  <VExpansionPanel
+    bg-color="transparent"
+    elevation="0"
+    :rounded="0"
+    @group:selected="handleOpen"
+  >
+    <VExpansionPanelTitle
+      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
+      style="min-height: 40px;"
     >
       {{ title }}
-    </v-expansion-panel-header>
+    </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
-      class="white"
-      style="
-        border-bottom: 1px solid lightgray !important;
-        border-right: 1px solid lightgray !important;
-      "
+      class="bg-white"
     >
       <div
         v-for="(item, i) in selectedItems"
         :key="i"
-        class="d-flex py-1 selected-item pl-4 pr-2"
+        class="d-flex py-1 selected-item px-2"
         @click="handleChange(i)"
       >
         <span>
@@ -26,7 +85,7 @@
             class="checkbox"
             checked
             @click.prevent.stop="handleRemove(i)"
-          />
+          >
         </span>
         <span
           class="align-self-center text-body-2 font-weight-medium pl-2"
@@ -38,111 +97,40 @@
         </span>
       </div>
     </div>
-    <v-expansion-panel-content
-      class="pt-1"
+    <VExpansionPanelText
+      class="py-2 text-right"
       color="white"
-      style="
-        border-bottom: 1px solid lightgray !important;
-        border-right: 1px solid lightgray !important;
-      "
     >
-      <v-text-field
+      <VTextField
+        ref="input"
         v-model="internalValue"
+        variant="outlined"
+        bg-color="white"
         hide-details
-        dense
+        density="compact"
         :placeholder="$t('filters.filter')"
         @keydown.enter="handleAdd"
+      />
+      <VBtn
+        class="mt-2"
+        color="accent"
+        variant="tonal"
+        size="small"
+        :disabled="internalValue.length < 1"
+        @click="handleAdd"
       >
-      </v-text-field>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+        {{ $t("filter.add") }}
+      </VBtn>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  reactive,
-  toRefs,
-  PropType,
-  watch,
-  ref,
-} from '@nuxtjs/composition-api'
-import { mdiClose, mdiPlus } from '@mdi/js'
-import cloneDeep from 'lodash/cloneDeep'
-export default defineComponent({
-  name: 'FilterInputText',
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Array as PropType<any[]>,
-      default: () => [],
-    },
-  },
-  setup(props, { emit }) {
-    const state = reactive({
-      suggestItems: [] as any[],
-      internalValue: '' as string,
-      selectedItems: [] as any[],
-      isLoading: false,
-    })
-    const icons = computed(() => {
-      return {
-        mdiClose,
-        mdiPlus,
-      }
-    })
-    const panel = ref()
-    watch(
-      () => props.value,
-      (newVal) => {
-        state.selectedItems = newVal
-      },
-      { immediate: true }
-    )
-    const handleInput = (event: any) => {
-      emit('input', event)
-    }
-    const handleAdd = () => {
-      if (state.internalValue === '') return
-      state.selectedItems = [...state.selectedItems, state.internalValue]
-      state.internalValue = ''
-      emit('input', state.selectedItems)
-    }
-    const handleRemove = (i: number) => {
-      const cloneItems = cloneDeep(state.selectedItems)
-      cloneItems.splice(i, 1)
-      state.selectedItems = cloneItems
-      emit('input', state.selectedItems)
-    }
-    const handleChange = (i: number) => {
-      const cloneItems = cloneDeep(state.selectedItems)
-      state.internalValue = cloneItems.splice(i, 1)[0]
-      state.selectedItems = cloneItems
-      emit('input', state.selectedItems)
-      if (!panel.value.isActive) panel.value.toggle()
-    }
-    return {
-      ...toRefs(state),
-      panel,
-      icons,
-      handleInput,
-      handleAdd,
-      handleRemove,
-      handleChange,
-    }
-  },
-})
-</script>
-
 <style scoped lang="scss">
-::v-deep .v-expansion-panel-content__wrap {
-  padding-right: 16px;
-  padding-left: 16px;
+:deep(.v-expansion-panel-text__wrapper) {
+  padding-right: 8px;
+  padding-left: 8px;
   padding-bottom: 8px;
+  padding-top:0;
 }
 
 .selected-item:hover {

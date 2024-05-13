@@ -1,37 +1,47 @@
+<script setup lang="ts">
+import { mdiArrowRight } from "@mdi/js";
+
+defineProps({
+  route: {
+    type: Object,
+    required: true,
+  },
+});
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-card
-      nuxt
+  <VHover v-slot="{ isHovering, props: hoverProps }">
+    <VCard
+      v-bind="hoverProps"
       :to="localePath(route.routeName)"
-      class="mx-sm-1 mb-1 mb-sm-2 d-flex"
-      :elevation="hover ? 2 : 1"
-      :color="hover ? 'accent lighten-1' : 'accent'"
+      class="mx-sm-1 mb-1 mb-sm-2 d-flex border"
+      :elevation="0"
+      :color="isHovering ? 'accent-lighten-1' : 'accent'"
     >
       <div class="py-2 d-flex d-sm-block align-center">
-        <v-icon
-          v-if="$vuetify.breakpoint.smAndUp"
-          class="pl-3"
-          color="accent lighten-2"
-          left
-        >
-          {{ route.icon }}
-        </v-icon>
+        <VIcon
+          v-if="$vuetify.display.smAndUp"
+          :icon="route.icon"
+          color="accent-lighten-3"
+          end
+        />
         <div
-          class="text-h5 text-sm-h4 pl-2 pl-sm-3 pt-sm-2 font-weight-bold white--text"
+          class="text-h5 text-sm-h4 pl-2 pl-sm-3 pt-sm-2 font-weight-bold text-white"
         >
           {{
             Math.max(
               Math.floor(route.count / 1000) * 1000,
-              Math.floor(route.count / 100) * 100
+              Math.floor(route.count / 100) * 100,
             )
               .toLocaleString()
-              .replace(/,/g, '\u00A0')
+              .replace(/,/g, "\u00A0")
           }}+
         </div>
         <div
-          class="font-weight-regular text-h6 pl-3 pt-0 white--text"
+          class="font-weight-regular text-h6 pl-3 pt-0 text-white"
           :class="{
-            'text-body-1': $vuetify.breakpoint.smAndDown,
+            'text-body-1': $vuetify.display.smAndDown,
           }"
         >
           <div class="montserrat">
@@ -39,29 +49,12 @@
           </div>
         </div>
       </div>
-      <v-icon color="accent lighten-2" class="ml-auto pr-2">
-        {{ icons.mdiArrowRight }}
-      </v-icon>
-    </v-card>
-  </v-hover>
+      <VIcon
+        :icon="mdiArrowRight"
+        color="accent-lighten-3"
+        class="ml-auto my-auto"
+        start
+      />
+    </VCard>
+  </VHover>
 </template>
-
-<script>
-import { mdiArrowRight } from '@mdi/js'
-export default {
-  name: 'CardRouteLink',
-  props: {
-    route: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    icons() {
-      return {
-        mdiArrowRight,
-      }
-    },
-  },
-}
-</script>

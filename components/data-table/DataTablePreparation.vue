@@ -1,24 +1,21 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+const localePath = useLocalePath();
+const { $translate } = useNuxtApp();
+</script>
+
 <template>
-  <base-data-table
+  <!-- @vue-ignore -->
+  <BaseDataTable
     v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
+    :item-to="(item) => localePath({ name: 'preparation-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
   >
     <template #item.preparation_number="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'preparation-id', params: { id: item.id } })"
-      >
-        {{ item.preparation_number }}
-      </nuxt-link>
+      {{ item.preparation_number }}
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_en"
         class="text-link"
         :to="
@@ -29,14 +26,25 @@
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
-    <template #item.depth="{ item }">
-      <span>{{ item.depth }}</span>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
+        {{
+          item.depth.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
+        }}
+      </span>
     </template>
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
-        <nuxt-link
+        <NuxtLink
           v-if="item.stratigraphy_id"
           class="text-link"
           :to="
@@ -52,10 +60,10 @@
               en: item.stratigraphy_en,
             })
           }}
-        </nuxt-link>
+        </NuxtLink>
 
         <span v-if="item.lithostratigraphy_id"> | </span>
-        <nuxt-link
+        <NuxtLink
           v-if="item.lithostratigraphy_id"
           class="text-link"
           :to="
@@ -71,53 +79,15 @@
               en: item.lithostratigraphy_en,
             })
           }}
-        </nuxt-link>
+        </NuxtLink>
       </span>
     </template>
-  </base-data-table>
+    <template #item.mass="{ item }">
+      <span v-if="item.mass">
+        {{
+          item.mass.toFixed(1)
+        }}
+      </span>
+    </template>
+  </BaseDataTable>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_PREPARATION } from '~/constants'
-import { useHeadersWithState } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTablePreparation',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersReset, handleHeadersChange } =
-      useHeadersWithState({
-        module: 'preparation',
-        localHeaders: HEADERS_PREPARATION,
-        statefulHeaders: props.statefulHeaders,
-        options: toRef(props, 'options'),
-      })
-    return { headers, handleHeadersChange, handleHeadersReset }
-  },
-})
-</script>

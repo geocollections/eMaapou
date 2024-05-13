@@ -1,8 +1,8 @@
-export default function zip(...arrs: any[][]) {
-  const firstArray = arrs.shift()
+export default function zip<T>(...arrs: T[][]) {
+  const firstArray = arrs.shift();
   return (
-    firstArray?.map((val: any, i: number) =>
-      arrs.reduce((a: any, arr: any) => [...a, arr[i]], [val])
+    firstArray?.map((val, i: number) =>
+      arrs.reduce((a, arr) => [...a, arr[i]], [val]),
     ) ?? []
-  )
+  );
 }
