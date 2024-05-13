@@ -53,14 +53,14 @@ jobs:
     steps:
       - run:
           name: Run next container
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_next.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_production.sh"
 workflows:
   build_next:
     when:
-      equal: [refactor/nuxt3, << pipeline.git.branch >>]
+      equal: [main, << pipeline.git.branch >>]
     jobs:
       - build_image:
-          tags: -t $IMAGE_NAME:next
+          tags: -t $IMAGE_NAME:latest -t $IMAGE_NAME:<< pipeline.parameters.package-version >>
       - publish_image:
           requires:
             - build_image
