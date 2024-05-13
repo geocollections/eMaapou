@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxtjs/seo",
     "vuetify-nuxt-module",
+    "@nuxt/test-utils/module",
   ],
   imports: {
     dirs: ["types", "constants"],
