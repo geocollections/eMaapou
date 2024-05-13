@@ -1,75 +1,19 @@
-# Nuxt 3 Minimal Starter
+# e-Maapõu
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+e-Maapõu is a web application to provide access to geological information deposited in the geoscience data management SARV, and link to other geology-related data resources and e-services in Estonia.
 
-## Setup
-
-Make sure to install the dependencies:
+## Build Setup
 
 ```bash
-# npm
-npm install
+# install dependencies
+$ npm install
 
-# pnpm
-pnpm install
+# serve with hot reload at localhost:3000
+$ npm run dev
 
-# yarn
-yarn install
+# build for production and launch server
+$ npm run build
+$ npm run start
 
-# bun
-bun install
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
