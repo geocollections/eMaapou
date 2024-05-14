@@ -186,13 +186,10 @@ useSeoMeta({
     },
   ),
 });
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="detail" :show-similar="false">
+  <TemplateDetail :show-similar="false">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #prepend>
@@ -214,5 +211,5 @@ definePageMeta({
       </HeaderDetailNew>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </NuxtLayout>
+  </TemplateDetail>
 </template>

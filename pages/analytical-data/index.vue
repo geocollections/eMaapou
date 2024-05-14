@@ -144,14 +144,10 @@ useSeoMeta({
   title: t("analyticalData.pageTitle"),
   ogTitle: t("analyticalData.pageTitle"),
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #form="{ closeMobileSearch }">
       <SearchFormAnalyticalData
         @submit="
@@ -188,5 +184,5 @@ definePageMeta({
       @reset:headers="handleHeadersReset(options)"
       @click:row="handleClickRow"
     />
-  </NuxtLayout>
+  </TemplateSearch>
 </template>

@@ -127,15 +127,10 @@ useSeoMeta({
     ? `https://files.geocollections.info/${file.value.uuid_filename}`
     : null,
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout
-    name="detail"
+  <TemplateDetail
     :show-similar="false"
   >
     <template #title>
@@ -161,7 +156,7 @@ definePageMeta({
       </HeaderDetailNew>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </NuxtLayout>
+  </TemplateDetail>
 </template>
 
 <style scoped>

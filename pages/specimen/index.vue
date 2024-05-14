@@ -136,14 +136,10 @@ const specimenImageFunction = useSpecimenImageFunction();
 useHead({
   title: t("specimen.pageTitle"),
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #title>
       <HeaderSearch
         :title="$t('specimen.pageTitle')"
@@ -214,7 +210,7 @@ definePageMeta({
         </VWindowItem>
       </VWindow>
     </ClientOnly>
-  </NuxtLayout>
+  </TemplateSearch>
 </template>
 
 <style scoped lang="scss">

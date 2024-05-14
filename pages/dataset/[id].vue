@@ -227,14 +227,10 @@ useHead({
 useSeoMeta({
   description: data.value?.dataset.abstract,
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="detail" :show-similar="showDrawer">
+  <TemplateDetail :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="data?.dataset.title">
         <template #prepend>
@@ -278,9 +274,8 @@ definePageMeta({
         </template>
       </SearchResultsDrawer>
     </template>
-
     <NuxtPage v-bind="activeTabProps" />
-  </nuxtlayout>
+  </TemplateDetail>
 </template>
 
 <style lang="scss" scoped>

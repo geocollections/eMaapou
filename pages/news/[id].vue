@@ -35,11 +35,8 @@ useHead({
           />
         </VCol>
       </VRow>
-      <VContainer>
-        <VMain />
-      </vcontainer>
-    </vcontainer>
-  </vmain>
+    </VContainer>
+  </VMain>
 </template>
 
 <style scoped>

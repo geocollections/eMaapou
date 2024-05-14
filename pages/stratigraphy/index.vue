@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiLayersTriple } from "@mdi/js";
+import TemplateSearch from "~/components/TemplateSearch.vue";
 
 const route = useRoute();
 
@@ -91,14 +92,10 @@ const { exportData } = useExportSolr("/stratigraphy", {
 useHead({
   title: t("stratigraphy.pageTitle"),
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #title>
       <HeaderSearch
         :title="$t('stratigraphy.pageTitle').toString()"
@@ -136,5 +133,5 @@ definePageMeta({
       @reset:headers="handleHeadersReset(options)"
       @click:row="handleClickRow"
     />
-  </NuxtLayout>
+  </TemplateSearch>
 </template>

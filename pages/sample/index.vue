@@ -93,15 +93,11 @@ const { exportData } = useExportSolr("/sample", {
   })),
 });
 
-definePageMeta({
-  layout: false,
-});
-
 const sampleImageFunction = useSampleImageFunction();
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #form="{ closeMobileSearch }">
       <SearchFormSample
         @submit="
@@ -138,5 +134,5 @@ const sampleImageFunction = useSampleImageFunction();
       @reset:headers="handleHeadersReset(options)"
       @click:row="handleClickRow"
     />
-  </NuxtLayout>
+  </TemplateSearch>
 </template>

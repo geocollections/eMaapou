@@ -205,14 +205,10 @@ function getDepthRange(sample: any) {
 useHead({
   title: `${title.value} | ${t("sample.pageTitle")}`,
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="detail" :show-similar="showDrawer">
+  <TemplateDetail :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #prepend>
@@ -264,7 +260,7 @@ definePageMeta({
         </template>
       </SearchResultsDrawer>
     </template>
-  </NuxtLayout>
+  </TemplateDetail>
 </template>
 
 <style scoped>
