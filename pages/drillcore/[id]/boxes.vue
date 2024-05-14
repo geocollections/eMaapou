@@ -6,7 +6,7 @@ const { options, searchParams, handleUpdate } = useDataTableGeoloogiaApi({
 const route = useRoute();
 
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
-  query: {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     ordering: "drillcore_box__depth_start,drillcore_box",
@@ -14,7 +14,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     attachment__is_preferred: true,
     nest: 2,
     ...searchParams.value,
-  },
+  })),
 });
 </script>
 

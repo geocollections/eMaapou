@@ -12,7 +12,6 @@ import type {
 export const useSpecimens = defineStore(
   "specimens",
   () => {
-    const route = useRoute();
     const {
       query,
       options,
@@ -35,11 +34,8 @@ export const useSpecimens = defineStore(
       sortBy: [] as SortItem[],
     });
 
-    function getView() {
-      return route.query.view === "image" ? 1 : 0;
-    }
-
-    const view = ref(0);
+    const views = computed(() => ["table", "image"] as const);
+    const view = ref("table" as "table" | "image");
 
     const { filters, solrFilters, reset: resetFilters } = useFilters({
       number: {
@@ -164,14 +160,16 @@ export const useSpecimens = defineStore(
 
     const routeQuerySchema = routeQueryOptionsSchema.merge(
       routeQueryFiltersSchema,
-    );
+    ).merge(z.object({
+      view: z.enum(views.value).catch("table" as const),
+    }));
 
     function setStateFromQueryParams(route: RouteLocation) {
       const params = routeQuerySchema.parse(route.query);
 
-      view.value = getView();
+      view.value = params.view;
 
-      if (view.value === 1) {
+      if (view.value === "image") {
         imageOptions.value.page = params.page;
         imageOptions.value.itemsPerPage = params.itemsPerPage;
       }
@@ -211,10 +209,12 @@ export const useSpecimens = defineStore(
 
     const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
       filtersStateToQueryParamsSchema,
-    );
+    ).merge(z.object({
+      view: z.enum(views.value),
+    }));
 
     function getViewOptions() {
-      if (view.value === 1)
+      if (view.value === "image")
         return imageOptions.value;
 
       return options.value;
@@ -222,6 +222,7 @@ export const useSpecimens = defineStore(
 
     function getQueryParams() {
       const viewOptions = getViewOptions();
+      console.log(view.value);
 
       return stateToQueryParamsSchema.parse({
         q: query.value,
@@ -244,6 +245,7 @@ export const useSpecimens = defineStore(
         page: viewOptions.page,
         itemsPerPage: viewOptions.itemsPerPage,
         sortBy: options.value.sortBy,
+        view: view.value,
       });
     }
 
