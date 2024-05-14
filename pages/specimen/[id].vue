@@ -196,14 +196,10 @@ useSeoMeta({
     )
     : null,
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="detail" :show-similar="showDrawer">
+  <TemplateDetail :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew class="mb-0">
         <template #prepend>
@@ -277,5 +273,5 @@ definePageMeta({
         </template>
       </SearchResultsDrawer>
     </template>
-  </NuxtLayout>
+  </TemplateDetail>
 </template>

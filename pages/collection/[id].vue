@@ -83,14 +83,10 @@ redirectInvalidTab({
 useHead({
   title: `${title.value} | ${t("collection.pageTitle")}`,
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="detail" :show-similar="false">
+  <TemplateDetail :show-similar="false">
     <template #title>
       <HeaderDetailNew :title="title">
         <template #prepend>
@@ -109,5 +105,5 @@ definePageMeta({
       </HeaderDetailNew>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </NuxtLayout>
+  </TemplateDetail>
 </template>
