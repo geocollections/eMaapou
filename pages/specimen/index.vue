@@ -2,7 +2,6 @@
 import { mdiBug } from "@mdi/js";
 
 const route = useRoute();
-const views = computed(() => ["table", "image"] as const);
 
 const specimensStore = useSpecimens();
 const { resetFilters, resetDataTable } = specimensStore;
@@ -16,8 +15,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOp
   = storeToRefs(specimensStore);
 
 setStateFromQueryParams(route);
-if (route.query.view)
-  currentView.value = views.value.indexOf(route.query.view as any);
 
 const {
   data,
@@ -67,7 +64,7 @@ watch(() => route.query, () => {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
+  router.push({ query: { ...getQueryParams() } });
 }
 
 async function refreshData() {
@@ -102,7 +99,7 @@ async function handleImageUpdate({ options: newOptions }: { options: DataTableOp
 
 const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
-  if (views.value[currentView.value] === "image") {
+  if (currentView.value === "image") {
     setSearchPosition(
       { name: "specimen-id", params: { id } },
       index + getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
@@ -150,7 +147,7 @@ useHead({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormSpecimen
-        :result-view="views[currentView]"
+        :result-view="currentView"
         @submit="
           handleUpdate();
           closeMobileSearch();
@@ -171,10 +168,18 @@ useHead({
         color="accent"
         density="compact"
       >
-        <VTab active-class="active-tab" class="montserrat text-capitalize">
+        <VTab
+          value="table"
+          active-class="active-tab"
+          class="montserrat text-capitalize"
+        >
           {{ $t(`common.table`) }}
         </VTab>
-        <VTab active-class="active-tab" class="montserrat text-capitalize">
+        <VTab
+          value="image"
+          active-class="active-tab"
+          class="montserrat text-capitalize"
+        >
           {{ $t(`common.image`) }}
           <VChip class="ml-2" size="small">
             {{ imageData?.response.numFound ?? 0 }}
@@ -182,7 +187,7 @@ useHead({
         </VTab>
       </VTabs>
       <VWindow v-model="currentView" :touch="false">
-        <VWindowItem :value="0">
+        <VWindowItem value="table">
           <DataTableSpecimen
             class="border-t border-b"
             :show-search="false"
@@ -199,7 +204,7 @@ useHead({
             @click:row="handleClickRow"
           />
         </VWindowItem>
-        <VWindowItem :value="1">
+        <VWindowItem value="image">
           <SpecimenImageView
             class="border-t border-b"
             :items="imageData?.response.docs ?? []"
