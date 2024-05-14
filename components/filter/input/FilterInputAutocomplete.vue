@@ -146,6 +146,8 @@ function refreshSuggestions() {
 const input = ref();
 
 function handleOpen(value: { value: boolean }) {
+  if (!input.value)
+    return;
   if (!value.value)
     return;
 
