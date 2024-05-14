@@ -83,14 +83,10 @@ const { exportData } = useExportSolr("/taxon", {
 useHead({
   title: t("taxon.pageTitle"),
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #title>
       <HeaderSearch
         :title="$t('taxon.pageTitle')"
@@ -127,5 +123,5 @@ definePageMeta({
       @change:headers="handleHeadersChange"
       @reset:headers="handleHeadersReset(options)"
     />
-  </NuxtLayout>
+  </TemplateSearch>
 </template>

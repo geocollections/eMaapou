@@ -101,14 +101,10 @@ const { exportData } = useExportSolr("/attachment", {
 useHead({
   title: t("photo.pageTitle"),
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #title>
       <HeaderSearch
         :title="$t('photo.pageTitle')"
@@ -207,7 +203,7 @@ definePageMeta({
         </VWindowItem>
       </VWindow>
     </ClientOnly>
-  </NuxtLayout>
+  </TemplateSearch>
 </template>
 
 <style scoped lang="scss">

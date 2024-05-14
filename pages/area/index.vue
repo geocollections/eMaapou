@@ -95,14 +95,10 @@ const { exportData } = useExportSolr("/area", {
 useHead({
   title: t("area.pageTitle"),
 });
-
-definePageMeta({
-  layout: false,
-});
 </script>
 
 <template>
-  <NuxtLayout name="search">
+  <TemplateSearch>
     <template #title>
       <HeaderSearch
         :title="$t('area.pageTitle')"
@@ -136,5 +132,5 @@ definePageMeta({
       @reset:headers="handleHeadersReset(options)"
       @click:row="handleClickRow"
     />
-  </NuxtLayout>
+  </TemplateSearch>
 </template>
