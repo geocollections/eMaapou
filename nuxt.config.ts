@@ -125,9 +125,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  site: {
-    indexable: false,
-  },
   linkChecker: {
     enabled: false,
   },
