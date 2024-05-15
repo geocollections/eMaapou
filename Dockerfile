@@ -1,6 +1,6 @@
 FROM node:20.10.0-bullseye-slim AS base
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 WORKDIR /code
 
