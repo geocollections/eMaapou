@@ -26,6 +26,9 @@ useSeoMeta({
   ogImage: img("logos/emaapou_short.png"),
   themeColor: "#616161",
 });
+
+const siteConfig = useSiteConfig();
+console.log(siteConfig);
 </script>
 
 <template>
