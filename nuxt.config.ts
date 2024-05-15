@@ -128,4 +128,7 @@ export default defineNuxtConfig({
   linkChecker: {
     enabled: false,
   },
+  site: {
+    debug: true,
+  },
 });
