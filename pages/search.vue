@@ -235,44 +235,46 @@ useHead({
 </script>
 
 <template>
-  <VContainer
-    class="pt-1 pb-10 px-0"
-    style="height: 100%"
-    :fluid="true"
-  >
-    <div>
-      <VRow
-        no-gutters
-        justify="center"
-        align="center"
-      >
-        <VCol class="my-4 mx-2">
-          <BaseHeader :icon="mdiMagnify">
-            <template #title>
-              <I18nT keypath="quickSearch.title" tag="div">
-                <template #query>
-                  <b v-text="route.query.q" />
-                </template>
-              </I18nT>
-            </template>
-          </BaseHeader>
-        </VCol>
-      </VRow>
-      <VRow no-gutters>
-        <VCol class="mx-4">
-          <ButtonTabs :tabs="data.tabs" />
-        </VCol>
-      </VRow>
-      <div v-if="noResults">
-        <div class="mt-4 text-h4 text-center">
-          {{ $t("quickSearch.noResults") }}
+  <VMain>
+    <VContainer
+      class="pt-1 pb-10 px-0"
+      style="height: 100%"
+      :fluid="true"
+    >
+      <div>
+        <VRow
+          no-gutters
+          justify="center"
+          align="center"
+        >
+          <VCol class="my-4 mx-2">
+            <BaseHeader :icon="mdiMagnify">
+              <template #title>
+                <I18nT keypath="quickSearch.title" tag="div">
+                  <template #query>
+                    <b v-text="route.query.q" />
+                  </template>
+                </I18nT>
+              </template>
+            </BaseHeader>
+          </VCol>
+        </VRow>
+        <VRow no-gutters>
+          <VCol class="mx-4">
+            <ButtonTabs :tabs="data.tabs" />
+          </VCol>
+        </VRow>
+        <div v-if="noResults">
+          <div class="mt-4 text-h4 text-center">
+            {{ $t("quickSearch.noResults") }}
+          </div>
         </div>
+        <NuxtPage
+          class="border-t border-b"
+          :query="query"
+          keep-alive
+        />
       </div>
-      <NuxtPage
-        class="border-t border-b"
-        :query="query"
-        keep-alive
-      />
-    </div>
-  </VContainer>
+    </VContainer>
+  </VMain>
 </template>
