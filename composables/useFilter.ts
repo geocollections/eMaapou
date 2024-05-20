@@ -202,7 +202,9 @@ function getSolrFilter(filter: FilterUnion) {
       const lookupFn = getLookupFn(filter.lookup);
       return filter.fields
         .map(field =>
-          filter.value.map(v => lookupFn(field, v)).join(" OR "),
+          filter.value.map((v) => {
+            return lookupFn(field, v.replaceAll(" ", "\\ "));
+          }).join(" OR "),
         )
         .join(" OR ");
     }

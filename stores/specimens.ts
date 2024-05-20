@@ -41,7 +41,7 @@ export const useSpecimens = defineStore(
       number: {
         type: "textList",
         value: [],
-        fields: ["number"],
+        fields: ["specimen_number", "specimen_full_name"],
         lookup: "startswith",
       } as TextListFilter,
       locality: {
