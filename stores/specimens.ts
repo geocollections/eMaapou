@@ -222,7 +222,6 @@ export const useSpecimens = defineStore(
 
     function getQueryParams() {
       const viewOptions = getViewOptions();
-      console.log(view.value);
 
       return stateToQueryParamsSchema.parse({
         q: query.value,

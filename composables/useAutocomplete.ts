@@ -153,7 +153,9 @@ export function useAutocomplete(
       },
     });
 
-    return values.map(id => ({
+    return values.filter((id) => {
+      return res.facets[id].count > 0;
+    }).map(id => ({
       id,
       name: res.facets[id].name.buckets[0].val,
       count: res.facets[id].count,
