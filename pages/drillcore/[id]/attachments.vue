@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  locality: number;
+  locality?: number;
 }>();
 
 const {
@@ -18,12 +18,20 @@ const {
 
 const route = useRoute();
 
+const orSearch = computed(() => {
+  const orSearch = [`drillcore:${route.params.id}`];
+  if (props.locality)
+    orSearch.push(`locality:${props.locality}`);
+
+  return orSearch.join(" OR ");
+});
+
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     nest: 2,
-    or_search: `drillcore:${route.params.id} OR locality:${props.locality}`,
+    or_search: orSearch.value,
     ordering: sortBy.value,
     ...searchParams.value,
   },
@@ -34,7 +42,7 @@ const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    or_search: `drillcore:${route.params.id} OR locality:${props.locality}`,
+    or_search: orSearch.value,
     nest: 2,
     ordering: sortBy,
     ...searchParams.value,
