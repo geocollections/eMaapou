@@ -5,42 +5,40 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-  sortBy,
-  searchParams,
-} = useDataTableGeoloogiaApi({
+  solrSort,
+  solrQuery,
+} = useDataTable({
   initOptions: LOCALITY.options,
   initHeaders: HEADERS_AREA_LOCALITY,
 });
 
 const route = useRoute();
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality/", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/locality", {
   query: computed(() => ({
+    q: solrQuery.value,
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    area: route.params.id,
-    nest: 1,
-    ordering: sortBy.value,
-    ...searchParams.value,
+    fq: `area_id:${route.params.id}`,
+    sort: solrSort.value,
   })),
 });
 
-const { exportData } = useExportGeoloogiaApi("/locality/", {
-  totalRows: computed(() => data.value?.count ?? 0),
+const { exportData } = useExportSolr("/locality", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
   query: computed(() => ({
+    query: solrQuery.value,
+    sort: solrSort.value,
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    area: route.params.id,
-    nest: 1,
-    ordering: sortBy,
-    ...searchParams.value,
+    fields: EXPORT_SOLR_LOCALITY,
   })),
 });
 </script>
 
 <template>
   <DataTableLocality
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="headers"
     :is-loading="pending"
