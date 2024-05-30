@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { mdiFileDownloadOutline } from "@mdi/js";
 import isEmpty from "lodash/isEmpty";
+import type { Area } from "../[id].vue";
 import type { MapMarker } from "~/types/map";
 
-const props = defineProps<{ area: any }>();
+const props = defineProps<{ area: Area }>();
 
 const area = computed(() => props.area);
-const deposit = computed(() => props.area.maaamet_maardla);
-const miningClaim = computed(() => props.area.maaamet_maeeraldis);
+const deposit = computed(() => props.area.land_board_deposit);
+const miningClaim = computed(() => props.area.land_board_claim);
 const eelisArray = computed(() => props.area.eelis?.split(";") ?? []);
 const egfArray = computed(() => props.area.egf?.split(";") ?? []);
-const planArray = computed(() => props.area.text1?.split(";") ?? []);
+const planArray = computed(() => props.area.plans?.split(";") ?? []);
 const geojson = computed(() => {
   if (isEmpty(props.area))
     return null;
@@ -20,11 +21,13 @@ const geojson = computed(() => {
     = JSON.parse(
       // NOTE: Remove trailing commas from JSON object string
 
-      props.area.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, ""),
+      props.area.polygon!.replace(/\,(?!\s*?[\{\[\"\'\w])/g, ""),
     ) ?? null;
   if (parsedPolygon === null)
     return null;
-  if (!(Array.isArray(parsedPolygon))) { return parsedPolygon; }
+  if (!(Array.isArray(parsedPolygon))) {
+    return parsedPolygon;
+  }
   else {
     return {
       type: "Feature",
@@ -87,49 +90,50 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             :value="$translate({ et: area.name, en: area.name_en })"
           />
           <TableRowLink
-            v-if="area.area_type === 2"
+            v-if="area.type.id === 2"
             :title="$t('area.areaType')"
             :value="
               $translate({
-                et: area.area_type__name,
-                en: area.area_type__name_en,
+                et: area.type.name,
+                en: area.type.name_en,
               })
             "
-            @link-click="$openTurba('turbaala', area.id)"
+            @link-click="$openTurba('turbaala', area.id.toString())"
           />
           <TableRow
             v-else
             :title="$t('area.areaType')"
             :value="
               $translate({
-                et: area.area_type.name,
-                en: area.area_type.name_en,
+                et: area.type.name,
+                en: area.type.name_en,
               })
             "
           />
           <TableRowLink
-            v-if="area.parent_area"
+            v-if="area.parent"
             nuxt
             :href="
               localePath({
                 name: 'area-id',
-                params: { id: area.parent_area.id },
+                params: { id: area.parent.id },
               })
             "
             :title="$t('area.parentArea')"
             :value="
               $translate({
-                et: area.parent_area.name,
-                en: area.parent_area.name_en,
+                et: area.parent.name,
+                en: area.parent.name_en,
               })
             "
           />
           <TableRow
+            v-if="area.county"
             :title="$t('area.county')"
             :value="
               $translate({
-                et: area.maakond__maakond,
-                en: area.maakond__maakond_en,
+                et: area.county.name,
+                en: area.county.name_en,
               })
             "
           />
@@ -149,11 +153,12 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             </template>
           </TableRow>
           <TableRowLink
+            v-if="area.deposit"
             :title="$t('area.maardla')"
-            @link-click="$openEelis(area.maardla)"
+            @link-click="$openEelis(area.deposit.toString())"
           >
             <template #value>
-              {{ $t("area.maardlaLink") }} ({{ area.maardla }})
+              {{ $t("area.maardlaLink") }} ({{ area.deposit }})
             </template>
           </TableRowLink>
           <TableRow v-if="eelisArray.length > 0" :title="$t('area.eelis')">
@@ -168,7 +173,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           </TableRow>
 
           <TableRow
-            v-if="area.area_type === 2 && planArray.length > 0"
+            v-if="area.type.id === 2 && planArray.length > 0"
             :title="$t('area.text1')"
             :value="planArray"
           >
@@ -200,7 +205,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           />
         </BaseTable>
         <template
-          v-if="$translate({ et: area.description, en: area.description_en })"
+          v-if="!!$translate({ et: area.description!, en: area.description_en! })"
         >
           <div class="text-h6 py-2">
             {{ $t("area.description") }}
@@ -208,8 +213,8 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           <div
             v-html="
               $translate({
-                et: area.description,
-                en: area.description_en,
+                et: area.description!,
+                en: area.description_en!,
               })
             "
           />
@@ -298,13 +303,13 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             <TableRow :title="$t('miningClaim.number')">
               <template #value>
                 <BaseLinkExternal
-                  @click.native="
+                  @click="
                     $openWindow(
                       `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`,
                     )
                   "
                 >
-                  {{ area.maaamet_maeeraldis.id }}
+                  {{ miningClaim.id }}
                 </BaseLinkExternal>
                 (Maaamet XGIS2)
               </template>
@@ -312,7 +317,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             <TableRow :title="$t('miningClaim.registrationNo')">
               <template #value>
                 <BaseLinkExternal
-                  @click.native="
+                  @click="
                     $openWindow(
                       `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`,
                     )
@@ -325,9 +330,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             </TableRow>
             <TableRow
               :title="$t('miningClaim.name')"
-              :value="`${miningClaim.nimetus} ${
-                miningClaim.maardla_os ? `(${miningClaim.maardla_os})` : ''
-              }`"
+              :value="miningClaim.nimetus"
             />
             <TableRow
               :title="$t('miningClaim.area')"
@@ -357,7 +360,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             >
               <template #value>
                 <BaseLinkExternal
-                  @click.native="
+                  @click="
                     $openWindow(
                       `https://kotkas.envir.ee/permits/public_index?search=1&permit_nr=${miningClaim.loa_number}`,
                     )

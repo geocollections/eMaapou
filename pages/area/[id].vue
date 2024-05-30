@@ -2,7 +2,7 @@
 import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
+const { $geoloogiaFetch, $solrFetch, $apiFetch, $translate } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -43,6 +43,7 @@ const tabs = {
         query: {
           q: "*",
           fq: `area_id:${route.params.id}`,
+          rows: 0,
         },
       });
       return response.response.numFound;
@@ -54,9 +55,9 @@ const tabs = {
     routeName: "area-id-references",
     title: "area.localityReferences",
     count: async () => {
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/areas/${route.params.id}/area-references/`, {
         query: {
-          area: route.params.id,
+          limit: 0,
         },
       });
       return response.count;
@@ -68,9 +69,10 @@ const tabs = {
     routeName: "area-id-related-areas",
     title: "area.relatedAreas",
     count: async () => {
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/area/", {
+      const response = await $apiFetch<GeoloogiaListResponse>("/areas/", {
         query: {
-          parent_area: route.params.id,
+          parent: route.params.id,
+          limit: 0,
         },
       });
       return response.count;
@@ -82,20 +84,109 @@ const tabs = {
     routeName: "area-id-localities",
     title: "area.localities",
     count: async () => {
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality/", {
+      const response = await $solrFetch<SolrResponse>("/locality", {
         query: {
+          q: "*",
           area: route.params.id,
+          fq: `area_id:${route.params.id}`,
+          rows: 0,
         },
       });
-      return response.count;
+      return response.response.numFound;
     },
     props: {},
   } satisfies Tab,
 };
+
+export interface Area {
+  id: number;
+  name: string;
+  name_en: string;
+  type: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  parent?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  county?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  eelis?: string;
+  egf?: string;
+  plans?: string;
+  polygon?: string;
+  area_ha?: number;
+  deposit?: number;
+  deposit_area_ha?: number;
+  description?: string;
+  description_en?: string;
+  date_added?: string;
+  date_changed?: string;
+  land_board_deposit?: {
+    id: number;
+    nimetus: string;
+    maardla_os: string;
+    pindala: number;
+    aluspohja: boolean;
+    maavara: string;
+    pohimaavar: string;
+    kaasmaavar: string;
+    maeteh_ti: string;
+    geookol_ti: string;
+    eksporditi: string;
+  };
+  land_board_claim?: {
+    id: number;
+    nimetus: string;
+    reg_kaart: string;
+    pindala: number;
+    erald_varu: string;
+    kas_eesm: string;
+    rekult: string;
+    me_olek: string;
+    loa_number: string;
+    loa_algus: string;
+    loa_lopp: string;
+    kaevandaja: string;
+    eksporditi: string;
+    loa_omanik: string;
+  };
+}
+
 const { data } = await useAsyncData("area", async () => {
-  const area = await $geoloogiaFetch<any>(`/area/${route.params.id}`, {
+  const area = await $apiFetch<Area>(`/areas/${route.params.id}/`, {
     query: {
-      nest: 1,
+      expand: "type,parent,county,land_board_deposit,land_board_claim",
+      fields: [
+        "id",
+        "name",
+        "name_en",
+        "type.id",
+        "type.name",
+        "type.name_en",
+        "parent.id",
+        "parent.name",
+        "parent.name_en",
+        "plans",
+        "eelis",
+        "egf",
+        "polygon",
+        "area_ha",
+        "deposit",
+        "deposit_area_ha",
+        "description",
+        "description_en",
+        "land_board_deposit",
+        "land_board_claim",
+        "date_added",
+        "date_changed",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
@@ -134,15 +225,15 @@ const activeTabProps = computed(() => {
 
 const pageTitle = computed(() =>
   $translate({
-    et: data.value?.area.name,
-    en: data.value?.area.name_en,
+    et: data.value?.area?.name,
+    en: data.value?.area?.name_en,
   }),
 );
 const metaTitle = computed(
   () =>
     `${$translate({
-      et: data.value?.area.name,
-      en: data.value?.area.name_en,
+      et: data.value?.area?.name,
+      en: data.value?.area?.name_en,
     })} | ${t("area.pageTitle")}`,
 );
 
