@@ -2,8 +2,9 @@
 import { mdiScrewMachineFlatTop } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
+const { t } = useI18n();
 const localePath = useLocalePath();
 
 const drillcoresStore = useDrillcores();
@@ -171,10 +172,81 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface Drillcore {
+  id: number;
+  name: string;
+  name_en: string;
+  boxes?: number;
+  box_numbers?: string;
+  year?: string;
+  meters_in_box?: number;
+  remarks?: string;
+  date_added?: string;
+  date_changed?: string;
+  locality?: {
+    id: number;
+    name: string;
+    name_en: string;
+    latitude?: number;
+    longitude?: number;
+    elevation?: string;
+    depth?: number;
+    country?: {
+      name: string;
+      name_en: string;
+      iso_3166_1_alpha_2: string;
+    };
+  };
+  database?: {
+    name: string;
+    name_en: string;
+    url: string;
+  };
+  agent?: {
+    name: string;
+  };
+  storage?: {
+    name: string;
+  };
+  depository?: {
+    value: string;
+    value_en: string;
+  };
+
+};
+
 const { data } = await useAsyncData("drillcore", async () => {
-  const drillcore = await $geoloogiaFetch<any>(`/drillcore/${route.params.id}/`, {
+  const drillcore = await $apiFetch<Drillcore>(`/drillcores/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "locality,locality.country,database,agent,storage,depository",
+      fields: [
+        "name",
+        "name_en",
+        "boxes",
+        "box_numbers",
+        "year",
+        "meters_in_box",
+        "remarks",
+        "date_added",
+        "date_changed",
+        "locality.id",
+        "locality.name",
+        "locality.name_en",
+        "locality.latitude",
+        "locality.longitude",
+        "locality.elevation",
+        "locality.depth",
+        "locality.country.name",
+        "locality.country.name_en",
+        "locality.country.iso_3166_1_alpha_2",
+        "database.name",
+        "database.name_en",
+        "database.url",
+        "agent.name",
+        "storage.name",
+        "depository.value",
+        "depository.value_en",
+      ],
     },
     onResponseError: (_error) => {
       showError({
@@ -237,8 +309,8 @@ const activeTabProps = computed(() => {
 
 const title = computed(() =>
   $translate({
-    et: data.value?.drillcore.drillcore,
-    en: data.value?.drillcore.drillcore_en,
+    et: data.value?.drillcore?.name,
+    en: data.value?.drillcore?.name_en,
   }),
 );
 redirectInvalidTab({
@@ -248,8 +320,6 @@ redirectInvalidTab({
   }),
   tabs: data.value?.tabs ?? [],
 });
-
-const { t } = useI18n();
 
 useHead({
   title: `${title.value} | ${t("drillcore.pageTitle")}`,
@@ -262,8 +332,8 @@ useHead({
       <HeaderDetailNew
         :title="
           $translate({
-            et: data?.drillcore.drillcore,
-            en: data?.drillcore.drillcore_en,
+            et: data?.drillcore.name,
+            en: data?.drillcore.name_en,
           })
         "
       >

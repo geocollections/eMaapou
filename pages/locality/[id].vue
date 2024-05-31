@@ -316,9 +316,11 @@ const { data } = await useAsyncData("locality", async () => {
     },
   });
 
-  const drillcorePromise = $geoloogiaFetch<any>("/drillcore/", {
+  const drillcorePromise = $apiFetch<GeoloogiaListResponse<{ id: number; name: string; name_en: string; boxes?: number }>>("/drillcores/", {
     query: {
       locality: route.params.id,
+      fields: "id,name,name_en,boxes",
+      limit: 1,
     },
   });
   // Checking if locality has a related .las file to show in graph tab
@@ -480,8 +482,8 @@ useSeoMeta({
             </VIcon>
             {{
               $translate({
-                et: data?.drillcore.drillcore,
-                en: data?.drillcore.drillcore_en,
+                et: data?.drillcore.name,
+                en: data?.drillcore.name_en,
               })
             }}
           </VBtn>
