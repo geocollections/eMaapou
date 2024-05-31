@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
+import type { Dataset } from "../[id].vue";
 
-defineProps<{ dataset: any; parameters: any }>();
+defineProps<{ dataset: Dataset; parameters: any }>();
 const { $solrFetch, $geoloogiaFetch, $translate } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -125,10 +126,10 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             :value="dataset.title_alternative"
           />
           <TableRow
-            v-if="dataset.creators || dataset.owner_txt || dataset.owner"
+            v-if="dataset.creators || dataset.owner_text || dataset.owner"
             :title="$t('dataset.creators')"
             :value="
-              dataset.creators || dataset.owner_txt || dataset.owner.agent
+              dataset.creators || dataset.owner_text || dataset.owner.name
             "
           />
           <TableRow
@@ -153,8 +154,8 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             :title="$t('dataset.language')"
             :value="
               $translate({
-                et: dataset.language.value,
-                en: dataset.language.value_en,
+                et: dataset.language.name,
+                en: dataset.language.name_en,
               })
             "
           />
@@ -187,8 +188,8 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             :title="$t('dataset.locality')"
             :value="
               $translate({
-                et: dataset.locality.locality,
-                en: dataset.locality.locality_en,
+                et: dataset.locality.name,
+                en: dataset.locality.name_en,
               })
             "
             nuxt
@@ -202,21 +203,21 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
           <TableRow
             v-if="dataset.copyright_agent"
             :title="$t('dataset.copyright')"
-            :value="dataset.copyright_agent.agent"
+            :value="dataset.copyright_agent.name"
           />
           <TableRowLink
             v-if="dataset.licence"
             :title="$t('dataset.licence')"
             :value="
               $translate({
-                et: dataset.licence.licence,
-                en: dataset.licence.licence_en,
+                et: dataset.licence.name,
+                en: dataset.licence.name_en,
               })
             "
             :href="
               $translate({
-                et: dataset.licence.licence_url,
-                en: dataset.licence.licence_url_en,
+                et: dataset.licence.url,
+                en: dataset.licence.url_en,
               })
             "
           />

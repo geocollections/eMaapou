@@ -2,7 +2,7 @@
 import { mdiDatabaseOutline } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
@@ -141,10 +141,89 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface Dataset {
+  id: number;
+  title: string;
+  title_alternative?: string;
+  title_translated?: string;
+  owner?: {
+    name: string;
+  };
+  owner_text?: string;
+  creators?: string;
+  publication_year?: string;
+  date?: string;
+  resource?: string;
+  publisher?: string;
+  subjects?: string;
+  language?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  abstract?: string;
+  methods?: string;
+  version?: string;
+  reference?: {
+    id: number;
+    reference: string;
+  };
+  locality?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  copyright_agent?: {
+    name: string;
+  };
+  licence?: {
+    id: number;
+    name: string;
+    name_en: string;
+    url?: string;
+    url_en?: string;
+  };
+  date_added?: string;
+  date_changed?: string;
+}
+
 const { data } = await useAsyncData("dataset", async () => {
-  const dataset = await $geoloogiaFetch<any>(`/dataset/${route.params.id}/`, {
+  const dataset = await $apiFetch<Dataset>(`/datasets/${route.params.id}/`, {
     query: {
-      nest: 1,
+      expand: "language,locality,licence,reference,copyright_agent,owner",
+      fields: [
+        "id",
+        "title",
+        "title_alternative",
+        "title_translated",
+        "owner.name",
+        "owner_text",
+        "creators",
+        "publication_year",
+        "date",
+        "resource",
+        "publisher",
+        "subjects",
+        "language.id",
+        "language.name",
+        "language.name_en",
+        "abstract",
+        "methods",
+        "version",
+        "reference.id",
+        "reference.reference",
+        "locality.id",
+        "locality.name",
+        "locality.name_en",
+        "licence.id",
+        "licence.name",
+        "licence.name_en",
+        "licence.url",
+        "licence.url_en",
+        "copyright_agent.name",
+        "date_added",
+        "date_changed",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
