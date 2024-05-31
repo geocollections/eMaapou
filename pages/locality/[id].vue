@@ -9,7 +9,7 @@ import {
 } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $solrFetch, $translate, $geoloogiaFetch } = useNuxtApp();
+const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
 
 const localePath = useLocalePath();
 const { t } = useI18n();
@@ -213,10 +213,100 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface Locality {
+  id: number;
+  name: string;
+  name_en: string;
+  number?: string;
+  longitude?: number;
+  latitude?: number;
+  elevation?: string;
+  coordx?: number;
+  coordy?: number;
+  remarks?: string;
+  remarks_location?: string;
+  land_board_id?: number;
+  coordinate_system?: string;
+  type?: {
+    value: string;
+    value_en: string;
+  };
+  country?: {
+    name: string;
+    name_en: string;
+    iso_3166_1_alpha_2: string;
+  };
+  coordinate_agent?: {
+    name: string;
+  };
+  coordinate_method?: {
+    value: string;
+    value_en: string;
+  };
+  coordinate_precision?: {
+    value: string;
+  };
+  stratigraphy_top?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  stratigraphy_base?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  municipality?: {
+    name: string;
+    name_en: string;
+  };
+  settlement?: {
+    name: string;
+    name_en: string;
+  };
+  date_added?: string;
+  date_changed?: string;
+};
+
 const { data } = await useAsyncData("locality", async () => {
-  const locality = await $geoloogiaFetch<any>(`/locality/${route.params.id}/`, {
+  const locality = await $apiFetch<Locality>(`/localities/${route.params.id}/`, {
     query: {
-      nest: 1,
+      expand: "type,country,coordinate_agent,coordinate_method,coordinate_precision,stratigraphy_top,stratigraphy_base,municipality,settlement",
+      fields: [
+        "id",
+        "name",
+        "name_en",
+        "number",
+        "longitude",
+        "latitude",
+        "elevation",
+        "coordx",
+        "coordy",
+        "remarks",
+        "remarks_location",
+        "land_board_id",
+        "coordinate_system",
+        "type.value",
+        "type.value_en",
+        "country.name",
+        "country.name_en",
+        "coordinate_agent.name",
+        "coordinate_method.value",
+        "coordinate_method.value_en",
+        "coordinate_precision.value",
+        "stratigraphy_top.id",
+        "stratigraphy_top.name",
+        "stratigraphy_top.name_en",
+        "stratigraphy_base.id",
+        "stratigraphy_base.name",
+        "stratigraphy_base.name_en",
+        "municipality.name",
+        "municipality.name_en",
+        "settlement.name",
+        "settlement.name_en",
+        "date_added",
+        "date_changed",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
@@ -312,8 +402,8 @@ const activeTabProps = computed(() => {
 
 const title = computed(() =>
   $translate({
-    et: data.value?.locality.locality,
-    en: data.value?.locality.locality_en,
+    et: data.value?.locality!.name,
+    en: data.value?.locality!.name_en,
   }),
 );
 redirectInvalidTab({
@@ -349,8 +439,8 @@ useSeoMeta({
       <HeaderDetailNew
         :title="
           $translate({
-            et: data?.locality.locality,
-            en: data?.locality.locality_en,
+            et: data?.locality?.name,
+            en: data?.locality?.name_en,
           })
         "
       >

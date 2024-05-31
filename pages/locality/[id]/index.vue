@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Locality } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
-const props = defineProps<{ locality: any }>();
+const props = defineProps<{ locality: Locality }>();
 
 const route = useRoute();
 const localePath = useLocalePath();
@@ -131,8 +132,8 @@ const mapOverlays = computed(() => {
           <TableRow
             :title="$t('locality.name')"
             :value="$translate({
-              et: locality.locality,
-              en: locality.locality_en,
+              et: locality.name,
+              en: locality.name_en,
             })
             "
           />
@@ -150,8 +151,8 @@ const mapOverlays = computed(() => {
             v-if="country"
             :title="$t('locality.country')"
             :value="$translate({
-              et: country.value,
-              en: country.value_en,
+              et: country.name,
+              en: country.name_en,
             })
             "
           />
@@ -202,14 +203,14 @@ const mapOverlays = computed(() => {
             v-if="stratigraphyTop"
             :title="$t('locality.stratigraphyTop')"
             :value="$translate({
-              et: stratigraphyTop.stratigraphy,
-              en: stratigraphyTop.stratigraphy_en,
+              et: stratigraphyTop.name,
+              en: stratigraphyTop.name_en,
             })
             "
             nuxt
             :href="localePath({
               name: 'stratigraphy-id',
-              params: { id: locality.stratigraphy_top.id },
+              params: { id: stratigraphyTop.id },
             })
             "
           />
@@ -217,23 +218,23 @@ const mapOverlays = computed(() => {
             v-if="stratigraphyBase"
             :title="$t('locality.stratigraphyBase')"
             :value="$translate({
-              et: stratigraphyBase.stratigraphy,
-              en: stratigraphyBase.stratigraphy_en,
+              et: stratigraphyBase.name,
+              en: stratigraphyBase.name,
             })
             "
             nuxt
             :href="localePath({
               name: 'stratigraphy-id',
-              params: { id: locality.stratigraphy_base.id },
+              params: { id: stratigraphyBase.id },
             })
             "
           />
           <TableRow :title="$t('locality.remarks')" :value="locality.remarks" />
           <TableRowLink
-            v-if="locality.maaamet_pa_id"
+            v-if="locality.land_board_id"
             :title="$t('locality.linkLandBoard')"
-            :value="locality.maaamet_pa_id"
-            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
+            :value="locality.land_board_id"
+            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.land_board_id}&fr=o&bk=1&page_id=382`"
           />
           <TableRow
             v-if="locality.date_added"
@@ -249,20 +250,19 @@ const mapOverlays = computed(() => {
       </VCol>
       <VCol v-if="showMap" :xl="4">
         <MapDetail
-          v-if="showMap"
           :base-layer="mapBaseLayer"
           :overlays="mapOverlays"
           :center="{
-            latitude: locality.latitude,
-            longitude: locality.longitude,
+            latitude: locality.latitude!,
+            longitude: locality.longitude!,
           }"
           :markers="[
             {
-              latitude: locality.latitude,
-              longitude: locality.longitude,
+              latitude: locality.latitude!,
+              longitude: locality.longitude!,
               text: $translate({
-                et: locality.locality,
-                en: locality.locality_en,
+                et: locality.name,
+                en: locality.name_en,
               }),
             },
           ]"
