@@ -1,20 +1,21 @@
 <script setup lang="ts">
-const props = defineProps<{ drillcoreBox: any }>();
+import type { DrillcoreBox } from "../[id].vue";
+
+const props = defineProps<{ drillcoreBox: DrillcoreBox }>();
 
 const img = useImage();
 const localePath = useLocalePath();
 const route = useRoute();
-const { $geoloogiaFetch } = useNuxtApp();
+const { $apiFetch } = useNuxtApp();
 
 const drillcore = computed(() => props.drillcoreBox.drillcore);
 const imageSizes = ["small", "medium", "large", "original"];
 
 const { data } = await useAsyncData("images", async () => {
-  const attachmentLinks = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+  const attachmentLinks = await $apiFetch<GeoloogiaListResponse<{ uuid_filename: string }>>(`/drillcore-boxes/${route.params.id}/attachments/`, {
     query: {
-      drillcore_box: route.params.id,
-      nest: 2,
-      ordering: "-attachment__is_preferred",
+      fields: "uuid_filename",
+      ordering: "-is_preferred",
     },
   });
 
@@ -41,21 +42,21 @@ const activeImage = computed(() => data.value?.activeImage);
           class="rounded border cursor-pointer transition-swing"
           :lazy-src="
             img(
-              activeImage.attachment.uuid_filename,
+              activeImage.uuid_filename,
               { size: 'small' },
               { provider: 'geocollections' },
             )
           "
           :src="
             img(
-              activeImage.attachment.uuid_filename,
+              activeImage.uuid_filename,
               { size: 'large' },
               { provider: 'geocollections' },
             )
           "
           max-width="2000"
           max-height="1000"
-          @click="$openImage(activeImage.attachment.uuid_filename)"
+          @click="$openImage(activeImage.uuid_filename)"
         >
           <template #placeholder>
             <VRow
@@ -75,7 +76,7 @@ const activeImage = computed(() => data.value?.activeImage);
           <span v-for="(size, index) in imageSizes" :key="index">
             <a
               class="text-link"
-              @click="$openImage(activeImage.attachment.uuid_filename, size)"
+              @click="$openImage(activeImage.uuid_filename, size)"
             >
               {{ $t(`common.${size}`) }}
             </a>
@@ -97,14 +98,14 @@ const activeImage = computed(() => data.value?.activeImage);
                 v-bind="hoverProps"
                 :src="
                   img(
-                    item.attachment.uuid_filename,
+                    item.uuid_filename,
                     { size: 'small' },
                     { provider: 'geocollections' },
                   )
                 "
                 :lazy-src="
                   img(
-                    item.attachment.uuid_filename,
+                    item.uuid_filename,
                     { size: 'small' },
                     { provider: 'geocollections' },
                   )
@@ -143,8 +144,8 @@ const activeImage = computed(() => data.value?.activeImage);
             :title="$t('drillcoreBox.drillcore')"
             :value="
               $translate({
-                et: drillcore.drillcore,
-                en: drillcore.drillcore_en,
+                et: drillcore.name,
+                en: drillcore.name_en,
               })
             "
             :href="
@@ -164,7 +165,7 @@ const activeImage = computed(() => data.value?.activeImage);
           />
           <TableRow
             :title="$t('drillcoreBox.depthOther')"
-            :value="drillcoreBox.depth_other"
+            :value="drillcoreBox.depth_text"
           />
           <TableRow
             :title="$t('drillcoreBox.diameter')"
@@ -175,8 +176,8 @@ const activeImage = computed(() => data.value?.activeImage);
             :title="$t('drillcoreBox.stratigraphyTop')"
             :value="
               $translate({
-                et: drillcoreBox.stratigraphy_top.stratigraphy,
-                en: drillcoreBox.stratigraphy_top.stratigraphy_en,
+                et: drillcoreBox.stratigraphy_top.name,
+                en: drillcoreBox.stratigraphy_top.name_en,
               })
             "
             nuxt
@@ -189,15 +190,15 @@ const activeImage = computed(() => data.value?.activeImage);
           />
           <TableRow
             :title="$t('drillcoreBox.stratigraphyTopFree')"
-            :value="drillcoreBox.stratigraphy_top_free"
+            :value="drillcoreBox.stratigraphy_top_text"
           />
           <TableRowLink
             v-if="drillcoreBox.stratigraphy_base"
             :title="$t('drillcoreBox.stratigraphyBase')"
             :value="
               $translate({
-                et: drillcoreBox.stratigraphy_base.stratigraphy,
-                en: drillcoreBox.stratigraphy_base.stratigraphy_en,
+                et: drillcoreBox.stratigraphy_base.name,
+                en: drillcoreBox.stratigraphy_base.name_en,
               })
             "
             nuxt
@@ -210,7 +211,7 @@ const activeImage = computed(() => data.value?.activeImage);
           />
           <TableRow
             :title="$t('drillcoreBox.stratigraphyBaseFree')"
-            :value="drillcoreBox.stratigraphy_base_free"
+            :value="drillcoreBox.stratigraphy_base_text"
           />
 
           <TableRow

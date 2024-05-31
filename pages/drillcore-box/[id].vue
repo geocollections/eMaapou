@@ -2,7 +2,7 @@
 import { mdiArchive } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $translate, $solrFetch } = useNuxtApp();
+const { $geoloogiaFetch, $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -80,14 +80,68 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface DrillcoreBox {
+  id: number;
+  number: string;
+  depth_start?: number;
+  depth_end?: number;
+  depth_text?: string;
+  diameter?: number;
+  drillcore: {
+    id: number;
+    name: string;
+    name_en: string;
+    locality: number;
+  };
+  stratigraphy_top?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  stratigraphy_top_text?: string;
+  stratigraphy_base?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  stratigraphy_base_text?: string;
+  remarks?: string;
+  date_added?: string;
+  date_changed?: string;
+}
+
 const { data } = await useAsyncData(
   "drillcore-box",
   async () => {
-    const drillcoreBox = await $geoloogiaFetch<any>(
-      `/drillcore_box/${route.params.id}/`,
+    const drillcoreBox = await $apiFetch<DrillcoreBox>(
+      `/drillcore-boxes/${route.params.id}/`,
       {
         query: {
-          nest: 1,
+          expand: "drillcore,stratigraphy_top,stratigraphy_base",
+          fields: [
+            "id",
+            "number",
+            "depth_start",
+            "depth_end",
+            "depth_text",
+            "diameter",
+            "drillcore.id",
+            "drillcore.name",
+            "drillcore.name_en",
+            "stratigraphy_top",
+            "stratigraphy_top.id",
+            "stratigraphy_top.name",
+            "stratigraphy_top.name_en",
+            "stratigraphy_top_text",
+            "stratigraphy_base",
+            "stratigraphy_base.id",
+            "stratigraphy_base.name",
+            "stratigraphy_base.name_en",
+            "stratigraphy_base_text",
+            "remarks",
+            "date_added",
+            "date_changed",
+          ].join(","),
         },
         onResponseError: (_error) => {
           showError({
@@ -119,11 +173,10 @@ const { data } = await useAsyncData(
       },
       ctx: { drillcoreBox },
     });
-    const attachmentLinks = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+    const attachmentLinks = await $apiFetch<GeoloogiaListResponse<{ uuid_filename: string }>>(`/drillcore-boxes/${route.params.id}/attachments/`, {
       query: {
-        drillcore_box: route.params.id,
-        nest: 2,
-        ordering: "-attachment__is_preferred",
+        fields: "uuid_filename",
+        ordering: "-is_preferred",
       },
     });
 
@@ -157,10 +210,10 @@ const activeTabProps = computed(() => {
 const pageTitle = computed(
   () =>
     `${t("drillcoreBox.nr", {
-      number: data.value?.drillcoreBox.number,
+      number: data.value?.drillcoreBox?.number,
     })} - ${$translate({
-      et: data.value?.drillcoreBox.drillcore?.drillcore,
-      en: data.value?.drillcoreBox.drillcore?.drillcore_en,
+      et: data.value?.drillcoreBox?.drillcore?.name,
+      en: data.value?.drillcoreBox?.drillcore?.name_en,
     })}`,
 );
 
@@ -179,7 +232,7 @@ useHead({
 const img = useImage();
 useSeoMeta({
   ogImage: img(
-    data.value?.activeImage?.attachment?.uuid_filename,
+    data.value?.activeImage?.uuid_filename,
     { size: "medium" },
     {
       provider: "geocollections",

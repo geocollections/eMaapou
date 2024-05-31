@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Drillcore } from "../[id].vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
-  drillcore: any;
+  drillcore: Drillcore;
 }>();
 
 const localePath = useLocalePath();
@@ -15,7 +16,7 @@ const database = computed(() => props.drillcore.database);
 const locality = computed(() => props.drillcore.locality);
 
 const mapBaseLayer = computed(() => {
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
@@ -23,7 +24,7 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   const overlays: MapOverlay[] = ["Puursüdamikud / Drillcores"];
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
   return overlays;
@@ -44,8 +45,8 @@ const mapOverlays = computed(() => {
             :title="$t('drillcore.name')"
             :value="
               $translate({
-                et: drillcore.drillcore,
-                en: drillcore.drillcore_en,
+                et: drillcore.name,
+                en: drillcore.name_en,
               })
             "
           />
@@ -70,17 +71,17 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="storage"
             :title="$t('drillcore.storage')"
-            :value="storage.location"
+            :value="storage.name"
           />
           <TableRow
             v-if="agent"
             :title="$t('drillcore.driller')"
-            :value="agent.agent"
+            :value="agent.name"
           />
           <TableRow :title="$t('drillcore.year')" :value="drillcore.year" />
           <TableRow
             :title="$t('drillcore.metersInBox')"
-            :value="drillcore.number_meters"
+            :value="drillcore.meters_in_box"
           />
 
           <TableRowLink
@@ -116,46 +117,47 @@ const mapOverlays = computed(() => {
       <VCol :xl="4">
         <BaseTable class="border rounded mb-4">
           <TableRowLink
+            v-if="locality"
             :title="$t('locality.locality')"
             :value="
               $translate({
-                et: locality.locality,
-                en: locality.locality_en,
+                et: locality.name,
+                en: locality.name_en,
               })
             "
             nuxt
             :href="
               localePath({
                 name: 'locality-id',
-                params: { id: drillcore.locality.id },
+                params: { id: locality.id },
               })
             "
           />
           <TableRow
-            v-if="locality.country"
+            v-if="locality?.country"
             :title="$t('locality.country')"
             :value="
               $translate({
-                et: locality.country.value,
-                en: locality.country.value_en,
+                et: locality.country.name,
+                en: locality.country.name_en,
               })
             "
           />
           <TableRow
             :title="$t('locality.coordinates')"
-            :value="`${locality.latitude}, ${locality.longitude}`"
+            :value="`${locality?.latitude}, ${locality?.longitude}`"
           />
           <TableRow
             :title="$t('locality.elevation')"
-            :value="locality.elevation"
+            :value="locality?.elevation"
           />
           <TableRow
             :title="$t('locality.depth')"
-            :value="locality.depth"
+            :value="locality?.depth"
           />
         </BaseTable>
         <MapDetail
-          v-if="locality.latitude && locality.longitude"
+          v-if="locality?.latitude && locality?.longitude"
           :base-layer="mapBaseLayer"
           :overlays="mapOverlays"
           :center="{
@@ -167,8 +169,8 @@ const mapOverlays = computed(() => {
               latitude: locality.latitude,
               longitude: locality.longitude,
               text: $translate({
-                et: locality.locality,
-                en: locality.locality_en,
+                et: locality.name,
+                en: locality.name_en,
               }),
             },
           ]"

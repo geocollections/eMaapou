@@ -11,11 +11,11 @@ const { $geoloogiaFetch } = useNuxtApp();
 
 const type = computed(() => props.locality.type);
 const country = computed(() => props.locality.country);
-const municipality = computed(() => props.locality.vald);
-const settlementUnit = computed(() => props.locality.asustusyksus);
-const coordinatePrecision = computed(() => props.locality.coord_det_precision);
-const coordinateMethod = computed(() => props.locality.coord_det_method);
-const coordinateAgent = computed(() => props.locality.coord_det_agent);
+const municipality = computed(() => props.locality.municipality);
+const settlementUnit = computed(() => props.locality.settlement);
+const coordinatePrecision = computed(() => props.locality.coordinate_precision);
+const coordinateMethod = computed(() => props.locality.coordinate_method);
+const coordinateAgent = computed(() => props.locality.coordinate_agent);
 const stratigraphyTop = computed(() => props.locality.stratigraphy_top);
 const stratigraphyBase = computed(() => props.locality.stratigraphy_base);
 
@@ -68,7 +68,7 @@ const _ = await useAsyncData("image", async () => {
 });
 
 const mapBaseLayer = computed(() => {
-  if (country.value?.value === "Eesti")
+  if (country.value?.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
@@ -76,7 +76,7 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   const overlays: MapOverlay[] = ["Lokaliteedid / Localities"];
-  if (country.value?.value === "Eesti")
+  if (country.value?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
   return overlays;
@@ -160,8 +160,8 @@ const mapOverlays = computed(() => {
             v-if="municipality"
             :title="$t('locality.parish')"
             :value="$translate({
-              et: municipality.vald,
-              en: municipality.vald_en,
+              et: municipality.name,
+              en: municipality.name_en,
             })
             "
           />
@@ -169,14 +169,14 @@ const mapOverlays = computed(() => {
             v-if="settlementUnit"
             :title="$t('locality.settlement')"
             :value="$translate({
-              et: settlementUnit.asustusyksus,
-              en: settlementUnit.asustusyksus_en,
+              et: settlementUnit.name,
+              en: settlementUnit.name_en,
             })
             "
           />
           <TableRow :title="$t('locality.elevation')" :value="locality.elevation" />
           <TableRow :title="$t('locality.coordinates')" :value="`${locality.latitude}, ${locality.longitude}`" />
-          <TableRow :title="$t('locality.coordinateSystem')" :value="locality.coord_system" />
+          <TableRow :title="$t('locality.coordinateSystem')" :value="locality.coordinate_system" />
           <TableRow :title="$t('locality.coordinateX')" :value="locality.coordx" />
           <TableRow :title="$t('locality.coordinateY')" :value="locality.coordy" />
           <TableRow
@@ -196,7 +196,7 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="coordinateAgent"
             :title="$t('locality.coordinateAgent')"
-            :value="coordinateAgent.agent"
+            :value="coordinateAgent.name"
           />
           <TableRow :title="$t('locality.locationRemarks')" :value="locality.remarks_location" />
           <TableRowLink
