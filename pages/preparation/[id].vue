@@ -2,8 +2,9 @@
 import { mdiEyedropper } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch } = useNuxtApp();
+const { $geoloogiaFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
+const { t } = useI18n();
 const localePath = useLocalePath();
 
 const preparationsStore = usePreparations();
@@ -67,10 +68,83 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface Preparation {
+  id: number;
+  number: string;
+  sample_number?: string;
+  remarks?: string;
+  date_added?: string;
+  date_changed?: string;
+  location?: string;
+  identification_date?: string;
+  identification_remarks?: string;
+  agent_text?: string;
+  date_prepared?: string;
+  date_prepared_text?: string;
+  sample?: {
+    id: number;
+    number: string;
+    number_additional?: string;
+    number_field?: string;
+    depth?: number;
+    depth_interval?: number;
+    date_collected?: string;
+    date_collected_text?: string;
+  };
+  analysis?: {
+    id: number;
+  };
+  taxon?: {
+    id: number;
+    name: string;
+  };
+  identification_agent?: {
+    name: string;
+  };
+  agent?: {
+    name: string;
+  };
+  storage?: {
+    name: string;
+  };
+  owner?: {
+    name: string;
+  };
+}
+
 const { data } = await useAsyncData("preparation", async () => {
-  const preparation = await $geoloogiaFetch<any>(`/preparation/${route.params.id}`, {
+  const preparation = await $apiFetch<Preparation>(`/preparations/${route.params.id}/`, {
     query: {
-      nest: 1,
+      expand: "sample,analysis,taxon,identification_agent,agent,storage,owner",
+      fields: [
+        "id",
+        "number",
+        "sample_number",
+        "sample.id",
+        "sample.number",
+        "sample.number_additional",
+        "sample.number_field",
+        "sample.depth",
+        "sample.depth_interval",
+        "sample.date_collected",
+        "sample.date_collected_text",
+        "remarks",
+        "date_added",
+        "date_changed",
+        "location",
+        "identification_date",
+        "identification_remarks",
+        "agent_text",
+        "date_prepared",
+        "date_prepared_text",
+        "analysis.id",
+        "taxon.id",
+        "taxon.name",
+        "identification_agent.name",
+        "agent.name",
+        "storage.name",
+        "owner.name",
+      ],
     },
     onResponseError: (_error) => {
       showError({
@@ -99,7 +173,7 @@ const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value.tabs);
 });
 
-const title = computed(() => data.value.preparation?.preparation_number);
+const title = computed(() => data.value.preparation?.number);
 
 redirectInvalidTab({
   redirectRoute: localePath({
@@ -108,8 +182,6 @@ redirectInvalidTab({
   }),
   tabs: data.value.tabs,
 });
-
-const { t } = useI18n();
 
 useHead({
   title: `${title.value} | ${t("preparation.pageTitle")}`,
