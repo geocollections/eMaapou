@@ -45,6 +45,7 @@ const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
     :headers="headers"
     :is-loading="pending"
     :export-func="exportData"
+    :show-search="false"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { mdiMapMarkerOutline, mdiTextureBox } from "@mdi/js";
 
-const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
@@ -38,9 +39,8 @@ const tabs = {
     routeName: "site-id-attachments",
     title: "site.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/attachments/`, {
         query: {
-          site: route.params.id,
           limit: 0,
         },
       });
@@ -95,10 +95,99 @@ const tabs = {
   } satisfies DynamicTab,
 };
 
+export interface Site {
+  id: number;
+  name: string;
+  name_en: string;
+  coordx?: number;
+  coordy?: number;
+  depth?: number;
+  description?: string;
+  elevation?: string;
+  elevation_accuracy?: string;
+  extent?: number;
+  date_start?: string;
+  date_text?: string;
+  latitude?: number;
+  longitude?: number;
+  accuracy?: string;
+  remarks?: string;
+  remarks_location?: string;
+  area?: {
+    id: number;
+    name: string;
+    name_en: string;
+    type: number;
+    plans?: string;
+  };
+  locality?: {
+    id: number;
+    name: string;
+    name_en: string;
+    depth: number;
+    country: {
+      id: number;
+      name: string;
+      name_en: string;
+      iso_3166_1_alpha_2: string;
+    };
+  };
+  project?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  coordinate_method?: {
+    value: string;
+    value_en: string;
+  };
+  date_added?: string;
+  date_changed?: string;
+}
+
 const { data } = await useAsyncData("site", async () => {
-  const site = await $geoloogiaFetch<any>(`/site/${route.params.id}/`, {
+  const site = await $apiFetch<Site>(`/sites/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "area,locality,locality.country,project,coordinate_method",
+      fields: [
+        "id",
+        "name",
+        "name_en",
+        "coordx",
+        "coordy",
+        "depth",
+        "description",
+        "elevation",
+        "elevation_accuracy",
+        "extent",
+        "date_start",
+        "date_text",
+        "latitude",
+        "longitude",
+        "accuracy",
+        "remarks",
+        "remarks_location",
+        "area.id",
+        "area.name",
+        "area.name_en",
+        "area.type",
+        "area.plans",
+        "locality.id",
+        "locality.name",
+        "locality.name_en",
+        "locality.depth",
+        "locality.country.id",
+        "locality.country.name",
+        "locality.country.name_en",
+        "locality.country.iso_3166_1_alpha_2",
+        "project.id",
+        "project.name",
+        "project.name_en",
+        "coordinate_method.value",
+        "coordinate_method.value_en",
+        "date_added",
+        "date_changed",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
@@ -145,7 +234,7 @@ const title = computed(() => {
   const engTitle = data.value?.site?.name_en
     ? data.value?.site?.name_en
     : data.value?.site?.name;
-  return $translate({ et: data.value?.site?.name, en: engTitle });
+  return $translate({ et: data.value?.site?.name!, en: engTitle });
 });
 
 const activeTabProps = computed(() => {
@@ -160,7 +249,6 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-const { t } = useI18n();
 const img = useImage();
 
 useHead({
