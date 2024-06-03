@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Tab } from "~/composables/useTabs";
 
-const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $translate, $apiFetch, $solrFetch } = useNuxtApp();
 const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -31,10 +31,55 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface Collection {
+  id: number;
+  number: string;
+  name: string;
+  name_en: string;
+  name_long: string;
+  name_long_en: string;
+  classification?: {
+    name: string;
+  };
+  number_objects?: number;
+  date_added?: string;
+  date_changed?: string;
+  database?: {
+    id: number;
+    name: string;
+    name_en: string;
+    url: string;
+  };
+  reference?: {
+    id: number;
+    reference: string;
+  };
+  remarks?: string;
+}
+
 const { data } = await useAsyncData("collection", async () => {
-  const collection = await $geoloogiaFetch<any>(`/collection/${route.params.id}/`, {
+  const collection = await $apiFetch<Collection>(`/collections/${route.params.id}/`, {
     query: {
-      nest: 1,
+      expand: "classification,database,reference",
+      fields: [
+        "id",
+        "number",
+        "name",
+        "name_en",
+        "name_long",
+        "name_long_en",
+        "classification.name",
+        "number_objects",
+        "date_added",
+        "date_changed",
+        "database.id",
+        "database.name",
+        "database.name_en",
+        "database.url",
+        "reference.id",
+        "reference.reference",
+        "remarks",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
