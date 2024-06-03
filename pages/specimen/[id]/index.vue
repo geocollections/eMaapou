@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Specimen } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 
 const props = defineProps<{
-  specimen: any;
+  specimen: Specimen;
   specimenAlt: any;
 }>();
 
@@ -13,15 +14,15 @@ const { $solrFetch } = useNuxtApp();
 const dateCollected = computed(() => {
   if (!props.specimen)
     return "";
-  return props.specimen.date_collected ?? props.specimen.date_collected_free;
+  return props.specimen.date_collected ?? props.specimen.date_collected_text;
 });
-const coll = computed(() => props.specimen.coll);
+const coll = computed(() => props.specimen.collection);
 const type = computed(() => props.specimen.type);
 const classification = computed(() => props.specimen.classification);
 const locality = computed(() => props.specimen.locality);
 const stratigraphy = computed(() => props.specimen.stratigraphy);
 const lithostratigraphy = computed(() => props.specimen.lithostratigraphy);
-const agentCollected = computed(() => props.specimen.agent_collected);
+const agentCollected = computed(() => props.specimen.collector);
 const database = computed(() => props.specimen.database);
 const sample = computed(() => props.specimen.sample);
 const parent = computed(() => props.specimen.parent);
@@ -70,14 +71,14 @@ const _ = await useAsyncData("images", async () => {
 });
 
 const mapBaseLayer = computed(() => {
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
 });
 
 const mapOverlays = computed(() => {
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     return ["Estonian bedrock" as const];
   return undefined;
 });
@@ -142,7 +143,7 @@ const mapOverlays = computed(() => {
 
           <TableRow
             :title="$t('specimen.number')"
-            :value="`${specimen.specimen_id}`"
+            :value="`${specimen.number}`"
           />
           <TableRowLink
             v-if="parent"
@@ -151,12 +152,12 @@ const mapOverlays = computed(() => {
             :href="
               localePath({ name: 'specimen-id', params: { id: parent.id } })
             "
-            :value="parent.specimen_id"
+            :value="parent.number"
           />
           <TableRow
-            v-if="specimen.specimen_nr"
+            v-if="specimen.old_number"
             :title="$t('specimen.oldNumber')"
-            :value="`${specimen.specimen_nr}`"
+            :value="`${specimen.old_number}`"
           />
           <TableRow
             v-if="specimen.original_status"
@@ -183,8 +184,8 @@ const mapOverlays = computed(() => {
             :title="$t('specimen.group')"
             :value="
               $translate({
-                et: classification.class_field,
-                en: classification.class_en,
+                et: classification.name,
+                en: classification.name_en,
               })
             "
           />
@@ -197,8 +198,8 @@ const mapOverlays = computed(() => {
             :title="$t('specimen.locality')"
             :value="
               $translate({
-                et: locality.locality,
-                en: locality.locality_en,
+                et: locality.name,
+                en: locality.name_en,
               })
             "
             nuxt
@@ -218,8 +219,8 @@ const mapOverlays = computed(() => {
             :title="$t('specimen.stratigraphy')"
             :value="
               $translate({
-                et: stratigraphy.stratigraphy,
-                en: stratigraphy.stratigraphy_en,
+                et: stratigraphy.name,
+                en: stratigraphy.name_en,
               })
             "
             nuxt
@@ -235,8 +236,8 @@ const mapOverlays = computed(() => {
             :title="$t('specimen.lithostratigraphy')"
             :value="
               $translate({
-                et: lithostratigraphy.stratigraphy,
-                en: lithostratigraphy.stratigraphy_en,
+                et: lithostratigraphy.name,
+                en: lithostratigraphy.name_en,
               })
             "
             nuxt
@@ -249,7 +250,7 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('specimen.stratigraphyRemarks')"
-            :value="specimen.stratigraphy_free"
+            :value="specimen.stratigraphy_text"
           />
 
           <TableRow
@@ -263,7 +264,7 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="agentCollected"
             :title="$t('specimen.collector')"
-            :value="agentCollected.agent"
+            :value="agentCollected.name"
           />
           <TableRowLink
             v-if="sample"
@@ -311,8 +312,8 @@ const mapOverlays = computed(() => {
               latitude: locality.latitude,
               longitude: locality.longitude,
               text: $translate({
-                et: locality.locality,
-                en: locality.locality_en,
+                et: locality.name,
+                en: locality.name_en,
               }),
             },
           ]"
