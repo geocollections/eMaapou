@@ -2,7 +2,7 @@
 import { mdiImageFilterHdr, mdiTestTube } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
+const { $geoloogiaFetch, $solrFetch, $translate, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -96,10 +96,91 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface Analysis {
+  id: number;
+  analysis_method: {
+    name: string;
+    name_en: string;
+  };
+  analyst?: {
+    name: string;
+  };
+  sample?: {
+    id: number;
+    number?: string;
+    locality?: {
+      id: number;
+      name: string;
+      name_en: string;
+    };
+    depth?: number;
+    depth_interval?: number;
+    stratigraphy?: {
+      id: number;
+      name: string;
+      name_en: string;
+    };
+    lithostratigraphy?: {
+      id: number;
+      name: string;
+      name_en: string;
+    };
+  };
+  remarks?: string;
+  reference?: {
+    id: number;
+    reference: string;
+  };
+  database?: {
+    id: number;
+    name: string;
+    name_en: string;
+    url: string;
+  };
+  dataset?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  date_added?: string;
+  date_changed?: string;
+}
+
 const { data } = await useAsyncData("analysis", async () => {
-  const analysis = await $geoloogiaFetch<any>(`/analysis/${route.params.id}/`, {
+  const analysis = await $apiFetch<Analysis>(`/analyses/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "analysis_method,analyst,sample,sample.locality,sample.stratigraphy,sample.lithostratigraphy,reference,database,dataset",
+      fields: [
+        "id",
+        "analysis_method.name",
+        "analysis_method.name_en",
+        "analyst.name",
+        "sample.id",
+        "sample.number",
+        "sample.locality.id",
+        "sample.locality.name",
+        "sample.locality.name_en",
+        "sample.depth",
+        "sample.depth_interval",
+        "sample.stratigraphy.id",
+        "sample.stratigraphy.name",
+        "sample.stratigraphy.name_en",
+        "sample.lithostratigraphy.id",
+        "sample.lithostratigraphy.name",
+        "sample.lithostratigraphy.name_en",
+        "remarks",
+        "reference.id",
+        "reference.reference",
+        "database.id",
+        "database.name",
+        "database.name_en",
+        "database.url",
+        "dataset.id",
+        "dataset.name",
+        "dataset.name_en",
+        "date_added",
+        "date_changed",
+      ],
     },
     onResponseError: (_error) => {
       showError({
@@ -137,10 +218,10 @@ const activeTabProps = computed(() => {
 const pageTitle = computed(() =>
   t("analysis.title", {
     method: $translate({
-      et: data.value?.analysis.analysis_method?.analysis_method,
-      en: data.value?.analysis.analysis_method?.method_en,
+      et: data.value?.analysis?.analysis_method.name,
+      en: data.value?.analysis?.analysis_method.name_en,
     }),
-    sample: data.value?.analysis.sample?.number,
+    sample: data.value?.analysis?.sample?.number ?? data.value?.analysis?.sample?.id,
   }),
 );
 
