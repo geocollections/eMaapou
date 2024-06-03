@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Stratigraphy } from "../[id].vue";
+
 defineProps<{
-  stratigraphy: any;
+  stratigraphy: Stratigraphy;
 }>();
 
 const localePath = useLocalePath();
@@ -86,8 +88,8 @@ const mapOverlays = computed(() => {
             :title="$t('stratigraphy.parentStratigraphy')"
             :value="
               $translate({
-                et: stratigraphy.parent.stratigraphy,
-                en: stratigraphy.parent.stratigraphy_en,
+                et: stratigraphy.parent.name,
+                en: stratigraphy.parent.name_en,
               })
             "
             nuxt
@@ -145,18 +147,19 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('stratigraphy.author')"
-            :value="stratigraphy.author_free"
+            :value="stratigraphy.author_text"
           />
           <TableRow
             :title="$t('stratigraphy.year')"
             :value="stratigraphy.year"
           />
           <TableRow
+            v-if="stratigraphy.etymon || stratigraphy.etymon_en"
             :title="$t('stratigraphy.etymon')"
             :value="
               $translate({
-                et: stratigraphy.etymon,
-                en: stratigraphy.etymon_en,
+                et: stratigraphy.etymon ?? '',
+                en: stratigraphy.etymon_en ?? '',
               })
             "
           />
@@ -177,8 +180,8 @@ const mapOverlays = computed(() => {
             :title="$t('stratigraphy.age')"
             :value="
               $translate({
-                et: stratigraphy.age_chronostratigraphy.stratigraphy,
-                en: stratigraphy.age_chronostratigraphy.stratigraphy_en,
+                et: stratigraphy.age_chronostratigraphy.name,
+                en: stratigraphy.age_chronostratigraphy.name,
               })
             "
             nuxt
@@ -198,12 +201,12 @@ const mapOverlays = computed(() => {
           />
 
           <TableRow
-            v-if="stratigraphy.index_main_html"
+            v-if="stratigraphy.index_html"
             :title="$t('stratigraphy.index')"
           >
             <template #value>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <div v-html="stratigraphy.index_main_html" />
+              <div v-html="stratigraphy.index_html" />
             </template>
           </TableRow>
           <TableRow
