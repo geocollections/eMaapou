@@ -246,8 +246,8 @@ const activeTabProps = computed(() => {
 });
 const title = computed(() =>
   $translate({
-    et: data.value?.stratigraphy.stratigraphy,
-    en: data.value?.stratigraphy.stratigraphy_en,
+    et: data.value?.stratigraphy.name,
+    en: data.value?.stratigraphy.name_en,
   }),
 );
 
