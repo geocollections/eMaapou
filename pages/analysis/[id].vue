@@ -180,7 +180,7 @@ const { data } = await useAsyncData("analysis", async () => {
         "dataset.name_en",
         "date_added",
         "date_changed",
-      ],
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
