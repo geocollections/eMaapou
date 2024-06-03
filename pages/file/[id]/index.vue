@@ -4,10 +4,11 @@ import {
   mdiFileMusicOutline,
   mdiFileVideoOutline,
 } from "@mdi/js";
+import type { File } from "../[id].vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
-  file: any;
+  file: File;
 }>();
 
 const { $translate, $geoloogiaFetch } = useNuxtApp();
@@ -75,9 +76,9 @@ const imageSize = computed(() => {
     ? `${props.file.image_width} × ${props.file.image_height} px`
     : undefined;
 });
-const isImage = computed(() => props.file.attachment_format.includes("image"));
-const isAudio = computed(() => props.file.attachment_format.includes("audio"));
-const isVideo = computed(() => props.file.attachment_format.includes("video"));
+const isImage = computed(() => props.file.mime_type?.content_type.includes("image"));
+const isAudio = computed(() => props.file.mime_type?.content_type.includes("audio"));
+const isVideo = computed(() => props.file.mime_type?.content_type.includes("video"));
 
 const imageSizes = computed(() => {
   if (!isImage.value)
@@ -96,8 +97,8 @@ const showMap = computed(() => {
 
 const _mapIsEstonian = computed(() => {
   return (
-    props.file.locality?.country?.value === "Eesti"
-    || props.file.specimen?.locality?.country?.value === "Eesti"
+    props.file.locality?.country?.iso_3166_1_alpha_2 === "EE"
+    || props.file.specimen?.locality?.country?.iso_3166_1_alpha_2 === "EE"
   );
 });
 
@@ -119,13 +120,13 @@ const mapLongitude = computed(() => {
 const mapLocalityText = computed(() => {
   return $translate({
     et:
-      props.file.locality?.locality
-      || props.file.specimen?.locality?.locality
+      props.file.locality?.name
+      || props.file.specimen?.locality?.name
       || props.file.image_place
       || props.file.description,
     en:
-      props.file.locality?.locality_en
-      || props.file.specimen?.locality?.locality_en
+      props.file.locality?.name_en
+      || props.file.specimen?.locality?.name_en
       || props.file.image_place
       || props.file.description_en,
   });
@@ -137,7 +138,7 @@ const locality = computed(
   () => props.file.locality ?? props.file.specimen?.locality,
 );
 const type = computed(() => props.file.type);
-const agentDigitised = computed(() => props.file.agent_digitised);
+const agentDigitised = computed(() => props.file.digitised_by);
 const database = computed(() => props.file.database);
 const licence = computed(() => props.file.licence);
 
@@ -149,7 +150,7 @@ const specimenIdentificationGeology = computed(
   () => data.value?.specimenIdentificationGeology ?? [],
 );
 const mapBaseLayer = computed(() => {
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
@@ -157,7 +158,7 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   const overlays: MapOverlay[] = [];
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
   return overlays;
@@ -210,7 +211,7 @@ const mapOverlays = computed(() => {
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>
           <source
-            :src="`https://files.geocollections.info/${file.uuid_filename}`"
+            :src="`https://files.geocollections.info/${file.filename}`"
           >
           Your browser does not support the audio element.
           <VIcon>{{ mdiFileMusicOutline }}</VIcon>
@@ -219,7 +220,7 @@ const mapOverlays = computed(() => {
         <!-- Video -->
         <video v-else-if="isVideo" controls>
           <source
-            :src="`https://files.geocollections.info/${file.uuid_filename}`"
+            :src="`https://files.geocollections.info/${file.filename}`"
           >
           Your browser does not support the video element.
           <VIcon>{{ mdiFileVideoOutline }}</VIcon>
@@ -231,7 +232,7 @@ const mapOverlays = computed(() => {
           class="rounded file-download text-primary"
           @click="
             $openWindow(
-              `https://files.geocollections.info/${file.uuid_filename}`,
+              `https://files.geocollections.info/${file.filename}`,
             )
           "
         >
@@ -247,15 +248,15 @@ const mapOverlays = computed(() => {
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
-            <div v-if="file.author || file.author_free">
+            <div v-if="file.author || file.author_text">
               <span class="font-weight-bold">{{ $t("file.author") }}: </span>
-              <span v-if="file.author">{{ file.author }}</span>
-              <span v-else>{{ file.author_free }}</span>
+              <span v-if="file.author">{{ file.author.name }}</span>
+              <span v-else>{{ file.author_text }}</span>
             </div>
-            <div v-if="file.date_created || file.date_created_free">
+            <div v-if="file.date_created || file.date_created_text">
               <span class="font-weight-bold">{{ $t("file.date") }}: </span>
               <span v-if="file.date_created">{{ file.date_created }}</span>
-              <span v-else>{{ file.date_created_free }}</span>
+              <span v-else>{{ file.date_created }}</span>
             </div>
           </div>
 
@@ -263,7 +264,7 @@ const mapOverlays = computed(() => {
             <span v-for="(size, index) in imageSizes" :key="index">
               <a
                 class="text-link"
-                @click="$openImage(file.uuid_filename, size)"
+                @click="$openImage(file.filename, size)"
               >
                 {{ $t(`common.${size}`) }}
                 <VIcon
@@ -287,26 +288,26 @@ const mapOverlays = computed(() => {
       >
         <BaseTable class="border rounded mb-2">
           <TableRowLink
-            v-if="specimen && specimen.coll"
+            v-if="specimen && specimen.collection"
             :title="$t('file.collectionNr')"
-            :value="specimen.coll.number"
+            :value="specimen.collection.number"
             nuxt
             :href="
               localePath({
                 name: 'specimen-id',
-                params: { id: file.specimen.id },
+                params: { id: specimen.id },
               })
             "
           />
           <TableRowLink
             v-if="specimen"
             :title="$t('file.specimenNr')"
-            :value="file.specimen.specimen_id"
+            :value="specimen.number"
             nuxt
             :href="
               localePath({
                 name: 'specimen-id',
-                params: { id: file.specimen.id },
+                params: { id: specimen.id },
               })
             "
           />
@@ -339,8 +340,8 @@ const mapOverlays = computed(() => {
             :title="$t('file.locality')"
             :value="
               $translate({
-                et: specimen.locality.locality,
-                en: specimen.locality.locality_en,
+                et: specimen.locality.name,
+                en: specimen.locality.name,
               })
             "
             nuxt
@@ -356,8 +357,8 @@ const mapOverlays = computed(() => {
             :title="$t('file.stratigraphy')"
             :value="
               $translate({
-                et: specimen.stratigraphy.stratigraphy,
-                en: specimen.stratigraphy.stratigraphy_en,
+                et: specimen.stratigraphy.name,
+                en: specimen.stratigraphy.name_en,
               })
             "
             nuxt
@@ -389,7 +390,7 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="imageset"
             :title="$t('file.imagesetNumber')"
-            :value="imageset.imageset_number"
+            :value="imageset.number"
           />
           <TableRow
             v-if="imageset"
@@ -398,11 +399,11 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('file.author')"
-            :value="file.author"
+            :value="file.author.name"
           />
           <TableRow
             :title="$t('file.author')"
-            :value="file.author_free"
+            :value="file.author_text"
           />
           <TableRow
             :title="$t('file.imagePeople')"
@@ -410,7 +411,7 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('file.date')"
-            :value="file.date_created || file.date_created_free"
+            :value="file.date_created || file.date_created_text"
           />
           <TableRow
             :title="$t('file.imagePlace')"
@@ -421,8 +422,8 @@ const mapOverlays = computed(() => {
             :title="$t('file.locality')"
             :value="
               $translate({
-                et: locality.locality,
-                en: locality.locality_en,
+                et: locality.name,
+                en: locality.name_en,
               })
             "
             nuxt
@@ -453,7 +454,7 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('file.format')"
-            :value="file.attachment_format"
+            :value="file.mime_type?.content_type"
           />
           <TableRow
             v-if="attachmentKeywords.length > 0"
@@ -471,11 +472,11 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="agentDigitised"
             :title="$t('file.personDigitised')"
-            :value="agentDigitised.agent"
+            :value="agentDigitised.name"
           />
           <TableRow
             :title="$t('file.dateDigitised')"
-            :value="file.date_digitised || file.date_digitised_free"
+            :value="file.date_digitised || file.date_digitised_text"
           />
           <TableRow
             :title="$t('file.imageSize')"
@@ -496,8 +497,8 @@ const mapOverlays = computed(() => {
           <TableRowLink
             v-if="licence"
             :title="$t('file.licence')"
-            :value="licence.licence_en"
-            @link-click="$openWindow(licence.licence_url_en)"
+            :value="licence.name"
+            @link-click="$openWindow(licence.url)"
           />
           <TableRow
             :title="$t('file.remarks')"

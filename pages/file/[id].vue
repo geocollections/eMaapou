@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { mdiFile } from "@mdi/js";
 
-const { $geoloogiaFetch, $translate, $solrFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 
@@ -29,10 +29,157 @@ const tabs = {
   } satisfies Tab,
 };
 
+export interface File {
+  id: number;
+  specimen?: {
+    id: number;
+    number?: string;
+    locality?: {
+      id: number;
+      name: string;
+      name_en: string;
+      latitude?: number;
+      longitude?: number;
+      country?: {
+        iso_3166_1_alpha_2: string;
+      };
+    };
+    collection?: {
+      id: number;
+      number: string;
+    };
+    stratigraphy?: {
+      id: number;
+      name: string;
+      name_en: string;
+    };
+  };
+  filename: string;
+  image_height?: number;
+  image_width?: number;
+  image_latitude?: number;
+  image_longitude?: number;
+  image_place?: string;
+  image_scalebar?: string;
+  image_number?: string;
+  image_people?: string;
+  description?: string;
+  description_en?: string;
+  date_digitised?: string;
+  date_digitised_text?: string;
+  mime_type?: {
+    id: number;
+    content_type: string;
+  };
+  locality?: {
+    id: number;
+    name: string;
+    name_en: string;
+    latitude?: number;
+    longitude?: number;
+    country?: {
+      iso_3166_1_alpha_2: string;
+    };
+  };
+  digitised_by?: {
+    name: string;
+  };
+  type?: {
+    id: number;
+    value: string;
+    value_en: string;
+  };
+  licence?: {
+    name: string;
+    url: string;
+  };
+  author?: {
+    name: string;
+  };
+  author_text?: string;
+  remarks?: string;
+  date_created?: string;
+  date_created_text?: string;
+  date_added?: string;
+  date_changed?: string;
+  imageset?: {
+    number: string;
+    description: string;
+  };
+  database?: {
+    id: number;
+    acronym: string;
+    name: string;
+    name_en: string;
+    url: string;
+  };
+  reference?: {
+    reference: string;
+  };
+  specimen_image_attachment: number;
+}
+
 const { data } = await useAsyncData("data", async () => {
-  const file = await $geoloogiaFetch<any>(`/attachment/${route.params.id}/`, {
+  const file = await $apiFetch<File>(`/attachments/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "specimen,specimen.locality,specimen.locality.country,specimen.collection,specimen.stratigraphy,database,licence,locality,locality.country,author,digitised_by,type,imageset,mime_type,reference",
+      fields: [
+        "id",
+        "filename",
+        "image_height",
+        "image_width",
+        "image_latitude",
+        "image_longitude",
+        "image_place",
+        "image_scalebar",
+        "image_number",
+        "image_people",
+        "description",
+        "description_en",
+        "date_digitised",
+        "date_digitised_text",
+        "locality.name",
+        "locality.name_en",
+        "locality.latitude",
+        "locality.longitude",
+        "locality.country.iso_3166_1_alpha_2",
+        "digitised_by.name",
+        "type.id",
+        "type.value",
+        "type.value_en",
+        "licence.name",
+        "licence.url",
+        "author.name",
+        "author_text",
+        "remarks",
+        "date_created",
+        "date_created_text",
+        "date_added",
+        "date_changed",
+        "specimen.id",
+        "specimen.number",
+        "specimen.locality.id",
+        "specimen.locality.name",
+        "specimen.locality.name_en",
+        "specimen.locality.latitude",
+        "specimen.locality.longitude",
+        "specimen.locality.country.iso_3166_1_alpha_2",
+        "specimen.collection.id",
+        "specimen.collection.number",
+        "specimen.stratigraphy.id",
+        "specimen.stratigraphy.name",
+        "specimen.stratigraphy.name_en",
+        "database.id",
+        "database.acronym",
+        "database.name",
+        "database.name_en",
+        "database.url",
+        "imageset.number",
+        "imageset.description",
+        "mime_type.content_type",
+        "reference.reference",
+        "specimen_image_attachment",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
@@ -70,9 +217,9 @@ const title = computed(() => {
     return "";
   switch (file.value.specimen_image_attachment) {
     case 1:
-      return `${file.value?.specimen?.coll?.number?.split(" ")?.[0]} ${
-        file.value?.specimen?.specimen_id
-      } (ID: ${file.value?.specimen.id})`;
+      return `${file.value?.specimen?.collection?.number?.split(" ")?.[0]} ${
+        file.value?.specimen?.number
+      } (ID: ${file.value?.specimen?.id})`;
     case 2:
       return file.value?.image_number;
     case 4:
@@ -101,9 +248,9 @@ const pageType = computed(() => {
   }
 });
 const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
-const isImage = computed(() => file.value.attachment_format.includes("image"));
-const isAudio = computed(() => file.value.attachment_format.includes("audio"));
-const isVideo = computed(() => file.value.attachment_format.includes("video"));
+const isImage = computed(() => file.value?.mime_type?.content_type.includes("image"));
+const isAudio = computed(() => file.value?.mime_type?.content_type.includes("audio"));
+const isVideo = computed(() => file.value?.mime_type?.content_type.includes("video"));
 
 useHead({
   title: pageTitle.value,
@@ -113,7 +260,7 @@ const img = useImage();
 useSeoMeta({
   ogImage: isImage.value
     ? img(
-        `${file.value.filename}`,
+        `${file.value?.filename}`,
         { size: "medium" },
         {
           provider: "geocollections",
@@ -121,10 +268,10 @@ useSeoMeta({
     )
     : null,
   ogVideo: isVideo.value
-    ? `https://files.geocollections.info/${file.value.uuid_filename}`
+    ? `https://files.geocollections.info/${file.value?.filename}`
     : null,
   ogAudio: isAudio.value
-    ? `https://files.geocollections.info/${file.value.uuid_filename}`
+    ? `https://files.geocollections.info/${file.value?.filename}`
     : null,
 });
 </script>
