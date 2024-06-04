@@ -141,7 +141,6 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             v-if="area"
-            :value="area"
             :title="$t('site.area')"
           >
             <template #value>
@@ -181,7 +180,6 @@ const mapOverlays = computed(() => {
 
           <TableRow
             v-if="area && area.type === 2"
-            :value="area"
             :title="$t('site.areaText1')"
           >
             <template #value>
@@ -318,8 +316,8 @@ const mapOverlays = computed(() => {
               longitude: site.longitude,
               text: $translate({
                 et: site.name,
-                en: site.name_en,
-              }),
+                en: site.name_en ?? site.name,
+              })!,
             },
           ]"
         />

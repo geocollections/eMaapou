@@ -75,13 +75,13 @@ const showMap = computed(() => {
 });
 
 const mapCenter = computed(() => {
-  if (locality.value) {
+  if (locality.value?.latitude && locality.value?.longitude) {
     return {
       latitude: locality.value.latitude,
       longitude: locality.value.longitude,
     };
   }
-  if (site.value) {
+  if (site.value?.latitude && site.value?.longitude) {
     return {
       latitude: site.value.latitude,
       longitude: site.value.longitude,
@@ -92,7 +92,7 @@ const mapCenter = computed(() => {
 const { $translate } = useNuxtApp();
 
 const mapMarkers = computed(() => {
-  if (locality.value) {
+  if (locality.value?.latitude && locality.value?.longitude) {
     return [
       {
         latitude: locality.value.latitude,
@@ -104,7 +104,7 @@ const mapMarkers = computed(() => {
       },
     ];
   }
-  if (site.value) {
+  if (site.value?.latitude && site.value?.longitude) {
     return [
       {
         latitude: site.value.latitude,
@@ -376,9 +376,13 @@ const mapOverlays = computed(() => {
             "
           />
           <TableRow
+            v-if="sample.is_palaeontology"
             :title="$t('sample.palaeontology')"
-            :value="sample.is_palaeontology"
-          />
+          >
+            <template #value>
+              <BaseBoolean :value="sample.is_palaeontology" />
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('sample.fossils')"
             :value="sample.fossils"

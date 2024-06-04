@@ -129,7 +129,7 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             v-if="dataset.creators || dataset.owner_text || dataset.owner"
             :title="$t('dataset.creators')"
             :value="
-              dataset.creators || dataset.owner_text || dataset.owner.name
+              dataset.creators || dataset.owner_text || dataset.owner?.name
             "
           />
           <TableRow

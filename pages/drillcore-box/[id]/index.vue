@@ -38,6 +38,7 @@ const activeImage = computed(() => data.value?.activeImage);
       <VCol>
         <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
         <VImg
+          v-if="activeImage"
           contain
           class="rounded border cursor-pointer transition-swing"
           :lazy-src="
@@ -72,7 +73,7 @@ const activeImage = computed(() => data.value?.activeImage);
           </template>
         </VImg>
 
-        <div class="text-end">
+        <div v-if="activeImage" class="text-end">
           <span v-for="(size, index) in imageSizes" :key="index">
             <a
               class="text-link"

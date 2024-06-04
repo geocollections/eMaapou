@@ -171,7 +171,7 @@ const mapOverlays = computed(() => {
               text: $translate({
                 et: locality.name,
                 en: locality.name_en,
-              }),
+              })!,
             },
           ]"
         />

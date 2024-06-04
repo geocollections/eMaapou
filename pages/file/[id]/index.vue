@@ -399,7 +399,7 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('file.author')"
-            :value="file.author.name"
+            :value="file.author?.name"
           />
           <TableRow
             :title="$t('file.author')"
@@ -459,13 +459,14 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="attachmentKeywords.length > 0"
             :title="$t('file.keywords')"
-            :value="attachmentKeywords"
           >
             <template #value>
-              <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                <li v-if="item.keyword">
-                  {{ item.keyword.keyword }}
-                </li>
+              <ul style="list-style-position: inside">
+                <template v-for="(item, index) in attachmentKeywords">
+                  <li v-if="item.keyword" :key="index">
+                    {{ item.keyword.keyword }}
+                  </li>
+                </template>
               </ul>
             </template>
           </TableRow>
@@ -521,13 +522,13 @@ const mapOverlays = computed(() => {
           :base-layer="mapBaseLayer"
           :overlays="mapOverlays"
           :center="{
-            latitude: mapLatitude,
-            longitude: mapLongitude,
+            latitude: mapLatitude!,
+            longitude: mapLongitude!,
           }"
           :markers="[
             {
-              latitude: mapLatitude,
-              longitude: mapLongitude,
+              latitude: mapLatitude!,
+              longitude: mapLongitude!,
               text: mapLocalityText,
             },
           ]"
