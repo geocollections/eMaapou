@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { Sample } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
-  sample: any;
+  sample: Sample;
 }>();
 
 const localePath = useLocalePath();
@@ -52,18 +53,18 @@ const _ = await useAsyncData("image", async () => {
   await imageQuery({ rows: 10, page: 0 });
 });
 
-const parentSpecimen = computed(() => props.sample.parent_specimen);
-const parent = computed(() => props.sample.parent_sample);
+const parentSpecimen = computed(() => props.sample.specimen);
+const parent = computed(() => props.sample.parent);
 const project = computed(() => props.sample.project);
 const database = computed(() => props.sample.database);
 const owner = computed(() => props.sample.owner);
 const classificationRock = computed(() => props.sample.classification_rock);
-const samplePurpose = computed(() => props.sample.sample_purpose);
-const agentCollected = computed(() => props.sample.agent_collected);
+const samplePurpose = computed(() => props.sample.purpose);
+const collector = computed(() => props.sample.collector);
 const lithostratigraphy = computed(() => props.sample.lithostratigraphy);
 const stratigraphy = computed(() => props.sample.stratigraphy);
 const site = computed(() => props.sample.site);
-const series = computed(() => props.sample.series);
+const series = computed(() => props.sample.sample_series);
 const locality = computed(() => props.sample.locality);
 
 const showMap = computed(() => {
@@ -74,13 +75,13 @@ const showMap = computed(() => {
 });
 
 const mapCenter = computed(() => {
-  if (locality.value) {
+  if (locality.value?.latitude && locality.value?.longitude) {
     return {
       latitude: locality.value.latitude,
       longitude: locality.value.longitude,
     };
   }
-  if (site.value) {
+  if (site.value?.latitude && site.value?.longitude) {
     return {
       latitude: site.value.latitude,
       longitude: site.value.longitude,
@@ -91,19 +92,19 @@ const mapCenter = computed(() => {
 const { $translate } = useNuxtApp();
 
 const mapMarkers = computed(() => {
-  if (locality.value) {
+  if (locality.value?.latitude && locality.value?.longitude) {
     return [
       {
         latitude: locality.value.latitude,
         longitude: locality.value.longitude,
         text: $translate({
-          et: props.sample.drillcore,
-          en: props.sample.drillcore_en,
+          et: locality.value.name,
+          en: locality.value.name_en,
         }),
       },
     ];
   }
-  if (site.value) {
+  if (site.value?.latitude && site.value?.longitude) {
     return [
       {
         latitude: site.value.latitude,
@@ -116,7 +117,7 @@ const mapMarkers = computed(() => {
 });
 
 const mapBaseLayer = computed(() => {
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
@@ -124,7 +125,7 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   const overlays: MapOverlay[] = ["Proovid / Samples"];
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
   return overlays;
@@ -201,7 +202,7 @@ const mapOverlays = computed(() => {
                 params: { id: parentSpecimen.id },
               })
             "
-            :value="parentSpecimen.specimen_id"
+            :value="parentSpecimen.number"
           />
           <TableRowLink
             :title="$t('sample.igsn')"
@@ -221,29 +222,29 @@ const mapOverlays = computed(() => {
               :title="$t('locality.locality')"
               :value="
                 $translate({
-                  et: locality.locality,
-                  en: locality.locality_en,
+                  et: locality.name,
+                  en: locality.name_en,
                 })
               "
               nuxt
               :href="
                 localePath({
                   name: 'locality-id',
-                  params: { id: sample.locality.id },
+                  params: { id: locality.id },
                 })
               "
             />
             <TableRow
               :title="$t('sample.localityFree')"
-              :value="sample.locality_free"
+              :value="sample.locality_text"
             />
             <TableRow
               v-if="locality.country"
               :title="$t('locality.country')"
               :value="
                 $translate({
-                  et: locality.country.value,
-                  en: locality.country.value_en,
+                  et: locality.country.name,
+                  en: locality.country.name_en,
                 })
               "
             />
@@ -290,15 +291,15 @@ const mapOverlays = computed(() => {
             :title="$t('sample.stratigraphy')"
             :value="
               $translate({
-                et: stratigraphy.stratigraphy,
-                en: stratigraphy.stratigraphy_en,
+                et: stratigraphy.name,
+                en: stratigraphy.name_en,
               })
             "
             nuxt
             :href="
               localePath({
                 name: 'stratigraphy-id',
-                params: { id: sample.stratigraphy.id },
+                params: { id: stratigraphy.id },
               })
             "
           />
@@ -307,21 +308,21 @@ const mapOverlays = computed(() => {
             :title="$t('sample.lithostratigraphy')"
             :value="
               $translate({
-                et: lithostratigraphy.stratigraphy,
-                en: lithostratigraphy.stratigraphy_en,
+                et: lithostratigraphy.name,
+                en: lithostratigraphy.name_en,
               })
             "
             nuxt
             :href="
               localePath({
                 name: 'stratigraphy-id',
-                params: { id: sample.lithostratigraphy.id },
+                params: { id: lithostratigraphy.id },
               })
             "
           />
           <TableRow
             :title="$t('sample.stratigraphyFree')"
-            :value="sample.stratigraphy_free"
+            :value="sample.stratigraphy_text"
           />
           <TableRow
             :title="$t('sample.stratigraphyBed')"
@@ -329,12 +330,12 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('sample.dateCollected')"
-            :value="sample.date_collected || sample.date_collected_free"
+            :value="sample.date_collected || sample.date_collected_text"
           />
           <TableRow
-            v-if="agentCollected || sample.agent_collected_txt"
+            v-if="collector || sample.collector_text"
             :title="$t('sample.agentCollected')"
-            :value="agentCollected.agent || sample.agent_collected_txt"
+            :value="collector?.name || sample.collector_text"
           />
           <TableRow
             :title="$t('sample.mass')"
@@ -359,8 +360,8 @@ const mapOverlays = computed(() => {
             :title="$t('sample.rock')"
             :value="
               $translate({
-                et: sample.rock,
-                en: sample.rock_en,
+                et: sample.rock_text,
+                en: sample.rock_text_en,
               })
             "
           />
@@ -375,9 +376,13 @@ const mapOverlays = computed(() => {
             "
           />
           <TableRow
+            v-if="sample.is_palaeontology"
             :title="$t('sample.palaeontology')"
-            :value="sample.palaeontology"
-          />
+          >
+            <template #value>
+              <BaseBoolean :value="sample.is_palaeontology" />
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('sample.fossils')"
             :value="sample.fossils"
@@ -389,7 +394,7 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="owner"
             :title="$t('sample.owner')"
-            :value="owner.agent"
+            :value="owner.name"
           />
           <TableRowLink
             v-if="database"
@@ -408,8 +413,8 @@ const mapOverlays = computed(() => {
             :title="$t('sample.project')"
             :value="
               $translate({
-                et: sample.project.name,
-                en: sample.project.name_en,
+                et: project.name,
+                en: project.name_en,
               })
             "
           />

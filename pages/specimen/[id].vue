@@ -5,7 +5,7 @@ import type { Tab } from "~/composables/useTabs";
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
-const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
+const { $geoloogiaFetch, $solrFetch, $translate, $apiFetch } = useNuxtApp();
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -88,10 +88,135 @@ const {
 
 const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
 
+export interface Specimen {
+  id: number;
+  number?: string;
+  date_collected?: string;
+  date_collected_text?: string;
+  old_number?: string;
+  part?: string;
+  depth?: number;
+  remarks?: string;
+  collector?: {
+    name: string;
+  };
+  type?: {
+    value: string;
+    value_en: string;
+  };
+  classification?: {
+    name: string;
+    name_en: string;
+  };
+  locality?: {
+    id: number;
+    name: string;
+    name_en: string;
+    longitude?: number;
+    latitude?: number;
+    country?: {
+      name: string;
+      name_en: string;
+      iso_3166_1_alpha_2: string;
+    };
+  };
+  stratigraphy?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  stratigraphy_text?: string;
+  lithostratigraphy?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  database?: {
+    id: number;
+    acronym: string;
+    name: string;
+    name_en: string;
+    url: string;
+  };
+  sample?: {
+    id: number;
+    number: string;
+  };
+  parent?: {
+    id: number;
+    number: string;
+  };
+  collection?: {
+    id: number;
+    number: string;
+    name: string;
+    name_en: string;
+  };
+  original_status?: {
+    id: number;
+    value: string;
+    value_en: string;
+  };
+  fossil?: {
+    id: number;
+    value: string;
+    value_en: string;
+  };
+}
+
 const { data } = await useAsyncData("specimen", async () => {
-  const specimen = await $geoloogiaFetch<any>(`/specimen/${route.params.id}/`, {
+  const specimen = await $apiFetch<Specimen>(`/specimens/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "collector,classification,locality,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type",
+      fields: [
+        "id",
+        "number",
+        "date_collected",
+        "date_collected_text",
+        "old_number",
+        "part",
+        "depth",
+        "remarks",
+        "collector.name",
+        "type.value",
+        "type.value_en",
+        "classification.name",
+        "classification.name_en",
+        "locality.id",
+        "locality.name",
+        "locality.name_en",
+        "locality.longitude",
+        "locality.latitude",
+        "locality.country.name",
+        "locality.country.name_en",
+        "locality.country.iso_3166_1_alpha_2",
+        "stratigraphy.id",
+        "stratigraphy.name",
+        "stratigraphy.name_en",
+        "stratigraphy_text",
+        "lithostratigraphy.id",
+        "lithostratigraphy.name",
+        "lithostratigraphy.name_en",
+        "database.id",
+        "database.acronym",
+        "database.name",
+        "database.name_en",
+        "database.url",
+        "sample.id",
+        "sample.number",
+        "parent.id",
+        "parent.number",
+        "collection.id",
+        "collection.number",
+        "collection.name",
+        "collection.name_en",
+        "original_status.id",
+        "original_status.value",
+        "original_status.value_en",
+        "fossil.id",
+        "fossil.value",
+        "fossil.value_en",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
@@ -121,7 +246,7 @@ const { data } = await useAsyncData("specimen", async () => {
   });
 
   const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { specimen, specimenAlt } },
+    props: { general: { specimen } },
   });
 
   return {
@@ -148,7 +273,7 @@ const isRock = computed(() => !!data.value.specimenAlt?.rock);
 const isTaxon = computed(() => !!data.value.specimenAlt?.taxon);
 const title = computed(
   () =>
-        `${data.value.specimen?.database?.acronym} ${data.value.specimen?.specimen_id}`,
+        `${data.value.specimen?.database?.acronym} ${data.value.specimen?.number}`,
 );
 const titleAlt = computed(() => {
   if (data.value.specimenAlt?.rock) {

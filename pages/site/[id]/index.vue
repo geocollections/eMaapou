@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { mdiFileDownloadOutline, mdiOpenInNew } from "@mdi/js";
+import type { Site } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
-const props = defineProps<{ site: any }>();
+const props = defineProps<{ site: Site }>();
 
 const localePath = useLocalePath();
 const { $formatDate, $geoloogiaFetch } = useNuxtApp();
@@ -11,7 +12,7 @@ const { $formatDate, $geoloogiaFetch } = useNuxtApp();
 const locality = computed(() => props.site.locality);
 const area = computed(() => props.site.area);
 const planArray = computed(() => {
-  return props.site.area?.text1 ? props.site.area?.text1.split(",") : [];
+  return props.site.area?.plans ? props.site.area?.plans.split(",") : [];
 });
 const elevation = computed(() => {
   return props.site.elevation_accuracy
@@ -21,7 +22,7 @@ const elevation = computed(() => {
 const studied = computed(() => {
   return props.site.date_start
     ? $formatDate(props.site.date_start)
-    : props.site?.date_free;
+    : props.site?.date_text;
 });
 const route = useRoute();
 
@@ -68,7 +69,7 @@ const _ = await useAsyncData("image", async () => {
 });
 
 const mapBaseLayer = computed(() => {
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
@@ -76,7 +77,7 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   const overlays: MapOverlay[] = ["Uuringupunktid / Sites"];
-  if (locality.value?.country.value === "Eesti")
+  if (locality.value?.country.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
   return overlays;
@@ -140,14 +141,13 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             v-if="area"
-            :value="area"
             :title="$t('site.area')"
           >
             <template #value>
               <a
-                v-if="area.area_type === 2"
+                v-if="area.type === 2"
                 class="text-link"
-                @click="$openTurba('turbaala', site.area)"
+                @click="$openTurba('turbaala', area.id.toString())"
               >
                 {{
                   $translate({
@@ -179,8 +179,7 @@ const mapOverlays = computed(() => {
           </TableRow>
 
           <TableRow
-            v-if="area && area.area_type === 2"
-            :value="area"
+            v-if="area && area.type === 2"
             :title="$t('site.areaText1')"
           >
             <template #value>
@@ -217,8 +216,8 @@ const mapOverlays = computed(() => {
             v-if="locality"
             :title="$t('locality.locality')"
             :value="$translate({
-              et: locality.locality,
-              en: locality.locality_en,
+              et: locality.name,
+              en: locality.name_en,
             })
             "
             nuxt
@@ -229,23 +228,22 @@ const mapOverlays = computed(() => {
             "
           />
           <TableRow
-            v-if="locality && locality.country"
+            v-if="locality?.country"
             :title="$t('locality.country')"
             :value="$translate({
-              et: locality.country.value,
-              en: locality.country.value_en,
+              et: locality.country.name,
+              en: locality.country.name_en,
             })
-
             "
           >
             <template #value>
               {{
                 $t("locality.countryFormat", {
                   name: $translate({
-                    et: locality.country.value,
-                    en: locality.country.value_en,
+                    et: locality.country.name,
+                    en: locality.country.name_en,
                   }),
-                  iso: locality.country.iso_code,
+                  iso: locality.country.iso_3166_1_alpha_2,
                 })
               }}
             </template>
@@ -262,16 +260,16 @@ const mapOverlays = computed(() => {
             :value="locality.depth"
           />
           <TableRow
-            v-if="site.location_accuracy"
+            v-if="site.accuracy"
             :title="$t('site.locationAccuracy')"
-            :value="site.location_accuracy"
+            :value="site.accuracy"
           />
           <TableRow
-            v-if="site.coord_det_method"
+            v-if="site.coordinate_method"
             :title="$t('site.coordDetMethod')"
             :value="$translate({
-              et: site.coord_det_method.value,
-              en: site.coord_det_method.value_en,
+              et: site.coordinate_method.value,
+              en: site.coordinate_method.value_en,
             })
             "
           />
@@ -303,7 +301,7 @@ const mapOverlays = computed(() => {
           />
         </BaseTable>
       </VCol>
-      <VCol v-if="(site.latitude && site.longitude) || site.locality_id" :xl="4">
+      <VCol v-if="(site.latitude && site.longitude) || site.locality" :xl="4">
         <MapDetail
           v-if="site.latitude && site.longitude"
           :base-layer="mapBaseLayer"
@@ -318,8 +316,8 @@ const mapOverlays = computed(() => {
               longitude: site.longitude,
               text: $translate({
                 et: site.name,
-                en: site.name_en,
-              }),
+                en: site.name_en ?? site.name,
+              })!,
             },
           ]"
         />

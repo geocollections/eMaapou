@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Locality } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
-const props = defineProps<{ locality: any }>();
+const props = defineProps<{ locality: Locality }>();
 
 const route = useRoute();
 const localePath = useLocalePath();
@@ -10,11 +11,11 @@ const { $geoloogiaFetch } = useNuxtApp();
 
 const type = computed(() => props.locality.type);
 const country = computed(() => props.locality.country);
-const municipality = computed(() => props.locality.vald);
-const settlementUnit = computed(() => props.locality.asustusyksus);
-const coordinatePrecision = computed(() => props.locality.coord_det_precision);
-const coordinateMethod = computed(() => props.locality.coord_det_method);
-const coordinateAgent = computed(() => props.locality.coord_det_agent);
+const municipality = computed(() => props.locality.municipality);
+const settlementUnit = computed(() => props.locality.settlement);
+const coordinatePrecision = computed(() => props.locality.coordinate_precision);
+const coordinateMethod = computed(() => props.locality.coordinate_method);
+const coordinateAgent = computed(() => props.locality.coordinate_agent);
 const stratigraphyTop = computed(() => props.locality.stratigraphy_top);
 const stratigraphyBase = computed(() => props.locality.stratigraphy_base);
 
@@ -67,7 +68,7 @@ const _ = await useAsyncData("image", async () => {
 });
 
 const mapBaseLayer = computed(() => {
-  if (country.value?.value === "Eesti")
+  if (country.value?.iso_3166_1_alpha_2 === "EE")
     return "Estonian map";
 
   return "OpenStreetMap";
@@ -75,7 +76,7 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   const overlays: MapOverlay[] = ["Lokaliteedid / Localities"];
-  if (country.value?.value === "Eesti")
+  if (country.value?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
   return overlays;
@@ -131,8 +132,8 @@ const mapOverlays = computed(() => {
           <TableRow
             :title="$t('locality.name')"
             :value="$translate({
-              et: locality.locality,
-              en: locality.locality_en,
+              et: locality.name,
+              en: locality.name_en,
             })
             "
           />
@@ -150,8 +151,8 @@ const mapOverlays = computed(() => {
             v-if="country"
             :title="$t('locality.country')"
             :value="$translate({
-              et: country.value,
-              en: country.value_en,
+              et: country.name,
+              en: country.name_en,
             })
             "
           />
@@ -159,8 +160,8 @@ const mapOverlays = computed(() => {
             v-if="municipality"
             :title="$t('locality.parish')"
             :value="$translate({
-              et: municipality.vald,
-              en: municipality.vald_en,
+              et: municipality.name,
+              en: municipality.name_en,
             })
             "
           />
@@ -168,14 +169,14 @@ const mapOverlays = computed(() => {
             v-if="settlementUnit"
             :title="$t('locality.settlement')"
             :value="$translate({
-              et: settlementUnit.asustusyksus,
-              en: settlementUnit.asustusyksus_en,
+              et: settlementUnit.name,
+              en: settlementUnit.name_en,
             })
             "
           />
           <TableRow :title="$t('locality.elevation')" :value="locality.elevation" />
           <TableRow :title="$t('locality.coordinates')" :value="`${locality.latitude}, ${locality.longitude}`" />
-          <TableRow :title="$t('locality.coordinateSystem')" :value="locality.coord_system" />
+          <TableRow :title="$t('locality.coordinateSystem')" :value="locality.coordinate_system" />
           <TableRow :title="$t('locality.coordinateX')" :value="locality.coordx" />
           <TableRow :title="$t('locality.coordinateY')" :value="locality.coordy" />
           <TableRow
@@ -195,21 +196,21 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="coordinateAgent"
             :title="$t('locality.coordinateAgent')"
-            :value="coordinateAgent.agent"
+            :value="coordinateAgent.name"
           />
           <TableRow :title="$t('locality.locationRemarks')" :value="locality.remarks_location" />
           <TableRowLink
             v-if="stratigraphyTop"
             :title="$t('locality.stratigraphyTop')"
             :value="$translate({
-              et: stratigraphyTop.stratigraphy,
-              en: stratigraphyTop.stratigraphy_en,
+              et: stratigraphyTop.name,
+              en: stratigraphyTop.name_en,
             })
             "
             nuxt
             :href="localePath({
               name: 'stratigraphy-id',
-              params: { id: locality.stratigraphy_top.id },
+              params: { id: stratigraphyTop.id },
             })
             "
           />
@@ -217,23 +218,23 @@ const mapOverlays = computed(() => {
             v-if="stratigraphyBase"
             :title="$t('locality.stratigraphyBase')"
             :value="$translate({
-              et: stratigraphyBase.stratigraphy,
-              en: stratigraphyBase.stratigraphy_en,
+              et: stratigraphyBase.name,
+              en: stratigraphyBase.name,
             })
             "
             nuxt
             :href="localePath({
               name: 'stratigraphy-id',
-              params: { id: locality.stratigraphy_base.id },
+              params: { id: stratigraphyBase.id },
             })
             "
           />
           <TableRow :title="$t('locality.remarks')" :value="locality.remarks" />
           <TableRowLink
-            v-if="locality.maaamet_pa_id"
+            v-if="locality.land_board_id"
             :title="$t('locality.linkLandBoard')"
-            :value="locality.maaamet_pa_id"
-            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
+            :value="locality.land_board_id"
+            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.land_board_id}&fr=o&bk=1&page_id=382`"
           />
           <TableRow
             v-if="locality.date_added"
@@ -249,21 +250,20 @@ const mapOverlays = computed(() => {
       </VCol>
       <VCol v-if="showMap" :xl="4">
         <MapDetail
-          v-if="showMap"
           :base-layer="mapBaseLayer"
           :overlays="mapOverlays"
           :center="{
-            latitude: locality.latitude,
-            longitude: locality.longitude,
+            latitude: locality.latitude!,
+            longitude: locality.longitude!,
           }"
           :markers="[
             {
-              latitude: locality.latitude,
-              longitude: locality.longitude,
+              latitude: locality.latitude!,
+              longitude: locality.longitude!,
               text: $translate({
-                et: locality.locality,
-                en: locality.locality_en,
-              }),
+                et: locality.name,
+                en: locality.name_en,
+              })!,
             },
           ]"
         />

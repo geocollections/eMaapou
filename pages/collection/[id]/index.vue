@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Collection } from "../[id].vue";
+
 const props = defineProps<{
-  collection: any;
+  collection: Collection;
 }>();
 
 const reference = computed(() => props.collection.reference);
@@ -43,16 +45,13 @@ const classification = computed(() => props.collection.classification);
           <TableRow
             v-if="classification"
             :title="$t('collection.classification')"
-            :value="classification.class_field"
+            :value="classification.name"
           />
           <TableRowLink
             v-if="reference"
             :title="$t('collection.reference')"
             :value="
-              $translate({
-                et: reference.reference,
-                en: reference.reference_en,
-              })
+              reference.reference
             "
             :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
           />

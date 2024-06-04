@@ -3,7 +3,7 @@ import { mdiImageFilterHdr, mdiRuler } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
-const { $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const tabs = {
   general: {
     type: "static",
@@ -135,10 +135,168 @@ const {
 
 const similarSamples = computed(() => samplesRes.value?.response.docs ?? []);
 
+export interface Sample {
+  id: number;
+  number?: string;
+  number_additional?: string;
+  number_field?: string;
+  depth?: number;
+  depth_interval?: number;
+  igsn?: string;
+  remarks?: string;
+  parent?: {
+    id: number;
+    number?: string;
+  };
+  specimen?: {
+    id: number;
+    number?: string;
+  };
+  project?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  owner?: {
+    name: string;
+  };
+  classification_rock?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  rock_text?: string;
+  rock_text_en?: string;
+  purpose?: {
+    value: string;
+    value_en: string;
+  };
+  stratigraphy_text?: string;
+  stratigraphy_bed?: string;
+  stratigraphy?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  lithostratigraphy?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  site?: {
+    id: number;
+    name: string;
+    name_en: string;
+    longitude?: number;
+    latitude?: number;
+  };
+  sample_series?: {
+    id: number;
+    name: string;
+  };
+  locality_text?: string;
+  locality?: {
+    id: number;
+    name: string;
+    name_en: string;
+    longitude?: number;
+    latitude?: number;
+    elevation?: string;
+    depth?: number;
+    country?: {
+      name: string;
+      name_en: string;
+      iso_3166_1_alpha_2: string;
+    };
+  };
+  database?: {
+    id: number;
+    name: string;
+    name_en: string;
+    url: string;
+  };
+  date_collected?: string;
+  date_collected_text?: string;
+  collector?: {
+    name: string;
+  };
+  collector_text?: string;
+  is_palaeontology: boolean;
+  mass?: number;
+  fossils?: string;
+  date_added?: string;
+  date_changed?: string;
+}
+
 const { data } = await useAsyncData("sample", async () => {
-  const sample = await $geoloogiaFetch<any>(`/sample/${route.params.id}/`, {
+  const sample = await $apiFetch<Sample>(`/samples/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "parent,specimen,project,owner,classification_rock,purpose,stratigraphy,lithostratigraphy,site,sample_series,locality,country,database,collector",
+      fields: [
+        "id",
+        "number",
+        "number_additional",
+        "number_field",
+        "depth",
+        "depth_interval",
+        "igsn",
+        "remarks",
+        "parent.id",
+        "parent.number",
+        "specimen.id",
+        "specimen.number",
+        "project.id",
+        "project.name",
+        "project.name_en",
+        "owner.name",
+        "classification_rock.id",
+        "classification_rock.name",
+        "classification_rock.name_en",
+        "rock_text",
+        "rock_text_en",
+        "purpose.value",
+        "purpose.value_en",
+        "stratigraphy_text",
+        "stratigraphy_bed",
+        "stratigraphy.id",
+        "stratigraphy.name",
+        "stratigraphy.name_en",
+        "lithostratigraphy.id",
+        "lithostratigraphy.name",
+        "lithostratigraphy.name_en",
+        "site.id",
+        "site.name",
+        "site.name_en",
+        "site.longitude",
+        "site.latitude",
+        "sample_series.id",
+        "sample_series.name",
+        "locality_text",
+        "locality.id",
+        "locality.name",
+        "locality.name_en",
+        "locality.longitude",
+        "locality.latitude",
+        "locality.elevation",
+        "locality.depth",
+        "locality.country.name",
+        "locality.country.name_en",
+        "locality.country.iso_3166_1_alpha_2",
+        "database.id",
+        "database.name",
+        "database.name_en",
+        "database.url",
+        "date_collected",
+        "date_collected_text",
+        "collector.name",
+        "collector_text",
+        "is_palaeontology",
+        "mass",
+        "fossils",
+        "date_added",
+        "date_changed",
+
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({

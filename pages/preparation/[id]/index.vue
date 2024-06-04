@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps<{ preparation: any }>();
+import type { Preparation } from "../[id].vue";
+
+const props = defineProps<{ preparation: Preparation }>();
 
 const localePath = useLocalePath();
 
@@ -26,7 +28,7 @@ const owner = computed(() => props.preparation.owner);
         <BaseTable class="border rounded">
           <TableRow
             :title="$t('preparation.preparation_number')"
-            :value="preparation.preparation_number"
+            :value="preparation.number"
           />
 
           <TableRow
@@ -48,25 +50,25 @@ const owner = computed(() => props.preparation.owner);
           <TableRowLink
             v-if="taxon"
             :title="$t('preparation.taxon')"
-            :value="taxon.taxon"
+            :value="taxon.name"
             @link-click="
-              $openWindow(`https://fossiilid.info/${preparation.taxon.id}`)
+              $openWindow(`https://fossiilid.info/${taxon.id}`)
             "
           />
           <TableRow
             v-if="agent"
             :title="$t('preparation.agent')"
-            :value="agent.agent || preparation.agent_txt"
+            :value="agent.name || preparation.agent_text"
           />
           <TableRow
             v-if="identificationAgent"
             :title="$t('preparation.identification_agent')"
-            :value="identificationAgent.agent"
+            :value="identificationAgent.name"
           />
           <TableRow
             :title="$t('preparation.date_prepared')"
             :value="
-              preparation.date_prepared || preparation.date_prepared_txt
+              preparation.date_prepared || preparation.date_prepared_text
             "
           />
           <TableRow
@@ -84,12 +86,12 @@ const owner = computed(() => props.preparation.owner);
           <TableRow
             v-if="storage"
             :title="$t('preparation.storage')"
-            :value="storage.location"
+            :value="storage.name"
           />
           <TableRow
             v-if="owner"
             :title="$t('preparation.owner')"
-            :value="owner.agent"
+            :value="owner.name"
           />
           <TableRow
             v-if="preparation.date_added"
@@ -128,15 +130,15 @@ const owner = computed(() => props.preparation.owner);
           />
           <TableRow
             :title="$t('sample.depth')"
-            :value="sample.depth"
+            :value="sample?.depth"
           />
           <TableRow
             :title="$t('sample.depthInterval')"
-            :value="sample.depth_interval"
+            :value="sample?.depth_interval"
           />
           <TableRow
             :title="$t('sample.dateCollected')"
-            :value="sample.date_collected || sample.date_collected_free"
+            :value="sample?.date_collected || sample?.date_collected_text"
           />
         </BaseTable>
       </VCol>

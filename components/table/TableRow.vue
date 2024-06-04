@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
 
-const props = defineProps({
-  title: { type: String, default: null },
-  value: {
-    type: [String, Number] as PropType<string | number | any>,
-    default: null,
-  },
-});
+const props = defineProps<{
+  title?: string;
+  value?: string | number;
+}>();
 
 const slots = useSlots();
 const isInvalid = computed(() => {

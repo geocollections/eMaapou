@@ -5,7 +5,7 @@ import type { Tab } from "~/composables/useTabs";
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
-const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
 const tabs = {
@@ -130,10 +130,93 @@ const {
 
 const similarStratigraphies = computed(() => stratigraphiesRes.value?.response.docs ?? []);
 
+export interface Stratigraphy {
+  id: number;
+  name: string;
+  name_en: string;
+  author_text?: string;
+  year?: number;
+  etymon?: string;
+  etymon_en?: string;
+  original_locality?: string;
+  index_html?: string;
+  index_additional_html?: string;
+  index_old?: string;
+  age_top?: number;
+  age_base?: number;
+  age_reference?: {
+    id: number;
+    reference: string;
+  };
+  age_chronostratigraphy?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  parent?: {
+    id: number;
+    name: string;
+    name_en: string;
+  };
+  type?: {
+    value: string;
+    value_en: string;
+  };
+  original_rank?: string;
+  rank?: {
+    value: string;
+    value_en: string;
+  };
+  scope?: {
+    value: string;
+    value_en: string;
+  };
+  status?: {
+    value: string;
+    value_en: string;
+  };
+  date_added?: string;
+  date_changed?: string;
+}
+
 const { data } = await useAsyncData("stratigraphy", async () => {
-  const stratigraphy = await $geoloogiaFetch<any>(`/stratigraphy/${route.params.id}/`, {
+  const stratigraphy = await $apiFetch<Stratigraphy>(`/stratigraphies/${route.params.id}/`, {
     query: {
-      nest: 2,
+      expand: "age_chronostratigraphy,age_reference,parent,rank,scope,status,type",
+      fields: [
+        "id",
+        "name",
+        "name_en",
+        "author_text",
+        "year",
+        "etymon",
+        "etymon_en",
+        "original_locality",
+        "index_html",
+        "index_additional_html",
+        "index_old",
+        "age_top",
+        "age_base",
+        "age_reference.id",
+        "age_reference.reference",
+        "age_chronostratigraphy.id",
+        "age_chronostratigraphy.name",
+        "age_chronostratigraphy.name_en",
+        "parent.id",
+        "parent.name",
+        "parent.name_en",
+        "type.value",
+        "type.value_en",
+        "original_rank",
+        "rank.value",
+        "rank.value_en",
+        "scope.value",
+        "scope.value_en",
+        "status.value",
+        "status.value_en",
+        "date_added",
+        "date_changed",
+      ].join(","),
     },
     onResponseError: (_error) => {
       showError({
@@ -172,8 +255,8 @@ const activeTabProps = computed(() => {
 });
 const title = computed(() =>
   $translate({
-    et: data.value?.stratigraphy.stratigraphy,
-    en: data.value?.stratigraphy.stratigraphy_en,
+    et: data.value?.stratigraphy.name,
+    en: data.value?.stratigraphy.name_en,
   }),
 );
 

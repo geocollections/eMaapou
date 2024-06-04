@@ -175,7 +175,6 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           <TableRow
             v-if="area.type.id === 2 && planArray.length > 0"
             :title="$t('area.text1')"
-            :value="planArray"
           >
             <template #value>
               <span v-for="(item, index) in planArray" :key="index">

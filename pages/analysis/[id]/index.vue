@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import sumBy from "lodash/sumBy";
 import sortBy from "lodash/sortBy";
+import type { Analysis } from "../[id].vue";
 
 const props = defineProps<{
-  analysis: any;
+  analysis: Analysis;
 }>();
 
 const database = computed(() => props.analysis.database);
-const analysisMethod = computed(() => props.analysis.analysis_method ?? "");
+const analysisMethod = computed(() => props.analysis.analysis_method);
 const sample = computed(() => props.analysis.sample);
-const agent = computed(() => props.analysis.agent);
+const analyst = computed(() => props.analysis.analyst);
 const reference = computed(() => props.analysis.reference);
 const dataset = computed(() => props.analysis.dataset);
 
@@ -70,15 +71,15 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :title="$t('analysis.method')"
             :value="
               $translate({
-                et: analysisMethod.analysis_method,
-                en: analysisMethod.method_en,
+                et: analysisMethod.name,
+                en: analysisMethod.name_en,
               })
             "
           />
           <TableRow
-            v-if="agent"
+            v-if="analyst"
             :title="$t('analysis.analysedBy')"
-            :value="agent.agent"
+            :value="analyst.name"
           />
 
           <TableRowLink
@@ -89,7 +90,7 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :href="
               localePath({
                 name: 'sample-id',
-                params: { id: analysis.sample.id },
+                params: { id: sample.id },
               })
             "
           />
@@ -102,7 +103,7 @@ const resultChartData = computed(() => data.value?.resultChartData);
             v-if="reference"
             :title="$t('analysis.reference')"
             :value="reference.reference"
-            @link-click="$openGeology('reference', reference.id)"
+            @link-click="$openGeology('reference', reference.id.toString())"
           />
           <TableRow
             v-if="dataset"
@@ -119,8 +120,8 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :title="$t('analysis.locality')"
             :value="
               $translate({
-                et: sample.locality.locality,
-                en: sample.locality.locality_en,
+                et: sample.locality.name,
+                en: sample.locality.name_en,
               })
             "
             nuxt
@@ -146,8 +147,8 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :title="$t('analysis.stratigraphy')"
             :value="
               $translate({
-                et: sample.stratigraphy.stratigraphy,
-                en: sample.stratigraphy.stratigraphy_en,
+                et: sample.stratigraphy.name,
+                en: sample.stratigraphy.name_en,
               })
             "
             nuxt
@@ -163,8 +164,8 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :title="$t('analysis.lithostratigraphy')"
             :value="
               $translate({
-                et: sample.lithostratigraphy.stratigraphy,
-                en: sample.lithostratigraphy.stratigraphy_en,
+                et: sample.lithostratigraphy.name,
+                en: sample.lithostratigraphy.name_en,
               })
             "
             nuxt
