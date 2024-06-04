@@ -142,12 +142,12 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="area"
             :title="$t('site.area')"
+            :value="area"
           >
             <template #value>
-              <a
+              <BaseLinkExternal
                 v-if="area.type === 2"
-                class="text-link"
-                @click="$openTurba('turbaala', area.id.toString())"
+                :to="`https://turba.geoloogia.info/turbaala/${area.id}`"
               >
                 {{
                   $translate({
@@ -155,13 +155,9 @@ const mapOverlays = computed(() => {
                     en: area.name_en,
                   })
                 }}
-                <VIcon size="small" color="primary-darken-2">{{
-                  mdiOpenInNew
-                }}</VIcon>
-              </a>
-              <NuxtLink
+              </BaseLinkExternal>
+              <BaseLink
                 v-else
-                class="text-link"
                 :to="localePath({
                   name: 'area-id',
                   params: { id: area.id },
@@ -174,20 +170,20 @@ const mapOverlays = computed(() => {
                     en: area.name_en,
                   })
                 }}
-              </NuxtLink>
+              </BaseLink>
             </template>
           </TableRow>
 
           <TableRow
             v-if="area && area.type === 2"
             :title="$t('site.areaText1')"
+            :value="planArray"
           >
             <template #value>
               <span v-for="(item, index) in planArray" :key="index">
                 <a
                   class="text-link"
                   :download="item.trim()"
-                  @click="$openTurba('plaanid', item.trim(), false)"
                 >
                   {{ item }}
                   <VIcon size="small" color="primary-darken-2">
@@ -212,21 +208,29 @@ const mapOverlays = computed(() => {
           <TableRow :title="$t('site.extent')" :value="site.extent" />
           <TableRow :title="$t('site.depth')" :value="site.depth" />
 
-          <TableRowLink
+          <TableRow
             v-if="locality"
             :title="$t('locality.locality')"
-            :value="$translate({
-              et: locality.name,
-              en: locality.name_en,
-            })
-            "
-            nuxt
-            :href="localePath({
-              name: 'locality-id',
-              params: { id: locality.id },
-            })
-            "
-          />
+            :value="locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="locality?.country"
             :title="$t('locality.country')"

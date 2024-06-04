@@ -82,29 +82,46 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :value="analyst.name"
           />
 
-          <TableRowLink
+          <TableRow
             v-if="sample"
             :title="$t('analysis.sampleNumber')"
-            :value="sample.number"
-            nuxt
-            :href="
-              localePath({
-                name: 'sample-id',
-                params: { id: sample.id },
-              })
-            "
-          />
+            :value="sample"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'sample-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
 
           <TableRow
             :title="$t('analysis.remarks')"
             :value="analysis.remarks"
           />
-          <TableRowLink
+          <TableRow
             v-if="reference"
             :title="$t('analysis.reference')"
-            :value="reference.reference"
-            @link-click="$openGeology('reference', reference.id.toString())"
-          />
+            :value="reference"
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="`https://kirjandus.geoloogia.info/reference/${value.id}`"
+              >
+                {{
+                  value.reference
+                }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
           <TableRow
             v-if="dataset"
             :title="$t('analysis.dataset')"
@@ -115,23 +132,29 @@ const resultChartData = computed(() => data.value?.resultChartData);
               })
             "
           />
-          <TableRowLink
-            v-if="sample && sample.locality"
+          <TableRow
+            v-if="sample?.locality"
             :title="$t('analysis.locality')"
-            :value="
-              $translate({
-                et: sample.locality.name,
-                en: sample.locality.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: sample.locality.id },
-              })
-            "
-          />
+            :value="sample.locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="sample"
             :title="$t('analysis.depth')"
@@ -142,53 +165,70 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :title="$t('analysis.depthInterval')"
             :value="sample.depth_interval"
           />
-          <TableRowLink
-            v-if="sample && sample.stratigraphy"
+          <TableRow
+            v-if="sample?.stratigraphy"
             :title="$t('analysis.stratigraphy')"
-            :value="
-              $translate({
-                et: sample.stratigraphy.name,
-                en: sample.stratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: sample.stratigraphy.id },
-              })
-            "
-          />
-          <TableRowLink
-            v-if="sample && sample.lithostratigraphy"
+            :value="sample.stratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
+            v-if="sample?.lithostratigraphy"
             :title="$t('analysis.lithostratigraphy')"
-            :value="
-              $translate({
-                et: sample.lithostratigraphy.name,
-                en: sample.lithostratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: sample.lithostratigraphy.id },
-              })
-            "
-          />
-          <TableRowLink
+            :value="sample.lithostratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="database"
             :title="$t('analysis.institution')"
-            :value="
-              $translate({
-                et: database.name,
-                en: database.name_en,
-              })
-            "
-            :href="database.url"
-            target="DatabaseWindow"
-          />
-
+            :value="database"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="value.url"
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="analysis.date_added"
             :title="$t('analysis.dateAdded')"

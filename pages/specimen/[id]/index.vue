@@ -16,7 +16,7 @@ const dateCollected = computed(() => {
     return "";
   return props.specimen.date_collected ?? props.specimen.date_collected_text;
 });
-const coll = computed(() => props.specimen.collection);
+const collection = computed(() => props.specimen.collection);
 const type = computed(() => props.specimen.type);
 const classification = computed(() => props.specimen.classification);
 const locality = computed(() => props.specimen.locality);
@@ -128,32 +128,51 @@ const mapOverlays = computed(() => {
         :xl="5"
       >
         <BaseTable class="border rounded">
-          <TableRowLink
-            v-if="coll"
+          <TableRow
+            v-if="collection"
             :title="$t('specimen.collectionNr')"
-            :value="coll.number"
-            nuxt
-            :href="
-              localePath({
-                name: 'collection-id',
-                params: { id: coll.id },
-              })
-            "
-          />
+            :value="collection"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'collection-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
 
           <TableRow
             :title="$t('specimen.number')"
             :value="`${specimen.number}`"
           />
-          <TableRowLink
+          <TableRow
             v-if="parent"
             :title="$t('specimen.parent')"
-            nuxt
-            :href="
-              localePath({ name: 'specimen-id', params: { id: parent.id } })
-            "
-            :value="parent.number"
-          />
+            :value="parent"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'specimen-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="specimen.old_number"
             :title="$t('specimen.oldNumber')"
@@ -193,61 +212,79 @@ const mapOverlays = computed(() => {
             :title="$t('specimen.part')"
             :value="specimen.part"
           />
-          <TableRowLink
+          <TableRow
             v-if="locality"
             :title="$t('specimen.locality')"
-            :value="
-              $translate({
-                et: locality.name,
-                en: locality.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: locality.id },
-              })
-            "
-          />
+            :value="locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('specimen.depth')"
             :value="specimen.depth"
           />
-          <TableRowLink
+          <TableRow
             v-if="stratigraphy"
             :title="$t('specimen.stratigraphy')"
-            :value="
-              $translate({
-                et: stratigraphy.name,
-                en: stratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: stratigraphy.id },
-              })
-            "
-          />
-          <TableRowLink
+            :value="stratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="lithostratigraphy"
             :title="$t('specimen.lithostratigraphy')"
-            :value="
-              $translate({
-                et: lithostratigraphy.name,
-                en: lithostratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: lithostratigraphy.id },
-              })
-            "
-          />
+            :value="lithostratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('specimen.stratigraphyRemarks')"
             :value="specimen.stratigraphy_text"
@@ -266,35 +303,44 @@ const mapOverlays = computed(() => {
             :title="$t('specimen.collector')"
             :value="agentCollected.name"
           />
-          <TableRowLink
+          <TableRow
             v-if="sample"
             :title="$t('specimen.sample')"
-            :value="
-              $translate({
-                et: sample.number,
-                en: sample.number,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'sample-id',
-                params: { id: sample.id },
-              })
-            "
-          />
-          <TableRowLink
+            :value="sample"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'sample-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="database"
             :title="$t('specimen.institution')"
-            :value="
-              $translate({
-                et: database.name,
-                en: database.name_en,
-              })
-            "
-            :href="database.url"
-            target="DatabaseWindow"
-          />
+            :value="database"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="value.url"
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
         </BaseTable>
       </VCol>
       <VCol

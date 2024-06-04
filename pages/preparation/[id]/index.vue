@@ -35,26 +35,38 @@ const owner = computed(() => props.preparation.owner);
             :title="$t('preparation.sample_number')"
             :value="preparation.sample_number"
           />
-          <TableRowLink
+          <TableRow
             v-if="analysis"
             :title="$t('preparation.analysis')"
-            :value="analysis.id"
-            nuxt
-            :href="
-              localePath({
-                name: 'analysis-id',
-                params: { id: analysis.id },
-              })
-            "
-          />
-          <TableRowLink
+            :value="analysis"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'analysis-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{ value.id }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="taxon"
             :title="$t('preparation.taxon')"
-            :value="taxon.name"
-            @link-click="
-              $openWindow(`https://fossiilid.info/${taxon.id}`)
-            "
-          />
+            :value="taxon"
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="`https://fossiilid.info/${taxon.id}`
+                "
+              >
+                {{ value.name }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
           <TableRow
             v-if="agent"
             :title="$t('preparation.agent')"
@@ -111,23 +123,29 @@ const owner = computed(() => props.preparation.owner);
       </VCol>
       <VCol :xl="4">
         <BaseTable class="border rounded">
-          <TableRowLink
+          <TableRow
             v-if="sample"
             :title="$t('sample.number')"
-            :value="
-              sample.number
-                || sample.number_additional
-                || sample.number_field
-                || sample.id
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'sample-id',
-                params: { id: sample.id },
-              })
-            "
-          />
+            :value="sample"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'sample-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  sample.number
+                    || sample.number_additional
+                    || sample.number_field
+                    || sample.id
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('sample.depth')"
             :value="sample?.depth"

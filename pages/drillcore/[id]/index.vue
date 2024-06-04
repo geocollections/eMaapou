@@ -84,18 +84,24 @@ const mapOverlays = computed(() => {
             :value="drillcore.meters_in_box"
           />
 
-          <TableRowLink
+          <TableRow
             v-if="database"
             :title="$t('drillcore.database')"
-            :value="
-              $translate({
-                et: database.name,
-                en: database.name_en,
-              })
-            "
-            :href="database.url"
-            target="DatabaseWindow"
-          />
+            :value="database"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="value.url"
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="drillcore.date_added"
             :title="$t('drillcore.dateAdded')"
@@ -116,23 +122,29 @@ const mapOverlays = computed(() => {
       </VCol>
       <VCol :xl="4">
         <BaseTable class="border rounded mb-4">
-          <TableRowLink
+          <TableRow
             v-if="locality"
             :title="$t('locality.locality')"
-            :value="
-              $translate({
-                et: locality.name,
-                en: locality.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: locality.id },
-              })
-            "
-          />
+            :value="locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="locality?.country"
             :title="$t('locality.country')"

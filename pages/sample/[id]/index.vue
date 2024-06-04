@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Sample } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
+import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
@@ -183,32 +184,58 @@ const mapOverlays = computed(() => {
             :title="$t('sample.number')"
             :value="sample.number"
           />
-          <TableRowLink
+          <TableRow
             v-if="parent"
             :title="$t('sample.parent')"
-            nuxt
-            :href="
-              localePath({ name: 'sample-id', params: { id: parent.id } })
-            "
-            :value="parent.number"
-          />
-          <TableRowLink
+            :value="parent"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'sample-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="parentSpecimen"
             :title="$t('sample.parentSpecimen')"
-            nuxt
-            :href="
-              localePath({
-                name: 'specimen-id',
-                params: { id: parentSpecimen.id },
-              })
-            "
-            :value="parentSpecimen.number"
-          />
-          <TableRowLink
-            :title="$t('sample.igsn')"
+            :value="parentSpecimen"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'specimen-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
+            :title="$t('sample.parentSpecimen')"
             :value="sample.igsn"
-            :href="`http://igsn.org/${sample.igsn}`"
-          />
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="`http://igsn.org/${value}`"
+              >
+                {{ value }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('sample.numberAdditional')"
             :value="sample.number_additional"
@@ -218,22 +245,28 @@ const mapOverlays = computed(() => {
             :value="sample.number_field"
           />
           <template v-if="locality">
-            <TableRowLink
+            <TableRow
               :title="$t('locality.locality')"
-              :value="
-                $translate({
-                  et: locality.name,
-                  en: locality.name_en,
-                })
-              "
-              nuxt
-              :href="
-                localePath({
-                  name: 'locality-id',
-                  params: { id: locality.id },
-                })
-              "
-            />
+              :value="locality"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'locality-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
             <TableRow
               :title="$t('sample.localityFree')"
               :value="sample.locality_text"
@@ -262,17 +295,25 @@ const mapOverlays = computed(() => {
             />
           </template>
           <template v-if="site">
-            <TableRowLink
+            <TableRow
               :title="$t('sample.site')"
-              :value="site.name"
-              nuxt
-              :href="
-                localePath({
-                  name: 'site-id',
-                  params: { id: site.id },
-                })
-              "
-            />
+              :value="site"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'site-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    value.name
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
             <TableRow
               :title="$t('locality.coordinates')"
               :value="`${site.latitude}, ${site.longitude}`"
@@ -286,40 +327,52 @@ const mapOverlays = computed(() => {
             :title="$t('sample.depthInterval')"
             :value="sample.depth_interval"
           />
-          <TableRowLink
+          <TableRow
             v-if="stratigraphy"
             :title="$t('sample.stratigraphy')"
-            :value="
-              $translate({
-                et: stratigraphy.name,
-                en: stratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: stratigraphy.id },
-              })
-            "
-          />
-          <TableRowLink
+            :value="stratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="lithostratigraphy"
             :title="$t('sample.lithostratigraphy')"
-            :value="
-              $translate({
-                et: lithostratigraphy.name,
-                en: lithostratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: lithostratigraphy.id },
-              })
-            "
-          />
+            :value="lithostratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('sample.stratigraphyFree')"
             :value="sample.stratigraphy_text"
@@ -378,9 +431,10 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="sample.is_palaeontology"
             :title="$t('sample.palaeontology')"
+            :value="sample.is_palaeontology"
           >
-            <template #value>
-              <BaseBoolean :value="sample.is_palaeontology" />
+            <template #value="{ value }">
+              <BaseBoolean :value="value" />
             </template>
           </TableRow>
           <TableRow
@@ -396,18 +450,24 @@ const mapOverlays = computed(() => {
             :title="$t('sample.owner')"
             :value="owner.name"
           />
-          <TableRowLink
+          <TableRow
             v-if="database"
             :title="$t('sample.database')"
-            :value="
-              $translate({
-                et: database.name,
-                en: database.name_en,
-              })
-            "
-            :href="database.url"
-            target="DatabaseWindow"
-          />
+            :value="database"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="value.url"
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="project"
             :title="$t('sample.project')"

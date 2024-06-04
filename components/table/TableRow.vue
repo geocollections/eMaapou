@@ -1,29 +1,25 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import isEmpty from "lodash/isEmpty";
 
 const props = defineProps<{
   title?: string;
-  value?: string | number;
+  value: T;
 }>();
 
-const slots = useSlots();
 const isInvalid = computed(() => {
   if (typeof props.value === "number")
     return false;
   return isEmpty(props.value);
 });
-const hasValueInSlot = computed(() => {
-  return slots.value;
-});
 </script>
 
 <template>
-  <tr v-if="!isInvalid || hasValueInSlot">
+  <tr v-if="!isInvalid">
     <td class="font-weight-medium">
       {{ title }}
     </td>
     <td>
-      <slot name="value">
+      <slot name="value" :value="value">
         {{ value }}
       </slot>
     </td>

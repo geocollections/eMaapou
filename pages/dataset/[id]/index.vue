@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
 import type { Dataset } from "../[id].vue";
+import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 
 defineProps<{ dataset: Dataset; parameters: any }>();
 const { $solrFetch, $geoloogiaFetch, $translate } = useNuxtApp();
@@ -171,56 +172,77 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             :title="$t('dataset.version')"
             :value="dataset.version"
           />
-          <TableRowLink
+          <TableRow
             v-if="doi"
             :title="$t('dataset.doi')"
             :value="doi"
-            :href="`https://doi.geocollections.info/${doi}`"
-          />
-          <TableRowLink
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="`https://doi.geocollections.info/${value}`"
+              >
+                {{
+                  value
+                }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="reference"
             :title="$t('dataset.reference')"
-            :value="reference.reference"
-            :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
-          />
-          <TableRowLink
+            :value="reference"
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="`https://kirjandus.geoloogia.info/reference/${value.id}`"
+              >
+                {{
+                  value.reference
+                }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="dataset.locality"
             :title="$t('dataset.locality')"
-            :value="
-              $translate({
-                et: dataset.locality.name,
-                en: dataset.locality.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: dataset.locality.id },
-              })
-            "
-          />
+            :value="dataset.locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="dataset.copyright_agent"
             :title="$t('dataset.copyright')"
             :value="dataset.copyright_agent.name"
           />
-          <TableRowLink
+          <TableRow
             v-if="dataset.licence"
             :title="$t('dataset.licence')"
-            :value="
-              $translate({
-                et: dataset.licence.name,
-                en: dataset.licence.name_en,
-              })
-            "
-            :href="
-              $translate({
-                et: dataset.licence.url,
-                en: dataset.licence.url_en,
-              })
-            "
-          />
+            :value="dataset.licence"
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="value.url"
+              >
+                {{ value.name }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
           <TableRow
             v-if="dataset.date_added"
             :title="$t('dataset.dateAdded')"

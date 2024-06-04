@@ -32,12 +32,21 @@ const localePath = useLocalePath();
                   :title="$t('localityDescription.authorFree')"
                   :value="item.author_free"
                 />
-                <TableRowLink
+                <TableRow
                   v-if="item.reference"
                   :title="$t('localityDescription.reference')"
-                  :value="item.reference.reference"
-                  @link-click="$openGeology('reference', item.reference.id)"
-                />
+                  :value="item.reference"
+                >
+                  <template #value="{ value }">
+                    <BaseLinkExternal
+                      :to="`https://kirjandus.geoloogia.info/reference/${value.id}`"
+                    >
+                      {{
+                        value.reference
+                      }}
+                    </BaseLinkExternal>
+                  </template>
+                </TableRow>
                 <TableRow
                   :title="$t('localityDescription.year')"
                   :value="item.year"

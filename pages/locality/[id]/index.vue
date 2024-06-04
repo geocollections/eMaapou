@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { startCase } from "lodash";
 import type { Locality } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
@@ -199,43 +200,68 @@ const mapOverlays = computed(() => {
             :value="coordinateAgent.name"
           />
           <TableRow :title="$t('locality.locationRemarks')" :value="locality.remarks_location" />
-          <TableRowLink
+          <TableRow
             v-if="stratigraphyTop"
             :title="$t('locality.stratigraphyTop')"
-            :value="$translate({
-              et: stratigraphyTop.name,
-              en: stratigraphyTop.name_en,
-            })
-            "
-            nuxt
-            :href="localePath({
-              name: 'stratigraphy-id',
-              params: { id: stratigraphyTop.id },
-            })
-            "
-          />
-          <TableRowLink
+            :value="stratigraphyTop"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="stratigraphyBase"
             :title="$t('locality.stratigraphyBase')"
-            :value="$translate({
-              et: stratigraphyBase.name,
-              en: stratigraphyBase.name,
-            })
-            "
-            nuxt
-            :href="localePath({
-              name: 'stratigraphy-id',
-              params: { id: stratigraphyBase.id },
-            })
-            "
-          />
+            :value="stratigraphyBase"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow :title="$t('locality.remarks')" :value="locality.remarks" />
-          <TableRowLink
+          <TableRow
             v-if="locality.land_board_id"
             :title="$t('locality.linkLandBoard')"
             :value="locality.land_board_id"
-            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.land_board_id}&fr=o&bk=1&page_id=382`"
-          />
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${value}&fr=o&bk=1&page_id=382`"
+              >
+                {{
+                  value
+                }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
           <TableRow
             v-if="locality.date_added"
             :title="$t('locality.dateAdded')"
