@@ -9,6 +9,7 @@ const emit = defineEmits(["click:row"]);
 const localePath = useLocalePath();
 const img = useImage();
 
+const imageOverlay = ref();
 const images = ref<SampleImage[]>([]);
 const totalImage = ref(0);
 const showOverlay = ref(false);
@@ -19,6 +20,7 @@ const initIndex = ref(0);
 
 async function openOverlay(sample: any) {
   initIndex.value = 0;
+  imageOverlay.value.reset();
   page.value = 0;
 
   currentSampleOverlay.value = sample;
@@ -161,6 +163,7 @@ function handleEnd() {
     </template>
   </BaseDataTable>
   <ImageOverlay
+    ref="imageOverlay"
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"

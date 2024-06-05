@@ -15,6 +15,7 @@ type SpecimenImage = Image<{
 
 const img = useImage();
 const localePath = useLocalePath();
+const imageOverlay = ref();
 const showOverlay = ref(false);
 const images = ref<SpecimenImage[]>([]);
 const totalImage = ref(0);
@@ -25,6 +26,7 @@ const initIndex = ref(0);
 
 async function openOverlay(specimen: any) {
   initIndex.value = 0;
+  imageOverlay.value.reset();
   page.value = 0;
 
   currentSpecimenOverlay.value = specimen;
@@ -200,6 +202,7 @@ function handleEnd() {
     </template>
   </BaseDataTable>
   <ImageOverlay
+    ref="imageOverlay"
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"

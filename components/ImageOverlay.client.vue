@@ -26,6 +26,16 @@ const emit = defineEmits(["update:model-value", "end"]);
 function handleReachEnd() {
   emit("end");
 }
+
+const swiper = ref();
+
+function reset() {
+  swiper.value.reset();
+}
+
+defineExpose({
+  reset,
+});
 </script>
 
 <template>
@@ -49,6 +59,7 @@ function handleReachEnd() {
       <VIcon>{{ mdiClose }}</VIcon>
     </VBtn>
     <SwiperLightbox
+      ref="swiper"
       :images="images"
       :total="total"
       :initial-slide="initialSlide"
