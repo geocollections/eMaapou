@@ -128,8 +128,6 @@ const { exportData } = useExportSolr("/specimen", {
   })),
 });
 
-const specimenImageFunction = useSpecimenImageFunction();
-
 useHead({
   title: t("specimen.pageTitle"),
 });
@@ -197,7 +195,6 @@ useHead({
             :options="options"
             :is-loading="pending"
             :export-func="exportData"
-            :image-func="specimenImageFunction"
             @update="handleDataTableUpdate"
             @change:headers="handleHeadersChange"
             @reset:headers="handleHeadersReset(options)"

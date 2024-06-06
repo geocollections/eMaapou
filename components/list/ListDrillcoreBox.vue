@@ -201,46 +201,52 @@ function handleSearch() {
                       :title="$t('drillcoreBox.depthEnd')"
                       :value="box.drillcore_box.depth_end"
                     />
-                    <TableRowLink
+                    <TableRow
                       v-if="box.drillcore_box.stratigraphy_top"
                       :title="$t('drillcoreBox.stratigraphyTop')"
-                      :value="
-                        $translate({
-                          et: box.drillcore_box.stratigraphy_top.stratigraphy,
-                          en: box.drillcore_box.stratigraphy_top
-                            .stratigraphy_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'stratigraphy-id',
-                          params: {
-                            id: box.drillcore_box.stratigraphy_top.id,
-                          },
-                        })
-                      "
-                    />
-                    <TableRowLink
+                      :value="box.drillcore_box.stratigraphy_top"
+                    >
+                      <template #value="{ value }">
+                        <BaseLink
+                          :to="
+                            localePath({
+                              name: 'stratigraphy-id',
+                              params: { id: value.id },
+                            })
+                          "
+                        >
+                          {{
+                            $translate({
+                              et: value.stratigraphy,
+                              en: value.stratigraphy_en,
+                            })
+                          }}
+                        </BaseLink>
+                      </template>
+                    </TableRow>
+                    <TableRow
                       v-if="box.drillcore_box.stratigraphy_base"
                       :title="$t('drillcoreBox.stratigraphyBase')"
-                      :value="
-                        $translate({
-                          et: box.drillcore_box.stratigraphy_base.stratigraphy,
-                          en: box.drillcore_box.stratigraphy_base
-                            .stratigraphy_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'stratigraphy-id',
-                          params: {
-                            id: box.drillcore_box.stratigraphy_base.id,
-                          },
-                        })
-                      "
-                    />
+                      :value="box.drillcore_box.stratigraphy_base"
+                    >
+                      <template #value="{ value }">
+                        <BaseLink
+                          :to="
+                            localePath({
+                              name: 'stratigraphy-id',
+                              params: { id: value.id },
+                            })
+                          "
+                        >
+                          {{
+                            $translate({
+                              et: value.stratigraphy,
+                              en: value.stratigraphy_en,
+                            })
+                          }}
+                        </BaseLink>
+                      </template>
+                    </TableRow>
                     <TableRow
                       :title="$t('drillcoreBox.depthOther')"
                       :value="box.drillcore_box.depth_other"

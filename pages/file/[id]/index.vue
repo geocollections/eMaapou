@@ -6,6 +6,7 @@ import {
 } from "@mdi/js";
 import type { File } from "../[id].vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 
 const props = defineProps<{
   file: File;
@@ -287,88 +288,130 @@ const mapOverlays = computed(() => {
         :xl="5"
       >
         <BaseTable class="border rounded mb-2">
-          <TableRowLink
-            v-if="specimen && specimen.collection"
+          <TableRow
+            v-if="specimen?.collection"
             :title="$t('file.collectionNr')"
-            :value="specimen.collection.number"
-            nuxt
-            :href="
-              localePath({
-                name: 'specimen-id',
-                params: { id: specimen.id },
-              })
-            "
-          />
-          <TableRowLink
+            :value="specimen.collection"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'collection-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="specimen"
             :title="$t('file.specimenNr')"
-            :value="specimen.number"
-            nuxt
-            :href="
-              localePath({
-                name: 'specimen-id',
-                params: { id: specimen.id },
-              })
-            "
-          />
+            :value="specimen"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'specimen-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  value.number
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <template v-for="(item, index) in specimenIdentification">
-            <TableRowLink
+            <TableRow
               v-if="item.taxon"
               :key="index"
               :title="$t('file.name')"
-              :value="item.taxon.taxon"
-              :suffix="item.name ? `| ${item.name}` : ''"
-              @link-click="
-                $openWindow(`https://fossiilid.info/${item.taxon.id}`)
-              "
-            />
+              :value="item.taxon"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="`https://fossiilid.info/${value.id}`"
+                >
+                  {{ value.taxon }}
+                </BaseLink>
+                <template v-if="item.name">
+                  | {{ item.name }}
+                </template>
+              </template>
+            </TableRow>
           </template>
           <template v-for="(item, index) in specimenIdentificationGeology">
-            <TableRowLink
+            <TableRow
               v-if="item.taxon"
               :key="index"
               :title="$t('file.name')"
-              :value="item.taxon.taxon"
-              :suffix="item.name ? `| ${item.name}` : ''"
-              @link-click="
-                $openWindow(`https://fossiilid.info/${item.taxon.id}`)
-              "
-            />
+              :value="item.taxon"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="`https://fossiilid.info/${value.id}`"
+                >
+                  {{ value.taxon }}
+                </BaseLink>
+                <template v-if="item.name">
+                  | {{ item.name }}
+                </template>
+              </template>
+            </TableRow>
           </template>
-          <TableRowLink
-            v-if="specimen && specimen.locality"
+          <TableRow
+            v-if="locality"
             :title="$t('file.locality')"
-            :value="
-              $translate({
-                et: specimen.locality.name,
-                en: specimen.locality.name,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: specimen.locality.id },
-              })
-            "
-          />
-          <TableRowLink
-            v-if="specimen && specimen.stratigraphy"
+            :value="locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
+            v-if="specimen?.stratigraphy"
             :title="$t('file.stratigraphy')"
-            :value="
-              $translate({
-                et: specimen.stratigraphy.name,
-                en: specimen.stratigraphy.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: specimen.stratigraphy.id },
-              })
-            "
-          />
+            :value="specimen.stratigraphy"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="file.image_scalebar"
             :title="$t('file.scalebar')"
@@ -417,23 +460,6 @@ const mapOverlays = computed(() => {
             :title="$t('file.imagePlace')"
             :value="file.image_place"
           />
-          <TableRowLink
-            v-if="locality"
-            :title="$t('file.locality')"
-            :value="
-              $translate({
-                et: locality.name,
-                en: locality.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: locality.id },
-              })
-            "
-          />
           <TableRow
             :title="$t('file.imageLatitude')"
             :value="file.image_latitude"
@@ -459,10 +485,11 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="attachmentKeywords.length > 0"
             :title="$t('file.keywords')"
+            :value="attachmentKeywords"
           >
-            <template #value>
+            <template #value="{ value }">
               <ul style="list-style-position: inside">
-                <template v-for="(item, index) in attachmentKeywords">
+                <template v-for="(item, index) in value">
                   <li v-if="item.keyword" :key="index">
                     {{ item.keyword.keyword }}
                   </li>
@@ -483,24 +510,37 @@ const mapOverlays = computed(() => {
             :title="$t('file.imageSize')"
             :value="imageSize"
           />
-          <TableRowLink
+          <TableRow
             v-if="database"
             :title="$t('file.institution')"
-            :value="
-              $translate({
-                et: database.name,
-                en: database.name_en,
-              })
-            "
-            :href="database.url"
-            target="DatabaseWindow"
-          />
-          <TableRowLink
+            :value="database"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="value.url"
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
+          <TableRow
             v-if="licence"
             :title="$t('file.licence')"
-            :value="licence.name"
-            @link-click="$openWindow(licence.url)"
-          />
+            :value="licence"
+          >
+            <template #value="{ value }">
+              <BaseLinkExternal
+                :to="value.url"
+              >
+                {{ value.name }}
+              </BaseLinkExternal>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('file.remarks')"
             :value="file.remarks"

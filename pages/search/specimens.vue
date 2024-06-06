@@ -26,8 +26,6 @@ const { data, pending } = await useSolrFetch<SolrResponse>("/specimen", {
     sort: solrSort.value,
   })),
 });
-
-const specimenImageFunction = useSpecimenImageFunction();
 </script>
 
 <template>
@@ -38,7 +36,6 @@ const specimenImageFunction = useSpecimenImageFunction();
     :options="options"
     :headers="headers"
     :is-loading="pending"
-    :image-func="specimenImageFunction"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

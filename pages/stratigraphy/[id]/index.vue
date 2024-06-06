@@ -83,23 +83,29 @@ const mapOverlays = computed(() => {
         :xl="5"
       >
         <BaseTable class="border rounded">
-          <TableRowLink
+          <TableRow
             v-if="stratigraphy.parent"
             :title="$t('stratigraphy.parentStratigraphy')"
-            :value="
-              $translate({
-                et: stratigraphy.parent.name,
-                en: stratigraphy.parent.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: stratigraphy.parent.id },
-              })
-            "
-          />
+            :value="stratigraphy.parent"
+          >
+            <template #value="{ value: parent }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: parent.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: parent.name,
+                    en: parent.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="stratigraphy.type"
             :title="$t('stratigraphy.type')"
@@ -175,25 +181,29 @@ const mapOverlays = computed(() => {
             :title="$t('stratigraphy.ageBase')"
             :value="stratigraphy.age_base"
           />
-          <TableRowLink
+          <TableRow
             v-if="stratigraphy.age_chronostratigraphy"
             :title="$t('stratigraphy.age')"
-            :value="
-              $translate({
-                et: stratigraphy.age_chronostratigraphy.name,
-                en: stratigraphy.age_chronostratigraphy.name,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: {
-                  id: stratigraphy.age_chronostratigraphy.id,
-                },
-              })
-            "
-          />
+            :value="stratigraphy.age_chronostratigraphy"
+          >
+            <template #value="{ value: chronostratigraphy }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: chronostratigraphy.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: chronostratigraphy.name,
+                    en: chronostratigraphy.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="stratigraphy.age_reference"
             :title="$t('stratigraphy.ageReference')"
@@ -203,29 +213,28 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="stratigraphy.index_html"
             :title="$t('stratigraphy.index')"
+            :value="stratigraphy.index_html"
           >
-            <template #value>
+            <template #value="{ value }">
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <div v-html="stratigraphy.index_html" />
+              <div v-html="value" />
             </template>
           </TableRow>
           <TableRow
             v-if="stratigraphy.index_additional_html"
             :title="$t('stratigraphy.indexAlt')"
+            :value="stratigraphy.index_additional_html"
           >
-            <template #value>
+            <template #value="{ value }">
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <div v-html="stratigraphy.index_additional_html" />
+              <div v-html="value" />
             </template>
           </TableRow>
           <TableRow
             v-if="stratigraphy.index_old"
             :title="$t('stratigraphy.indexAlt')"
-          >
-            <template #value>
-              <div v-text="stratigraphy.index_old" />
-            </template>
-          </TableRow>
+            :value="stratigraphy.index_old"
+          />
           <TableRow
             v-if="stratigraphy.date_added"
             :title="$t('stratigraphy.dateAdded')"

@@ -139,23 +139,29 @@ const activeImage = computed(() => data.value?.activeImage);
       </VCol>
       <VCol :cols="12" :xl="4">
         <BaseTable class="border rounded">
-          <TableRowLink
+          <TableRow
             v-if="drillcore"
-            nuxt
             :title="$t('drillcoreBox.drillcore')"
-            :value="
-              $translate({
-                et: drillcore.name,
-                en: drillcore.name_en,
-              })
-            "
-            :href="
-              localePath({
-                name: 'drillcore-id',
-                params: { id: drillcore.id },
-              })
-            "
-          />
+            :value="drillcore"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('drillcoreBox.depthStart')"
             :value="drillcoreBox.depth_start"
@@ -172,44 +178,56 @@ const activeImage = computed(() => data.value?.activeImage);
             :title="$t('drillcoreBox.diameter')"
             :value="drillcoreBox.diameter"
           />
-          <TableRowLink
+          <TableRow
             v-if="drillcoreBox.stratigraphy_top"
             :title="$t('drillcoreBox.stratigraphyTop')"
-            :value="
-              $translate({
-                et: drillcoreBox.stratigraphy_top.name,
-                en: drillcoreBox.stratigraphy_top.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: drillcoreBox.stratigraphy_top.id },
-              })
-            "
-          />
+            :value="drillcoreBox.stratigraphy_top"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('drillcoreBox.stratigraphyTopFree')"
             :value="drillcoreBox.stratigraphy_top_text"
           />
-          <TableRowLink
+          <TableRow
             v-if="drillcoreBox.stratigraphy_base"
-            :title="$t('drillcoreBox.stratigraphyBase')"
-            :value="
-              $translate({
-                et: drillcoreBox.stratigraphy_base.name,
-                en: drillcoreBox.stratigraphy_base.name_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: drillcoreBox.stratigraphy_base.id },
-              })
-            "
-          />
+            :title="$t('drillcoreBox.stratigraphyTop')"
+            :value="drillcoreBox.stratigraphy_base"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             :title="$t('drillcoreBox.stratigraphyBaseFree')"
             :value="drillcoreBox.stratigraphy_base_text"

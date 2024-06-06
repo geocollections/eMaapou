@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { mdiFileDownloadOutline, mdiOpenInNew } from "@mdi/js";
+import { mdiFileDownloadOutline } from "@mdi/js";
 import type { Site } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+import type { ImageAttachment } from "~/composables/useImageFunc";
 
 const props = defineProps<{ site: Site }>();
 
 const localePath = useLocalePath();
-const { $formatDate, $geoloogiaFetch } = useNuxtApp();
+const { $formatDate, $apiFetch } = useNuxtApp();
 
 const locality = computed(() => props.site.locality);
 const area = computed(() => props.site.area);
@@ -24,7 +25,6 @@ const studied = computed(() => {
     ? $formatDate(props.site.date_start)
     : props.site?.date_text;
 });
-const route = useRoute();
 
 type SiteImage = Image<{
   author: string | null;
@@ -32,41 +32,35 @@ type SiteImage = Image<{
   dateText: string | null;
 }>;
 
-const images = ref<SiteImage[]>([]);
-const imagesHasNext = ref(true);
-const totalImages = ref(0);
-
-async function imageQuery({ rows, page }: { rows: number; page: number }) {
-  if (!imagesHasNext.value)
-    return;
-  const newImages = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+async function imageQuery({ item, rows, page }: { item: Site; rows: number; page: number }) {
+  const res = await $apiFetch<GeoloogiaListResponse<ImageAttachment>>(`/sites/${item.id}/attachments/`, {
     query: {
-      site: route.params.id,
-      attachment__attachment_format__value__istartswith: "image",
-      nest: 2,
+      mime_type__content_type__istartswith: "image",
+      fields: "id,filename,author.name,date_created,date_created_text",
       limit: rows,
       offset: page * rows,
     },
-  }).then((res) => {
-    imagesHasNext.value = !!res.next;
-    if (totalImages.value === 0)
-      totalImages.value = res.count;
-
-    return res.results.map((image: any) => ({
-      id: image.attachment.id,
-      filename: image.attachment.filename,
-      info: {
-        author: image.attachment.author?.agent,
-        date: image.attachment.date_created,
-        dateText: image.attachment.date_created_free,
-      },
-    }));
   });
-  images.value = [...images.value, ...newImages];
+
+  const newImages = res.results.map(image => ({
+    id: image.id,
+    filename: image.filename,
+    info: {
+      author: image.author?.name ?? null,
+      date: image.date_created,
+      dateText: image.date_created_text,
+    },
+  })) as SiteImage[];
+  return { images: newImages, total: res.count, hasNext: res.next !== null };
 }
-const _ = await useAsyncData("image", async () => {
-  await imageQuery({ rows: 10, page: 0 });
-});
+
+const { images, total, nextImages } = useImages(imageQuery);
+
+async function getMoreImages() {
+  await nextImages(props.site);
+}
+
+await getMoreImages();
 
 const mapBaseLayer = computed(() => {
   if (locality.value?.country.iso_3166_1_alpha_2 === "EE")
@@ -89,10 +83,9 @@ const mapOverlays = computed(() => {
     <VRow v-if="images.length > 0">
       <VCol>
         <ImageBar
-          v-if="images.length > 0"
           :images="images"
-          :total="totalImages"
-          @update="imageQuery"
+          :total="total"
+          @update="getMoreImages"
         >
           <template #tooltipInfo="{ item }">
             <div v-if="item.info.author">
@@ -142,12 +135,12 @@ const mapOverlays = computed(() => {
           <TableRow
             v-if="area"
             :title="$t('site.area')"
+            :value="area"
           >
             <template #value>
-              <a
+              <BaseLinkExternal
                 v-if="area.type === 2"
-                class="text-link"
-                @click="$openTurba('turbaala', area.id.toString())"
+                :to="`https://turba.geoloogia.info/turbaala/${area.id}`"
               >
                 {{
                   $translate({
@@ -155,13 +148,9 @@ const mapOverlays = computed(() => {
                     en: area.name_en,
                   })
                 }}
-                <VIcon size="small" color="primary-darken-2">{{
-                  mdiOpenInNew
-                }}</VIcon>
-              </a>
-              <NuxtLink
+              </BaseLinkExternal>
+              <BaseLink
                 v-else
-                class="text-link"
                 :to="localePath({
                   name: 'area-id',
                   params: { id: area.id },
@@ -174,20 +163,20 @@ const mapOverlays = computed(() => {
                     en: area.name_en,
                   })
                 }}
-              </NuxtLink>
+              </BaseLink>
             </template>
           </TableRow>
 
           <TableRow
             v-if="area && area.type === 2"
             :title="$t('site.areaText1')"
+            :value="planArray"
           >
             <template #value>
               <span v-for="(item, index) in planArray" :key="index">
                 <a
                   class="text-link"
                   :download="item.trim()"
-                  @click="$openTurba('plaanid', item.trim(), false)"
                 >
                   {{ item }}
                   <VIcon size="small" color="primary-darken-2">
@@ -212,21 +201,29 @@ const mapOverlays = computed(() => {
           <TableRow :title="$t('site.extent')" :value="site.extent" />
           <TableRow :title="$t('site.depth')" :value="site.depth" />
 
-          <TableRowLink
+          <TableRow
             v-if="locality"
             :title="$t('locality.locality')"
-            :value="$translate({
-              et: locality.name,
-              en: locality.name_en,
-            })
-            "
-            nuxt
-            :href="localePath({
-              name: 'locality-id',
-              params: { id: locality.id },
-            })
-            "
-          />
+            :value="locality"
+          >
+            <template #value="{ value }">
+              <BaseLink
+                :to="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: value.id },
+                  })
+                "
+              >
+                {{
+                  $translate({
+                    et: value.name,
+                    en: value.name_en,
+                  })
+                }}
+              </BaseLink>
+            </template>
+          </TableRow>
           <TableRow
             v-if="locality?.country"
             :title="$t('locality.country')"

@@ -108,6 +108,14 @@ watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY
   if (!newIsOutside && newX !== oldX && newY !== oldY)
     showInfo.value = true;
 });
+
+defineExpose({
+  reset,
+});
+
+function reset() {
+  swiper.value?.swiper.slideTo(0);
+}
 </script>
 
 <template>
