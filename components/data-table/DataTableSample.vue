@@ -1,57 +1,31 @@
 <script setup lang="ts">
-import type { SampleImage } from "~/composables/useImageFunc";
-
-const props = defineProps<{
-  imageFunc?: ImageFunc<SampleImage>;
-}>();
 const emit = defineEmits(["click:row"]);
 
 const localePath = useLocalePath();
 const img = useImage();
 
 const imageOverlay = ref();
-const images = ref<SampleImage[]>([]);
-const totalImage = ref(0);
 const showOverlay = ref(false);
-const rowsPerPage = 10;
-const page = ref(0);
-const currentSampleOverlay = ref<any>();
+const currentOverlaySample = ref<any>();
 const initIndex = ref(0);
 
-async function openOverlay(sample: any) {
-  initIndex.value = 0;
-  imageOverlay.value.reset();
-  page.value = 0;
+const sampleImageFunc = useSampleImageFunction();
+const { images, total, nextImages, reset: resetImages } = useImages(sampleImageFunc);
 
-  currentSampleOverlay.value = sample;
-  if (!props.imageFunc) {
-    images.value = [{ id: sample.attachment_id, filename: sample.image, info: { author: sample.image_author, date: sample.image_date, dateText: sample.image_date } }];
-    totalImage.value = 1;
-  }
-  else {
-    const { images: newImages, total } = await props.imageFunc({ item: sample, page: page.value, rows: rowsPerPage });
-    images.value = newImages;
-    totalImage.value = total;
-  }
+async function openOverlay(sample: any) {
+  resetImages();
+  imageOverlay.value.reset();
+
+  currentOverlaySample.value = sample;
+  await nextImages(sample);
 
   showOverlay.value = true;
 }
 
-async function loadMore() {
-  if (!props.imageFunc)
-    return;
-  if (currentSampleOverlay.value === undefined)
-    return;
-  if (images.value.length >= totalImage.value)
-    return;
-
-  page.value += 1;
-  const { images: newImages } = await props.imageFunc({ item: currentSampleOverlay.value, page: page.value, rows: rowsPerPage });
-  images.value = [...images.value, ...newImages];
-}
-
 function handleEnd() {
-  loadMore();
+  if (images.value.length < 1)
+    return;
+  nextImages(currentOverlaySample.value);
 }
 </script>
 
@@ -167,7 +141,7 @@ function handleEnd() {
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"
-    :total="totalImage"
+    :total="total"
     @end="handleEnd"
   >
     <template #overlayInfo="{ item }">

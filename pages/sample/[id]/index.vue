@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Sample } from "../[id].vue";
-import type { Image } from "~/components/ImageBar.vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
@@ -9,50 +8,16 @@ const props = defineProps<{
 }>();
 
 const localePath = useLocalePath();
-const route = useRoute();
-const { $formatDate, $geoloogiaFetch } = useNuxtApp();
+const { $formatDate } = useNuxtApp();
 
-type SampleImage = Image<{
-  author: string | null;
-  date: string | null;
-  dateText: string | null;
-}>;
+const sampleImageFunc = useSampleImageFunction();
+const { images, total, nextImages } = useImages(sampleImageFunc);
 
-const images = ref<SampleImage[]>([]);
-const imagesHasNext = ref(true);
-const totalImages = ref(0);
-
-async function imageQuery({ rows, page }: { rows: number; page: number }) {
-  if (!imagesHasNext.value)
-    return;
-  const newImages = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
-    query: {
-      sample: route.params.id,
-      attachment__attachment_format__value__istartswith: "image",
-      nest: 2,
-      limit: rows,
-      offset: page * rows,
-    },
-  }).then((res) => {
-    imagesHasNext.value = !!res.next;
-    if (totalImages.value === 0)
-      totalImages.value = res.count;
-
-    return res.results.map((image: any) => ({
-      id: image.attachment.id,
-      filename: image.attachment.filename,
-      info: {
-        author: image.attachment.author?.agent,
-        date: image.attachment.date_created,
-        dateText: image.attachment.date_created_free,
-      },
-    }));
-  });
-  images.value = [...images.value, ...newImages];
+async function getMoreImages() {
+  await nextImages(props.sample);
 }
-const _ = await useAsyncData("image", async () => {
-  await imageQuery({ rows: 10, page: 0 });
-});
+
+await getMoreImages();
 
 const parentSpecimen = computed(() => props.sample.specimen);
 const parent = computed(() => props.sample.parent);
@@ -138,10 +103,9 @@ const mapOverlays = computed(() => {
     <VRow v-if="images.length > 0">
       <VCol>
         <ImageBar
-          v-if="images.length > 0"
           :images="images"
-          :total="totalImages"
-          @update="imageQuery"
+          :total="total"
+          @update="getMoreImages"
         >
           <template #tooltipInfo="{ item }">
             <div v-if="item.info.author">

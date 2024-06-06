@@ -16,12 +16,9 @@ defineProps({
   },
 });
 const emit = defineEmits(["update"]);
-const rowsPerPage = 10;
-const page = ref(1);
 const showOverlay = ref(false);
 function loadMore() {
-  emit("update", { page: page.value, rows: rowsPerPage });
-  page.value += 1;
+  emit("update");
 }
 const initIndex = ref(0);
 function openOverlay(index: number) {

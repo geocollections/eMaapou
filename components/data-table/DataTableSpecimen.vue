@@ -1,63 +1,30 @@
 <script setup lang="ts">
-import type { Image } from "../ImageBar.vue";
-import type { ImageFunc } from "~/composables/useImageFunc";
-
-const props = defineProps<{
-  imageFunc?: ImageFunc<SpecimenImage>;
-}>();
-
 const emit = defineEmits(["click:row"]);
-
-type SpecimenImage = Image<{
-  author: string | null;
-  date: string | null;
-}>;
 
 const img = useImage();
 const localePath = useLocalePath();
 const imageOverlay = ref();
 const showOverlay = ref(false);
-const images = ref<SpecimenImage[]>([]);
-const totalImage = ref(0);
-const rowsPerPage = 10;
-const page = ref(0);
-const currentSpecimenOverlay = ref<any>();
+const currentOverlaySpecimen = ref<any>();
 const initIndex = ref(0);
 
-async function openOverlay(specimen: any) {
-  initIndex.value = 0;
-  imageOverlay.value.reset();
-  page.value = 0;
+const specimenImageFunc = useSpecimenImageFunction();
+const { images, total, nextImages, reset: resetImages } = useImages(specimenImageFunc);
 
-  currentSpecimenOverlay.value = specimen;
-  if (!props.imageFunc) {
-    images.value = [{ id: specimen.attachment_id, filename: specimen.image, info: { author: specimen.image_author, date: specimen.image_date } }];
-    totalImage.value = 1;
-  }
-  else {
-    const { images: newImages, total } = await props.imageFunc({ item: specimen, page: page.value, rows: rowsPerPage });
-    images.value = newImages;
-    totalImage.value = total;
-  }
+async function openOverlay(sample: any) {
+  resetImages();
+  imageOverlay.value.reset();
+
+  currentOverlaySpecimen.value = sample;
+  await nextImages(sample);
 
   showOverlay.value = true;
 }
 
-async function loadMore() {
-  if (!props.imageFunc)
-    return;
-  if (currentSpecimenOverlay.value === undefined)
-    return;
-  if (images.value.length >= totalImage.value)
-    return;
-
-  page.value += 1;
-  const { images: newImages } = await props.imageFunc({ item: currentSpecimenOverlay.value, page: page.value, rows: rowsPerPage });
-  images.value = [...images.value, ...newImages];
-}
-
 function handleEnd() {
-  loadMore();
+  if (images.value.length < 1)
+    return;
+  nextImages(currentOverlaySpecimen.value);
 }
 </script>
 
@@ -206,7 +173,7 @@ function handleEnd() {
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"
-    :total="totalImage"
+    :total="total"
     @end="handleEnd"
   >
     <template #overlayInfo="{ item }">

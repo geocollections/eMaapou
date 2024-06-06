@@ -27,48 +27,14 @@ const database = computed(() => props.specimen.database);
 const sample = computed(() => props.specimen.sample);
 const parent = computed(() => props.specimen.parent);
 
-type SpecimenImage = Image<{
-  author: string | null;
-  date: string | null;
-}>;
+const specimenImageFunc = useSpecimenImageFunction();
+const { images, total, nextImages } = useImages(specimenImageFunc);
 
-const images = ref<SpecimenImage[]>([]);
-const imagesHasNext = ref(true);
-const totalImages = ref(0);
-
-async function imageQuery({ rows, page }: { rows: number; page: number }) {
-  if (!imagesHasNext.value)
-    return;
-
-  const res = await $solrFetch<SolrResponse>("/attachment", {
-    query: {
-      q: "*",
-      fq: `specimen_id:${route.params.id} AND specimen_image_attachment:1`,
-      sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
-      limit: rows,
-      offset: rows * page,
-    },
-  });
-  if (totalImages.value === 0)
-    totalImages.value = res.response.numFound;
-
-  const newImages = res.response.docs.map((attachment: any) => ({
-    id: attachment.id,
-    filename: attachment.filename,
-    info: {
-      author: attachment.agent,
-      date: attachment.date_created,
-    },
-  }));
-  images.value = [...images.value, ...newImages];
-
-  imagesHasNext.value = images.value.length < totalImages.value;
+async function getMoreImages() {
+  await nextImages(props.specimen);
 }
-const _ = await useAsyncData("images", async () => {
-  await imageQuery({ rows: 10, page: 0 });
-}, {
-  default: () => [],
-});
+
+await getMoreImages();
 
 const mapBaseLayer = computed(() => {
   if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
@@ -90,8 +56,8 @@ const mapOverlays = computed(() => {
       <VCol>
         <ImageBar
           :images="images"
-          :total="totalImages"
-          @update="imageQuery"
+          :total="total"
+          @update="getMoreImages"
         >
           <template #tooltipInfo="{ item }">
             <div v-if="item.info.author">

@@ -92,8 +92,6 @@ const { exportData } = useExportSolr("/sample", {
     fields: EXPORT_SOLR_SAMPLE,
   })),
 });
-
-const sampleImageFunction = useSampleImageFunction();
 </script>
 
 <template>
@@ -128,7 +126,6 @@ const sampleImageFunction = useSampleImageFunction();
       :options="options"
       :is-loading="pending"
       :export-func="exportData"
-      :image-func="sampleImageFunction"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"
       @reset:headers="handleHeadersReset(options)"

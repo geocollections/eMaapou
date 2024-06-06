@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { startCase } from "lodash";
 import type { Locality } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{ locality: Locality }>();
 
-const route = useRoute();
 const localePath = useLocalePath();
-const { $geoloogiaFetch } = useNuxtApp();
+const { $apiFetch } = useNuxtApp();
 
 const type = computed(() => props.locality.type);
 const country = computed(() => props.locality.country);
@@ -30,43 +28,36 @@ type LocalityImage = Image<{
   dateText: string | null;
 }>;
 
-const images = ref<LocalityImage[]>([]);
-const imagesHasNext = ref(true);
-const totalImages = ref(0);
-
-async function imageQuery({ rows, page }: { rows: number; page: number }) {
-  if (!imagesHasNext.value)
-    return;
-  const newImages = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_image/", {
+async function imageQuery({ item, rows, page }: { item: Locality; rows: number; page: number }) {
+  const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${item.id}/locality-images/`, {
     query: {
-      locality: route.params.id,
-      nest: 2,
+      expand: "attachment,attachment.author",
+      fields: "attachment.id,attachment.filename,attachment.author.name,attachment.date_created,attachment.date_created_free",
       limit: rows,
       offset: rows * page,
-      ordering: "sort",
+      ordering: "sort,id",
     },
-  }).then((res) => {
-    imagesHasNext.value = !!res.next;
-    if (totalImages.value === 0)
-      totalImages.value = res.count;
-
-    return res.results
-      .map((image: any) => ({
-        id: image.attachment.id,
-        filename: image.attachment.filename,
-        info: {
-          author: image.attachment.author?.agent,
-          date: image.attachment.date_created,
-          dateText: image.attachment.date_created_free,
-        },
-      }));
   });
-  images.value = [...images.value, ...newImages];
+  const newImages = res.results
+    .map((image: any) => ({
+      id: image.attachment.id,
+      filename: image.attachment.filename,
+      info: {
+        author: image.attachment.author?.name,
+        date: image.attachment.date_created,
+        dateText: image.attachment.date_created_free,
+      },
+    })) as LocalityImage[];
+  return { images: newImages, total: res.count, hasNext: !!res.next };
 }
 
-const _ = await useAsyncData("image", async () => {
-  await imageQuery({ rows: 10, page: 0 });
-});
+const { images, total, nextImages } = useImages(imageQuery);
+
+async function getMoreImages() {
+  await nextImages(props.locality);
+}
+
+await getMoreImages();
 
 const mapBaseLayer = computed(() => {
   if (country.value?.iso_3166_1_alpha_2 === "EE")
@@ -90,8 +81,8 @@ const mapOverlays = computed(() => {
       <VCol>
         <ImageBar
           :images="images"
-          :total="totalImages"
-          @update="imageQuery"
+          :total="total"
+          @update="getMoreImages"
         >
           <template #tooltipInfo="{ item }">
             <div v-if="item.info.author">
