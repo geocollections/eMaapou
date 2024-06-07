@@ -190,12 +190,17 @@ function isValidFilter(filter: FilterUnion): boolean {
   }
 }
 
+function escapeSpecialChars(s: string) {
+  const pattern = /([\!\*\+\-\=\<\>\&\|\(\)\[\]\{\}\^\~\?\:\\\/"])/g;
+  return s.replace(pattern, "\\$1");
+}
+
 function getSolrFilter(filter: FilterUnion) {
   switch (filter.type) {
     case "text": {
       const lookupFn = getLookupFn(filter.lookup);
       return filter.fields
-        .map(field => lookupFn(field, filter.value))
+        .map(field => lookupFn(field, escapeSpecialChars(filter.value)))
         .join(" OR ");
     }
     case "textList": {
@@ -203,7 +208,7 @@ function getSolrFilter(filter: FilterUnion) {
       return filter.fields
         .map(field =>
           filter.value.map((v) => {
-            return lookupFn(field, v.replaceAll(" ", "\\ "));
+            return lookupFn(field, escapeSpecialChars(v).replaceAll(" ", "\\ "));
           }).join(" OR "),
         )
         .join(" OR ");
