@@ -584,6 +584,7 @@ export default {
     dateAdded: "Date added",
     dateChanged: "Date changed",
     hierarchy: "Startigraphy",
+    image: "Image",
   },
   taxon: {
     id: "ID",

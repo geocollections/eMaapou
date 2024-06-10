@@ -2,6 +2,31 @@
 const emit = defineEmits(["click:row"]);
 const localePath = useLocalePath();
 const { $translate } = useNuxtApp();
+const img = useImage();
+
+const imageOverlay = ref();
+const showOverlay = ref(false);
+const currentOverlaySample = ref<any>();
+const initIndex = ref(0);
+
+const preparationImageFunc = usePreparationImageFunction();
+const { images, total, nextImages, reset: resetImages } = useImages(preparationImageFunc);
+
+async function openOverlay(sample: any) {
+  resetImages();
+  imageOverlay.value.reset();
+
+  currentOverlaySample.value = sample;
+  await nextImages(sample);
+
+  showOverlay.value = true;
+}
+
+function handleEnd() {
+  if (images.value.length < 1)
+    return;
+  nextImages(currentOverlaySample.value);
+}
 </script>
 
 <template>
@@ -89,5 +114,44 @@ const { $translate } = useNuxtApp();
         }}
       </span>
     </template>
+    <template #item.image="{ item }">
+      <div class="d-flex align-center">
+        <ThumbnailImage
+          v-if="item.image"
+          class="my-1"
+          :src="
+            img(item.image, { size: 'small' }, { provider: 'geocollections' })
+          "
+          @click="
+            openOverlay(item)
+          "
+        />
+        <span v-if="item.image_count > 1" class="pl-1 text-medium-emphasis font-weight-medium">
+          +{{ item.image_count - 1 }}
+        </span>
+      </div>
+    </template>
   </BaseDataTable>
+  <ImageOverlay
+    ref="imageOverlay"
+    v-model="showOverlay"
+    :initial-slide="initIndex"
+    :images="images"
+    :total="total"
+    @end="handleEnd"
+  >
+    <template #overlayInfo="{ item }">
+      <div v-if="item.info.author">
+        <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+        <span>{{ item.info.author }}</span>
+      </div>
+      <div v-if="item.info.date || item.info.dateText">
+        <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+        <span v-if="item.info.date">
+          {{ $formatDate(item.info.date) }}
+        </span>
+        <span v-else>{{ item.info.dateText }}</span>
+      </div>
+    </template>
+  </ImageOverlay>
 </template>

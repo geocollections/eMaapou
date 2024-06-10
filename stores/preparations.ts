@@ -64,6 +64,11 @@ export const usePreparations = defineStore(
         tag: "stratigraphy",
         alphaNumeric: false,
       } as StringIdListFilter,
+      hasImage: {
+        type: "boolean",
+        value: false,
+        fields: ["has_image"],
+      } as BooleanFilter,
     });
 
     const routeQueryFiltersSchema = z.object({
@@ -72,6 +77,7 @@ export const usePreparations = defineStore(
       locality: idParamParser(","),
       depth: rangeParamParser,
       stratigraphy: idParamParser(","),
+      hasImage: booleanParamParser,
       geometry: geometryParamParser,
     });
 
@@ -100,6 +106,7 @@ export const usePreparations = defineStore(
       depth: rangeValueParser,
       stratigraphy: idValueParser(","),
       geometry: geometryValueParser,
+      hasImage: booleanValueParser,
     });
 
     const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
@@ -114,6 +121,7 @@ export const usePreparations = defineStore(
         depth: filters.value.depth.value,
         stratigraphy: filters.value.stratigraphy.value,
         geometry: filters.value.geometry.value,
+        hasImage: filters.value.hasImage.value,
         page: options.value.page,
         itemsPerPage: options.value.itemsPerPage,
         sortBy: options.value.sortBy,
