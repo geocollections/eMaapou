@@ -11,6 +11,8 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
     sort: Ref<string | undefined>;
   };
 }) {
+  const route = useRoute();
+  const getRouteBaseName = useRouteBaseName();
   const searchPositionStore = useSearchPosition();
   const { setSearchPosition } = searchPositionStore;
   const {
@@ -22,29 +24,6 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
   const page = ref(
     !fromSearch ? 1 : Math.floor(searchPosition.value / perPage) + 1,
   );
-
-  function handleSelect({ index, id }: { index: number; id: number }) {
-    if (searchPosition.value < 0)
-      return;
-    setSearchPosition(
-      { name: routeName, params: { id } },
-      index + (page.value - 1) * perPage,
-    );
-  }
-
-  const { data } = await useSolrFetch<SolrResponse<T>>(url, {
-    query: computed(() => ({
-      q: solrParams.query.value,
-      rows: perPage,
-      start: (page.value - 1) * perPage,
-      sort: solrParams.sort.value,
-      json: {
-        filter: solrParams.filter.value,
-      },
-    })),
-  });
-  const route = useRoute();
-  const getRouteBaseName = useRouteBaseName();
 
   const showDrawer = computed(() => {
     if (!rootDetailRoute.value)
@@ -62,5 +41,25 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
     return true;
   });
 
+  const { data } = await useSolrFetch<SolrResponse<T>>(url, {
+    query: computed(() => ({
+      q: solrParams.query.value,
+      rows: perPage,
+      start: (page.value - 1) * perPage,
+      sort: solrParams.sort.value,
+      json: {
+        filter: solrParams.filter.value,
+      },
+    })),
+  });
+
+  function handleSelect({ index, id }: { index: number; id: number }) {
+    if (searchPosition.value < 0)
+      return;
+    setSearchPosition(
+      { name: routeName, params: { id } },
+      index + (page.value - 1) * perPage,
+    );
+  }
   return { data, page, handleSelect, showDrawer };
 }

@@ -3,7 +3,7 @@ import { mdiFileDownloadOutline } from "@mdi/js";
 import type { Site } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
-import type { ImageAttachment } from "~/composables/useImageFunc";
+import type { ImageAttachment } from "~/composables/useImages";
 
 const props = defineProps<{ site: Site }>();
 

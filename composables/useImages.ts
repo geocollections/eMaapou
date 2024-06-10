@@ -87,7 +87,7 @@ export function useSpecimenImageFunction() {
   return imageFunc;
 }
 
-interface Attachment {
+export interface ImageAttachment {
   id: number;
   filename: string;
   author: Nullable<{
@@ -99,7 +99,7 @@ interface Attachment {
 export function useSampleImageFunction() {
   const { $apiFetch } = useNuxtApp();
   const imageFunc: ImageFunc<SampleImage> = async ({ item, page, rows }) => {
-    const res = await $apiFetch<GeoloogiaListResponse<Attachment>>(`/samples/${item.id}/attachments/`, {
+    const res = await $apiFetch<GeoloogiaListResponse<ImageAttachment>>(`/samples/${item.id}/attachments/`, {
       query: {
         mime_type__content_type__istartswith: "image",
         fields: "id,filename,author.name,date_created,date_created_text",
@@ -125,7 +125,7 @@ export function useSampleImageFunction() {
 export function usePreparationImageFunction() {
   const { $apiFetch } = useNuxtApp();
   const imageFunc: ImageFunc<PreparationImage> = async ({ item, page, rows }) => {
-    const res = await $apiFetch<GeoloogiaListResponse<Attachment>>(`/preparations/${item.id}/attachments/`, {
+    const res = await $apiFetch<GeoloogiaListResponse<ImageAttachment>>(`/preparations/${item.id}/attachments/`, {
       query: {
         mime_type__content_type__istartswith: "image",
         fields: "id,filename,author.name,date_created,date_created_text",

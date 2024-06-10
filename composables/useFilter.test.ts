@@ -12,6 +12,17 @@ const initFilters = {
     fields: ["foo"],
     tag: "foo",
   } as IdListFilter,
+  range: {
+    type: "range",
+    value: [null, null],
+    placeholders: ["range.min", "range.max"],
+    fields: ["range"],
+  } as RangeFilter,
+  bool: {
+    type: "boolean",
+    value: false,
+    fields: ["bool"],
+  } as BooleanFilter,
 };
 
 describe("useFilter", () => {
@@ -74,5 +85,37 @@ describe("useFilter", () => {
     expect(solrFilters.value).toStrictEqual([
       "test:value\\ value\\ value",
     ]);
+  });
+
+  it("[range] sets min", () => {
+    const { filters, solrFilters } = useFilters(initFilters);
+
+    filters.value.range.value = [1, null];
+
+    expect(solrFilters.value).toStrictEqual(["range:[1 TO *]"]);
+  });
+
+  it("[range] sets max", () => {
+    const { filters, solrFilters } = useFilters(initFilters);
+
+    filters.value.range.value = [null, 1];
+
+    expect(solrFilters.value).toStrictEqual(["range:[* TO 1]"]);
+  });
+
+  it("[range] sets both", () => {
+    const { filters, solrFilters } = useFilters(initFilters);
+
+    filters.value.range.value = [1, 2];
+
+    expect(solrFilters.value).toStrictEqual(["range:[1 TO 2]"]);
+  });
+
+  it("[boolean] sets true", () => {
+    const { filters, solrFilters } = useFilters(initFilters);
+
+    filters.value.bool.value = true;
+
+    expect(solrFilters.value).toStrictEqual(["bool:true"]);
   });
 });
