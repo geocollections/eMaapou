@@ -52,6 +52,11 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
     <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
+      <FilterInputCheckbox
+        v-model="filters.hasImage.value"
+        :label="$t('filters.hasImage')"
+        @update:model-value="handleUpdate"
+      />
       <VDivider class="mx-2" />
       <VExpansionPanels
         class="px-2"

@@ -14,10 +14,55 @@ const identificationAgent = computed(
 );
 const storage = computed(() => props.preparation.storage);
 const owner = computed(() => props.preparation.owner);
+
+const preparationImageFunc = usePreparationImageFunction();
+const { images, total, nextImages } = useImages(preparationImageFunc);
+
+async function getMoreImages() {
+  await nextImages(props.preparation);
+}
+
+await getMoreImages();
 </script>
 
 <template>
   <VContainer style="margin: initial">
+    <VRow v-if="images.length > 0">
+      <VCol>
+        <ImageBar
+          :images="images"
+          :total="total"
+          @update="getMoreImages"
+        >
+          <template #tooltipInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date || item.info.dateText">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span v-if="item.info.date">
+                {{ $formatDate(item.info.date) }}
+              </span>
+              <span v-else>{{ item.info.dateText }}</span>
+            </div>
+          </template>
+          <template #overlayInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date || item.info.dateText">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span v-if="item.info.date">
+                {{ $formatDate(item.info.date) }}
+              </span>
+              <span v-else>{{ item.info.dateText }}</span>
+            </div>
+          </template>
+        </ImageBar>
+      </VCol>
+    </VRow>
     <VRow>
       <VCol
         :sm="12"

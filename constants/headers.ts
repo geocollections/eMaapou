@@ -1521,6 +1521,14 @@ export const HEADERS_PREPARATION: Headers = {
       ...numberFieldProps,
       ...normalColumn,
     },
+    image: {
+      title: "preparation.image",
+      value: "image",
+      show: true,
+      apiFieldValue: "image",
+      sortable: false,
+      ...normalColumn,
+    },
   },
   allIds: [
     "id",
@@ -1530,6 +1538,7 @@ export const HEADERS_PREPARATION: Headers = {
     "stratigraphy",
     "agent",
     "mass",
+    "image",
   ],
 };
 

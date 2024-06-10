@@ -585,6 +585,7 @@ export default {
     dateAdded: "Kirje lisatud",
     dateChanged: "Kirje muudetud",
     hierarchy: "Stratigraafia",
+    image: "Pilt",
   },
   taxon: {
     id: "ID",
