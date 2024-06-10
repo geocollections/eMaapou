@@ -17,6 +17,12 @@ export type SampleImage = Image<{
   dateText: string | null;
 }>;
 
+export type PreparationImage = Image<{
+  author: string | null;
+  date: string | null;
+  dateText: string | null;
+}>;
+
 export interface ImageFunc<IT, T = { id: any;[K: string]: any }> {
   (params: { item: T; page: number; rows: number }): Promise<{ images: IT[]; total: number; hasNext: boolean }>;
 }
@@ -94,6 +100,32 @@ export function useSampleImageFunction() {
   const { $apiFetch } = useNuxtApp();
   const imageFunc: ImageFunc<SampleImage> = async ({ item, page, rows }) => {
     const res = await $apiFetch<GeoloogiaListResponse<Attachment>>(`/samples/${item.id}/attachments/`, {
+      query: {
+        mime_type__content_type__istartswith: "image",
+        fields: "id,filename,author.name,date_created,date_created_text",
+        limit: rows,
+        offset: page * rows,
+      },
+    });
+
+    const newImages = res.results.map(image => ({
+      id: image.id,
+      filename: image.filename,
+      info: {
+        author: image.author?.name ?? null,
+        date: image.date_created,
+        dateText: image.date_created_text,
+      },
+    }));
+    return { images: newImages, total: res.count, hasNext: res.next !== null };
+  };
+  return imageFunc;
+}
+
+export function usePreparationImageFunction() {
+  const { $apiFetch } = useNuxtApp();
+  const imageFunc: ImageFunc<PreparationImage> = async ({ item, page, rows }) => {
+    const res = await $apiFetch<GeoloogiaListResponse<Attachment>>(`/preparations/${item.id}/attachments/`, {
       query: {
         mime_type__content_type__istartswith: "image",
         fields: "id,filename,author.name,date_created,date_created_text",
