@@ -55,4 +55,24 @@ describe("useFilter", () => {
 
     expect(solrFilters.value).toStrictEqual([]);
   });
+
+  it("[text] escape special characters", () => {
+    const { filters, solrFilters } = useFilters(initFilters);
+
+    filters.value.test.value = ["value:value"];
+
+    expect(solrFilters.value).toStrictEqual([
+      "test:value\\:value",
+    ]);
+  });
+
+  it("[text] escape spaces", () => {
+    const { filters, solrFilters } = useFilters(initFilters);
+
+    filters.value.test.value = ["value value value"];
+
+    expect(solrFilters.value).toStrictEqual([
+      "test:value\\ value\\ value",
+    ]);
+  });
 });
