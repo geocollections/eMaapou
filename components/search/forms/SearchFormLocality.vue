@@ -1,32 +1,11 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
-const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterReferences = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
 const localitiesStore = useLocalities();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(localitiesStore);
-
-function handleReset() {
-  emit("reset");
-}
-function handleUpdate() {
-  nextTick(() => {
-    filterCountry.value?.refreshSuggestions();
-    filterReferences.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-function handleSubmit() {
-  nextTick(() => {
-    filterCountry.value?.refreshSuggestions();
-    filterReferences.value?.refreshSuggestions();
-    emit("submit");
-  });
-}
 
 const { suggest: suggestCountry, hydrate: hydrateCountry } = useAutocomplete(
   "/locality",
@@ -45,6 +24,30 @@ const { suggest: suggestReference, hydrate: hydrateReference }
     solrParams: { query: solrQuery, filter: solrFilters },
     containsParser: removeNonAlphanumeric,
   });
+
+const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterReferences = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  country: filterCountry.value?.refreshSuggestions,
+  reference: filterReferences.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
+}
 </script>
 
 <template>

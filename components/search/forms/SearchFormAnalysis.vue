@@ -4,39 +4,6 @@ import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
-function handleReset() {
-  emit("reset");
-}
-
-const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterLab = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterMethod = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterSite = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterSample = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
-function handleUpdate() {
-  nextTick(() => {
-    filterInstitution.value?.refreshSuggestions();
-    filterLab.value?.refreshSuggestions();
-    filterMethod.value?.refreshSuggestions();
-    filterLocality.value?.refreshSuggestions();
-    filterSite.value?.refreshSuggestions();
-    filterSample.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-function handleSubmit() {
-  nextTick(() => {
-    filterInstitution.value?.refreshSuggestions();
-    filterLab.value?.refreshSuggestions();
-    filterMethod.value?.refreshSuggestions();
-    filterLocality.value?.refreshSuggestions();
-    filterSite.value?.refreshSuggestions();
-    filterSample.value?.refreshSuggestions();
-    emit("submit");
-  });
-}
 const analysesStore = useAnalyses();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(analysesStore);
 
@@ -92,6 +59,38 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
     filterExclude: "institution",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
+
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterLab = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMethod = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterSite = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterSample = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  institution: filterInstitution.value?.refreshSuggestions,
+  lab: filterLab.value?.refreshSuggestions,
+  method: filterMethod.value?.refreshSuggestions,
+  locality: filterLocality.value?.refreshSuggestions,
+  site: filterSite.value?.refreshSuggestions,
+  sample: filterSample.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
+}
 </script>
 
 <template>

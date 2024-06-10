@@ -4,32 +4,8 @@ import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutoco
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
-const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterRepository = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
 const drillcoresStore = useDrillcores();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(drillcoresStore);
-
-function handleReset() {
-  emit("reset");
-}
-function handleUpdate() {
-  nextTick(() => {
-    filterCountry.value?.refreshSuggestions();
-    filterRepository.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-function handleSubmit() {
-  nextTick(() => {
-    filterCountry.value?.refreshSuggestions();
-    filterRepository.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    emit("submit");
-  });
-}
 
 const { suggest: suggestCountry, hydrate: hydrateCountry } = useAutocomplete(
   "/drillcore",
@@ -54,6 +30,34 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
     filterExclude: "institution",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
+
+const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterRepository = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  country: filterCountry.value?.refreshSuggestions,
+  repository: filterRepository.value?.refreshSuggestions,
+  institution: filterInstitution.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
+}
 </script>
 
 <template>

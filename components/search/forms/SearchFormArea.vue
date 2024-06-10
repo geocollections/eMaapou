@@ -1,41 +1,11 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
 const areasStore = useAreas();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(areasStore);
-const filterCounty = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterType = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterMiner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterMiningPermit = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterMiningPermitOwner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
-function handleReset() {
-  emit("reset");
-}
-function handleUpdate() {
-  nextTick(() => {
-    filterCounty.value?.refreshSuggestions();
-    filterType.value?.refreshSuggestions();
-    filterMiner.value?.refreshSuggestions();
-    filterMiningPermit.value?.refreshSuggestions();
-    filterMiningPermitOwner.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-
-function handleSubmit() {
-  nextTick(() => {
-    filterCounty.value?.refreshSuggestions();
-    filterType.value?.refreshSuggestions();
-    filterMiner.value?.refreshSuggestions();
-    filterMiningPermit.value?.refreshSuggestions();
-    filterMiningPermitOwner.value?.refreshSuggestions();
-    emit("submit");
-  });
-}
 
 const { suggest: suggestCounty, hydrate: hydrateCounty } = useAutocomplete(
   "/area",
@@ -86,6 +56,38 @@ const { suggest: suggestMiningPermitOwner, hydrate: hydrateMiningPermitOwner } =
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
+
+const filterCounty = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterType = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiningPermit = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiningPermitOwner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  county: filterCounty.value?.refreshSuggestions,
+  type: filterType.value?.refreshSuggestions,
+  miner: filterMiner.value?.refreshSuggestions,
+  miningPermit: filterMiningPermit.value?.refreshSuggestions,
+  miningPermitOwner: filterMiningPermitOwner.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
+}
 </script>
 
 <template>

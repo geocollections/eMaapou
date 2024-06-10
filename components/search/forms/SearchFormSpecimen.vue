@@ -8,6 +8,7 @@ const emit = defineEmits(["update", "reset", "submit"]);
 
 const specimensStore = useSpecimens();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);
+
 const { suggest: suggestLocality, hydrate: hydrateLocality }
   = useAutocomplete("/specimen", {
     idField: "locality_id_s",
@@ -84,10 +85,6 @@ const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChild
   filter: filters.value.taxon,
 });
 
-function handleReset() {
-  emit("reset");
-}
-
 const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 const filterCollector = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
@@ -115,6 +112,10 @@ const suggestionRefreshMap = computed(() => {
     taxon: filterTaxon.value?.refreshSuggestions,
   };
 });
+
+function handleReset() {
+  emit("reset");
+}
 
 function handleUpdate(excludeKey?: string) {
   nextTick(() => {

@@ -3,27 +3,6 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
-function handleReset() {
-  emit("reset");
-}
-
-const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
-function handleUpdate() {
-  nextTick(() => {
-    filterLocality.value?.refreshSuggestions();
-    filterStratigraphy.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-function handleSubmit() {
-  nextTick(() => {
-    filterLocality.value?.refreshSuggestions();
-    filterStratigraphy.value?.refreshSuggestions();
-    emit("submit");
-  });
-}
 
 const preparationsStore = usePreparations();
 const { filters, query, solrQuery, solrFilters }
@@ -45,6 +24,31 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
     filterExclude: "stratigraphy",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
+
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  locality: filterLocality.value?.refreshSuggestions,
+  stratigraphy: filterStratigraphy.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
+}
 </script>
 
 <template>

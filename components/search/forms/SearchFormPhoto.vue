@@ -1,42 +1,15 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
 const photosStore = usePhotos();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(photosStore);
-
-const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterAuthor = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
 const allSolrFilters = computed(() => {
   return [...solrFilters.value, "specimen_image_attachment:\"2\""];
 });
 
-function handleReset() {
-  emit("reset");
-}
-function handleUpdate() {
-  nextTick(() => {
-    filterCountry.value?.refreshSuggestions();
-    filterLocality.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    filterAuthor.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-function handleSubmit() {
-  nextTick(() => {
-    filterCountry.value?.refreshSuggestions();
-    filterLocality.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    filterAuthor.value?.refreshSuggestions();
-    emit("submit");
-  });
-}
 const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
   "/attachment",
   {
@@ -70,6 +43,34 @@ const { suggest: suggestAuthor, hydrate: hydrateAuthor }
     filterExclude: "author",
     solrParams: { query: solrQuery, filter: allSolrFilters },
   });
+
+const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterAuthor = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  country: filterCountry.value?.refreshSuggestions,
+  locality: filterLocality.value?.refreshSuggestions,
+  institution: filterInstitution.value?.refreshSuggestions,
+  author: filterAuthor.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
+}
 </script>
 
 <template>

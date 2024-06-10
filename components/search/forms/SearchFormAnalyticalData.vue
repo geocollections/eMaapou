@@ -87,10 +87,6 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy, getChildren:
   filter: filters.value.stratigraphy,
 });
 
-function handleReset() {
-  emit("reset");
-}
-
 const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 const filterMethod = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
@@ -117,10 +113,21 @@ const suggestionRefreshMap = computed(() => {
   };
 });
 
+function handleReset() {
+  emit("reset");
+}
+
 function handleUpdate(excludeKey?: string) {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
     emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
   });
 }
 
@@ -145,13 +152,6 @@ function handleParameterFilterUpdate(value: ParameterValue[]) {
 
   filters.value.parameter.value = value;
   handleUpdate();
-}
-
-function handleSubmit() {
-  nextTick(() => {
-    refreshSuggestionFilters(suggestionRefreshMap.value);
-    emit("submit");
-  });
 }
 
 async function suggestParameters({
