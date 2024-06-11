@@ -20,12 +20,14 @@ jobs:
     executor: docker-publisher
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - node/install-packages:
           pkg-manager: npm
       - run:
           name: Run tests
           command: npm test
-  build_image:
+  build-image:
     executor: docker-publisher
     parameters:
       tags:
@@ -33,8 +35,6 @@ jobs:
         type: string
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Build Docker image
           command: |
@@ -46,7 +46,7 @@ jobs:
           root: .
           paths:
             - ./image.tar
-  publish_image:
+  publish-image:
     executor: docker-publisher
     steps:
       - attach_workspace:
@@ -60,13 +60,13 @@ jobs:
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker push $IMAGE_NAME
-  run_container:
+  run-prod:
     executor: docker-publisher
     steps:
       - run:
           name: Run next container
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_production.sh"
-  run_dev_container:
+  run-stage:
     executor: docker-publisher
     steps:
       - run:
@@ -78,25 +78,25 @@ workflows:
       equal: [develop, << pipeline.git.branch >>]
     jobs:
       - build-and-test
-      - build_image:
+      - build-image:
           requires:
             - build-and-test
           tags: -t $IMAGE_NAME:dev
-      - publish_image:
+      - publish-image:
           requires:
-            - build_image
-      - run_dev_container:
+            - build-image
+      - run-stage:
           requires:
-            - publish_image
+            - publish-image
   build_deploy_prod:
     when:
       equal: [main, << pipeline.git.branch >>]
     jobs:
-      - build_image:
+      - build-image:
           tags: -t $IMAGE_NAME:latest -t $IMAGE_NAME:<< pipeline.parameters.package-version >>
-      - publish_image:
+      - publish-image:
           requires:
-            - build_image
-      - run_container:
+            - build-image
+      - run-prod:
           requires:
-            - publish_image
+            - publish-image
