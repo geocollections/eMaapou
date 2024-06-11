@@ -20,8 +20,8 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-        name: Run tests
-        command: npm test
+          name: Run tests
+          command: npm test
   build_image:
     executor: docker-publisher
     parameters:
