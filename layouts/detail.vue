@@ -45,7 +45,7 @@ const { mdAndUp } = useDisplay();
 
 <template>
   <VApp>
-    <AppBar :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
+    <AppBar @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"

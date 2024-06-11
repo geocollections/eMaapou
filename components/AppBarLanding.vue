@@ -8,10 +8,6 @@ import {
 } from "~/constants";
 
 const props = defineProps({
-  drawer: {
-    type: Boolean,
-    required: true,
-  },
   showSearch: {
     type: Boolean,
     default: true,
@@ -58,7 +54,7 @@ const cssProps = computed(() => {
 
 <template>
   <VAppBar
-    density="compact"
+    :height="48"
     flat
     absolute
     :class="{

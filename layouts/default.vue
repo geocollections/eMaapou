@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
-import { mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiViewList } from "@mdi/js";
+import { mdiChevronDoubleLeft, mdiChevronDoubleRight } from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -21,24 +21,16 @@ const localePath = useLocalePath();
 
 const { t } = useI18n({ useScope: "local" });
 
-const mini = ref(false);
-
 const showDrawer = ref(false);
 watch(() => display.smAndDown.value, (value) => {
   if (!value)
     showDrawer.value = false;
 });
-function closeMobileSearch() {
-  showDrawer.value = false;
-}
-const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
-
-const { showSimilar } = useAttrs();
 </script>
 
 <template>
   <VApp>
-    <AppBar :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
+    <AppBar @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
       v-if="!mdAndUp"
       :drawer="drawer"

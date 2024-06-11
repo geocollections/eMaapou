@@ -54,8 +54,6 @@ const state = reactive({
     temporary
     color="white"
     class="elevation-2"
-    style="z-index: 2050; margin-top: 48px"
-    :class="{ 'use-padding-bottom': $vuetify.display.smAndDown }"
     @update:model-value="$emit('update:navigationDrawer', $event)"
   >
     <VContainer class="more-menu py-4 mb-6">
@@ -172,10 +170,6 @@ const state = reactive({
   border-top: 2px solid #959595;
   margin: 16px 0;
   opacity: 0.2;
-}
-
-.use-padding-bottom {
-  padding-bottom: 56px;
 }
 
 .lang-icon {
