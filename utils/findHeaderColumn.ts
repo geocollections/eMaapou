@@ -1,6 +1,6 @@
-export function findHeaderColumn(headersMap: { [K: string]: Header }, sortKey: string): Header | ChildHeader | undefined {
-  if (headersMap[sortKey])
-    return headersMap[sortKey];
+export function findHeaderColumn(headersMap: { [K: string]: Header }, key: string): Header | ChildHeader | undefined {
+  if (headersMap[key])
+    return headersMap[key];
 
   const headersWithChildren = Object.values(headersMap).filter((header) => {
     return header.children && header.children.length > 0;
@@ -8,7 +8,7 @@ export function findHeaderColumn(headersMap: { [K: string]: Header }, sortKey: s
 
   for (const header of headersWithChildren) {
     for (const child of header.children!) {
-      if (child.value === sortKey)
+      if (child.value === key)
         return child;
     }
   }
