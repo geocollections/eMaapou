@@ -1,16 +1,5 @@
-<script>
+<script setup lang="ts">
 import { mdiMagnify } from "@mdi/js";
-
-export default {
-  name: "SearchButton",
-  computed: {
-    icons() {
-      return {
-        mdiMagnify,
-      };
-    },
-  },
-};
 </script>
 
 <template>
@@ -21,7 +10,7 @@ export default {
     class="px-3 text-capitalize"
   >
     <VIcon start>
-      {{ icons.mdiMagnify }}
+      {{ mdiMagnify }}
     </VIcon>
     <div class="montserrat">
       {{ $t('common.searchCommand') }}

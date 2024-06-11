@@ -1,9 +1,3 @@
-<script>
-export default {
-  name: "BaseTable",
-};
-</script>
-
 <template>
   <VTable density="compact">
     <template #default>

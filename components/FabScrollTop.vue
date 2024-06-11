@@ -1,30 +1,20 @@
-<script>
+<script setup lang="ts">
 import { mdiChevronUp } from "@mdi/js";
 
-export default {
-  name: "FabScrollTop",
-  data: () => ({
-    showFab: false,
-  }),
-  computed: {
-    icons() {
-      return { mdiChevronUp };
-    },
-  },
-  methods: {
-    onScroll(event) {
-      if (typeof window === "undefined")
-        return;
-      const top = window.pageYOffset || event.target.scrollTop || 0;
+const showFab = ref(false);
+const goTo = useGoTo();
 
-      this.showFab = top > 400;
-    },
+function onScroll(event: any) {
+  if (typeof window === "undefined")
+    return;
+  const top = window.scrollY || event.target.scrollTop || 0;
 
-    toTop() {
-      this.$vuetify.goTo(0);
-    },
-  },
-};
+  showFab.value = top > 400;
+}
+
+function toTop() {
+  goTo(0);
+}
 </script>
 
 <template>
@@ -39,7 +29,7 @@ export default {
       color="accent"
       @click="toTop"
     >
-      <VIcon>{{ icons.mdiChevronUp }}</VIcon>
+      <VIcon>{{ mdiChevronUp }}</VIcon>
     </VBtn>
   </VFabTransition>
 </template>
