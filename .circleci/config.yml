@@ -13,6 +13,15 @@ executors:
       - image: circleci/node:lts-stretch
 
 jobs:
+  build-and-test:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+        name: Run tests
+        command: npm test
   build_image:
     executor: docker-publisher
     parameters:
@@ -65,7 +74,10 @@ workflows:
     when:
       equal: [develop, << pipeline.git.branch >>]
     jobs:
+      - build-and-test
       - build_image:
+          requires:
+            - build-and-test
           tags: -t $IMAGE_NAME:dev
       - publish_image:
           requires:
