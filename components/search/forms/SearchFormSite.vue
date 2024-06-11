@@ -28,21 +28,24 @@ const { suggest: suggestProject, hydrate: hydrateProject } = useAutocomplete(
 const filterArea = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 const filterProject = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
+const suggestionRefreshMap = computed(() => ({
+  area: filterArea.value?.refreshSuggestions,
+  project: filterProject.value?.refreshSuggestions,
+}));
+
 function handleReset() {
   emit("reset");
 }
-function handleUpdate() {
+
+function handleUpdate(excludeKey?: string) {
   nextTick(() => {
-    filterArea.value?.refreshSuggestions();
-    filterProject.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
     emit("update");
   });
 }
-
 function handleSubmit() {
   nextTick(() => {
-    filterArea.value?.refreshSuggestions();
-    filterProject.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value);
     emit("submit");
   });
 }

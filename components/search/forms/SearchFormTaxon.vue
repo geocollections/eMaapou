@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { FilterInputHierarchy,FilterInputAutocomplete } from "#components";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
@@ -21,10 +21,6 @@ const { suggest: suggestFossilGroup, hydrate: hydrateFossilGroup }
     solrParams: { query: solrQuery, filter: solrFilters },
   });
 
-function handleReset() {
-  emit("reset");
-}
-
 const filterTaxon = ref<ComponentExposed<typeof FilterInputHierarchy>>();
 const filterFossilGroup = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
@@ -32,6 +28,10 @@ const suggestionRefreshMap = computed(() => ({
   taxon: filterTaxon.value?.refreshSuggestions,
   fossilGroup: filterFossilGroup.value?.refreshSuggestions,
 }));
+
+function handleReset() {
+  emit("reset");
+}
 
 function handleUpdate(excludeKey?: string) {
   nextTick(() => {

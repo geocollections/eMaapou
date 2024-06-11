@@ -1,33 +1,12 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import FilterInputAutocomplete, { type Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
+import { FilterInputAutocomplete } from "#components";
+import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
-const filterAnalysedParameter = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-
 const datasetsStore = useDatasets();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(datasetsStore);
-
-function handleReset() {
-  emit("reset");
-}
-function handleUpdate() {
-  nextTick(() => {
-    filterAnalysedParameter.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    emit("update");
-  });
-}
-
-function handleSubmit() {
-  nextTick(() => {
-    filterAnalysedParameter.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    emit("update");
-  });
-}
 
 const { suggest: suggestInstitution, hydrate: hydrateInstitution }
   = useAutocomplete("/dataset", {
@@ -129,6 +108,31 @@ async function hydrateParameter(values: string[]) {
         ?.parameter ?? id,
     count: res.facets[id].count,
   }));
+}
+
+const filterAnalysedParameter = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => ({
+  analysisParameter: filterAnalysedParameter.value?.refreshSuggestions,
+  institution: filterInstitution.value?.refreshSuggestions,
+}));
+
+function handleReset() {
+  emit("reset");
+}
+
+function handleUpdate(excludeKey?: string) {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
+    emit("submit");
+  });
 }
 </script>
 

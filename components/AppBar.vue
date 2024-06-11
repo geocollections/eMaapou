@@ -8,14 +8,6 @@ import {
   SERVICES,
 } from "~/constants";
 
-const props = defineProps({
-  drawer: {
-    type: Boolean,
-    required: true,
-  },
-});
-const route = useRoute();
-const getRouteBaseName = useRouteBaseName();
 const localePath = useLocalePath();
 const display = useDisplay();
 
@@ -30,7 +22,7 @@ const state = reactive({
 
 <template>
   <VAppBar
-    density="compact"
+    :height="48"
     :elevation="2"
     :class="{
       'app-bar-full': display.mdAndUp.value,
@@ -201,95 +193,11 @@ const state = reactive({
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <VIcon color="accent" size="font-size: 24px">
+        <VIcon color="accent">
           {{ mdiMenu }}
         </VIcon>
       </VBtn>
     </VToolbarItems>
-    <!-- <template v-if="$vuetify.display.mdAndUp && getRouteBaseName(route) !== 'index'" #extension> -->
-    <!--   <div class="w-100 bg-grey-darken-2"> -->
-    <!--     <VTabs -->
-    <!--       align-tabs="center" -->
-    <!--       color="accent" -->
-    <!--       :mandatory="false" -->
-    <!--     > -->
-    <!--       <VTooltip -->
-    <!--         v-for="(item, index) in state.browseTaxon" -->
-    <!--         :key="`browse-taxon-item-${index}`" -->
-    <!--         :text="$t(item.label)" -->
-    <!--         location="bottom" -->
-    <!--         open-delay="100" -->
-    <!--       > -->
-    <!--         <template #activator="{ props: tooltipProps }"> -->
-    <!--           <VTab -->
-    <!--             v-bind="tooltipProps" -->
-    <!--             style="min-width: 0px" -->
-    <!--             exact -->
-    <!--             :icon="item.icon" -->
-    <!--             :label="$t(item.label)" -->
-    <!--             :to="localePath({ name: item.routeName })" -->
-    <!--           > -->
-    <!--             <VIcon color="white"> -->
-    <!--               {{ item.icon }} -->
-    <!--             </VIcon> -->
-    <!--           </VTab> -->
-    <!--         </template> -->
-    <!--       </VTooltip> -->
-    <!--       <VDivider -->
-    <!--         vertical -->
-    <!--         color="white" -->
-    <!--       /> -->
-    <!--       <VTooltip -->
-    <!--         v-for="(item, index) in state.browseLab" -->
-    <!--         :key="`browse-lab-item-${index}`" -->
-    <!--         :text="$t(item.label)" -->
-    <!--         location="bottom" -->
-    <!--         open-delay="100" -->
-    <!--       > -->
-    <!--         <template #activator="{ props: tooltipProps }"> -->
-    <!--           <VTab -->
-    <!--             v-bind="tooltipProps" -->
-    <!--             style="min-width: 0px" -->
-    <!--             :icon="item.icon" -->
-    <!--             :label="$t(item.label)" -->
-    <!--             :to="localePath({ name: item.routeName })" -->
-    <!--             exact -->
-    <!--           > -->
-    <!--             <VIcon color="white"> -->
-    <!--               {{ item.icon }} -->
-    <!--             </VIcon> -->
-    <!--           </VTab> -->
-    <!--         </template> -->
-    <!--       </VTooltip> -->
-    <!--       <VDivider -->
-    <!--         vertical -->
-    <!--         color="white" -->
-    <!--       /> -->
-    <!--       <VTooltip -->
-    <!--         v-for="(item, index) in state.browseGeography" -->
-    <!--         :key="`browse-geography-item-${index}`" -->
-    <!--         :text="$t(item.label)" -->
-    <!--         location="bottom" -->
-    <!--         open-delay="100" -->
-    <!--       > -->
-    <!--         <template #activator="{ props: tooltipProps }"> -->
-    <!--           <VTab -->
-    <!--             v-bind="tooltipProps" -->
-    <!--             style="min-width: 0px" -->
-    <!--             :icon="item.icon" -->
-    <!--             :label="$t(item.label)" -->
-    <!--             :to="localePath({ name: item.routeName })" -->
-    <!--             exact -->
-    <!--           > -->
-    <!--             <VIcon color="white"> -->
-    <!--               {{ item.icon }} -->
-    <!--             </VIcon> -->
-    <!--           </VTab> -->
-    <!--         </template> -->
-    <!--       </VTooltip> -->
-    <!--     </VTabs> -->
-    <!--   </div> -->
-    <!-- </template> -->
   </VAppBar>
 </template>
 

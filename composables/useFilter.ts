@@ -14,7 +14,6 @@ export type FilterType =
   | "idList"
   | "textList"
   | "geom"
-  | "multiHierarchyList"
   | "boolean"
   | "range"
   | "rangeAlt"
@@ -28,11 +27,6 @@ export interface BaseFilter {
   tag?: string;
 }
 
-export type TextFilter = Omit<BaseFilter, "value"> & {
-  type: "text";
-  lookup?: LookupType;
-  value: string;
-};
 export type BooleanFilter = Omit<BaseFilter, "value"> & {
   type: "boolean";
   value: boolean;
@@ -54,11 +48,6 @@ export type StringIdListFilter = Omit<BaseFilter, "value"> & {
   value: string[];
   alphaNumeric: boolean;
   lookup?: LookupType;
-};
-export type MultiHierarchyListFilter = Omit<BaseFilter, "value"> & {
-  type: "multiHierarchyList";
-  value: string[];
-  idField: string;
 };
 
 export type GeomFilter = Omit<BaseFilter, "value"> & {
@@ -89,11 +78,9 @@ export type ParameterFilter = Omit<BaseFilter, "value" | "fields"> & {
 };
 
 export type FilterUnion =
-  | TextFilter
   | TextListFilter
   | IdListFilter
   | StringIdListFilter
-  | MultiHierarchyListFilter
   | GeomFilter
   | RangeFilter
   | BooleanFilter
@@ -163,15 +150,11 @@ function isStringIdListFilter(
 }
 function isValidFilter(filter: FilterUnion): boolean {
   switch (filter.type) {
-    case "text":
-      return filter.value.length > 0;
     case "textList":
       return filter.value.length > 0;
     case "idList":
       return filter.value.length > 0;
     case "dateList":
-      return filter.value.length > 0;
-    case "multiHierarchyList":
       return filter.value.length > 0;
     case "range":
       return filter.value.some(value => value !== null);
@@ -197,12 +180,6 @@ function escapeSpecialChars(s: string) {
 
 function getSolrFilter(filter: FilterUnion) {
   switch (filter.type) {
-    case "text": {
-      const lookupFn = getLookupFn(filter.lookup);
-      return filter.fields
-        .map(field => lookupFn(field, escapeSpecialChars(filter.value)))
-        .join(" OR ");
-    }
     case "textList": {
       const lookupFn = getLookupFn(filter.lookup);
       return filter.fields
@@ -266,13 +243,6 @@ function getSolrFilter(filter: FilterUnion) {
       }
       return filter.fields
         .map(field => filter.value.map(v => `${field}:${v}`).join(" OR "))
-        .join(" OR ");
-    }
-    case "multiHierarchyList": {
-      return filter.value
-        .map((v) => {
-          return `${filter.idField}:${v} OR ${filter.fields.map(field => `${field}:*-${v}-*`).join(" OR ")}`;
-        })
         .join(" OR ");
     }
     case "parameter": {

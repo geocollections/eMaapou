@@ -7,40 +7,54 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-  sortBy,
-  searchParams,
-} = useDataTableGeoloogiaApi({
+  solrSort,
+  solrQuery,
+} = useDataTable({
   initOptions: AREA.options,
   initHeaders: HEADERS_AREA,
 });
 
 const route = useRoute();
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/area/", {
-  query: computed(() => ({
-    limit: options.value.itemsPerPage,
-    offset: getOffset(options.value.page, options.value.itemsPerPage),
-    parent_area: route.params.id,
-    ordering: sortBy.value,
-    ...searchParams.value,
-  })),
+
+const solrFilter = computed(() => {
+  return `parent_area_id:${route.params.id}`;
 });
 
-const { exportData } = useExportGeoloogiaApi("/area/", {
-  totalRows: computed(() => data.value?.count ?? 0),
+const {
+  data,
+  pending,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/area", {
   query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilter.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
+const { exportData } = useExportSolr("/area", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilter.value,
+    sort: solrSort.value,
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    parent_area: route.params.id,
-    ordering: sortBy,
-    ...searchParams.value,
+    fields: EXPORT_SOLR_AREA,
   })),
 });
 </script>
 
 <template>
   <DataTableArea
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="headers"
     :is-loading="pending"

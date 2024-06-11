@@ -2,7 +2,7 @@
 import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $apiFetch, $translate } = useNuxtApp();
+const { $solrFetch, $apiFetch, $translate } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -69,13 +69,14 @@ const tabs = {
     routeName: "area-id-related-areas",
     title: "area.relatedAreas",
     count: async () => {
-      const response = await $apiFetch<GeoloogiaListResponse>("/areas/", {
+      const response = await $solrFetch<SolrResponse>("/area", {
         query: {
-          parent: route.params.id,
-          limit: 0,
+          q: "*",
+          fq: `parent_area_id:${route.params.id}`,
+          rows: 0,
         },
       });
-      return response.count;
+      return response.response.numFound;
     },
     props: {},
   } satisfies Tab,
