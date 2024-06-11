@@ -51,6 +51,7 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
         filter: solrParams.filter.value,
       },
     })),
+    immediate: showDrawer.value,
   });
 
   function handleSelect({ index, id }: { index: number; id: number }) {
