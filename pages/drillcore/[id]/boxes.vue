@@ -14,6 +14,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     attachment__is_preferred: true,
     nest: 2,
     ...searchParams.value,
+    search_fields: "drillcore_box__number,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en",
   })),
 });
 </script>
