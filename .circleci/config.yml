@@ -10,7 +10,7 @@ executors:
     environment:
       IMAGE_NAME: geocollections/geoloogia
     docker:
-      - image: circleci/node:lts-stretch
+      - image: cimg/node:20.10.0
 
 jobs:
   build-and-test:
