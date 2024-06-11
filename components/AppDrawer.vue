@@ -18,6 +18,10 @@ defineProps({
   },
 });
 
+const emit = defineEmits<{
+  "update:navigationDrawer": [value: boolean];
+}>();
+
 const localePath = useLocalePath();
 
 const state = reactive({
@@ -54,7 +58,7 @@ const state = reactive({
     temporary
     color="white"
     class="elevation-2"
-    @update:model-value="$emit('update:navigationDrawer', $event)"
+    @update:model-value="emit('update:navigationDrawer', $event)"
   >
     <VContainer class="more-menu py-4 mb-6">
       <VList class="py-1 px-2">

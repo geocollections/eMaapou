@@ -2,7 +2,7 @@
 import { mdiClose } from "@mdi/js";
 import type { Image } from "./ImageBar.vue";
 
-const props = defineProps({
+defineProps({
   modelValue: {
     type: Boolean,
     required: true,

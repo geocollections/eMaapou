@@ -2,7 +2,7 @@
 import { mdiArchive } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $translate, $solrFetch, $apiFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();

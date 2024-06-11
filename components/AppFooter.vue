@@ -102,21 +102,7 @@ const links = [
   { name: "sarv.title", url: "https://edit.geocollections.info" },
   { name: "link.geologyAPI", url: "https://api.geoloogia.info" },
 ];
-const institutions = [
-  {
-    name: "institutions.ttu",
-    url: "https://taltech.ee/geoloogia-instituut",
-  },
-  { name: "institutions.tu", url: "https://geoloogia.ut.ee" },
-  { name: "institutions.egt", url: "https://egt.ee" },
-  {
-    name: "institutions.maaamet",
-    url: "https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html",
-  },
-  { name: "institutions.egeos", url: "https://egeos.ee" },
-  { name: "institutions.maeselts", url: "http://maeselts.ee" },
-  { name: "institutions.steiger", url: "https://steiger.ee" },
-];
+
 const searchRoutes = [
   {
     routeName: "locality",

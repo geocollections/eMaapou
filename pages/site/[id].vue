@@ -234,7 +234,7 @@ const title = computed(() => {
   const engTitle = data.value?.site?.name_en
     ? data.value?.site?.name_en
     : data.value?.site?.name;
-  return $translate({ et: data.value?.site?.name!, en: engTitle });
+  return $translate({ et: data.value?.site?.name, en: engTitle });
 });
 
 const activeTabProps = computed(() => {

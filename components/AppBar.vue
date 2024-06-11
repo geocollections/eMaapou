@@ -8,16 +8,12 @@ import {
   SERVICES,
 } from "~/constants";
 
+const emit = defineEmits(["toggle:navigationDrawer"]);
+
 const localePath = useLocalePath();
 const display = useDisplay();
 
-const state = reactive({
-  browseGeography: BROWSE_GEOLOGY_LIST,
-  browseLab: BROWSE_LAB_LIST,
-  browseTaxon: BROWSE_TAXON_LIST,
-  logo: "/logos/emaapou5white.svg",
-  services: SERVICES,
-});
+const logo = "/logos/emaapou5white.svg";
 </script>
 
 <template>
@@ -40,7 +36,7 @@ const state = reactive({
         :height="32"
         contain
         class="px-0 px-sm-3"
-        :src="state.logo"
+        :src="logo"
         style="vertical-align: middle;"
       />
     </NuxtLink>
@@ -71,7 +67,7 @@ const state = reactive({
           <VCardActions class="d-flex align-baseline">
             <VList class="mx-3" width="250">
               <BaseMenuListItem
-                v-for="(item, index) in state.browseTaxon"
+                v-for="(item, index) in BROWSE_TAXON_LIST"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
@@ -86,7 +82,7 @@ const state = reactive({
             />
             <VList class="mx-3" width="250">
               <BaseMenuListItem
-                v-for="(item, index) in state.browseLab"
+                v-for="(item, index) in BROWSE_LAB_LIST"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
@@ -102,7 +98,7 @@ const state = reactive({
             />
             <VList class="mx-3" width="250">
               <BaseMenuListItem
-                v-for="(item, index) in state.browseGeography"
+                v-for="(item, index) in BROWSE_GEOLOGY_LIST"
                 :key="`browse-geography-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
@@ -167,13 +163,13 @@ const state = reactive({
               class="d-flex"
             >
               <BaseMenuListItem
-                v-for="(tabId, index) in state.services.ids"
+                v-for="(tabId, index) in SERVICES.ids"
                 :key="`service-${index}`"
                 class="my-1"
                 target="_blank"
                 style="width: 250px"
-                :href="state.services[tabId].href"
-                :label="$t(state.services[tabId].title)"
+                :href="SERVICES[tabId].href"
+                :label="$t(SERVICES[tabId].title)"
                 label-only
               />
             </VList>
@@ -191,7 +187,7 @@ const state = reactive({
         class="montserrat ml-auto"
         aria-label="Open navigation drawer"
         style="text-transform: capitalize"
-        @click.stop="$emit('toggle:navigationDrawer')"
+        @click.stop="emit('toggle:navigationDrawer')"
       >
         <VIcon color="accent">
           {{ mdiMenu }}

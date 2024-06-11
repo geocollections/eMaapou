@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import type { Specimen } from "../[id].vue";
-import type { Image } from "~/components/ImageBar.vue";
 
 const props = defineProps<{
   specimen: Specimen;
   specimenAlt: any;
 }>();
 
-const route = useRoute();
 const localePath = useLocalePath();
-const { $solrFetch } = useNuxtApp();
 
 const dateCollected = computed(() => {
   if (!props.specimen)

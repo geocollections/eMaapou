@@ -12,6 +12,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vuetify"],
   },
+  typescript: {
+    strict: true,
+  },
   modules: [
     "@nuxtjs/i18n",
     "@nuxt/image",

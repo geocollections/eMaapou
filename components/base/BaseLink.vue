@@ -9,4 +9,3 @@ const props = defineProps< NuxtLinkProps>();
     <slot />
   </NuxtLink>
 </template>
-
