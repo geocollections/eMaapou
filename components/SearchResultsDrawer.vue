@@ -20,9 +20,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  "page:previous": [number];
-  "page:next": [number];
-  "select": [{ index: number; id: number }];
+  "page:previous": [page: number];
+  "page:next": [page: number];
+  "select": [value: { index: number; id: number }];
 }>();
 
 const hasNext = computed(() => props.page * props.perPage < props.totalResults);

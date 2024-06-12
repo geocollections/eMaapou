@@ -5,7 +5,10 @@ const props = withDefaults(defineProps<{
   useCustomMarkers?: boolean;
 }>(), { items: () => [] as any[], useCustomMarkers: false });
 
-const emit = defineEmits(["update:model-value", "input"]);
+const emit = defineEmits<{
+  "update:model-value": [value: any | null];
+}>();
+
 const show = ref(false);
 
 function handleOpen() {

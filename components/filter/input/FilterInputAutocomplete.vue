@@ -27,7 +27,9 @@ const props = withDefaults(defineProps<{
   showFilter: true,
 });
 
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: T[]];
+}>();
 
 defineExpose({
   refreshSuggestions,

@@ -6,7 +6,9 @@ const props = defineProps<{
   initialSelection: any[];
 }>();
 
-const emit = defineEmits(["input"]);
+const emit = defineEmits<{
+  input: [value: any[]];
+}>();
 
 const search = ref("");
 const searchDebounced = refDebounced(search, 200);

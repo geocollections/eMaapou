@@ -24,7 +24,12 @@ const props = withDefaults(defineProps<
   maxWidth: -1,
   rounded: 0,
 });
-const emit = defineEmits(["input", "enter", "focus", "blur"]);
+const emit = defineEmits<{
+  "update:model-value": [value: string];
+  "enter": [event: any];
+  "focus": [event: any];
+  "blur": [event: any];
+}>();
 const searchFocused = ref(false);
 const searchInput = ref();
 const inputStyle = computed(() => ({
@@ -51,7 +56,7 @@ const inputStyle = computed(() => ({
       :class="inputClass"
       :autofocus="autofocus"
       v-bind="{ ...$attrs }"
-      @update:model-value="emit('input', $event)"
+      @update:model-value="emit('update:model-value', $event)"
       @keyup.enter="emit('enter', $event)"
       @focus="emit('focus', $event)"
       @blur="emit('blur', $event)"

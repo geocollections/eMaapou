@@ -13,7 +13,10 @@ withDefaults(defineProps<
   initialSlide: 0,
 });
 
-const emit = defineEmits(["update:model-value", "end"]);
+const emit = defineEmits<{
+  "update:model-value": [value: boolean];
+  "end": [];
+}>();
 
 function handleReachEnd() {
   emit("end");

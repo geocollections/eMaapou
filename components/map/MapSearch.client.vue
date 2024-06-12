@@ -9,7 +9,9 @@ import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
 
 const props = defineProps<{ modelValue: Nullable<any> }>();
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: any];
+}>();
 const map = ref<L.Map>();
 const activeGeomanLayer = ref<L.Polygon | L.Circle>();
 const gpsLocation = ref<L.LatLng>();

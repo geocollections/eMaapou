@@ -8,7 +8,9 @@ withDefaults(
   { disabled: false },
 );
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  "update:modelValue": [value: boolean];
+}>();
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const emit = defineEmits(["update:modelValue"]);
     :model-value="modelValue"
     density="compact"
     :disabled="disabled"
-    @update:model-value="emit('update:modelValue', $event)"
+    @update:model-value="emit('update:modelValue', $event as boolean)"
   >
     <template #label>
       <div

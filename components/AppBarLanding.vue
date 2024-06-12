@@ -13,7 +13,9 @@ const props = withDefaults(defineProps<{
   maxWidth?: number;
 }>(), { showSearch: true, transparent: false, maxWidth: 1785 });
 
-const emit = defineEmits(["toggle:navigationDrawer"]);
+const emit = defineEmits<{
+  "toggle:navigationDrawer": [];
+}>();
 
 const route = useRoute();
 const localePath = useLocalePath();

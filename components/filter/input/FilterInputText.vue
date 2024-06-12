@@ -6,7 +6,9 @@ const props = defineProps<{
   modelValue: string[];
 }>();
 
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: string[]];
+}>();
 
 const internalValue = ref("");
 const selectedItems = ref(props.modelValue);

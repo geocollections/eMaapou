@@ -3,7 +3,11 @@ import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete } from "#components";
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-const emit = defineEmits(["update", "reset", "submit"]);
+const emit = defineEmits<{
+  update: [];
+  reset: [];
+  submit: [];
+}>();
 
 const datasetsStore = useDatasets();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(datasetsStore);

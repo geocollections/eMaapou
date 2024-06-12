@@ -17,7 +17,9 @@ const props = withDefaults(
     step: 1,
   },
 );
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: [null | number, null | number]];
+}>();
 
 const { t } = useI18n();
 function parseInput(input: string) {
@@ -29,7 +31,7 @@ function parseInput(input: string) {
   else return Number.parseInt(input);
 }
 
-const internalValue = ref<(null | number)[]>([null, null]);
+const internalValue = ref<[null | number, null | number]>([null, null]);
 
 watch(
   () => props.modelValue,

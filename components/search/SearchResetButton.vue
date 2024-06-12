@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { mdiEraser } from "@mdi/js";
 
-const emit = defineEmits(["click"]);
+const emit = defineEmits<{
+  click: [];
+}>();
 </script>
 
 <template>

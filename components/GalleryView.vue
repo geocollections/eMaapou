@@ -8,7 +8,10 @@ const props = defineProps<{
   options: DataTableOptions;
 }>();
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits<{
+  update: [payload: { options: DataTableOptions }];
+}>();
+
 const { t } = useI18n();
 const localePath = useLocalePath();
 const img = useImage();

@@ -10,7 +10,9 @@ const props = defineProps<{
   hasChildren?: boolean;
 }>();
 
-const emit = defineEmits(["select"]);
+const emit = defineEmits<{
+  select: [node: TreeNode];
+}>();
 
 const checkbox = ref<HTMLInputElement>();
 

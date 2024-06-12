@@ -3,7 +3,9 @@ import type { Renderer } from "~/types/enums";
 
 defineProps<{ renderer: Renderer }>();
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits<{
+  update: [renderer: Renderer];
+}>();
 </script>
 
 <template>

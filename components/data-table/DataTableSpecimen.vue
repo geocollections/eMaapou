@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const emit = defineEmits(["click:row"]);
+const emit = defineEmits<{
+  "click:row": [payload: { index: number; id: string }];
+}>();
 
 const img = useImage();
 const localePath = useLocalePath();

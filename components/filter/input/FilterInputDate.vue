@@ -6,7 +6,9 @@ const props = defineProps<{
   title: string;
 }>();
 
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: string[][]];
+}>();
 
 const { locale } = useI18n();
 const panel = ref();

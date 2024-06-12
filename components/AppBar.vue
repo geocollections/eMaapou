@@ -8,7 +8,9 @@ import {
   SERVICES,
 } from "~/constants";
 
-const emit = defineEmits(["toggle:navigationDrawer"]);
+const emit = defineEmits<{
+  "toggle:navigationDrawer": [];
+}>();
 
 const localePath = useLocalePath();
 const display = useDisplay();

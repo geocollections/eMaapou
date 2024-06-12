@@ -6,7 +6,11 @@ const props = defineProps<{
   items: any[];
 }>();
 
-const emit = defineEmits(["update:search", "select", "end"]);
+const emit = defineEmits<{
+  "update:search": [value: string];
+  "select": [item: any];
+  "end": [isIntersecting: boolean];
+}>();
 
 const { t } = useI18n({ useScope: "local" });
 const { $translate } = useNuxtApp();

@@ -2,7 +2,11 @@
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
-const emit = defineEmits(["update", "reset", "submit"]);
+const emit = defineEmits<{
+  update: [];
+  reset: [];
+  submit: [];
+}>();
 
 const taxaStore = useTaxa();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(taxaStore);

@@ -3,7 +3,9 @@ import { mdiClose } from "@mdi/js";
 
 defineProps<{ modelValue: string }>();
 
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: string];
+}>();
 </script>
 
 <template>

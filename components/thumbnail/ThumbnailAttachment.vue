@@ -11,7 +11,10 @@ const props = defineProps<{
   type: Nullable<string>;
 }>();
 
-const emit = defineEmits(["click", "click:image"]);
+const emit = defineEmits<{
+  "click": [];
+  "click:image": [];
+}>();
 
 const isImage = computed(() => props.type?.startsWith("image"));
 const isVideo = computed(() => props.type?.startsWith("video"));

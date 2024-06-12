@@ -12,7 +12,9 @@ const props = withDefaults(
   { count: 0, showSearch: true },
 );
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits<{
+  update: [payload: { options: DataTableOptions; search: string }];
+}>();
 
 const { t } = useI18n();
 const localePath = useLocalePath();

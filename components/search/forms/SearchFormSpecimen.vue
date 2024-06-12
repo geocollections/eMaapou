@@ -4,7 +4,11 @@ import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 defineProps<{ resultView: "table" | "image" }>();
 
-const emit = defineEmits(["update", "reset", "submit"]);
+const emit = defineEmits<{
+  update: [];
+  reset: [];
+  submit: [];
+}>();
 
 const specimensStore = useSpecimens();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);

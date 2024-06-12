@@ -27,7 +27,9 @@ const props = withDefaults(defineProps<{
   label: "Parameter",
 });
 
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: ParameterValue[]];
+}>();
 
 const { t } = useI18n();
 const panel = ref();

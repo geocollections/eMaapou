@@ -30,7 +30,9 @@ const props = defineProps<{
   suggestionFunction: (query: string, { page, perPage }: { page: number; perPage: number }) => Promise<Suggestion[]>;
 }>();
 
-const emit = defineEmits(["update:model-value"]);
+const emit = defineEmits<{
+  "update:model-value": [value: string[]];
+}>();
 
 defineExpose({
   refreshSuggestions,

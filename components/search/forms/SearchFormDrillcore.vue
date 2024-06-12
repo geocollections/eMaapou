@@ -2,7 +2,11 @@
 import type { ComponentExposed } from "vue-component-type-helpers";
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-const emit = defineEmits(["update", "reset", "submit"]);
+const emit = defineEmits<{
+  update: [];
+  reset: [];
+  submit: [];
+}>();
 
 const drillcoresStore = useDrillcores();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(drillcoresStore);

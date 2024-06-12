@@ -7,7 +7,10 @@ const props = defineProps<{
   options: DataTableOptions;
 }>();
 
-const emit = defineEmits(["update", "click:row"]);
+const emit = defineEmits<{
+  "update": [payload: { options: DataTableOptions }];
+  "click:row": [row: number];
+}>();
 
 const { t } = useI18n();
 const localePath = useLocalePath();

@@ -12,7 +12,10 @@ const props = withDefaults(defineProps<
   }
   >(), { initialSlide: 0 });
 
-const emit = defineEmits(["end", "close"]);
+const emit = defineEmits<{
+  end: [];
+  close: [];
+}>();
 const img = useImage();
 const localePath = useLocalePath();
 // register Swiper custom elements
