@@ -17,7 +17,7 @@ const route = useRoute();
 const filteredHeaders = computed(() =>
   headers.value.filter((header) => {
     return (
-      !(header.value === "analysis_method") ?? true
+      !(header.value === "analysis_method")
     );
   }),
 );

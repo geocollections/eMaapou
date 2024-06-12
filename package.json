@@ -47,7 +47,7 @@
     "leaflet": "^1.9.4",
     "leaflet-gesture-handling": "^1.2.2",
     "leaflet.fullscreen": "^3.0.0",
-    "nuxt": "^3.11.1",
+    "nuxt": "^3.12.1",
     "playwright-core": "^1.44.0",
     "sass": "^1.69.7",
     "typescript": "^5.4.5",

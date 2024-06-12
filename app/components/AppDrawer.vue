@@ -176,29 +176,6 @@ const state = reactive({
   width: 20px !important;
 }
 
-.flag {
-  position: relative;
-  display: inline-block;
-  width: 1em;
-  line-height: 1em;
-  background-size: cover;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  border-radius: 100%;
-}
-
-.flag:before {
-  content: "\A0";
-}
-
-.flag-et {
-  background-image: url("~assets/et.svg");
-}
-
-.flag-en {
-  background-image: url("~assets/en.svg");
-}
-
 .v-list-item::before {
   border-radius: 4px;
 }

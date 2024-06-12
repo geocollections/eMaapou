@@ -15,7 +15,7 @@ const {
 });
 const filteredHeaders = computed(() =>
   headers.value.filter((header) => {
-    return !(header.value === "locality") ?? true;
+    return !(header.value === "locality");
   }),
 );
 
