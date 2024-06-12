@@ -88,12 +88,12 @@ function handleSubmit() {
       <FilterInputCheckbox
         v-model="filters.hasImage.value"
         :label="$t('filters.hasImage')"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputCheckbox
         v-model="filters.hasCoordinates.value"
         :label="$t('filters.hasCoordinates')"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <VDivider class="mx-2" />
       <VExpansionPanels
@@ -105,7 +105,7 @@ function handleSubmit() {
           v-model="filters.number.value"
           :title="$t('filters.sampleNumber')"
           value="number"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterLocality"
@@ -114,18 +114,18 @@ function handleSubmit() {
           :query-function="suggestLocality"
           :hydration-function="hydrateLocality"
           value="locality"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('locality')"
         />
         <FilterMap
           v-model="filters.geometry.value"
           value="map"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputRange
           v-model="filters.depth.value"
           :title="$t('filters.depth')"
           value="depth"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputHierarchy
           ref="filterStratigraphy"
@@ -156,7 +156,7 @@ function handleSubmit() {
           :query-function="suggestCollector"
           :hydration-function="hydrateCollector"
           value="collector"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('collector')"
         />
         <FilterInputAutocomplete
           ref="filterInstitution"
@@ -166,7 +166,7 @@ function handleSubmit() {
           :hydration-function="hydrateInstitution"
           :per-page="-1"
           value="institution"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('institution')"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

@@ -66,13 +66,13 @@ function handleSubmit() {
         v-model="filters.species.value"
         :title="$t('filters.taxon')"
         value="species"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputText
         v-model="filters.author.value"
         :title="$t('filters.author')"
         value="author"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputHierarchy
         ref="filterTaxon"
@@ -92,7 +92,7 @@ function handleSubmit() {
         :query-function="suggestFossilGroup"
         :hydration-function="hydrateFossilGroup"
         value="fossilGroup"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('fossilGroup')"
       />
     </VExpansionPanels>
     <VDivider class="mx-2" />

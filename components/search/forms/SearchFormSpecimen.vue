@@ -154,7 +154,7 @@ function handleHasImageUpdate(value: boolean) {
     <FilterInputCheckbox
       v-model="filters.hasCoordinates.value"
       :label="$t('filters.hasCoordinates')"
-      @update:model-value="handleUpdate"
+      @update:model-value="handleUpdate()"
     />
     <VDivider class="mx-2" />
     <VExpansionPanels
@@ -166,7 +166,7 @@ function handleHasImageUpdate(value: boolean) {
         v-model="filters.number.value"
         :title="$t('filters.number')"
         value="number"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
         ref="filterCollection"
@@ -175,7 +175,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestCollection"
         :hydration-function="hydrateCollection"
         value="collection"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('collection')"
       />
       <FilterInputAutocomplete
         ref="filterFossilGroup"
@@ -184,7 +184,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestFossilGroup"
         :hydration-function="hydrateFossilGroup"
         value="fossilGroup"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('fossilGroup')"
       />
       <FilterInputHierarchy
         ref="filterTaxon"
@@ -215,7 +215,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestLocality"
         :hydration-function="hydrateLocality"
         value="locality"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('locality')"
       />
       <FilterInputAutocomplete
         ref="filterCountry"
@@ -224,7 +224,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestCountry"
         :hydration-function="hydrateCountry"
         value="country"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('country')"
       />
       <FilterMap
         v-model="filters.geometry.value"
@@ -246,7 +246,7 @@ function handleHasImageUpdate(value: boolean) {
         v-model="filters.depth.value"
         :title="$t('filters.depth')"
         value="depth"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
         ref="filterReference"
@@ -255,7 +255,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestReference"
         :hydration-function="hydrateReference"
         value="reference"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('reference')"
       />
       <FilterInputAutocomplete
         ref="filterCollector"
@@ -264,7 +264,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestCollector"
         :hydration-function="hydrateCollector"
         value="collector"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('collector')"
       />
       <FilterInputAutocomplete
         ref="filterOriginalStatus"
@@ -273,7 +273,7 @@ function handleHasImageUpdate(value: boolean) {
         :query-function="suggestOriginalStatus"
         :hydration-function="hydrateOriginalStatus"
         value="originalStatus"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('originalStatus')"
       />
       <FilterInputAutocomplete
         ref="filterInstitution"
@@ -283,7 +283,7 @@ function handleHasImageUpdate(value: boolean) {
         :hydration-function="hydrateInstitution"
         :per-page="-1"
         value="institution"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('institution')"
       />
     </VExpansionPanels>
     <VDivider class="mx-2" />

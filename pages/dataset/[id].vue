@@ -289,7 +289,7 @@ const { data } = await useAsyncData("dataset", async () => {
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });
-const title = computed(() => data.value?.dataset.title);
+const title = computed(() => data.value?.dataset?.title);
 
 redirectInvalidTab({
   redirectRoute: localePath({
@@ -304,14 +304,14 @@ useHead({
 });
 
 useSeoMeta({
-  description: data.value?.dataset.abstract,
+  description: data.value?.dataset?.abstract,
 });
 </script>
 
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew :title="data?.dataset.title">
+      <HeaderDetailNew :title="data?.dataset?.title">
         <template #prepend>
           <VChip
             class="text-none"

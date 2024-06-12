@@ -15,10 +15,6 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits<{
-  "click:row": [payload: { index: number; id: string }];
-}>();
-
 const localePath = useLocalePath();
 const attrs = useAttrs();
 const filteredHeaders = computed(() => {

@@ -69,7 +69,7 @@ function handleSubmit() {
           v-model="filters.name.value"
           :title="$t('filters.localityName')"
           value="name"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterCountry"
@@ -78,7 +78,7 @@ function handleSubmit() {
           :query-function="suggestCountry"
           :hydration-function="hydrateCountry"
           value="country"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('country')"
         />
         <FilterMap
           v-model="filters.geometry.value"
@@ -89,7 +89,7 @@ function handleSubmit() {
           v-model="filters.stratigraphyAge.value"
           :title="$t('filters.stratigraphyAge')"
           value="stratigraphyAge"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterReferences"
@@ -98,7 +98,7 @@ function handleSubmit() {
           :query-function="suggestReference"
           :hydration-function="hydrateReference"
           value="reference"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('reference')"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

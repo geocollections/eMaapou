@@ -1,7 +1,4 @@
 <script setup lang="ts">
-const emit = defineEmits<{
-  "click:row": [payload: { index: number; id: string }];
-}>();
 const localePath = useLocalePath();
 const { $translate } = useNuxtApp();
 const img = useImage();
@@ -36,7 +33,6 @@ function handleEnd() {
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'preparation-id', params: { id: item.id } })"
-    @click:row="emit('click:row', $event)"
   >
     <template #item.preparation_number="{ item }">
       {{ item.preparation_number }}

@@ -101,13 +101,13 @@ function handleReset() {
         v-model="filters.index.value"
         :title="$t('filters.index')"
         value="index"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputRange
         v-model="filters.age.value"
         :title="$t('filters.age')"
         value="age"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
         ref="filterType"
@@ -116,7 +116,7 @@ function handleReset() {
         :query-function="suggestType"
         :hydration-function="hydrateType"
         value="type"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('type')"
       />
       <FilterInputAutocomplete
         ref="filterRank"
@@ -125,7 +125,7 @@ function handleReset() {
         :query-function="suggestRank"
         :hydration-function="hydrateRank"
         value="rank"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('rank')"
       />
       <FilterInputAutocomplete
         ref="filterScope"
@@ -134,7 +134,7 @@ function handleReset() {
         :query-function="suggestScope"
         :hydration-function="hydrateScope"
         value="scope"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('scope')"
       />
     </VExpansionPanels>
     <VDivider class="mx-2" />

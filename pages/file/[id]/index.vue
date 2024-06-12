@@ -124,12 +124,12 @@ const mapLocalityText = computed(() => {
       props.file.locality?.name
       || props.file.specimen?.locality?.name
       || props.file.image_place
-      || props.file.description,
+      || props.file.description || "Lokaliteet",
     en:
       props.file.locality?.name_en
       || props.file.specimen?.locality?.name_en
       || props.file.image_place
-      || props.file.description_en,
+      || props.file.description_en || "Locality",
   });
 });
 

@@ -108,7 +108,7 @@ function handleSubmit() {
         v-model="filters.name.value"
         :title="$t('filters.name')"
         value="name"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
         ref="filterCounty"
@@ -117,7 +117,7 @@ function handleSubmit() {
         :query-function="suggestCounty"
         :hydration-function="hydrateCounty"
         value="county"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('county')"
       />
       <FilterInputAutocomplete
         ref="filterType"
@@ -126,13 +126,13 @@ function handleSubmit() {
         :query-function="suggestType"
         :hydration-function="hydrateType"
         value="type"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('type')"
       />
       <FilterInputRange
         v-model="filters.size.value"
         :title="$t('filters.size')"
         value="size"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
         ref="filterMiningPermit"
@@ -141,7 +141,7 @@ function handleSubmit() {
         :query-function="suggestMiningPermit"
         :hydration-function="hydrateMiningPermit"
         value="miningPermit"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('miningPermit')"
       />
       <FilterInputAutocomplete
         ref="filterMiningPermitOwner"
@@ -150,7 +150,7 @@ function handleSubmit() {
         :query-function="suggestMiningPermitOwner"
         :hydration-function="hydrateMiningPermitOwner"
         value="miningPermitOwner"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('miningPermitOwner')"
       />
       <FilterInputAutocomplete
         ref="filterMiner"
@@ -159,7 +159,7 @@ function handleSubmit() {
         :query-function="suggestMiner"
         :hydration-function="hydrateMiner"
         value="miner"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('miner')"
       />
     </VExpansionPanels>
     <VDivider class="mx-2" />

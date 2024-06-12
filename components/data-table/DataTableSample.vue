@@ -1,8 +1,4 @@
 <script setup lang="ts">
-const emit = defineEmits<{
-  "click:row": [payload: { index: number; id: string }];
-}>();
-
 const localePath = useLocalePath();
 const img = useImage();
 
@@ -36,7 +32,6 @@ function handleEnd() {
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'sample-id', params: { id: item.id } })"
-    @click:row="emit('click:row', $event)"
   >
     <template #item.id="{ item }">
       {{ item.id }}

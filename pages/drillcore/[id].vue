@@ -332,8 +332,8 @@ useHead({
       <HeaderDetailNew
         :title="
           $translate({
-            et: data?.drillcore.name,
-            en: data?.drillcore.name_en,
+            et: data?.drillcore?.name,
+            en: data?.drillcore?.name_en,
           })
         "
       >

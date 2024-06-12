@@ -63,7 +63,7 @@ function handleSubmit() {
       <FilterInputCheckbox
         v-model="filters.hasImage.value"
         :label="$t('filters.hasImage')"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <VDivider class="mx-2" />
       <VExpansionPanels
@@ -75,7 +75,7 @@ function handleSubmit() {
           v-model="filters.number.value"
           :title="$t('filters.sampleNumber')"
           value="number"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterLocality"
@@ -84,18 +84,18 @@ function handleSubmit() {
           :query-function="suggestLocality"
           :hydration-function="hydrateLocality"
           value="locality"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('locality')"
         />
         <FilterMap
           v-model="filters.geometry.value"
           value="map"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputRange
           v-model="filters.depth.value"
           :title="$t('filters.depth')"
           value="depth"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterStratigraphy"
@@ -104,7 +104,7 @@ function handleSubmit() {
           :query-function="suggestStratigraphy"
           :hydration-function="hydrateStratigraphy"
           value="stratigraphy"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('stratigraphy')"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

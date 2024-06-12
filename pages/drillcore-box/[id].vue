@@ -231,13 +231,15 @@ useHead({
 
 const img = useImage();
 useSeoMeta({
-  ogImage: img(
-    data.value?.activeImage?.uuid_filename,
-    { size: "medium" },
-    {
-      provider: "geocollections",
-    },
-  ),
+  ogImage: data.value?.activeImage
+    ? img(
+      data.value?.activeImage?.uuid_filename,
+      { size: "medium" },
+      {
+        provider: "geocollections",
+      },
+    )
+    : undefined,
 });
 </script>
 

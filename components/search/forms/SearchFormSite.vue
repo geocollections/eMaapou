@@ -70,7 +70,7 @@ function handleSubmit() {
           v-model="filters.name.value"
           :title="$t('filters.name')"
           value="name"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterArea"
@@ -79,7 +79,7 @@ function handleSubmit() {
           :query-function="suggestArea"
           :hydration-function="hydrateArea"
           value="area"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('area')"
         />
         <FilterInputAutocomplete
           ref="filterProject"
@@ -88,12 +88,12 @@ function handleSubmit() {
           :query-function="suggestProject"
           :hydration-function="hydrateProject"
           value="project"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('project')"
         />
         <FilterMap
           v-model="filters.geometry.value"
           value="map"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

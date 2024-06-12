@@ -398,7 +398,7 @@ const mapOverlays = computed(() => {
             :value="sample.is_palaeontology"
           >
             <template #value="{ value }">
-              <BaseBoolean :value="value" />
+              <BaseBoolean :model-value="value" />
             </template>
           </TableRow>
           <TableRow

@@ -95,7 +95,7 @@ function handleSubmit() {
           :query-function="suggestLocality"
           :hydration-function="hydrateLocality"
           value="locality"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('locality')"
         />
         <FilterInputAutocomplete
           ref="filterCountry"
@@ -104,12 +104,12 @@ function handleSubmit() {
           :query-function="suggestCountry"
           :hydration-function="hydrateCountry"
           value="country"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('country')"
         />
         <FilterMap
           v-model="filters.geometry.value"
           value="map"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterAuthor"
@@ -118,37 +118,37 @@ function handleSubmit() {
           :query-function="suggestAuthor"
           :hydration-function="hydrateAuthor"
           value="author"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('author')"
         />
         <FilterInputText
           v-model="filters.people.value"
           :title="$t('filters.people')"
           value="people"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputText
           v-model="filters.tags.value"
           :title="$t('filters.tags')"
           value="tags"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputText
           v-model="filters.number.value"
           :title="$t('filters.number')"
           value="number"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputRange
           v-model="filters.size.value"
           :title="$t('filters.imageSize')"
           value="imageSize"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputDate
           v-model="filters.date.value"
           :title="$t('filters.date')"
           value="date"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterInstitution"
@@ -157,7 +157,7 @@ function handleSubmit() {
           :query-function="suggestInstitution"
           :hydration-function="hydrateInstitution"
           value="institution"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('institution')"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

@@ -117,8 +117,8 @@ await useLazyAsyncData("data", async () => {
 
 const chartTitle = computed(() => {
   return $translate({
-    et: props.localityObject?.locality,
-    en: props.localityObject?.locality_en,
+    et: props.localityObject?.name,
+    en: props.localityObject?.name_en,
   });
 });
 </script>
@@ -135,8 +135,8 @@ const chartTitle = computed(() => {
       :parameters="parameters"
       :title="
         $translate({
-          et: localityObject.locality,
-          en: localityObject.locality_en,
+          et: localityObject.name,
+          en: localityObject.name_en,
         })
       "
       :reverse="reversed"

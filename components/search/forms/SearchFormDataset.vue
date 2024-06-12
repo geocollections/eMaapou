@@ -155,7 +155,7 @@ function handleSubmit() {
           v-model="filters.name.value"
           :title="$t('filters.datasetName')"
           value="name"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterAnalysedParameter"
@@ -165,19 +165,19 @@ function handleSubmit() {
           :query-function="suggestParameter"
           :hydration-function="hydrateParameter"
           value="analysisParameter"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('analysisParameter')"
         />
         <FilterInputText
           v-model="filters.owner.value"
           :title="$t('filters.owner')"
           value="owner"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputText
           v-model="filters.date.value"
           :title="$t('filters.date')"
           value="date"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterInstitution"
@@ -186,7 +186,7 @@ function handleSubmit() {
           :query-function="suggestInstitution"
           :hydration-function="hydrateInstitution"
           value="institution"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('institution')"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

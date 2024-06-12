@@ -87,7 +87,7 @@ function handleSubmit() {
           :query-function="suggestCountry"
           :hydration-function="hydrateCountry"
           value="country"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('country')"
         />
         <FilterMap
           v-model="filters.geometry.value"
@@ -101,19 +101,19 @@ function handleSubmit() {
           :query-function="suggestRepository"
           :hydration-function="hydrateRepository"
           value="repository"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('repository')"
         />
         <FilterInputRange
           v-model="filters.boxes.value"
           :title="$t('filters.drillcoreBoxes')"
           value="boxes"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputRange
           v-model="filters.stratigraphyAge.value"
           :title="$t('filters.stratigraphyAge')"
           value="stratigraphyAge"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
           ref="filterInstitution"
@@ -123,7 +123,7 @@ function handleSubmit() {
           :hydration-function="hydrateInstitution"
           :per-page="-1"
           value="institution"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('institution')"
         />
       </VExpansionPanels>
       <VDivider class="mx-2" />

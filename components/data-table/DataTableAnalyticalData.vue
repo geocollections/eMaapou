@@ -1,8 +1,4 @@
 <script setup lang="ts">
-const emit = defineEmits<{
-  "click:row": [payload: { index: number; id: string }];
-}>();
-
 const localePath = useLocalePath();
 </script>
 
@@ -11,7 +7,6 @@ const localePath = useLocalePath();
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'analysis-id', params: { id: item.id } })"
-    @click:row="emit('click:row', $event)"
   >
     <template #item.depthFrom="{ item }">
       <span v-if="item.depth">

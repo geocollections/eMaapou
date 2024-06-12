@@ -144,6 +144,7 @@ export interface Stratigraphy {
   index_old?: string;
   age_top?: number;
   age_base?: number;
+  hierarchy_string?: string;
   age_reference?: {
     id: number;
     reference: string;
@@ -195,6 +196,7 @@ const { data } = await useAsyncData("stratigraphy", async () => {
         "index_html",
         "index_additional_html",
         "index_old",
+        "hierarchy_string",
         "age_top",
         "age_base",
         "age_reference.id",
@@ -255,8 +257,8 @@ const activeTabProps = computed(() => {
 });
 const title = computed(() =>
   $translate({
-    et: data.value?.stratigraphy.name,
-    en: data.value?.stratigraphy.name_en,
+    et: data.value?.stratigraphy?.name,
+    en: data.value?.stratigraphy?.name_en,
   }),
 );
 

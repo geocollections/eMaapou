@@ -208,7 +208,7 @@ async function suggestParameters({
         v-model="filters.depth.value"
         :title="$t('filters.depth')"
         value="depth"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
         ref="filterMethod"
@@ -217,7 +217,7 @@ async function suggestParameters({
         :query-function="suggestMethod"
         :hydration-function="hydrateMethod"
         value="method"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('method')"
       />
       <FilterInputAutocomplete
         ref="filterLab"
@@ -226,7 +226,7 @@ async function suggestParameters({
         :query-function="suggestLab"
         :hydration-function="hydrateLab"
         value="lab"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('lab')"
       />
       <FilterInputAutocomplete
         ref="filterProject"
@@ -235,7 +235,7 @@ async function suggestParameters({
         :query-function="suggestProject"
         :hydration-function="hydrateProject"
         value="project"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('project')"
       />
       <FilterInputAutocomplete
         ref="filterDataset"
@@ -244,7 +244,7 @@ async function suggestParameters({
         :query-function="suggestDataset"
         :hydration-function="hydrateDataset"
         value="dataset"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('dataset')"
       />
       <FilterInputAutocomplete
         ref="filterSample"
@@ -253,7 +253,7 @@ async function suggestParameters({
         :query-function="suggestSample"
         :hydration-function="hydrateSample"
         value="sample"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('sample')"
       />
       <FilterInputParameter
         :model-value="filters.parameter.value"
@@ -278,7 +278,7 @@ async function suggestParameters({
         :query-function="suggestReference"
         :hydration-function="hydrateReference"
         value="reference"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('reference')"
       />
       <FilterInputAutocomplete
         ref="filterLocality"
@@ -287,7 +287,7 @@ async function suggestParameters({
         :query-function="suggestLocality"
         :hydration-function="hydrateLocality"
         value="locality"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('locality')"
       />
       <FilterInputAutocomplete
         ref="filterSite"
@@ -296,7 +296,7 @@ async function suggestParameters({
         :query-function="suggestSite"
         :hydration-function="hydrateSite"
         value="site"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('site')"
       />
       <FilterMap
         v-model="filters.geometry.value"
@@ -311,7 +311,7 @@ async function suggestParameters({
         :hydration-function="hydrateInstitution"
         :per-page="-1"
         value="institution"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('institution')"
       />
     </VExpansionPanels>
     <VDivider class="mx-2" />

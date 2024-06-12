@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import isNil from "lodash/isNil";
 
-const emit = defineEmits<{
-  "click:row": [payload: { index: number; id: string }];
-}>();
-
 const localePath = useLocalePath();
 </script>
 
@@ -13,7 +9,6 @@ const localePath = useLocalePath();
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'locality-id', params: { id: item.id } })"
-    @click:row="emit('click:row', $event)"
   >
     <template #item.id="{ item }">
       {{ item.id }}
