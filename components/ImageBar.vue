@@ -5,16 +5,8 @@ export interface Image<T> {
   info: T;
 }
 
-defineProps({
-  images: {
-    type: Array as PropType<Image<T>[]>,
-    required: true,
-  },
-  total: {
-    type: Number,
-    required: true,
-  },
-});
+defineProps<{ images: Image<T>[]; total: number }>();
+
 const emit = defineEmits(["update"]);
 const showOverlay = ref(false);
 function loadMore() {

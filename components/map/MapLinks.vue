@@ -1,21 +1,16 @@
 <script setup lang="ts">
-defineProps({
-  latitude: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  longitude: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  tooltip: {
-    type: String,
-    required: false,
-    default: "",
-  },
+withDefaults(defineProps<
+  {
+    latitude?: number;
+    longitude?: number;
+    tooltip?: string;
+  }
+  >(), {
+  latitude: 0,
+  longitude: 0,
+  tooltip: "",
 });
+
 function geoToLest(north: number, east: number) {
   const LAT = north * (Math.PI / 180);
   const LON = east * (Math.PI / 180);

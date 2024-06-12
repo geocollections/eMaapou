@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Stratigraphy } from "../[id].vue";
+
 const props = defineProps<{
-  stratigraphy: any;
+  stratigraphy: Stratigraphy;
 }>();
 
 const {

@@ -1,48 +1,30 @@
 <script setup lang="ts">
-const props = defineProps({
-  showButton: {
-    type: Boolean,
-    default: false,
+const props = withDefaults(defineProps<
+  {
+    modelValue: string;
+    showButton?: boolean;
+    iconButton?: boolean;
+    dense?: boolean;
+    placeholder?: string;
+    autofocus?: boolean;
+    inputClass?: string;
+    maxWidth?: number;
+    rounded?: number;
+  }
+  >(), {
+  showButton: false,
+  iconButton: false,
+  dense: false,
+  placeholder: () => {
+    const { t } = useI18n();
+    return t("common.searchAlt");
   },
-  iconButton: {
-    type: Boolean,
-    default: false,
-  },
-  dense: {
-    type: Boolean,
-    default: false,
-  },
-  modelValue: {
-    type: String,
-    default: "",
-  },
-  placeholder: {
-    type: String,
-    default(): string {
-      const { t } = useI18n();
-      return t("common.searchAlt");
-    },
-  },
-  autofocus: {
-    type: Boolean,
-    default: false,
-  },
-  inputClass: {
-    type: String,
-    default: "",
-  },
-  maxWidth: {
-    type: Number,
-    default: -1,
-  },
-  rounded: {
-    type: Number,
-    default: 0,
-  },
+  autofocus: false,
+  inputClass: "",
+  maxWidth: -1,
+  rounded: 0,
 });
-
 const emit = defineEmits(["input", "enter", "focus", "blur"]);
-
 const searchFocused = ref(false);
 const searchInput = ref();
 const inputStyle = computed(() => ({

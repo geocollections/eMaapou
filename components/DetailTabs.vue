@@ -2,12 +2,9 @@
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import type { HydratedTab } from "~/composables/useTabs";
 
-const props = defineProps({
-  tabs: {
-    type: Array as PropType<HydratedTab[]>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  tabs: HydratedTab[];
+}>();
 
 const localePath = useLocalePath();
 const getRouteBaseName = useRouteBaseName();

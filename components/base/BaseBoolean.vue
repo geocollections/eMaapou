@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
 
-defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-});
+defineProps<{ modelValue: boolean }>();
 </script>
 
 <template>

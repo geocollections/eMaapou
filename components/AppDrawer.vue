@@ -11,12 +11,7 @@ import {
   SERVICES,
 } from "~/constants";
 
-defineProps({
-  drawer: {
-    type: Boolean,
-    required: true,
-  },
-});
+defineProps<{ drawer: boolean }>();
 
 const emit = defineEmits<{
   "update:navigationDrawer": [value: boolean];

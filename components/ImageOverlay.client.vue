@@ -2,23 +2,15 @@
 import { mdiClose } from "@mdi/js";
 import type { Image } from "./ImageBar.vue";
 
-defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-  total: {
-    type: Number,
-    required: true,
-  },
-  images: {
-    required: true,
-    type: Array as PropType<Image<T>[]>,
-  },
-  initialSlide: {
-    type: Number,
-    default: 0,
-  },
+withDefaults(defineProps<
+  {
+    modelValue: boolean;
+    total: number;
+    images: Image<T>[];
+    initialSlide?: number;
+  }
+  >(), {
+  initialSlide: 0,
 });
 
 const emit = defineEmits(["update:model-value", "end"]);

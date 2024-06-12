@@ -2,23 +2,11 @@
 import { mdiFileDownloadOutline } from "@mdi/js";
 import { useDisplay } from "vuetify";
 
-const props = defineProps({
-  items: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  count: {
-    type: Number,
-    default: 0,
-  },
-  options: {
-    type: Object as PropType<DataTableOptions>,
-    default: () => ({
-      page: 1,
-      itemsPerPage: 25,
-    }),
-  },
-});
+const props = defineProps<{
+  items: any[];
+  count: number;
+  options: DataTableOptions;
+}>();
 
 const emit = defineEmits(["update"]);
 const { t } = useI18n();

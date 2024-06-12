@@ -1,10 +1,7 @@
 <script setup lang="ts">
-defineProps({
-  dataset: {
-    type: Object,
-    required: true,
-  },
-});
+import type { Dataset } from "../[id].vue";
+
+defineProps<{ dataset: Dataset }>();
 
 const analysisResults = ref([]);
 const sampleResults = ref([]);

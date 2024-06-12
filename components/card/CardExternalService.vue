@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { mdiOpenInNew } from "@mdi/js";
 
-defineProps({
-  route: {
-    type: Object,
-    required: true,
-  },
-});
+interface RouteExternalService {
+  title: string;
+  description: string;
+  href: string;
+}
+
+defineProps<{ route: RouteExternalService }>();
 </script>
 
 <template>

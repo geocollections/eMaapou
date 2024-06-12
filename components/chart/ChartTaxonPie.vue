@@ -20,17 +20,10 @@ import {
   TOOLBOX_RIGHT,
 } from "~/constants";
 
-const props = defineProps({
-  chartTitle: {
-    type: String,
-    required: true,
-    default: "Chart title",
-  },
-  taxonData: {
-    type: Array as PropType<{ name: string; value: number }[]>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  chartTitle: string;
+  taxonData: { name: string; value: number }[];
+}>();
 
 use([
   PieChart,

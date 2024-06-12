@@ -4,20 +4,13 @@ import { mdiFileDownloadOutline, mdiInformationOutline } from "@mdi/js";
 import { register } from "swiper/element/bundle";
 import type { Image } from "./ImageBar.vue";
 
-const props = defineProps({
-  total: {
-    type: Number,
-    required: true,
-  },
-  images: {
-    required: true,
-    type: Array as PropType<Image<T>[]>,
-  },
-  initialSlide: {
-    type: Number,
-    default: 0,
-  },
-});
+const props = withDefaults(defineProps<
+  {
+    total: number;
+    images: Image<T>[];
+    initialSlide?: number;
+  }
+  >(), { initialSlide: 0 });
 
 const emit = defineEmits(["end", "close"]);
 const img = useImage();

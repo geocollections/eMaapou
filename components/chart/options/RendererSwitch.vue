@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { Renderer } from "~/types/enums";
+import type { Renderer } from "~/types/enums";
 
-defineProps({
-  renderer: {
-    type: String,
-    default: Renderer.Canvas,
-    required: true,
-  },
-});
+defineProps<{ renderer: Renderer }>();
 
 const emit = defineEmits(["update"]);
 </script>

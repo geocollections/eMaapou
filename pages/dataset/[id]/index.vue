@@ -4,6 +4,7 @@ import type { Dataset } from "../[id].vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 
 defineProps<{ dataset: Dataset; parameters: any }>();
+
 const { $solrFetch, $geoloogiaFetch, $translate } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();

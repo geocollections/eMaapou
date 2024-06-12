@@ -1,18 +1,10 @@
 <script setup lang="ts">
-const props = defineProps({
-  items: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  useCustomMarkers: {
-    type: Boolean,
-    default: false,
-  },
-  modelValue: {
-    type: Object as PropType<any>,
-    default: () => null,
-  },
-});
+const props = withDefaults(defineProps<{
+  modelValue: any | null;
+  items?: any[];
+  useCustomMarkers?: boolean;
+}>(), { items: () => [] as any[], useCustomMarkers: false });
+
 const emit = defineEmits(["update:model-value", "input"]);
 const show = ref(false);
 

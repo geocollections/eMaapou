@@ -1,15 +1,12 @@
 <script setup lang="ts">
-const props = defineProps({
-  locality: { type: Number, required: true },
-  drillcoreObject: {
-    type: Object,
-    required: true,
-  },
-  attachment: {
-    type: String,
-    required: false,
-    default: "",
-  },
+import type { Drillcore } from "../[id].vue";
+
+const props = withDefaults(defineProps<{
+  locality: number;
+  drillcoreObject: Drillcore;
+  attachment?: string;
+}>(), {
+  attachment: "",
 });
 
 const lasContent = ref<{ [K: string]: any }>();
@@ -118,8 +115,8 @@ await useLazyAsyncData("data", async () => {
 });
 const chartTitle = computed(() => {
   return $translate({
-    et: props.drillcoreObject?.drillcore,
-    en: props.drillcoreObject?.drillcore_en,
+    et: props.drillcoreObject?.name,
+    en: props.drillcoreObject?.name_en,
   });
 });
 </script>
@@ -135,8 +132,8 @@ const chartTitle = computed(() => {
       :parameters="parameters"
       :title="
         $translate({
-          et: drillcoreObject.drillcore,
-          en: drillcoreObject.drillcore_en,
+          et: drillcoreObject.name,
+          en: drillcoreObject.name_en,
         })
       "
       :reverse="reversed"

@@ -5,46 +5,28 @@ import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 // @ts-expect-error - this should work
 export interface Suggestion { id: T; name: string; count: number }
 
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  modelValue: {
-    type: Array as PropType<T[]>,
-    required: true,
-  },
-  perPage: {
-    type: Number,
-    default: 8,
-  },
-  primary: {
-    type: String,
-    default: "name",
-  },
-  showFilter: {
-    type: Boolean,
-    default: true,
-  },
-  queryFunction: {
-    type: Function as PropType<
-      ({
-        query,
-        pagination,
-        values,
-      }: {
-        query: string;
-        pagination: { page: number; perPage: number };
-        values: T[];
-      }) => Promise<Suggestion[]>
-    >,
-    required: true,
-  },
-  hydrationFunction: {
-    type: Function as PropType<(values: T[]) => Promise<Suggestion[]>>,
-    required: true,
-  },
+const props = withDefaults(defineProps<{
+  title: string;
+  modelValue: T[];
+  perPage?: number;
+  primary?: string;
+  showFilter?: boolean;
+  queryFunction: ({
+    query,
+    pagination,
+    values,
+  }: {
+    query: string;
+    pagination: { page: number; perPage: number };
+    values: T[];
+  }) => Promise<Suggestion[]>;
+  hydrationFunction: (values: T[]) => Promise<Suggestion[]>;
+}>(), {
+  perPage: 8,
+  primary: "name",
+  showFilter: true,
 });
+
 const emit = defineEmits(["update:model-value"]);
 
 defineExpose({

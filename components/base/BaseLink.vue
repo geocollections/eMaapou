@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NuxtLinkProps } from "#app";
 
-const props = defineProps< NuxtLinkProps>();
+const props = defineProps<NuxtLinkProps>();
 </script>
 
 <template>

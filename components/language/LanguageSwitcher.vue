@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { mdiChevronDown, mdiWeb } from "@mdi/js";
 
-defineProps({
-  color: {
-    type: String,
-    default: "white",
-  },
-});
+withDefaults(defineProps<{ color: string }>(), { color: "white" });
 </script>
 
 <template>

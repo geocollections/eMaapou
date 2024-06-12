@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import cloneDeep from "lodash/cloneDeep";
 
-const props = defineProps({
-  modelValue: {
-    type: Array as PropType<string[][]>,
-    required: true,
-  },
-  title: {
-    type: String,
-    default: null,
-  },
-});
+const props = defineProps<{
+  modelValue: string[][];
+  title: string;
+}>();
 
 const emit = defineEmits(["update:model-value"]);
 

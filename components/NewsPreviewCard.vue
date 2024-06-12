@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { decodeHTML } from "entities";
 
-const props = defineProps({
-  dark: { type: Boolean, default: false },
-  title: { type: String, default: null },
-  content: { type: String, default: null },
-  date: { type: String, default: null },
-  previewLenght: { type: Number, default: 200 },
-  to: { type: String, required: true },
+const props = withDefaults(defineProps<{
+  to: string;
+  title: Nullable<string>;
+  content: Nullable<string>;
+  date: Nullable<string>;
+  dark?: boolean;
+  previewLenght?: number;
+}>(), {
+  dark: false,
+  previewLenght: 200,
 });
+
 const truncatedText = computed(() => {
+  if (!props.content)
+    return "";
+
   let value = extractContent(props.content);
   if (!value)
     return "";
@@ -38,6 +45,7 @@ function extractContent(html: string) {
       :to="to"
     >
       <div
+        v-if="date"
         class="text-right pr-4 montserrat text--secondary"
         :class="{ 'white--text': dark }"
       >

@@ -1,23 +1,14 @@
 <script setup lang="ts">
 import { mdiArrowRight } from "@mdi/js";
 
-defineProps({
-  icon: {
-    type: String,
-    default: "",
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  labelOnly: {
-    type: Boolean,
-    default: false,
-  },
-  trailingIcon: {
-    type: String,
-    default: mdiArrowRight,
-  },
+withDefaults(defineProps<{
+  label: string;
+  icon?: string;
+  labelOnly?: boolean;
+  trailingIcon?: string;
+}>(), {
+  labelOnly: false,
+  trailingIcon: mdiArrowRight,
 });
 </script>
 

@@ -1,10 +1,7 @@
 <script setup lang="ts">
-const props = defineProps({
-  sampleObject: {
-    type: Object,
-    default: () => {},
-  },
-});
+import type { Sample } from "../[id].vue";
+
+const props = defineProps<{ sampleObject: Sample }>();
 
 const { t } = useI18n();
 const route = useRoute();

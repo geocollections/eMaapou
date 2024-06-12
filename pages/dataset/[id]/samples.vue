@@ -1,11 +1,14 @@
 <script setup lang="ts">
-const props = defineProps({
+const props = withDefaults(defineProps<{
   parameterHeaders: {
-    type: Object,
-    default: () => {
-      return { byIds: {}, allIds: [] };
-    },
-  },
+    byIds: Record<string, any>;
+    allIds: string[];
+  };
+}>(), {
+  parameterHeaders: () => ({
+    byIds: {},
+    allIds: [],
+  }),
 });
 const allHeaders = computed(() => {
   return {

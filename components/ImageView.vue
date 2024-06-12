@@ -1,23 +1,11 @@
 <script setup lang="ts">
 import { mdiFileImageOutline } from "@mdi/js";
 
-const props = defineProps({
-  items: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  count: {
-    type: Number,
-    default: 0,
-  },
-  options: {
-    type: Object as PropType<DataTableOptions>,
-    default: () => ({
-      page: 1,
-      itemsPerPage: 25,
-    }),
-  },
-});
+const props = defineProps<{
+  items: any[];
+  count: number;
+  options: DataTableOptions;
+}>();
 
 const emit = defineEmits(["update", "click:row"]);
 

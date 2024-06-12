@@ -28,21 +28,15 @@ import {
   TOOLBOX_RIGHT,
 } from "~/constants";
 
-const props = defineProps({
-  fileData: {
-    type: Object,
-    required: true,
-  },
-  chartTitle: {
-    type: String,
-    required: false,
-    default: "Chart title",
-  },
-  hideRendererSwitch: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
+const props = withDefaults(defineProps<
+  {
+    fileData: { [K: string]: any };
+    chartTitle?: string;
+    hideRendererSwitch?: boolean;
+  }
+>(), {
+  chartTitle: "Chart title",
+  hideRendererSwitch: false,
 });
 
 use([

@@ -1,10 +1,6 @@
 <script setup lang="ts">
-const props = defineProps({
-  locality: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{ locality: number }>();
+
 const {
   options,
   handleUpdate,

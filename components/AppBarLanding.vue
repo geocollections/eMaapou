@@ -7,20 +7,11 @@ import {
   SERVICES,
 } from "~/constants";
 
-const props = defineProps({
-  showSearch: {
-    type: Boolean,
-    default: true,
-  },
-  transparent: {
-    type: Boolean,
-    default: false,
-  },
-  maxWidth: {
-    type: Number,
-    default: 1785,
-  },
-});
+const props = withDefaults(defineProps<{
+  showSearch?: boolean;
+  transparent?: boolean;
+  maxWidth?: number;
+}>(), { showSearch: true, transparent: false, maxWidth: 1785 });
 
 const emit = defineEmits(["toggle:navigationDrawer"]);
 

@@ -7,37 +7,24 @@ import isNull from "lodash/isNull";
 import type { Suggestion } from "./FilterInputAutocomplete.vue";
 import type { ParameterValue } from "~/composables/useFilter";
 
-const props = defineProps({
-  queryFunction: {
-    type: Function as PropType<
-      ({
-        query,
-        pagination,
-        values,
-      }: {
-        query: string;
-        pagination: { page: number; perPage: number };
-        values: ParameterValue[];
-      }) => Promise<Suggestion[]>
-    >,
-    required: true,
-  },
-  disableRemove: {
-    type: Boolean,
-    default: false,
-  },
-  disableAdd: {
-    type: Boolean,
-    default: false,
-  },
-  modelValue: {
-    type: Array as PropType<ParameterValue[]>,
-    required: true,
-  },
-  label: {
-    type: String,
-    default: "Parameter",
-  },
+const props = withDefaults(defineProps<{
+  modelValue: ParameterValue[];
+  queryFunction: ({
+    query,
+    pagination,
+    values,
+  }: {
+    query: string;
+    pagination: { page: number; perPage: number };
+    values: ParameterValue[];
+  }) => Promise<Suggestion[]>;
+  disableRemove?: boolean;
+  disableAdd?: boolean;
+  label?: string;
+}>(), {
+  disableRemove: false,
+  disableAdd: false,
+  label: "Parameter",
 });
 
 const emit = defineEmits(["update:model-value"]);

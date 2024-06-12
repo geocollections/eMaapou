@@ -1,14 +1,8 @@
 <script setup lang="ts">
-defineProps({
-  activator: {
-    type: Object as PropType<Element | undefined>,
-    default: undefined,
-  },
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-});
+defineProps<{
+  activator?: Element;
+  modelValue: boolean;
+}>();
 
 const emit = defineEmits(["input"]);
 </script>

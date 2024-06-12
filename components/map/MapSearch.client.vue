@@ -8,12 +8,7 @@ import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
 
-const props = defineProps({
-  modelValue: {
-    type: Object as PropType<any | null>,
-    default: null,
-  },
-});
+const props = defineProps<{ modelValue: Nullable<any> }>();
 const emit = defineEmits(["update:model-value"]);
 const map = ref<L.Map>();
 const activeGeomanLayer = ref<L.Polygon | L.Circle>();

@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { mdiClose } from "@mdi/js";
 
-defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
-});
+defineProps<{ modelValue: string }>();
 
 const emit = defineEmits(["update:model-value"]);
 </script>

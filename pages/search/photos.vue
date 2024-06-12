@@ -1,10 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
-  query: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{ query: string }>();
 
 const {
   options,

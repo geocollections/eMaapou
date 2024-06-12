@@ -53,39 +53,20 @@ interface GroupedParameter {
   count: number;
   methods: any[];
 }
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  analyses: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  samples: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  taxa: {
-    type: Array as PropType<any[]>,
-    default: () => [],
-  },
-  minDepth: {
-    type: Number,
-    required: true,
-  },
-  maxDepth: {
-    type: Number,
-    required: true,
-  },
-  parameters: {
-    type: Array as PropType<IFlogMethod[]>,
-    required: true,
-  },
-  reverse: {
-    type: Boolean,
-    default: false,
-  },
+const props = withDefaults(defineProps<{
+  title: string;
+  minDepth: number;
+  maxDepth: number;
+  parameters: IFlogMethod[];
+  analyses?: any[];
+  samples?: any[];
+  taxa?: any[];
+  reverse?: boolean;
+}>(), {
+  analyses: () => [],
+  samples: () => [],
+  taxa: () => [],
+  reverse: false,
 });
 
 use([

@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { mdiArrowRight } from "@mdi/js";
 
-defineProps({
-  route: {
-    type: Object,
-    required: true,
-  },
-});
+interface RouteItem {
+  routeName: string;
+  text: string;
+  icon: string;
+  count: number;
+}
+
+defineProps<{ route: RouteItem }>();
+
 const localePath = useLocalePath();
 </script>
 

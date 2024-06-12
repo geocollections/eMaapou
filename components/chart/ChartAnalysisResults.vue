@@ -21,14 +21,11 @@ type ECOption = ComposeOption<
   | YAXisComponentOption
   | GridComponentOption
 >;
-const props = defineProps({
+const props = defineProps<{
   data: {
-    type: Object as PropType<{
-      [K: number]: BarSeriesOption["data"];
-    }>,
-    required: true,
-  },
-});
+    [K: number]: BarSeriesOption["data"];
+  };
+}>();
 
 use([CanvasRenderer, BarChart, GridComponent, TooltipComponent]);
 

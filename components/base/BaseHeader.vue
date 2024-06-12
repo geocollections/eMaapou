@@ -1,18 +1,8 @@
 <script setup lang="ts">
-defineProps({
-  title: {
-    type: String,
-    default: "",
-  },
-  subtitle: {
-    type: String,
-    default: "",
-  },
-  icon: {
-    type: String,
-    default: "",
-  },
-});
+defineProps<{
+  title?: string;
+  icon?: string;
+}>();
 </script>
 
 <template>
@@ -24,7 +14,7 @@ defineProps({
         class="d-flex align-center px-3"
       >
         <VIcon
-          v-if="icon.length > 0"
+          v-if="icon"
           start
           color="accent"
           size="x-large"

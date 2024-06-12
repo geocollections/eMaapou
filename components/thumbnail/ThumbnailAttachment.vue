@@ -5,21 +5,11 @@ import {
   mdiFileVideoOutline,
 } from "@mdi/js";
 
-const props = defineProps({
-  src: {
-    type: String,
-    default: null,
-  },
-  previewSrc: {
-    type: String,
-    default: null,
-  },
-  type: {
-    type: String,
-    default: null,
-    required: true,
-  },
-});
+const props = defineProps<{
+  src: string;
+  previewSrc: string;
+  type: Nullable<string>;
+}>();
 
 const emit = defineEmits(["click", "click:image"]);
 

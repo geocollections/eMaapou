@@ -1,14 +1,11 @@
 <script setup lang="ts">
-const props = defineProps({
-  localityObject: {
-    type: Object,
-    required: true,
-  },
-  attachment: {
-    type: String,
-    required: false,
-    default: "",
-  },
+import type { Locality } from "../[id].vue";
+
+const props = withDefaults(defineProps<{
+  localityObject: Locality;
+  attachment?: string;
+}>(), {
+  attachment: "",
 });
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
