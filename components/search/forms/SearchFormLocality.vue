@@ -40,7 +40,7 @@ const suggestionRefreshMap = computed(() => ({
 function handleReset() {
   emit("reset");
 }
-function handleUpdate(excludeKey?: string) {
+function handleUpdate(excludeKey?: keyof typeof suggestionRefreshMap.value) {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
     emit("update");

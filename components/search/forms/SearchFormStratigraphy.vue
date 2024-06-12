@@ -57,7 +57,7 @@ const suggestionRefreshMap = computed(() => ({
   stratigraphy: filterStratigraphy.value?.refreshSuggestions,
 }));
 
-function handleUpdate(excludeKey?: string) {
+function handleUpdate(excludeKey?: keyof typeof suggestionRefreshMap.value) {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
     emit("update");

@@ -34,6 +34,7 @@ describe("refreshSuggestionFilters", () => {
       c: vi.fn(),
     };
     const excludeKey = "d";
+    // @ts-expect-error this test is to check that the function works even if excludeKey is not a key of suggestionRefreshMap
     refreshSuggestionFilters(suggestionRefreshMap, excludeKey);
     expect(suggestionRefreshMap.a).toHaveBeenCalledTimes(1);
     expect(suggestionRefreshMap.b).toHaveBeenCalledTimes(1);
