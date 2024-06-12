@@ -37,11 +37,6 @@ const {
   watch: false,
 });
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshAnalyticalData();
-}, { deep: true });
-
 const { $solrFetch } = useNuxtApp();
 
 const { data: parameterHeaders } = await useAsyncData(async () => {

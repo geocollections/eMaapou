@@ -36,11 +36,6 @@ const {
   watch: false,
 });
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshAnalyses();
-}, { deep: true });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });

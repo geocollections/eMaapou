@@ -56,12 +56,6 @@ watch(currentView, () => {
   setQueryParamsFromState();
 });
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshSpecimens();
-  refreshSpecimenImages();
-}, { deep: true });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: { ...getQueryParams() } });

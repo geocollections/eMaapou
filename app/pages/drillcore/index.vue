@@ -37,11 +37,6 @@ const {
   watch: false,
 });
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshDrillcores();
-}, { deep: true });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });

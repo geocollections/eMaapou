@@ -14,6 +14,8 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(taxaStore);
 
+setStateFromQueryParams(route);
+
 const {
   data,
   pending,
@@ -32,12 +34,6 @@ const {
   })),
   watch: false,
 });
-
-setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshTaxa();
-}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {

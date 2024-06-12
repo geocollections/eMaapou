@@ -41,11 +41,6 @@ const {
   watch: false,
 });
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshLocalities();
-}, { deep: true });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() as LocationQueryRaw });

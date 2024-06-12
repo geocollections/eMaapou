@@ -44,11 +44,6 @@ const {
   watch: false,
 });
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshPhotos();
-}, { deep: true });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });

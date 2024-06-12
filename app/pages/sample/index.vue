@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiImageFilterHdr } from "@mdi/js";
+import isEqual from "lodash/isEqual";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -39,11 +40,6 @@ const {
   })),
   watch: false,
 });
-
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshSamples();
-}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {
