@@ -2,10 +2,6 @@
 import { describe, expect, it } from "vitest";
 
 describe("useTabs", () => {
-  it("test", () => {
-    expect(true).toBe(false);
-  });
-
   it("should hydrate tab count", async () => {
     const tabs = {
       test: {
