@@ -15,7 +15,7 @@ export function useHeaders(initHeaders: Headers) {
 
   const headers = computed(() => {
     return headersMap.value.allIds.map((id: string) => {
-      const header = headersMap.value.byIds[id];
+      const header = headersMap.value.byIds[id]!;
       return {
         ...header,
         sortable: header.sortable !== undefined ? header.sortable : true,
@@ -31,12 +31,12 @@ export function useHeaders(initHeaders: Headers) {
   });
 
   const handleHeadersChange = (e: string) => {
-    headersMap.value.byIds[e].show = !headersMap.value.byIds[e].show;
+    headersMap.value.byIds[e]!.show = !headersMap.value.byIds[e]!.show;
   };
   const handleHeadersReset = (options: DataTableOptions) => {
     headersMap.value = cloneDeep(initHeaders);
     options.sortBy?.forEach((sortItem) => {
-      headersMap.value.byIds[sortItem.key].show = true;
+      headersMap.value.byIds[sortItem.key]!.show = true;
     });
   };
 

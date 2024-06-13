@@ -12,9 +12,6 @@ export default defineNuxtConfig({
       },
     ],
   },
-  build: {
-    transpile: ["vuetify"],
-  },
   typescript: {
     strict: true,
   },
@@ -28,6 +25,7 @@ export default defineNuxtConfig({
     "@nuxtjs/seo",
     "vuetify-nuxt-module",
     "@nuxt/test-utils/module",
+    "@nuxt/eslint",
   ],
   imports: {
     dirs: ["types", "constants"],
@@ -113,7 +111,6 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      // @ts-expect-error - This is a valid font config. Disables automatic Roboto font loading.
       "Roboto": false,
       "Montserrat": [300, 400, 500, 700],
       "Noto+Sans": [400, 500, 700],
@@ -133,5 +130,10 @@ export default defineNuxtConfig({
   },
   linkChecker: {
     enabled: false,
+  },
+  eslint: {
+    config: {
+      standalone: false,
+    },
   },
 });

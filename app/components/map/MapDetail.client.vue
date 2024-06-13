@@ -207,8 +207,7 @@ onMounted(() => {
       markerInstance.on("click", (event) => {
         L.DomEvent.stopPropagation(event);
 
-        // @ts-expect-error - need to check if marker id is always a number. have a feeling we should change it to always be a string
-        if (marker.id === route.params.id && markerRouteName === getRouteBaseName(route))
+        if (marker.id?.toString() === route.params.id && markerRouteName === getRouteBaseName(route))
           return;
 
         if (marker.id && marker.routeName) {

@@ -252,7 +252,7 @@ function groupParameters(parameters: any[]): GroupedParameter[] {
         value: Number.parseInt(paramId),
         name: params[0].name,
         count: params[0].count,
-        methods: grouped[paramId].map(p => p.methodValue),
+        methods: grouped[paramId]!.map(p => p.methodValue),
       };
     }),
     ["id"],
@@ -304,7 +304,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
     const newOptions = addedParameters.reduce(
       (prev, addedParameter) => {
         // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
-        if (groupedNewParameters[addedParameter.value].length > 1) {
+        if (groupedNewParameters[addedParameter.value]!.length > 1) {
           const series = chart
             ?.getOption()
             .series.find((series: LineSeriesOption) =>
@@ -600,8 +600,8 @@ function createParameterChartComponents<
       return {
         id: `parameter-series-${method}-${param.value}`,
         name: `(${$translate({
-          et: methods.value[method].name,
-          en: methods.value[method].name_en,
+          et: methods.value[method]!.name,
+          en: methods.value[method]!.name_en,
         })}) ${param.name}`,
         type: "line",
         smooth: false,
@@ -852,11 +852,11 @@ function createOption(): ECOption {
           const categoryWidth = api.size
             ? (api.size([0, 1]) as number[])[0]
             : 0;
-          const dynamicHeight = end[1] - start[1];
+          const dynamicHeight = end[1]! - start[1]!;
           const height
             = api.value(2) || dynamicHeight < 10 ? dynamicHeight : 10;
-          const x = start[0] - categoryWidth * 0.5;
-          const y = api.value(2) ? start[1] : start[1] - height / 2;
+          const x = start[0]! - categoryWidth! * 0.5;
+          const y = api.value(2) ? start[1]! : start[1]! - height / 2;
           const rectShape = clipRectByRect(
             {
               x,
@@ -903,11 +903,11 @@ function createOption(): ECOption {
 }
 // Set initial selected parameters
 if (props.parameters.length > 0) {
-  state.selectedParameters = props.parameters[0].children.slice(
+  state.selectedParameters = props.parameters[0]!.children.slice(
     0,
-    props.parameters[0].children.length > 3
+    props.parameters[0]!.children.length > 3
       ? 3
-      : props.parameters[0].children.length,
+      : props.parameters[0]!.children.length,
   );
 }
 state.totalWidth = calculateTotalWidth();

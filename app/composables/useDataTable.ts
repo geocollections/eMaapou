@@ -38,7 +38,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
             const [key, order] = sortString.split(" ");
 
             return {
-              key,
+              key: key!,
               order: order as "asc" | "desc",
             };
           });
@@ -123,14 +123,14 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
         const sortStrings = val.split(",");
         return sortStrings
           .filter((sortString) => {
-            const [_key, order] = sortString.split(" ");
+            const [_key, order] = sortString.split(" ", 2);
             return order === "asc" || order === "desc";
           })
           .map((sortString): SortItem => {
-            const [key, order] = sortString.split(" ");
+            const [key, order] = sortString.split(" ", 2);
 
             return {
-              key,
+              key: key!,
               order: order as "asc" | "desc",
             };
           });

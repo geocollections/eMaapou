@@ -34,7 +34,7 @@ function handleRemove(i: number) {
 }
 function handleChange(i: number) {
   const cloneItems = cloneDeep(selectedItems.value);
-  internalValue.value = cloneItems.splice(i, 1)[0];
+  internalValue.value = cloneItems.splice(i, 1)[0]!; // NOTE: the item has to exist, as otherwise it would be impossible to change it
   selectedItems.value = cloneItems;
   emit("update:model-value", selectedItems.value);
   // if (!panel.value.isActive) panel.value.toggle();

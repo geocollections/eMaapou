@@ -65,7 +65,7 @@ describe("useTabs", () => {
     const filteredTabs = filterHydratedTabs(tabs, ["foo", "bar"]);
 
     expect(filteredTabs.length).toStrictEqual(1);
-    expect(filteredTabs[0].routeName).toStrictEqual("foo");
+    expect(filteredTabs[0]!.routeName).toStrictEqual("foo");
   });
 
   it("should not filter out static tabs", async () => {

@@ -16,11 +16,11 @@ export const textParamParser = z
 export const rangeParamParser = z
   .string()
   .transform((val, ctx) => {
-    const [startStr, endStr] = val.split("-");
-    const start = Number.parseInt(startStr) || null;
-    const end = Number.parseInt(endStr) || null;
+    const [startStr, endStr] = val.split("-", 2);
+    const start = startStr !== undefined && startStr.length > 0 ? Number.parseInt(startStr) : null;
+    const end = endStr !== undefined && endStr.length > 0 ? Number.parseInt(endStr) : null;
 
-    if (start && end && start > end) {
+    if (start !== null && end !== null && start > end) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Start cannot be larger than end",
@@ -50,11 +50,14 @@ export const dateArrayParamParser = z
 export const parameterParamParser = z
   .string()
   .transform(val =>
-    val.split(",").map((v) => {
-      const [parameter, values] = v.split(":");
-      const [startStr, endStr] = values.split("-");
-      const start = startStr === "*" ? null : Number.parseInt(startStr);
-      const end = endStr === "*" ? null : Number.parseInt(endStr);
+    val.split(",").filter(
+      v => v.includes(":"),
+    ).map((v) => {
+      const [parameter, values] = v.split(":", 2);
+
+      const [startStr, endStr] = values!.split("-");
+      const start = parseParameterValue(startStr);
+      const end = parseParameterValue(endStr);
       return {
         parameter,
         value: [start, end],
@@ -62,3 +65,17 @@ export const parameterParamParser = z
     }),
   )
   .catch(_ctx => []);
+
+function parseParameterValue(value: string | undefined) {
+  if (value === undefined) {
+    return null;
+  }
+  if (value === "*") {
+    return null;
+  }
+  const num = Number.parseInt(value, 10);
+  if (Number.isNaN(num)) {
+    return null;
+  }
+  return num;
+}

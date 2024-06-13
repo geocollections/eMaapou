@@ -15,7 +15,7 @@ const { t } = useI18n();
 const currentTab = computed(() => {
   return props.tabs.find((tab) => {
     return tab.routeName === getRouteBaseName(route);
-  }) ?? props.tabs[0];
+  }) ?? props.tabs[0]!;
 });
 
 function translateTitle(tab: HydratedTab) {

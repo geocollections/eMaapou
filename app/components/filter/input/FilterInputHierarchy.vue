@@ -126,12 +126,13 @@ const orderedSelectedItems = computed(() => {
 });
 
 async function addChildren(node: TreeNode) {
-  const page = paginationMap.value[node.value] ? paginationMap.value[node.value] + 1 : 1;
+  const nodePage = paginationMap.value[node.value];
+  const newPage = nodePage !== undefined ? nodePage + 1 : 1;
 
-  const [children, numBuckets] = await props.getChildren(node.value, { page, perPage: 15 });
+  const [children, numBuckets] = await props.getChildren(node.value, { page: newPage, perPage: 15 });
 
   numBucketsMap.value[node.value] = numBuckets;
-  paginationMap.value[node.value] = page;
+  paginationMap.value[node.value] = newPage;
 
   node.children = [...node.children, ...children];
   node.childrenLoaded = true;

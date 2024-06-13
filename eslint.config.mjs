@@ -1,19 +1,14 @@
 import antfu from "@antfu/eslint-config";
 
-// import { FlatCompat } from "@eslint/eslintrc";
-// const compat = new FlatCompat();
+import withNuxt from "./.nuxt/eslint.config.mjs";
 
-export default antfu(
-  {
+export default withNuxt(
+  antfu({
     stylistic: {
       semi: true,
       quotes: "double",
     },
-    typescript: {
-      tsconfigPath: "./.nuxt/tsconfig.json",
-    },
-  },
-  {
+  }, {
     rules: {
       "vue/component-name-in-template-casing": ["error", "PascalCase", {
         registeredComponentsOnly: false,
@@ -37,8 +32,5 @@ export default antfu(
       "no-unused-vars": "off",
       "vue/multi-word-component-names": "off",
     },
-  },
-  // ...compat.config({
-  //   extends: ["plugin:vuetify/recommended"],
-  // }),
+  }),
 );

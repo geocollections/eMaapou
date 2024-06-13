@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { Headers } from "#imports";
 
-const testHeaders: Headers = {
+const testHeaders = {
   byIds: {
     foo: {
       title: "skip translate",
@@ -25,9 +25,9 @@ const testHeaders: Headers = {
     },
   },
   allIds: ["foo", "baz", "bar"],
-};
+} satisfies Headers;
 
-const testHeadersComplex: Headers = {
+const testHeadersComplex = {
   byIds: {
     foo: {
       title: "skip translate",
@@ -62,7 +62,7 @@ const testHeadersComplex: Headers = {
     },
   },
   allIds: ["foo", "bar", "baz"],
-};
+} satisfies Headers;
 
 mockNuxtImport("useI18n", () => {
   return () => ({
@@ -75,27 +75,27 @@ describe("useHeaders", () => {
     const { headers } = useHeaders(testHeaders);
 
     expect(headers.value.length).toBe(testHeaders.allIds.length);
-    expect(headers.value[0].value).toBe("foo");
-    expect(headers.value[1].value).toBe("baz");
-    expect(headers.value[2].value).toBe("bar");
+    expect(headers.value[0]!.value).toBe("foo");
+    expect(headers.value[1]!.value).toBe("baz");
+    expect(headers.value[2]!.value).toBe("bar");
   });
 
   it("should translate headers", () => {
     const { headers } = useHeaders(testHeaders);
 
-    expect(headers.value[0].title).toBe("skip translate");
-    expect(headers.value[1].title).toBe("skip translate");
-    expect(headers.value[2].title).toBe("translated");
+    expect(headers.value[0]!.title).toBe("skip translate");
+    expect(headers.value[1]!.title).toBe("skip translate");
+    expect(headers.value[2]!.title).toBe("translated");
   });
 
   it("should toggle header visibility", () => {
     const { headers, handleHeadersChange } = useHeaders(testHeaders);
 
-    expect(headers.value[0].show).toBe(testHeaders.byIds.foo.show);
+    expect(headers.value[0]!.show).toBe(testHeaders.byIds.foo.show);
     handleHeadersChange("foo");
-    expect(headers.value[0].show).toBe(!testHeaders.byIds.foo.show);
+    expect(headers.value[0]!.show).toBe(!testHeaders.byIds.foo.show);
     handleHeadersChange("foo");
-    expect(headers.value[0].show).toBe(testHeaders.byIds.foo.show);
+    expect(headers.value[0]!.show).toBe(testHeaders.byIds.foo.show);
   });
 
   it("should reset headers", () => {
@@ -104,9 +104,9 @@ describe("useHeaders", () => {
     handleHeadersChange("foo");
     handleHeadersReset({ sortBy: [], page: 1, itemsPerPage: 25 });
 
-    expect(headers.value[0].show).toBe(true);
-    expect(headers.value[1].show).toBe(false);
-    expect(headers.value[2].show).toBe(true);
+    expect(headers.value[0]!.show).toBe(true);
+    expect(headers.value[1]!.show).toBe(false);
+    expect(headers.value[2]!.show).toBe(true);
   });
   it("should reset headers, but skip ones that are used in sorting", () => {
     const { headers, handleHeadersReset, handleHeadersChange } = useHeaders(testHeaders);
@@ -114,9 +114,9 @@ describe("useHeaders", () => {
     handleHeadersChange("foo");
     handleHeadersReset({ sortBy: [{ key: "baz", order: "asc" }], page: 1, itemsPerPage: 25 });
 
-    expect(headers.value[0].show).toBe(true);
-    expect(headers.value[1].show).toBe(true);
-    expect(headers.value[2].show).toBe(true);
+    expect(headers.value[0]!.show).toBe(true);
+    expect(headers.value[1]!.show).toBe(true);
+    expect(headers.value[2]!.show).toBe(true);
   });
 
   it("should add headers", () => {
@@ -136,13 +136,13 @@ describe("useHeaders", () => {
     addHeaders(newHeaders);
 
     expect(headers.value.length).toBe(4);
-    expect(headers.value[3].value).toBe("qux");
+    expect(headers.value[3]!.value).toBe("qux");
   });
 
   it("should translate child headers", () => {
     const { headers } = useHeaders(testHeadersComplex);
 
-    expect(headers.value[2].children?.[0].title).toBe("skip translate");
-    expect(headers.value[2].children?.[1].title).toBe("translated");
+    expect(headers.value[2]!.children?.[0]!.title).toBe("skip translate");
+    expect(headers.value[2]!.children?.[1]!.title).toBe("translated");
   });
 });

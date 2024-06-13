@@ -174,7 +174,7 @@ function isValidFilter(filter: FilterUnion): boolean {
 }
 
 function escapeSpecialChars(s: string) {
-  const pattern = /([\!\*\+\-\=\<\>\&\|\(\)\[\]\{\}\^\~\?\:\\\/"])/g;
+  const pattern = /([!*+\-=<>&|()[\]{}^~?:\\/"])/g;
   return s.replace(pattern, "\\$1");
 }
 
@@ -271,10 +271,10 @@ function getSolrFilter(filter: FilterUnion) {
             (prev, _: any, index: number, arr) => {
               if ((index + 1) % 3 === 0) {
                 prev.push([
-                  arr[index - 2],
-                  arr[index - 1],
-                  arr[index],
-                  arr[index - 2],
+                  arr[index - 2]!,
+                  arr[index - 1]!,
+                  arr[index]!,
+                  arr[index - 2]!,
                 ]);
               }
               return prev;

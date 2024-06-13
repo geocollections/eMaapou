@@ -60,7 +60,7 @@ export function useTabs() {
   }
 
   function filterHydratedTabs<
-    T extends Record<string | number | symbol, HydratedTab>,
+    T extends Record<K, HydratedTab>,
     K extends keyof T,
   >(tabs: T, order: K[]): HydratedTab[] {
     return order

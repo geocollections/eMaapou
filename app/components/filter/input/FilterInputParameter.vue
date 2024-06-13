@@ -74,10 +74,14 @@ function validateFilter(filter: ParameterValue) {
 }
 
 function handleValue(value: ParameterValue["value"], i: number) {
-  internalValue.value[i].value = value;
+  if (internalValue.value[i] === undefined)
+    return;
+  internalValue.value[i]!.value = value;
 }
 function handleParameter(value: ParameterValue["parameter"], i: number) {
-  internalValue.value[i].parameter = value;
+  if (internalValue.value[i] === undefined)
+    return;
+  internalValue.value[i]!.parameter = value;
 
   if (isEqual(props.modelValue, internalValue.value))
     return;

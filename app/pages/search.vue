@@ -181,7 +181,7 @@ const { data, refresh: fetch } = await useAsyncData("quickSearch", async () => {
   });
   const orderedTabs = orderBy(hydratedTabs, ["count"], ["desc"]);
 
-  if (orderedTabs[0].count > 0)
+  if (orderedTabs[0] !== undefined && orderedTabs[0].count > 0)
     noResults.value = false;
 
   return {

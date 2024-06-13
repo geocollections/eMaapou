@@ -61,15 +61,20 @@ function getDateStr(dateArray: string[]) {
     month: "numeric",
     day: "numeric",
   });
-  const startDate = new Date(dateArray[0]);
-  if (dateArray.length > 1) {
-    const endDate = new Date(dateArray[1]);
+  const startDateStr = dateArray[0];
+  if (startDateStr === undefined)
+    return "";
+  const startDate = new Date(startDateStr);
+
+  const endDateStr = dateArray[1];
+  if (endDateStr !== undefined) {
+    const endDate = new Date(endDateStr);
     return dateFormat.formatRange(startDate, endDate);
   }
   return dateFormat.format(startDate);
 }
 const maxDate = computed(() => {
-  return new Date().toISOString().substr(0, 10);
+  return new Date().toISOString().substring(0, 10);
 });
 </script>
 
