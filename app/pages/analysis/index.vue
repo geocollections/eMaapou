@@ -39,6 +39,7 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   if (toPath === fromPath)
     return;
 
+  console.log("refresh");
   setStateFromQueryParams(route);
   await refreshAnalyses();
   resultsCount.value = data.value?.response.numFound ?? 0;
