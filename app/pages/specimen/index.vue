@@ -52,9 +52,13 @@ const {
   watch: false,
 });
 
-watch(currentView, () => {
-  setQueryParamsFromState();
-});
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refreshData();
+}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {
@@ -69,26 +73,22 @@ async function refreshData() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshData();
 }
 
 async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshData();
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshData();
 }
 
 async function handleImageUpdate({ options: newOptions }: { options: DataTableOptions }) {
   imageOptions.value = newOptions;
   setQueryParamsFromState();
-  await refreshData();
 }
 
 const { setSearchPosition } = useSearchPosition();

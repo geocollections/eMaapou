@@ -20,6 +20,10 @@ const {
   resultsCount,
 } = storeToRefs(sitesStore);
 
+const route = useRoute();
+
+setStateFromQueryParams(route);
+
 const {
   data,
   pending,
@@ -39,9 +43,14 @@ const {
   watch: false,
 });
 
-const route = useRoute();
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
 
-setStateFromQueryParams(route);
+  setStateFromQueryParams(route);
+  await refreshSites();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {
@@ -51,23 +60,17 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshSites();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshSites();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshSites();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 const { setSearchPosition } = useSearchPosition();

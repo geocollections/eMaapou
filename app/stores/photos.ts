@@ -25,6 +25,7 @@ export const usePhotos = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: IMAGE.options,
       initHeaders: HEADERS_PHOTO,
@@ -32,7 +33,7 @@ export const usePhotos = defineStore(
 
     const view = ref(0);
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       locality: {
         value: [],
         type: "idList",
@@ -177,6 +178,8 @@ export const usePhotos = defineStore(
       fromSearch,
       resultsCount,
       currentView: view,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

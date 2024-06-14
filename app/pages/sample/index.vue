@@ -41,6 +41,15 @@ const {
   watch: false,
 });
 
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refreshSamples();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });
@@ -49,23 +58,17 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshSamples();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshSamples();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshSamples();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 const { setSearchPosition } = useSearchPosition();

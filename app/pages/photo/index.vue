@@ -9,6 +9,8 @@ const {
   handleHeadersChange,
   setStateFromQueryParams,
   getQueryParams,
+  resetFilters,
+  resetDataTable,
 } = photosStore;
 const {
   solrSort,
@@ -44,6 +46,15 @@ const {
   watch: false,
 });
 
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refreshPhotos();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
@@ -56,22 +67,17 @@ watch(currentView, () => {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshPhotos();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
-  await refreshPhotos();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshPhotos();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 function handleClickRow(index: number) {

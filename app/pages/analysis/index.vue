@@ -24,7 +24,6 @@ const {
   response: { numFound: number; docs: any[] };
 }>("/analysis", {
   query: computed(() => ({
-    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
@@ -36,6 +35,15 @@ const {
   watch: false,
 });
 
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refreshAnalyses();
+  resultsCount.value = data.value?.response.numFound ?? 0;
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });
@@ -44,23 +52,17 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshAnalyses();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshAnalyses();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshAnalyses();
-  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 const searchPosition = useSearchPosition();
