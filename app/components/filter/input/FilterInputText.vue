@@ -10,8 +10,12 @@ const emit = defineEmits<{
   "update:model-value": [value: string[]];
 }>();
 
+const { t } = useI18n();
+
 const internalValue = ref("");
+const panel = ref();
 const selectedItems = ref(props.modelValue);
+
 watch(
   () => props.modelValue,
   (newVal) => {
@@ -19,6 +23,7 @@ watch(
   },
   { immediate: true },
 );
+
 function handleAdd() {
   if (internalValue.value === "")
     return;
@@ -30,6 +35,7 @@ function handleRemove(i: number) {
   const cloneItems = cloneDeep(selectedItems.value);
   cloneItems.splice(i, 1);
   selectedItems.value = cloneItems;
+
   emit("update:model-value", selectedItems.value);
 }
 function handleChange(i: number) {
@@ -37,7 +43,8 @@ function handleChange(i: number) {
   internalValue.value = cloneItems.splice(i, 1)[0]!; // NOTE: the item has to exist, as otherwise it would be impossible to change it
   selectedItems.value = cloneItems;
   emit("update:model-value", selectedItems.value);
-  // if (!panel.value.isActive) panel.value.toggle();
+  if (!panel.value.groupItem.isSelected.value)
+    panel.value.groupItem.toggle();
 }
 
 const input = ref();
@@ -54,6 +61,8 @@ function handleOpen(value: { value: boolean }) {
 
 <template>
   <VExpansionPanel
+    ref="panel"
+    data-test="panel"
     bg-color="transparent"
     elevation="0"
     :rounded="0"
@@ -62,6 +71,7 @@ function handleOpen(value: { value: boolean }) {
     <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
       style="min-height: 40px;"
+      data-test="title"
     >
       {{ title }}
     </VExpansionPanelTitle>
@@ -73,6 +83,7 @@ function handleOpen(value: { value: boolean }) {
         v-for="(item, i) in selectedItems"
         :key="i"
         class="d-flex py-1 selected-item px-2"
+        data-test="selected-item"
         @click="handleChange(i)"
       >
         <span>
@@ -100,11 +111,12 @@ function handleOpen(value: { value: boolean }) {
       <VTextField
         ref="input"
         v-model="internalValue"
+        data-test="text-input"
         variant="outlined"
         bg-color="white"
         hide-details
         density="compact"
-        :placeholder="$t('filters.filter')"
+        :placeholder="t('filters.filter')"
         @keydown.enter="handleAdd"
       />
       <VBtn
@@ -112,10 +124,11 @@ function handleOpen(value: { value: boolean }) {
         color="accent"
         variant="tonal"
         size="small"
+        data-test="add-button"
         :disabled="internalValue.length < 1"
         @click="handleAdd"
       >
-        {{ $t("filter.add") }}
+        {{ t("filter.add") }}
       </VBtn>
     </VExpansionPanelText>
   </VExpansionPanel>
