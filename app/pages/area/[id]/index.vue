@@ -22,7 +22,7 @@ const geojson = computed(() => {
     = JSON.parse(
       // NOTE: Remove trailing commas from JSON object string
 
-      props.area.polygon!.replace(/\,(?!\s*?[\{\[\"\'\w])/g, ""),
+      props.area.polygon!.replace(/,(?!\s*[{["'\w])/g, ""),
     ) ?? null;
   if (parsedPolygon === null)
     return null;

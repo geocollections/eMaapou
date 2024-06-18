@@ -13,7 +13,7 @@ const {
 });
 const route = useRoute();
 
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
+const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
   "/stratigraphy_stratotype/",
   {
     query: computed(() => ({
@@ -46,7 +46,7 @@ const { exportData } = useExportGeoloogiaApi("/stratigraphy_stratotype/", {
     :count="data?.count ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

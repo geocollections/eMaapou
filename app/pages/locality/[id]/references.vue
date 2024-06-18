@@ -12,7 +12,7 @@ const {
   initHeaders: HEADERS_LOCALITY_REFERENCE,
 });
 const route = useRoute();
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_reference/", {
+const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_reference/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -42,7 +42,7 @@ const { exportData } = useExportGeoloogiaApi("/locality_reference/", {
     :count="data?.count ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

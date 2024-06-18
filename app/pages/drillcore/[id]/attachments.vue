@@ -26,7 +26,7 @@ const orSearch = computed(() => {
   return orSearch.join(" OR ");
 });
 
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -56,7 +56,7 @@ const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
     :count="data?.count ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     id-field="attachment"
     @update="handleUpdate"

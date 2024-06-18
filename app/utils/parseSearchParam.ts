@@ -8,8 +8,9 @@ export default (search: string | null): string | null => {
           && s.includes("-")
           && !s.startsWith("\"")
           && !s.endsWith("\"")
-        )
+        ) {
           return `"${s}"`;
+        }
         return s;
       })
       .join(" ") ?? null

@@ -17,7 +17,7 @@ const {
   initOptions: ANALYSIS.options,
   initHeaders: HEADERS_ANALYSIS,
 });
-const { data, pending } = await useSolrFetch<{
+const { data, status } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/analysis", {
   query: computed(() => ({
@@ -49,7 +49,7 @@ const { exportData } = useExportSolr("/analysis", {
     :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

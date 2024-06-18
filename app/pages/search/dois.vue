@@ -13,7 +13,7 @@ const {
   initHeaders: HEADERS_DOI,
 });
 
-const { data, pending } = await useSolrFetch<SolrResponse>("/doi", {
+const { data, status } = await useSolrFetch<SolrResponse>("/doi", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,
@@ -30,7 +30,7 @@ const { data, pending } = await useSolrFetch<SolrResponse>("/doi", {
     :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

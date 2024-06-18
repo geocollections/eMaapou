@@ -10,7 +10,7 @@ const { options, handleUpdate, searchParams } = useDataTableGeoloogiaApi({
   initHeaders: HEADERS_ATTACHMENT,
 });
 
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -29,7 +29,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     :options="options"
     :count="data?.count ?? 0"
     :items="data?.results ?? []"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     @update="handleUpdate"
   />
 </template>

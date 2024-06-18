@@ -19,7 +19,7 @@ setStateFromQueryParams(route);
 
 const {
   data,
-  pending,
+  status,
   refresh: refreshDrillcores,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
@@ -123,7 +123,7 @@ useHead({
       :count="data?.response.numFound ?? 0"
       :headers="headers"
       :options="options"
-      :is-loading="pending"
+      :is-loading="status === 'pending'"
       :export-func="exportData"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"

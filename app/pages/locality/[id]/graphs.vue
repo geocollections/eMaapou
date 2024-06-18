@@ -36,8 +36,9 @@ await useLazyAsyncData("data", async () => {
     if (
       typeof rawLasfileContentResponse === "string"
       && rawLasFileContent.startsWith("Error: ")
-    )
+    ) {
       rawLasFileContent = "";
+    }
     lasContent.value = rawLasFileContent;
   }
 

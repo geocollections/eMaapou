@@ -1,7 +1,3 @@
-/* eslint-disable ts/no-unsafe-call */
-/* eslint-disable ts/no-unsafe-member-access */
-/* eslint-disable ts/no-unsafe-argument */
-/* eslint-disable ts/no-unsafe-assignment */
 import zip from "~/utils/zip";
 
 export interface IFlogParameter {

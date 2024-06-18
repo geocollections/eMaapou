@@ -13,7 +13,7 @@ const {
 });
 const route = useRoute();
 
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
+const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -44,7 +44,7 @@ const { exportData } = useExportGeoloogiaApi("/stratigraphy_synonym/", {
     :count="data?.count ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

@@ -12,7 +12,7 @@ const {
   initHeaders: HEADERS_ATTACHMENT_LINK_SOLR,
 });
 const route = useRoute();
-const { data, pending } = await useSolrFetch<{
+const { data, status } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/attachment_link", {
   query: computed(() => ({
@@ -33,7 +33,7 @@ const { data, pending } = await useSolrFetch<{
     :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

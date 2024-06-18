@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware((to, _from) => {
   const searchPositionStore = useSearchPosition();
-  // eslint-disable-next-line ts/unbound-method
+
   const { $reset } = searchPositionStore;
   const { page, searchPosition } = storeToRefs(searchPositionStore);
 

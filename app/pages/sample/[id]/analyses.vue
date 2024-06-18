@@ -26,7 +26,7 @@ const filteredHeaders = computed(() =>
 
 const route = useRoute();
 
-const { data, pending } = await useSolrFetch("/analysis", {
+const { data, status } = await useSolrFetch("/analysis", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -58,7 +58,7 @@ const { exportData } = useExportSolr("/analysis", {
     :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="filteredHeaders"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

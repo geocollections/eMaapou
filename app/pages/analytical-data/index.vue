@@ -20,7 +20,7 @@ setStateFromQueryParams(route);
 
 const {
   data,
-  pending,
+  status,
   refresh: refreshAnalyticalData,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
@@ -175,7 +175,7 @@ useSeoMeta({
       :count="data?.response.numFound ?? 0"
       :headers="finalHeaders"
       :options="options"
-      :is-loading="pending"
+      :is-loading="status === 'pending'"
       :export-func="exportData"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"

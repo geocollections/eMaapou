@@ -15,9 +15,11 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(stratigraphiesStore);
 
+setStateFromQueryParams(route);
+
 const {
   data,
-  pending,
+  status,
   refresh: refreshStratigraphies,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
@@ -34,10 +36,12 @@ const {
   watch: false,
 });
 
-setStateFromQueryParams(route);
-watch(() => route.query, () => {
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
   setStateFromQueryParams(route);
-  refreshStratigraphies();
+  await refreshStratigraphies();
+  resultsCount.value = data.value?.response.numFound ?? 0;
 }, { deep: true });
 
 const router = useRouter();
@@ -126,7 +130,7 @@ useHead({
       :count="data?.response.numFound ?? 0"
       :headers="headers"
       :options="options"
-      :is-loading="pending"
+      :is-loading="status === 'pending'"
       :export-func="exportData"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"

@@ -65,10 +65,9 @@ describe("useImages", () => {
     });
     const { nextImages } = useImages(imageFunc);
 
-    // eslint-disable-next-line ts/no-floating-promises
     nextImages({ id: 1 });
     await vi.advanceTimersByTimeAsync(100);
-    // eslint-disable-next-line ts/no-floating-promises
+
     nextImages({ id: 1 });
 
     expect(imageFunc).toHaveBeenCalledTimes(1);
