@@ -15,6 +15,8 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(stratigraphiesStore);
 
+setStateFromQueryParams(route);
+
 const {
   data,
   pending,
@@ -34,10 +36,12 @@ const {
   watch: false,
 });
 
-setStateFromQueryParams(route);
-watch(() => route.query, () => {
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
   setStateFromQueryParams(route);
-  refreshStratigraphies();
+  await refreshStratigraphies();
+  resultsCount.value = data.value?.response.numFound ?? 0;
 }, { deep: true });
 
 const router = useRouter();
