@@ -13,7 +13,7 @@ const {
   initHeaders: HEADERS_SPECIMEN_IDENTIFICATION,
 });
 
-const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification/", {
+const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -43,7 +43,7 @@ const { exportData } = useExportGeoloogiaApi("/specimen_identification/", {
     :count="data?.count ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

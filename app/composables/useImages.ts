@@ -1,5 +1,3 @@
-/* eslint-disable ts/no-unsafe-member-access */
-/* eslint-disable ts/no-unsafe-assignment */
 export interface Image<T> {
   id: number;
   filename: string;

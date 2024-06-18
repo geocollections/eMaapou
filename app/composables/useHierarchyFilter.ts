@@ -1,10 +1,5 @@
-/* eslint-disable ts/no-unsafe-return */
-/* eslint-disable ts/no-unsafe-call */
-/* eslint-disable ts/no-unsafe-assignment */
-
 import type { TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";
 
-/* eslint-disable ts/no-unsafe-member-access */
 export function useStratigraphyHierarchyFilter(
   path: string,
   {

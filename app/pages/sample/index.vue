@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { mdiImageFilterHdr } from "@mdi/js";
-import isEqual from "lodash/isEqual";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -24,7 +23,7 @@ setStateFromQueryParams(route);
 
 const {
   data,
-  pending,
+  status,
   refresh: refreshSamples,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
@@ -123,7 +122,7 @@ const { exportData } = useExportSolr("/sample", {
       :count="data?.response.numFound ?? 0"
       :headers="headers"
       :options="options"
-      :is-loading="pending"
+      :is-loading="status === 'pending'"
       :export-func="exportData"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"

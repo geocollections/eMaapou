@@ -1,7 +1,3 @@
-/* eslint-disable ts/no-unsafe-call */
-/* eslint-disable ts/no-unsafe-return */
-/* eslint-disable ts/no-unsafe-member-access */
-/* eslint-disable ts/no-unsafe-assignment */
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 export function useAutocomplete(

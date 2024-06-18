@@ -69,7 +69,7 @@ const suggestionsEnd = ref(false);
 const query = ref("");
 const queryDebounced = refDebounced(query, 200);
 
-const { refresh: refreshAutocomplete, pending } = await useAsyncData(
+const { refresh: refreshAutocomplete, status } = await useAsyncData(
   `autocomplete-hierarchy-${id}`,
   async () => {
     const res = await props.suggestionFunction(query.value, { page: autocompletePage.value, perPage: 10 });
@@ -200,7 +200,7 @@ async function handleAdd(item: Suggestion) {
 function handleListEnd(isIntersecting: boolean) {
   if (!isIntersecting)
     return;
-  if (pending.value)
+  if (status.value === "pending")
     return;
   if (suggestionsEnd.value)
     return;

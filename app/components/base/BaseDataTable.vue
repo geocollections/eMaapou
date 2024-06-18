@@ -83,8 +83,9 @@ const handleChange = debounce((options) => {
     options.itemsPerPage === props.options.itemsPerPage
     && options.page === props.options.page
     && isEqual(options.sortBy, props.options.sortBy)
-  )
+  ) {
     return;
+  }
   emit("update", { options, search: search.value });
 }, 250);
 function handleSortByChange(newSortBy: SortItem[]) {
@@ -155,8 +156,9 @@ onMounted(() => {
     dataTableWrapper?.offsetWidth
     && dataTableWrapper?.scrollWidth
     && dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
-  )
+  ) {
     canScrollRight.value = true;
+  }
 });
 </script>
 

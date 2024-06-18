@@ -36,8 +36,9 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
       !getRouteBaseName(route)?.startsWith(
         rootDetailRoute.value.name.toString(),
       )
-    )
+    ) {
       return false;
+    }
     return true;
   });
 

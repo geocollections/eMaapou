@@ -13,7 +13,7 @@ const {
 });
 
 const route = useRoute();
-const { data, pending } = await useSolrFetch<SolrResponse>("/locality", {
+const { data, status } = await useSolrFetch<SolrResponse>("/locality", {
   query: computed(() => ({
     q: solrQuery.value,
     limit: options.value.itemsPerPage,
@@ -41,7 +41,7 @@ const { exportData } = useExportSolr("/locality", {
     :count="data?.response.numFound ?? 0"
     :options="options"
     :headers="headers"
-    :is-loading="pending"
+    :is-loading="status === 'pending'"
     :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
