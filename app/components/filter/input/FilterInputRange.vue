@@ -25,6 +25,8 @@ const { t } = useI18n();
 function parseInput(input: string) {
   if (isEmpty(input))
     return null;
+  if (Number.isNaN(Number(input)))
+    return null;
 
   if (props.numberType === "float")
     return Number.parseFloat(input);
@@ -43,8 +45,9 @@ function handleEnter() {
   if (
     props.modelValue[0] === internalValue.value[0]
     && props.modelValue[1] === internalValue.value[1]
-  )
+  ) {
     return;
+  }
 
   emit("update:model-value", internalValue.value);
 }
