@@ -56,11 +56,12 @@ async function suggestParameter({
     (item: any) => item.value,
   );
 
+  const filter = ids.length > 0 ? `parameter_index:(${ids.join(" OR ")})` : undefined;
   const nameRes = await $solrFetch<any>("/analysis_parameter", {
     query: {
       json: {
         query: "*",
-        filter: [`parameter_index:(${ids.join(" OR ")})`],
+        filter,
         limit: ids.length,
       },
     },
@@ -95,11 +96,14 @@ async function hydrateParameter(values: string[]) {
       },
     },
   });
+
+  const filter = values.length > 0 ? `parameter_index:(${values.join(" OR ")})` : undefined;
+
   const nameRes = await $solrFetch<any>("/analysis_parameter", {
     query: {
       json: {
         query: "*",
-        filter: [`parameter_index:(${values.join(" OR ")})`],
+        filter,
         limit: values.length,
       },
     },
