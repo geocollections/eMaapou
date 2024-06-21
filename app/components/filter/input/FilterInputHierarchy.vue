@@ -60,6 +60,7 @@ const { data: tree, refresh: refreshTree } = await useAsyncData<TreeNode[]>(
     paginationMap.value[props.rootValue] = 1;
     return tree;
   },
+  { deep: true },
 );
 
 const autocompletePage = ref(1);
