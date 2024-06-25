@@ -345,20 +345,25 @@ useSeoMeta({
           <div>
             {{ title }}
           </div>
-          <a
-            v-if="isRock && titleAlt"
-            target="_blank"
-            style="text-decoration: none"
-            class="text-grey-darken-2"
-            :href="`https://kivid.info/${data.specimenAlt?.rock_id}`"
-          >{{ titleAlt }}</a>
-          <a
-            v-if="isTaxon && titleAlt"
-            target="_blank"
-            class="text-grey-darken-2"
-            style="text-decoration: none"
-            :href="`https://fossiilid.info/${data.specimenAlt?.taxon_id}`"
-          >{{ titleAlt }}</a>
+          <div>
+            <a
+              v-if="isRock && titleAlt"
+              target="_blank"
+              style="text-decoration: none"
+              class="text-grey-darken-2"
+              :href="`https://kivid.info/${data.specimenAlt?.rock_id}`"
+            >{{ titleAlt }}</a>
+            <span v-if="isRock && isTaxon && titleAlt" vertical>
+              |
+            </span>
+            <a
+              v-if="isTaxon && titleAlt"
+              target="_blank"
+              class="text-grey-darken-2"
+              style="text-decoration: none"
+              :href="`https://fossiilid.info/${data.specimenAlt?.taxon_id}`"
+            >{{ data.specimenAlt?.taxon }}</a>
+          </div>
         </div>
         <template #sub>
           <div v-if="data.specimen?.fossil?.id === 9">
