@@ -3,7 +3,6 @@ import type { Specimen } from "../[id].vue";
 
 const props = defineProps<{
   specimen: Specimen;
-  specimenAlt: any;
 }>();
 
 const localePath = useLocalePath();
