@@ -70,7 +70,7 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
     });
   const locationMarkers = localities
     .concat(sites)
-    .reduce((filtered: MapMarker[], item: any): MapMarker[] => {
+    .reduce((filtered: any[], item: any): MapMarker[] => {
       if (!(item.latitude && item.longitude))
         return filtered;
       const isItemInArray = filtered.some(
@@ -81,18 +81,20 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
       if (isItemInArray)
         return filtered;
 
+      const routeName = item.locality_id ? "locality-id" : "site-id";
+      const routeId = item.locality_id ?? item.site_id;
+
       const newItem = {
         latitude: item.latitude,
         longitude: item.longitude,
         text:
           $translate({ et: item.locality, en: item.locality_en })
           ?? (item.name || `ID: ${item.id}`),
-        routeName: item.locality_id ? "locality" : "site",
-        id: item.locality_id ?? item.site_id,
-      };
+        route: localePath({ name: routeName, params: { id: routeId } }),
+      } as MapMarker;
 
       return [...filtered, newItem];
-    }, []);
+    }, [] as MapMarker[]);
   return {
     parameters,
     parameterHeaders,

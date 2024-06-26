@@ -1,7 +1,8 @@
+import type { RouteLocationRaw } from "vue-router";
+
 export interface MapMarker {
   text: string;
   longitude: number;
   latitude: number;
-  routeName?: string;
-  id?: number; // TODO: should rename to `routeId`
+  route?: RouteLocationRaw;
 }

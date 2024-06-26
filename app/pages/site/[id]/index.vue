@@ -315,6 +315,10 @@ const mapOverlays = computed(() => {
                 et: site.name,
                 en: site.name_en ?? site.name,
               })!,
+              route: localePath({
+                name: 'site-id',
+                params: { id: site.id },
+              }),
             },
           ]"
         />
