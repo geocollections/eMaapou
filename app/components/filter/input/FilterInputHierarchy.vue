@@ -232,6 +232,7 @@ function handleOpen(value: { value: boolean }) {
     <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px;"
+      data-test="title"
     >
       {{ title }}
     </VExpansionPanelTitle>
@@ -288,6 +289,7 @@ function handleOpen(value: { value: boolean }) {
         <TreeItem
           v-for="(node, index) in tree"
           :key="`tree-item-${index}`"
+          data-test="tree-item"
           :disabled="false"
           :node="node"
           :num-children="numBucketsMap[node.value] ?? 0"

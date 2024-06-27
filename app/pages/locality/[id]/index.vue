@@ -281,6 +281,10 @@ const mapOverlays = computed(() => {
                 et: locality.name,
                 en: locality.name_en,
               })!,
+              route: localePath({
+                name: 'locality-id',
+                params: { id: locality.id },
+              }),
             },
           ]"
         />

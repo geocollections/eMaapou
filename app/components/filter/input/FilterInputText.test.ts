@@ -15,7 +15,6 @@ describe("filterInputText", () => {
     directives,
   });
   const i18n = createI18n({
-
   });
   enableAutoUnmount(afterEach);
 

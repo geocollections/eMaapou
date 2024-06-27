@@ -3,7 +3,6 @@ import type { Specimen } from "../[id].vue";
 
 const props = defineProps<{
   specimen: Specimen;
-  specimenAlt: any;
 }>();
 
 const localePath = useLocalePath();
@@ -323,6 +322,10 @@ const mapOverlays = computed(() => {
               text: $translate({
                 et: locality.name,
                 en: locality.name_en,
+              }),
+              route: localePath({
+                name: 'locality-id',
+                params: { id: locality.id },
               }),
             },
           ]"

@@ -2,7 +2,6 @@
 import { mdiFileDownloadOutline } from "@mdi/js";
 import isEmpty from "lodash/isEmpty";
 import type { Area } from "../[id].vue";
-import type { MapMarker } from "~/types/map";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 
 const props = defineProps<{ area: Area }>();
@@ -53,7 +52,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
       },
     },
   });
-  return sites.response.docs.reduce((filtered: MapMarker[], item: any) => {
+  return sites.response.docs.reduce((filtered: any[], item: any): MapMarker[] => {
     if (!(item.longitude && item.latitude))
       return filtered;
     const isItemInArray = filtered.some(
@@ -67,12 +66,14 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
       longitude: item.longitude,
       latitude: item.latitude,
       text: $translate({ et: item.name, en: item.name_en }) ?? `ID: ${item.id}`,
-      routeName: "site",
-      id: item.id,
-    };
+      route: localePath({
+        name: "site-id",
+        params: { id: item.id },
+      }),
+    } as MapMarker;
 
     return [...filtered, newItem];
-  }, []);
+  }, [] as MapMarker[]);
 });
 </script>
 
@@ -422,7 +423,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           </BaseTable>
         </template>
       </VCol>
-      <VCol v-if="siteMarkers?.length > 0 || geojson" :xl="4">
+      <VCol v-if="siteMarkers !== undefined && siteMarkers.length > 0 || geojson" :xl="4">
         <MapDetail
           base-layer="Estonian map"
           :overlays="['Estonian bedrock']"

@@ -67,6 +67,10 @@ const mapMarkers = computed(() => {
           et: locality.value.name,
           en: locality.value.name_en,
         }),
+        route: localePath({
+          name: "locality-id",
+          params: { id: locality.value.id },
+        }),
       },
     ];
   }
@@ -76,6 +80,10 @@ const mapMarkers = computed(() => {
         latitude: site.value.latitude,
         longitude: site.value.longitude,
         text: site.value.name,
+        route: localePath({
+          name: "site-id",
+          params: { id: site.value.id },
+        }),
       },
     ];
   }

@@ -240,9 +240,6 @@ const { data } = await useAsyncData("dataset", async () => {
     },
   });
 
-  // hydratedTabsByIds.graphs.count =
-  //   locationMarkers.length === 1 ? locationMarkers.length : 0;
-
   const parameterValues
     = parametersResponse.response.docs[0]?.parameter_index_list?.[0]?.split("; ");
   const parameterText

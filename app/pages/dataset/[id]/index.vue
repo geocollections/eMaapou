@@ -10,12 +10,6 @@ const route = useRoute();
 const localePath = useLocalePath();
 
 const { data } = await useAsyncData("datasetGeneral", async () => {
-  const parametersPromise = $solrFetch<any>("/dataset", {
-    query: {
-      q: `id:${route.params.id}`,
-      fl: "parameter_index_list,parameter_list",
-    },
-  });
   const doiPromise = $geoloogiaFetch<any>("/doi/", {
     query: {
       dataset: route.params.id,
@@ -32,31 +26,16 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
       "rows": 10000,
     },
   });
-  const [parametersResponse, doiResponse, localityGroupedResponse]
-    = await Promise.all([parametersPromise, doiPromise, localityGroupedPromise]);
-
-  const parameterValues
-    = parametersResponse.response.docs[0]?.parameter_index_list?.[0]?.split("; ");
-  const parameterText
-    = parametersResponse.response.docs[0]?.parameter_list?.[0]?.split("; ");
-
-  const parameters
-    = parameterValues?.map((v: string, i: number) => {
-      return { text: parameterText[i], value: v };
-    }) ?? [];
-
-  const parameterHeaders = {
-    byIds: parameters.reduce((prev: { [key: string]: any }, parameter: any) => {
-      return { ...prev, [parameter.value]: { ...parameter, show: false } };
-    }, {} as { [key: string]: any }),
-    allIds: parameterValues,
-  };
+  const [doiResponse, localityGroupedResponse]
+    = await Promise.all([doiPromise, localityGroupedPromise]);
 
   const doi = doiResponse.results?.[0]?.identifier;
-  const reference = {
-    id: doiResponse.results?.[0]?.reference?.id,
-    reference: doiResponse.results?.[0]?.reference?.reference,
-  };
+  const reference = doiResponse.results?.[0]?.reference
+    ? {
+        id: doiResponse.results[0].reference.id,
+        reference: doiResponse.results[0].reference.reference,
+      }
+    : undefined;
 
   const localities = localityGroupedResponse?.grouped?.locality_id?.groups
     ?.map((item: any) => item?.doclist?.docs?.[0])
@@ -70,7 +49,7 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
     });
   const locationMarkers = localities
     .concat(sites)
-    .reduce((filtered: MapMarker[], item: any): MapMarker[] => {
+    .reduce((filtered: any[], item: any): MapMarker[] => {
       if (!(item.latitude && item.longitude))
         return filtered;
       const isItemInArray = filtered.some(
@@ -81,21 +60,21 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
       if (isItemInArray)
         return filtered;
 
+      const routeName = item.locality_id ? "locality-id" : "site-id";
+      const routeId = item.locality_id ?? item.site_id;
+
       const newItem = {
         latitude: item.latitude,
         longitude: item.longitude,
         text:
           $translate({ et: item.locality, en: item.locality_en })
           ?? (item.name || `ID: ${item.id}`),
-        routeName: item.locality_id ? "locality" : "site",
-        id: item.locality_id ?? item.site_id,
-      };
+        route: localePath({ name: routeName, params: { id: routeId } }),
+      } as MapMarker;
 
       return [...filtered, newItem];
-    }, []);
+    }, [] as MapMarker[]);
   return {
-    parameters,
-    parameterHeaders,
     doi,
     reference,
     locationMarkers,
@@ -266,7 +245,7 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
                 size="small"
                 class="mr-1 mb-1"
               >
-                {{ parameter.text }}
+                {{ parameter.title }}
               </VChip>
             </template>
           </TableRow>

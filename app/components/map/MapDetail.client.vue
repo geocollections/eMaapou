@@ -6,7 +6,6 @@ import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
-import type { MapMarker } from "~/types/map";
 
 export type MapBaseLayer = keyof typeof baseLayers.value;
 export type MapOverlay = keyof typeof overlays.value;
@@ -202,22 +201,16 @@ onMounted(() => {
 
       });
 
-      const markerRouteName = `${marker.routeName}-id`;
-
       markerInstance.on("click", (event) => {
         L.DomEvent.stopPropagation(event);
 
-        if (marker.id?.toString() === route.params.id && markerRouteName === getRouteBaseName(route))
+        if (marker.route === undefined) {
+          return;
+        }
+        if (router.resolve(marker.route).fullPath === route.fullPath)
           return;
 
-        if (marker.id && marker.routeName) {
-          router.push(
-            localePath({
-              name: markerRouteName,
-              params: { id: marker.id.toString() },
-            }),
-          );
-        }
+        router.push(marker.route);
       });
 
       markerInstance.bindTooltip(marker.text, {
