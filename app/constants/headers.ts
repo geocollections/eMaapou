@@ -296,24 +296,6 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
         },
       ],
     },
-    // depth: {
-    //   title: "analyticalData.depth",
-    //   value: "depth",
-    //   show: true,
-    //   apiFieldValue: "depth",
-    //   sortField: ["depth"],
-    //   ...numberFieldProps,
-    //   ...smallColumn,
-    // },
-    // depth_interval: {
-    //   title: "analyticalData.depthInterval",
-    //   value: "depth_interval",
-    //   show: true,
-    //   apiFieldValue: "depth_interval",
-    //   sortField: ["depth_interval"],
-    //   ...numberFieldProps,
-    //   ...smallColumn,
-    // },
     rock: {
       title: "analyticalData.rock",
       value: "rock",
@@ -367,7 +349,7 @@ export const HEADERS_AREA: Headers = {
       value: "id",
       show: false,
       apiFieldValue: "id",
-      sortField: ["id"],
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     name: {
@@ -447,7 +429,7 @@ export const HEADERS_AREA_LOCALITY: Headers = {
       value: "id",
       show: false,
       apiFieldValue: "id",
-      sortField: ["id"],
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     locality: {
@@ -520,7 +502,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       value: "id",
       show: true,
       apiFieldValue: "id",
-      sortField: ["id"],
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     format_value: {
@@ -1364,8 +1346,8 @@ export const HEADERS_PHOTO: Headers = {
       title: "photo.id",
       value: "id",
       show: true,
-      apiFieldValue: "id_sl",
-      sortField: ["id_sl"],
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     image_number: {
@@ -1548,8 +1530,8 @@ export const HEADERS_REFERENCE: Headers = {
       title: "reference.id",
       value: "id",
       show: false,
-      apiFieldValue: "id",
-      sortField: ["id"],
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     reference: {
@@ -1644,8 +1626,8 @@ export const HEADERS_ROCK: Headers = {
       title: "rock.id",
       value: "id",
       show: true,
-      apiFieldValue: "id",
-      sortField: ["id"],
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     name: {
@@ -1699,6 +1681,7 @@ export const HEADERS_SAMPLE: Headers = {
       value: "id",
       show: true,
       apiFieldValue: "id_l",
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     number: {
@@ -1706,6 +1689,7 @@ export const HEADERS_SAMPLE: Headers = {
       value: "number",
       show: true,
       apiFieldValue: "number",
+      sortField: ["number"],
       ...narrowColumn,
     },
     locality: {
@@ -1770,6 +1754,7 @@ export const HEADERS_SAMPLE: Headers = {
       value: "collector",
       show: true,
       apiFieldValue: "collector",
+      sortField: ["collector"],
       ...normalColumn,
     },
     dateCollected: {
@@ -1777,6 +1762,7 @@ export const HEADERS_SAMPLE: Headers = {
       value: "date_collected",
       show: true,
       apiFieldValue: "date_collected",
+      sortField: ["date_collected"],
       ...normalColumn,
     },
     image: {
@@ -2484,22 +2470,6 @@ export const HEADERS_STRATIGRAPHY: Headers = {
         },
       ],
     },
-    // ageBase: {
-    //   title: "stratigraphy.ageBase",
-    //   value: "ageBase",
-    //   show: true,
-    //   apiFieldValue: "age_base",
-    //   sortField: ["age_base"],
-    //   ...numberFieldProps,
-    // },
-    // ageTop: {
-    //   title: "stratigraphy.ageTop",
-    //   value: "ageTop",
-    //   show: true,
-    //   apiFieldValue: "age_top",
-    //   sortField: ["age_top"],
-    //   ...numberFieldProps,
-    // },
     age_stratigraphy: {
       title: "stratigraphy.age_stratigraphy",
       value: "age_stratigraphy",
