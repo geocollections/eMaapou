@@ -101,6 +101,7 @@ async function handleAddSiblings() {
         v-if="!node.leaf"
         variant="text"
         class="text-body-2"
+        data-test="show-children"
         slim
         :icon="node.showChildren ? mdiChevronUp : mdiChevronDown"
         height="28"
@@ -118,6 +119,7 @@ async function handleAddSiblings() {
       >
         <TreeItem
           class="ml-2"
+          data-test="tree-item"
           :disabled="selected || disabled"
           :selected-values="selectedValues"
           :node="child"
