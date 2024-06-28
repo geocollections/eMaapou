@@ -107,31 +107,28 @@ async function handleAddSiblings() {
         height="28"
         width="28"
         style="text-transform: none"
-        :disabled="node.childrenLoaded && node.children.length < 1"
         @click="handleAddChildren(node)"
       />
     </div>
     <ul v-if="node.showChildren" class="border-s ml-2">
-      <div
+      <TreeItem
         v-for="(child, index) in node.children"
         :key="index"
         style="position: relative"
-      >
-        <TreeItem
-          class="ml-2"
-          data-test="tree-item"
-          :disabled="selected || disabled"
-          :selected-values="selectedValues"
-          :node="child"
-          :add-children="addChildren"
-          :add-siblings="handleAddSiblings"
-          :child="true"
-          @select="select"
-        />
-      </div>
+        class="ml-2"
+        data-test="tree-item"
+        :disabled="selected || disabled"
+        :selected-values="selectedValues"
+        :node="child"
+        :add-children="addChildren"
+        :add-siblings="handleAddSiblings"
+        :child="true"
+        @select="select"
+      />
       <VBtn
-        v-if="node.children.length < numChildren"
+        v-if="!node.childrenLoaded"
         class="ml-1 text-none text-body-2"
+        data-test="show-more"
         variant="text"
         color="accent"
         @click="handleAddSiblings"

@@ -130,13 +130,16 @@ async function addChildren(node: TreeNode) {
   const nodePage = paginationMap.value[node.value];
   const newPage = nodePage !== undefined ? nodePage + 1 : 1;
 
-  const [children, numBuckets] = await props.getChildren(node.value, { page: newPage, perPage: 15 });
+  const perPage = 15;
+  const [children, numBuckets] = await props.getChildren(node.value, { page: newPage, perPage });
 
   numBucketsMap.value[node.value] = numBuckets;
   paginationMap.value[node.value] = newPage;
 
   node.children = [...node.children, ...children];
-  node.childrenLoaded = true;
+  if (numBuckets < newPage * perPage) {
+    node.childrenLoaded = true;
+  }
   node.showChildren = true;
 
   return numBuckets ?? 0;
