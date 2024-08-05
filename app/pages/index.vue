@@ -255,7 +255,10 @@ const router = useRouter();
 const localePath = useLocalePath();
 
 function handleSearch() {
-  router.push(localePath({ name: "search", query: { q: query.value } }));
+  const trimmedQuery = query.value.trim();
+  if (trimmedQuery.length < 1)
+    return;
+  router.push(localePath({ name: "search", query: { q: trimmedQuery } }));
 }
 </script>
 
