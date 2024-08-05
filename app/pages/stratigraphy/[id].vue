@@ -134,50 +134,50 @@ export interface Stratigraphy {
   id: number;
   name: string;
   name_en: string;
-  author_text?: string;
-  year?: number;
-  etymon?: string;
-  etymon_en?: string;
-  original_locality?: string;
-  index_html?: string;
-  index_additional_html?: string;
-  index_old?: string;
-  age_top?: number;
-  age_base?: number;
-  hierarchy_string?: string;
-  age_reference?: {
+  author_text: Nullable<string>;
+  year: Nullable<number>;
+  etymon: Nullable<string>;
+  etymon_en: Nullable<string>;
+  original_locality: Nullable<string>;
+  index_html: Nullable<string>;
+  index_additional_html: Nullable<string>;
+  index_old: Nullable<string>;
+  age_top: Nullable<number>;
+  age_base: Nullable<number>;
+  hierarchy_string: Nullable<string>;
+  age_reference: Nullable<{
     id: number;
     reference: string;
-  };
-  age_chronostratigraphy?: {
+  }>;
+  age_chronostratigraphy: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  parent?: {
+  }>;
+  parent: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  type?: {
+  }>;
+  type: Nullable<{
     value: string;
     value_en: string;
-  };
-  original_rank?: string;
-  rank?: {
+  }>;
+  original_rank: Nullable<string>;
+  rank: Nullable<{
     value: string;
     value_en: string;
-  };
-  scope?: {
+  }>;
+  scope: Nullable<{
     value: string;
     value_en: string;
-  };
-  status?: {
+  }>;
+  status: Nullable<{
     value: string;
     value_en: string;
-  };
-  date_added?: string;
-  date_changed?: string;
+  }>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 }
 
 const { data } = await useAsyncData("stratigraphy", async () => {

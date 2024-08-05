@@ -144,47 +144,47 @@ const tabs = {
 export interface Dataset {
   id: number;
   title: string;
-  title_alternative?: string;
-  title_translated?: string;
-  owner?: {
+  title_alternative: Nullable<string>;
+  title_translated: Nullable<string>;
+  owner: Nullable<{
     name: string;
-  };
-  owner_text?: string;
-  creators?: string;
-  publication_year?: string;
-  date?: string;
-  resource?: string;
-  publisher?: string;
-  subjects?: string;
-  language?: {
+  }>;
+  owner_text: Nullable<string>;
+  creators: Nullable<string>;
+  publication_year: Nullable<string>;
+  date: Nullable<string>;
+  resource: Nullable<string>;
+  publisher: Nullable<string>;
+  subjects: Nullable<string>;
+  language: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  abstract?: string;
-  methods?: string;
-  version?: string;
-  reference?: {
+  }>;
+  abstract: Nullable<string>;
+  methods: Nullable<string>;
+  version: Nullable<string>;
+  reference: Nullable<{
     id: number;
     reference: string;
-  };
-  locality?: {
+  }>;
+  locality: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  copyright_agent?: {
+  }>;
+  copyright_agent: Nullable<{
     name: string;
-  };
-  licence?: {
+  }>;
+  licence: Nullable<{
     id: number;
     name: string;
     name_en: string;
-    url?: string;
-    url_en?: string;
-  };
-  date_added?: string;
-  date_changed?: string;
+    url: Nullable<string>;
+    url_en: Nullable<string>;
+  }>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 }
 
 const { data } = await useAsyncData("dataset", async () => {

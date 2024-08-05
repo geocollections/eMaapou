@@ -176,43 +176,42 @@ export interface Drillcore {
   id: number;
   name: string;
   name_en: string;
-  boxes?: number;
-  box_numbers?: string;
-  year?: string;
-  meters_in_box?: number;
-  remarks?: string;
-  date_added?: string;
-  date_changed?: string;
-  locality?: {
+  boxes: Nullable<number>;
+  box_numbers: Nullable<string>;
+  year: Nullable<string>;
+  meters_in_box: Nullable<number>;
+  remarks: Nullable<string>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
+  locality: Nullable<{
     id: number;
     name: string;
     name_en: string;
-    latitude?: number;
-    longitude?: number;
-    elevation?: string;
-    depth?: number;
-    country?: {
+    latitude: Nullable<number>;
+    longitude: Nullable<number>;
+    elevation: Nullable<string>;
+    depth: Nullable<number>;
+    country: Nullable<{
       name: string;
       name_en: string;
       iso_3166_1_alpha_2: string;
-    };
-  };
-  database?: {
+    }>;
+  }>;
+  database: Nullable<{
     name: string;
     name_en: string;
     url: string;
-  };
-  agent?: {
+  }>;
+  agent: Nullable<{
     name: string;
-  };
-  storage?: {
+  }>;
+  storage: Nullable<{
     name: string;
-  };
-  depository?: {
+  }>;
+  depository: Nullable<{
     value: string;
     value_en: string;
-  };
-
+  }>;
 };
 
 const { data } = await useAsyncData("drillcore", async () => {

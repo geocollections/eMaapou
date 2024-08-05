@@ -137,95 +137,95 @@ const similarSamples = computed(() => samplesRes.value?.response.docs ?? []);
 
 export interface Sample {
   id: number;
-  number?: string;
-  number_additional?: string;
-  number_field?: string;
-  depth?: number;
-  depth_interval?: number;
-  igsn?: string;
-  remarks?: string;
-  parent?: {
+  number: Nullable<string>;
+  number_additional: Nullable<string>;
+  number_field: Nullable<string>;
+  depth: Nullable<number>;
+  depth_interval: Nullable<number>;
+  igsn: Nullable<string>;
+  remarks: Nullable<string>;
+  parent: Nullable<{
     id: number;
-    number?: string;
-  };
-  specimen?: {
+    number: Nullable<string>;
+  }>;
+  specimen: Nullable<{
     id: number;
-    number?: string;
-  };
-  project?: {
-    id: number;
-    name: string;
-    name_en: string;
-  };
-  owner?: {
-    name: string;
-  };
-  classification_rock?: {
+    number: Nullable<string>;
+  }>;
+  project: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  rock_text?: string;
-  rock_text_en?: string;
-  purpose?: {
+  }>;
+  owner: Nullable<{
+    name: string;
+  }>;
+  classification_rock: Nullable<{
+    id: number;
+    name: string;
+    name_en: string;
+  }>;
+  rock_text: Nullable<string>;
+  rock_text_en: Nullable<string>;
+  purpose: Nullable<{
     value: string;
     value_en: string;
-  };
-  stratigraphy_text?: string;
-  stratigraphy_bed?: string;
-  stratigraphy?: {
+  }>;
+  stratigraphy_text: Nullable<string>;
+  stratigraphy_bed: Nullable<string>;
+  stratigraphy: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  lithostratigraphy?: {
+  }>;
+  lithostratigraphy: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  site?: {
+  }>;
+  site: Nullable<{
     id: number;
     name: string;
     name_en: string;
-    longitude?: number;
-    latitude?: number;
-  };
-  sample_series?: {
+    longitude: Nullable<number>;
+    latitude: Nullable<number>;
+  }>;
+  sample_series: Nullable<{
     id: number;
     name: string;
-  };
-  locality_text?: string;
-  locality?: {
+  }>;
+  locality_text: Nullable<string>;
+  locality: Nullable<{
     id: number;
     name: string;
     name_en: string;
-    longitude?: number;
-    latitude?: number;
-    elevation?: string;
-    depth?: number;
-    country?: {
+    longitude: Nullable<number>;
+    latitude: Nullable<number>;
+    elevation: Nullable<string>;
+    depth: Nullable<number>;
+    country: Nullable<{
       name: string;
       name_en: string;
       iso_3166_1_alpha_2: string;
-    };
-  };
-  database?: {
+    }>;
+  }>;
+  database: Nullable<{
     id: number;
     name: string;
     name_en: string;
     url: string;
-  };
-  date_collected?: string;
-  date_collected_text?: string;
-  collector?: {
+  }>;
+  date_collected: Nullable<string>;
+  date_collected_text: Nullable<string>;
+  collector: Nullable<{
     name: string;
-  };
-  collector_text?: string;
+  }>;
+  collector_text: Nullable<string>;
   is_palaeontology: boolean;
-  mass?: number;
-  fossils?: string;
-  date_added?: string;
-  date_changed?: string;
+  mass: Nullable<number>;
+  fossils: Nullable<string>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 }
 
 const { data } = await useAsyncData("sample", async () => {

@@ -71,45 +71,45 @@ const tabs = {
 export interface Preparation {
   id: number;
   number: string;
-  sample_number?: string;
-  remarks?: string;
-  date_added?: string;
-  date_changed?: string;
-  location?: string;
-  identification_date?: string;
-  identification_remarks?: string;
-  agent_text?: string;
-  date_prepared?: string;
-  date_prepared_text?: string;
-  sample?: {
+  sample_number: Nullable<string>;
+  remarks: Nullable<string>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
+  location: Nullable<string>;
+  identification_date: Nullable<string>;
+  identification_remarks: Nullable<string>;
+  agent_text: Nullable<string>;
+  date_prepared: Nullable<string>;
+  date_prepared_text: Nullable<string>;
+  sample: Nullable<{
     id: number;
     number: string;
-    number_additional?: string;
-    number_field?: string;
-    depth?: number;
-    depth_interval?: number;
-    date_collected?: string;
-    date_collected_text?: string;
-  };
-  analysis?: {
+    number_additional: Nullable<string>;
+    number_field: Nullable<string>;
+    depth: Nullable<number>;
+    depth_interval: Nullable<number>;
+    date_collected: Nullable<string>;
+    date_collected_text: Nullable<string>;
+  }>;
+  analysis: Nullable<{
     id: number;
-  };
-  taxon?: {
+  }>;
+  taxon: Nullable<{
     id: number;
     name: string;
-  };
-  identification_agent?: {
+  }>;
+  identification_agent: Nullable<{
     name: string;
-  };
-  agent?: {
+  }>;
+  agent: Nullable<{
     name: string;
-  };
-  storage?: {
+  }>;
+  storage: Nullable<{
     name: string;
-  };
-  owner?: {
+  }>;
+  owner: Nullable<{
     name: string;
-  };
+  }>;
 }
 
 const { data } = await useAsyncData("preparation", async () => {

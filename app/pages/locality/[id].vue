@@ -7,6 +7,7 @@ import {
   mdiOpenInNew,
   mdiScrewMachineFlatTop,
 } from "@mdi/js";
+import type { Nullable } from "vitest";
 import type { Tab } from "~/composables/useTabs";
 
 const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
@@ -217,55 +218,55 @@ export interface Locality {
   id: number;
   name: string;
   name_en: string;
-  number?: string;
-  longitude?: number;
-  latitude?: number;
-  elevation?: string;
-  coordx?: number;
-  coordy?: number;
-  remarks?: string;
-  remarks_location?: string;
-  land_board_id?: number;
-  coordinate_system?: string;
-  type?: {
+  number: Nullable<string>;
+  longitude: Nullable<number>;
+  latitude: Nullable<number>;
+  elevation: Nullable<string>;
+  coordx: Nullable<number>;
+  coordy: Nullable<number>;
+  remarks: Nullable<string>;
+  remarks_location: Nullable<string>;
+  land_board_id: Nullable<number>;
+  coordinate_system: Nullable<string>;
+  type: Nullable<{
     value: string;
     value_en: string;
-  };
-  country?: {
+  }>;
+  country: Nullable<{
     name: string;
     name_en: string;
     iso_3166_1_alpha_2: string;
-  };
-  coordinate_agent?: {
+  }>;
+  coordinate_agent: Nullable<{
     name: string;
-  };
-  coordinate_method?: {
+  }>;
+  coordinate_method: Nullable<{
     value: string;
     value_en: string;
-  };
-  coordinate_precision?: {
+  }>;
+  coordinate_precision: Nullable<{
     value: string;
-  };
-  stratigraphy_top?: {
+  }>;
+  stratigraphy_top: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  stratigraphy_base?: {
+  }>;
+  stratigraphy_base: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  municipality?: {
+  }>;
+  municipality: Nullable<{
     name: string;
     name_en: string;
-  };
-  settlement?: {
+  }>;
+  settlement: Nullable<{
     name: string;
     name_en: string;
-  };
-  date_added?: string;
-  date_changed?: string;
+  }>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 };
 
 const { data } = await useAsyncData("locality", async () => {

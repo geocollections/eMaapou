@@ -31,91 +31,91 @@ const tabs = {
 
 export interface File {
   id: number;
-  specimen?: {
+  specimen: Nullable<{
     id: number;
-    number?: string;
-    locality?: {
+    number: Nullable<string>;
+    locality: Nullable<{
       id: number;
       name: string;
       name_en: string;
-      latitude?: number;
-      longitude?: number;
-      country?: {
+      latitude: Nullable<number>;
+      longitude: Nullable<number>;
+      country: Nullable<{
         iso_3166_1_alpha_2: string;
-      };
-    };
-    collection?: {
+      }>;
+    }>;
+    collection: Nullable<{
       id: number;
       number: string;
-    };
-    stratigraphy?: {
+    }>;
+    stratigraphy: Nullable<{
       id: number;
       name: string;
       name_en: string;
-    };
-  };
+    }>;
+  }>;
   filename: string;
-  image_height?: number;
-  image_width?: number;
-  image_latitude?: number;
-  image_longitude?: number;
-  image_place?: string;
-  image_scalebar?: string;
-  image_number?: string;
-  image_people?: string;
-  description?: string;
-  description_en?: string;
-  date_digitised?: string;
-  date_digitised_text?: string;
-  mime_type?: {
+  image_height: Nullable<number>;
+  image_width: Nullable<number>;
+  image_latitude: Nullable<number>;
+  image_longitude: Nullable<number>;
+  image_place: Nullable<string>;
+  image_scalebar: Nullable<string>;
+  image_number: Nullable<string>;
+  image_people: Nullable<string>;
+  description: Nullable<string>;
+  description_en: Nullable<string>;
+  date_digitised: Nullable<string>;
+  date_digitised_text: Nullable<string>;
+  mime_type: Nullable<{
     id: number;
     content_type: string;
-  };
-  locality?: {
+  }>;
+  locality: Nullable<{
     id: number;
     name: string;
     name_en: string;
-    latitude?: number;
-    longitude?: number;
-    country?: {
+    latitude: Nullable<number>;
+    longitude: Nullable<number>;
+    country: Nullable<{
       iso_3166_1_alpha_2: string;
-    };
-  };
-  digitised_by?: {
+    }>;
+  }>;
+  digitised_by: Nullable<{
     name: string;
-  };
-  type?: {
+  }>;
+  type: Nullable<{
     id: number;
     value: string;
     value_en: string;
-  };
-  licence?: {
+  }>;
+  licence: Nullable<{
     name: string;
     url: string;
-  };
-  author?: {
+  }>;
+  author: Nullable<{
     name: string;
-  };
-  author_text?: string;
-  remarks?: string;
-  date_created?: string;
-  date_created_text?: string;
-  date_added?: string;
-  date_changed?: string;
-  imageset?: {
+  }>;
+  author_text: Nullable<string>;
+  remarks: Nullable<string>;
+  date_created: Nullable<string>;
+  date_created_text: Nullable<string>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
+  imageset: Nullable<{
     number: string;
     description: string;
-  };
-  database?: {
+  }>;
+  database: Nullable<{
     id: number;
     acronym: string;
     name: string;
     name_en: string;
     url: string;
-  };
-  reference?: {
+  }>;
+  reference: Nullable<{
     reference: string;
-  };
+  }>;
   specimen_image_attachment: number;
 }
 
