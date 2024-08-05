@@ -16,7 +16,7 @@ executors:
       - image: cimg/node:20.10.0
 
 jobs:
-  build-and-test:
+  test:
     executor: docker-publisher
     steps:
       - checkout
@@ -83,7 +83,7 @@ workflows:
     when:
       equal: [develop, << pipeline.git.branch >>]
     jobs:
-      - build-and-test
+      - test
       - build-image:
           requires:
             - build-and-test
@@ -99,6 +99,7 @@ workflows:
     when:
       equal: [main, << pipeline.git.branch >>]
     jobs:
+      - test
       - build-image:
           tags: -t $IMAGE_NAME:latest -t $IMAGE_NAME:<< pipeline.parameters.package-version >>
       - publish-image:
