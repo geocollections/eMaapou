@@ -198,7 +198,7 @@ describe("filterInputHierarchy", () => {
               count: 0,
               value: "item1",
             };
-            return [Array.from<TreeNode>({ length: 10 }, _e => ({ ...child })), 20];
+            return [Array.from({ length: 10 }, _e => ({ ...child })), 20];
           },
           suggestionFunction: async () => [],
         };
@@ -257,7 +257,7 @@ describe("filterInputHierarchy", () => {
               count: 0,
               value: "item1",
             };
-            return [Array.from<TreeNode>({ length: 10 }, _e => ({ ...child })), 20];
+            return [Array.from({ length: 10 }, _e => ({ ...child })), 20];
           },
           suggestionFunction: async () => [],
         };
