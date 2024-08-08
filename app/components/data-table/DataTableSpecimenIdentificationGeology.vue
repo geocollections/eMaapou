@@ -25,7 +25,7 @@
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.reference"
-        @click="$openGeology('reference', item.reference.id)"
+        @click="$openGeokirjandus('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
       </BaseLinkExternal>

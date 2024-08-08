@@ -9,9 +9,9 @@ const props = defineProps<{ area: Area }>();
 const area = computed(() => props.area);
 const deposit = computed(() => props.area.land_board_deposit);
 const miningClaim = computed(() => props.area.land_board_claim);
-const eelisArray = computed(() => props.area.eelis?.split(";") ?? []);
-const egfArray = computed(() => props.area.egf?.split(";") ?? []);
-const planArray = computed(() => props.area.plans?.split(";") ?? []);
+const eelisArray = computed(() => props.area.eelis?.split(";").map(id => id.trim()) ?? []);
+const egfArray = computed(() => props.area.egf?.split(";").map(id => id.trim()) ?? []);
+const planArray = computed(() => props.area.plans?.split(";").map(file => file.trim()) ?? []);
 const geojson = computed(() => {
   if (isEmpty(props.area))
     return null;
@@ -163,11 +163,13 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             :value="egfArray"
           >
             <template #value>
-              <span v-for="(item, index) in egfArray" :key="index">
-                <a class="text-link" @click="$openEgf(item)">
-                  {{ item }}
-                </a>
-                <span v-if="index !== egfArray.length - 1" class="mr-1">|</span>
+              <span v-for="(id, index) in egfArray" :key="index">
+                <BaseLinkExternal
+                  :to="`https://fond.egt.ee/fond/egf/${id}`"
+                >
+                  {{ id }}
+                </BaseLinkExternal>
+                <span v-if="index !== egfArray.length - 1" class="mx-1">|</span>
               </span>
             </template>
           </TableRow>
@@ -190,11 +192,11 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             :value="eelisArray"
           >
             <template #value>
-              <span v-for="(item, index) in eelisArray" :key="index">
-                <a class="text-link" @click="$openEelis(item)">
-                  {{ item }}
-                </a>
-                <span v-if="index !== eelisArray.length - 1" class="mr-1">|</span>
+              <span v-for="(id, index) in eelisArray" :key="index">
+                <BaseLinkExternal :to="`http://register.keskkonnainfo.ee/envreg/main?reg_kood=${id}`">
+                  {{ id }}
+                </BaseLinkExternal>
+                <span v-if="index !== eelisArray.length - 1" class="mx-1">|</span>
               </span>
             </template>
           </TableRow>
@@ -209,7 +211,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
                 <a
                   class="text-link"
                   :download="item.trim()"
-                  @click="$openTurba('plaanid', item.trim(), false)"
+                  :href="`https://turba.geoloogia.info/plaanid/${item.trim()}`"
                 >
                   {{ item }}
                   <VIcon size="small" color="primary-darken-2">

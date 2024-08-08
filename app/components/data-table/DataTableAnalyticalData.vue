@@ -95,7 +95,7 @@ const localePath = useLocalePath();
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.reference_id"
-        @click="$openGeology('reference', item.reference_id)"
+        @click="$openGeokirjandus('reference', item.reference.id)"
       >
         {{ item.reference }}
       </BaseLinkExternal>

@@ -5,7 +5,7 @@
       <a
         v-if="item.reference"
         class="text-link"
-        @click="$openGeology('reference', item.reference.id)"
+        @click="$openGeokirjandus('reference', item.reference.id)"
       >{{ item.reference.reference }}</a>
     </template>
 
