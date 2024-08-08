@@ -12,7 +12,7 @@ function openPDF(link: string) {
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.id"
-        @click="$openGeology('reference', item.id)"
+        @click="$openGeokirjandus('reference', item.id)"
       >
         {{ item.reference }}
       </BaseLinkExternal>

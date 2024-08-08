@@ -108,28 +108,28 @@ export interface Area {
     name: string;
     name_en: string;
   };
-  parent?: {
+  parent: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  county?: {
+  }>;
+  county: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  eelis?: string;
-  egf?: string;
-  plans?: string;
-  polygon?: string;
-  area_ha?: number;
-  deposit?: number;
-  deposit_area_ha?: number;
-  description?: string;
-  description_en?: string;
-  date_added?: string;
-  date_changed?: string;
-  land_board_deposit?: {
+  }>;
+  eelis: Nullable<string>;
+  egf: Nullable<string>;
+  plans: Nullable<string>;
+  polygon: Nullable<string>;
+  area_ha: Nullable<number>;
+  deposit: Nullable<number>;
+  deposit_area_ha: Nullable<number>;
+  description: Nullable<string>;
+  description_en: Nullable<string>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
+  land_board_deposit: Nullable<{
     id: number;
     nimetus: string;
     maardla_os: string;
@@ -141,8 +141,8 @@ export interface Area {
     maeteh_ti: string;
     geookol_ti: string;
     eksporditi: string;
-  };
-  land_board_claim?: {
+  }>;
+  land_board_claim: Nullable<{
     id: number;
     nimetus: string;
     reg_kaart: string;
@@ -157,7 +157,7 @@ export interface Area {
     kaevandaja: string;
     eksporditi: string;
     loa_omanik: string;
-  };
+  }>;
 }
 
 const { data } = await useAsyncData("area", async () => {

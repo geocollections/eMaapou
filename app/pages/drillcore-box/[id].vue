@@ -83,31 +83,31 @@ const tabs = {
 export interface DrillcoreBox {
   id: number;
   number: string;
-  depth_start?: number;
-  depth_end?: number;
-  depth_text?: string;
-  diameter?: number;
+  depth_start: Nullable<number>;
+  depth_end: Nullable<number>;
+  depth_text: Nullable<string>;
+  diameter: Nullable<number>;
   drillcore: {
     id: number;
     name: string;
     name_en: string;
     locality: number;
   };
-  stratigraphy_top?: {
+  stratigraphy_top: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  stratigraphy_top_text?: string;
-  stratigraphy_base?: {
+  }>;
+  stratigraphy_top_text: Nullable<string>;
+  stratigraphy_base: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  stratigraphy_base_text?: string;
-  remarks?: string;
-  date_added?: string;
-  date_changed?: string;
+  }>;
+  stratigraphy_base_text: Nullable<string>;
+  remarks: Nullable<string>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 }
 
 const { data } = await useAsyncData(

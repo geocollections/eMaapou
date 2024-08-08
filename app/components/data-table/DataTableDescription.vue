@@ -111,7 +111,7 @@ const localePath = useLocalePath();
         v-if="item.reference"
         class="text-link"
         :class="{ 'is-preferred': !item.is_preferred }"
-        @click="$openGeology('reference', item.reference.id)"
+        @click="$openGeokirjandus('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
       </a>

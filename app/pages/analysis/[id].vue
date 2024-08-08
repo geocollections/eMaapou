@@ -102,48 +102,48 @@ export interface Analysis {
     name: string;
     name_en: string;
   };
-  analyst?: {
+  analyst: Nullable<{
     name: string;
-  };
-  sample?: {
+  }>;
+  sample: Nullable<{
     id: number;
-    number?: string;
-    locality?: {
+    number: Nullable<string>;
+    locality: Nullable<{
       id: number;
       name: string;
       name_en: string;
-    };
-    depth?: number;
-    depth_interval?: number;
-    stratigraphy?: {
+    }>;
+    depth: Nullable<number>;
+    depth_interval: Nullable<number>;
+    stratigraphy: Nullable<{
       id: number;
       name: string;
       name_en: string;
-    };
-    lithostratigraphy?: {
+    }>;
+    lithostratigraphy: Nullable<{
       id: number;
       name: string;
       name_en: string;
-    };
-  };
-  remarks?: string;
-  reference?: {
+    }>;
+  }>;
+  remarks: Nullable<string>;
+  reference: Nullable<{
     id: number;
     reference: string;
-  };
-  database?: {
+  }>;
+  database: Nullable<{
     id: number;
     name: string;
     name_en: string;
     url: string;
-  };
-  dataset?: {
+  }>;
+  dataset: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  date_added?: string;
-  date_changed?: string;
+  }>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 }
 
 const { data } = await useAsyncData("analysis", async () => {

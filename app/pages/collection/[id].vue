@@ -38,23 +38,23 @@ export interface Collection {
   name_en: string;
   name_long: string;
   name_long_en: string;
-  classification?: {
+  classification: Nullable<{
     name: string;
-  };
-  number_objects?: number;
-  date_added?: string;
-  date_changed?: string;
-  database?: {
+  }>;
+  number_objects: Nullable<number>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
+  database: Nullable<{
     id: number;
     name: string;
     name_en: string;
     url: string;
-  };
-  reference?: {
+  }>;
+  reference: Nullable<{
     id: number;
     reference: string;
-  };
-  remarks?: string;
+  }>;
+  remarks: Nullable<string>;
 }
 
 const { data } = await useAsyncData("collection", async () => {

@@ -99,28 +99,28 @@ export interface Site {
   id: number;
   name: string;
   name_en: string;
-  coordx?: number;
-  coordy?: number;
-  depth?: number;
-  description?: string;
-  elevation?: string;
-  elevation_accuracy?: string;
-  extent?: number;
-  date_start?: string;
-  date_text?: string;
-  latitude?: number;
-  longitude?: number;
-  accuracy?: string;
-  remarks?: string;
-  remarks_location?: string;
-  area?: {
+  coordx: Nullable<number>;
+  coordy: Nullable<number>;
+  depth: Nullable<number>;
+  description: Nullable<string>;
+  elevation: Nullable<string>;
+  elevation_accuracy: Nullable<string>;
+  extent: Nullable<number>;
+  date_start: Nullable<string>;
+  date_text: Nullable<string>;
+  latitude: Nullable<number>;
+  longitude: Nullable<number>;
+  accuracy: Nullable<string>;
+  remarks: Nullable<string>;
+  remarks_location: Nullable<string>;
+  area: Nullable<{
     id: number;
     name: string;
     name_en: string;
     type: number;
-    plans?: string;
-  };
-  locality?: {
+    plans: Nullable<string>;
+  }>;
+  locality: Nullable<{
     id: number;
     name: string;
     name_en: string;
@@ -131,18 +131,18 @@ export interface Site {
       name_en: string;
       iso_3166_1_alpha_2: string;
     };
-  };
-  project?: {
+  }>;
+  project: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  coordinate_method?: {
+  }>;
+  coordinate_method: Nullable<{
     value: string;
     value_en: string;
-  };
-  date_added?: string;
-  date_changed?: string;
+  }>;
+  date_added: Nullable<string>;
+  date_changed: Nullable<string>;
 }
 
 const { data } = await useAsyncData("site", async () => {

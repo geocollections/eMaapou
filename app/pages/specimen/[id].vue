@@ -90,78 +90,78 @@ const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? [])
 
 export interface Specimen {
   id: number;
-  number?: string;
-  date_collected?: string;
-  date_collected_text?: string;
-  old_number?: string;
-  part?: string;
-  depth?: number;
-  remarks?: string;
-  collector?: {
+  number: Nullable<string>;
+  date_collected: Nullable<string>;
+  date_collected_text: Nullable<string>;
+  old_number: Nullable<string>;
+  part: Nullable<string>;
+  depth: Nullable<number>;
+  remarks: Nullable<string>;
+  collector: Nullable<{
     name: string;
-  };
-  type?: {
+  }>;
+  type: Nullable<{
     value: string;
     value_en: string;
-  };
-  classification?: {
+  }>;
+  classification: Nullable<{
     name: string;
     name_en: string;
-  };
-  locality?: {
+  }>;
+  locality: Nullable<{
     id: number;
     name: string;
     name_en: string;
-    longitude?: number;
-    latitude?: number;
-    country?: {
+    longitude: Nullable<number>;
+    latitude: Nullable<number>;
+    country: Nullable<{
       name: string;
       name_en: string;
       iso_3166_1_alpha_2: string;
-    };
-  };
-  stratigraphy?: {
+    }>;
+  }>;
+  stratigraphy: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  stratigraphy_text?: string;
-  lithostratigraphy?: {
+  }>;
+  stratigraphy_text: Nullable<string>;
+  lithostratigraphy: Nullable<{
     id: number;
     name: string;
     name_en: string;
-  };
-  database?: {
+  }>;
+  database: Nullable<{
     id: number;
     acronym: string;
     name: string;
     name_en: string;
     url: string;
-  };
-  sample?: {
+  }>;
+  sample: Nullable<{
     id: number;
     number: string;
-  };
-  parent?: {
+  }>;
+  parent: Nullable<{
     id: number;
     number: string;
-  };
-  collection?: {
+  }>;
+  collection: Nullable<{
     id: number;
     number: string;
     name: string;
     name_en: string;
-  };
-  original_status?: {
+  }>;
+  original_status: Nullable<{
     id: number;
     value: string;
     value_en: string;
-  };
-  fossil?: {
+  }>;
+  fossil: Nullable<{
     id: number;
     value: string;
     value_en: string;
-  };
+  }>;
 }
 
 const { data } = await useAsyncData("specimen", async () => {

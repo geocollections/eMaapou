@@ -11,12 +11,10 @@ import {
 import { useDisplay } from "vuetify";
 
 const img = useImage();
-const backgroundImg = computed(() => {
-  return img("/frontpage/header_img2.jpg");
-});
-const backgroundSvg = computed(() => {
-  return img("/frontpage/layered-peaks-haikei.svg");
-});
+
+const backgroundImg = img("/frontpage/header_img2.jpg");
+const backgroundSvg = img("/frontpage/layered-peaks-haikei.svg");
+const background = `url(${backgroundSvg}), url(${backgroundImg})`;
 
 const { t } = useI18n();
 
@@ -30,12 +28,12 @@ useHead({
     {
       rel: "preload",
       as: "image",
-      href: backgroundSvg.value,
+      href: backgroundSvg,
     },
     {
       rel: "preload",
       as: "image",
-      href: backgroundImg.value,
+      href: backgroundImg,
     },
   ],
 });
@@ -240,10 +238,6 @@ const { data: searchRoutes } = await useAsyncData<SearchRoute[]>(
   },
 );
 
-const backgroundImage = computed(() => {
-  return `url(${backgroundSvg.value}), url(${backgroundImg.value})`;
-});
-
 const { smAndUp } = useDisplay();
 const topHeight = computed(() => {
   if (smAndUp)
@@ -267,7 +261,7 @@ function handleSearch() {
     <div
       class="spacer pt-16"
       :style="{
-        'background-image': backgroundImage,
+        'background-image': background,
         'background-color': '#333333',
         'height': topHeight,
       }"
