@@ -86,7 +86,7 @@ workflows:
       - test
       - build-image:
           requires:
-            - build-and-test
+            - test
           tags: -t $IMAGE_NAME:dev
       - publish-image:
           requires:
@@ -101,6 +101,8 @@ workflows:
     jobs:
       - test
       - build-image:
+          requires:
+            - test
           tags: -t $IMAGE_NAME:latest -t $IMAGE_NAME:<< pipeline.parameters.package-version >>
       - publish-image:
           requires:
