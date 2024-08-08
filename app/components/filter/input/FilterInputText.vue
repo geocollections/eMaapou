@@ -25,9 +25,10 @@ watch(
 );
 
 function handleAdd() {
-  if (internalValue.value === "")
+  const trimmedValue = internalValue.value.trim();
+  if (trimmedValue === "")
     return;
-  selectedItems.value = [...selectedItems.value, internalValue.value];
+  selectedItems.value = [...selectedItems.value, trimmedValue];
   internalValue.value = "";
   emit("update:model-value", selectedItems.value);
 }

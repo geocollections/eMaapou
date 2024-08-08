@@ -167,4 +167,34 @@ describe("filterInputText", () => {
     const selectedItemsText = selectedItems.map(item => item.text());
     expect(selectedItemsText).toEqual(["item1", "item2", "item3"]);
   });
+
+  it("should trim input value when adding new value", async () => {
+    const wrapper = mount({
+      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+    }, {
+      components: { FilterInputText },
+      data() {
+        return {
+          title: "Title",
+          modelValue: ["item1", "item2"],
+        };
+      },
+      global: {
+        plugins: [vuetify, i18n],
+      },
+    });
+
+    await wrapper.find(titleSelector).trigger("click");
+
+    const inputWrapper = wrapper.get("[data-test=\"text-input\"]");
+    const input = inputWrapper.find("input");
+    await input.setValue(" item3 ");
+    await wrapper.find("[data-test=\"add-button\"]").trigger("click");
+
+    expect(wrapper.findComponent(FilterInputText).props("modelValue")).toEqual(["item1", "item2", "item3"]);
+
+    const selectedItems = wrapper.findAll("[data-test=\"selected-item\"]");
+    const selectedItemsText = selectedItems.map(item => item.text());
+    expect(selectedItemsText).toEqual(["item1", "item2", "item3"]);
+  });
 });
