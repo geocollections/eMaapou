@@ -1,5 +1,4 @@
 const EDIT_URL = "https://edit.geocollections.info";
-const GEOLOGY_URL = "https://geoloogia.info";
 const GEOKIRJANDUS_URL = "https://kirjandus.geoloogia.info";
 
 export default defineNuxtPlugin((_nuxtApp) => {
@@ -36,16 +35,6 @@ export default defineNuxtPlugin((_nuxtApp) => {
     }
   };
 
-  function openGeology(table: string, id: string) {
-    if (table && id) {
-      window.open(
-        `${GEOLOGY_URL}/${table}/${id}`,
-        "GeologyWindow",
-        "height=800, width=800",
-      );
-    }
-  };
-
   function openGeokirjandus(table: "reference" | "library", id: string) {
     window.open(
       `${GEOKIRJANDUS_URL}/${table}/${id}`,
@@ -56,7 +45,6 @@ export default defineNuxtPlugin((_nuxtApp) => {
 
   return {
     provide: {
-      openGeology,
       openEdit,
       openWindow,
       openImage,
