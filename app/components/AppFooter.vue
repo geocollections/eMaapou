@@ -295,6 +295,25 @@ const routes = [
     </VContainer>
     <VContainer fluid class="border-t">
       <VContainer :fluid="$vuetify.display.lgAndDown">
+        <VRow class="pb-2">
+          <VCol class="text-body-2 text-center">
+            <div class="text-center d-flex justify-center align-center">
+              <div style="max-width: 700px">
+                <I18nT
+                  class="text-body-2 "
+                  keypath="privacyNotice"
+                  scope="global"
+                  tag="div"
+                >
+                  <a
+                    href="https://matomo.org"
+                    class="font-weight-bold text-blue text-decoration-none"
+                  >Matomo</a>
+                </I18nT>
+              </div>
+            </div>
+          </VCol>
+        </VRow>
         <VRow no-gutters>
           <VCol cols="12" align-self="center">
             <div class="text-center d-flex justify-center align-center">
