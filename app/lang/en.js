@@ -641,6 +641,7 @@ export default {
     elm: "Estonian Museum of Natural History",
     el: "European Union",
   },
+  privacyNotice: "This site uses {0} to analyze traffic and help us to improve your user experience. We process your IP address, viewed pages, load times and device information. This data is only processed by us.",
   frontDrillcores: {
     title: "Drillcores",
     description: "Catalogue of drillcores",
