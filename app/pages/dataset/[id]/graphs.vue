@@ -3,17 +3,10 @@ import type { Dataset } from "../[id].vue";
 
 defineProps<{ dataset: Dataset }>();
 
-const analysisResults = ref([]);
-const sampleResults = ref([]);
-const minDepth = ref(0);
-const maxDepth = ref(0);
-const reversed = ref(false);
-const parameters = ref<any[]>([]);
-
 const { $solrFetch } = useNuxtApp();
 const route = useRoute();
 
-await useLazyAsyncData("data", async () => {
+const { data } = await useLazyAsyncData("data", async () => {
   const analysisResultsPromise = $solrFetch<any>("/analysis_results", {
     query: {
       "q": "*",
@@ -44,16 +37,12 @@ await useLazyAsyncData("data", async () => {
     },
   });
 
-  // TODO: catch any failing promises
   const [analysisResultsResponse, sampleResponse] = await Promise.all([
     analysisResultsPromise,
     samplesPromise,
   ]);
 
-  const _analysisResults = analysisResultsResponse?.response.docs;
-  const _sampleResults = sampleResponse?.response.docs;
-
-  const [_maxDepth, _minDepth, _reversed] = chartRange(
+  const [maxDepth, minDepth, reversed] = chartRange(
     [
       analysisResultsResponse.stats.stats_fields.depth.max,
       sampleResponse.stats.stats_fields.depth.max,
@@ -65,30 +54,42 @@ await useLazyAsyncData("data", async () => {
       sampleResponse.stats.stats_fields.depth_interval.min,
     ],
   );
-  const _parameters = flogParameters(
+  const parameters = flogParameters(
     analysisResultsResponse.facet_counts.facet_pivot,
   );
 
-  analysisResults.value = _analysisResults;
-  sampleResults.value = _sampleResults;
-  minDepth.value = _minDepth;
-  maxDepth.value = _maxDepth;
-  reversed.value = _reversed;
-  parameters.value = _parameters;
+  return {
+    analysisResults: analysisResultsResponse.response.docs,
+    sampleResults: sampleResponse.response.docs,
+    minDepth,
+    maxDepth,
+    parameters,
+    reversed,
+  };
+}, {
+  default: () => ({
+    analysisResults: [],
+    sampleResults: [],
+    taxaResults: [],
+    minDepth: 0,
+    maxDepth: 0,
+    parameters: [],
+    reversed: false,
+  }),
 });
 </script>
 
 <template>
   <div>
     <ChartFlog
-      v-if="analysisResults.length > 0 && sampleResults.length > 0"
-      :analyses="analysisResults"
-      :samples="sampleResults"
-      :min-depth="minDepth"
-      :max-depth="maxDepth"
-      :parameters="parameters"
+      v-if="data.analysisResults.length > 0 && data.sampleResults.length > 0"
+      :analyses="data.analysisResults"
+      :samples="data.sampleResults"
+      :min-depth="data.minDepth"
+      :max-depth="data.maxDepth"
+      :parameters="data.parameters"
       :title="dataset.title"
-      :reverse="reversed"
+      :reverse="data.reversed"
     />
   </div>
 </template>
