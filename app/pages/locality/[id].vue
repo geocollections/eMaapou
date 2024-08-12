@@ -448,18 +448,11 @@ useSeoMeta({
         "
       >
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.locality')"
             :to="localePath({ path: '/locality', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiMapMarker }}
-            </VIcon>
-            {{ $t("common.locality") }}
-          </VChip>
+            :icon="mdiMapMarker"
+          />
         </template>
         <template #sub>
           <VBtn

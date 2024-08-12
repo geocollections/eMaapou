@@ -256,18 +256,11 @@ useHead({
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.area')"
             :to="localePath({ path: '/area', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiMapMarkerRadiusOutline }}
-            </VIcon>
-            {{ $t("common.area") }}
-          </VChip>
+            :icon="mdiMapMarkerRadiusOutline"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

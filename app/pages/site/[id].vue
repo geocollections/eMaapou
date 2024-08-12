@@ -274,18 +274,11 @@ useSeoMeta({
     <template #title>
       <HeaderDetailNew :title="title">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.site')"
             :to="localePath({ path: '/site', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiMapMarkerOutline }}
-            </VIcon>
-            {{ $t("common.site") }}
-          </VChip>
+            :icon="mdiMapMarkerOutline"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

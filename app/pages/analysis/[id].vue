@@ -257,18 +257,11 @@ const searchRoute = computed(() => {
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.analysis')"
             :to="localePath({ path: '/analysis', query: getQueryParamsAnalysis() })"
-          >
-            <VIcon start>
-              {{ mdiTestTube }}
-            </VIcon>
-            {{ $t("common.analysis") }}
-          </VChip>
+            :icon="mdiTestTube"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

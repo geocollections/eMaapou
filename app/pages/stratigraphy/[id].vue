@@ -272,18 +272,11 @@ useHead({
     <template #title>
       <HeaderDetailNew :title="title">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.stratigraphy')"
             :to="localePath({ path: '/stratigraphy', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiLayersTriple }}
-            </VIcon>
-            {{ $t("common.stratigraphy") }}
-          </VChip>
+            :icon="mdiLayersTriple"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />

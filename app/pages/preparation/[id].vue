@@ -193,18 +193,11 @@ useHead({
     <template #title>
       <HeaderDetailNew :title="title">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.preparation')"
             :to="localePath({ path: '/preparation', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiEyedropper }}
-            </VIcon>
-            {{ $t("common.preparation") }}
-          </VChip>
+            :icon="mdiEyedropper"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

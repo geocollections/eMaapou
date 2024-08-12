@@ -310,18 +310,11 @@ useSeoMeta({
     <template #title>
       <HeaderDetailNew :title="data?.dataset?.title">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.dataset')"
             :to="localePath({ path: '/dataset', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiDatabaseOutline }}
-            </VIcon>
-            {{ $t("common.dataset") }}
-          </VChip>
+            :icon="mdiDatabaseOutline"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

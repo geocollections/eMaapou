@@ -328,18 +328,11 @@ useSeoMeta({
     <template #title>
       <HeaderDetailNew class="mb-0">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.specimen')"
             :to="localePath({ path: '/specimen', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiBug }}
-            </VIcon>
-            {{ $t("common.specimen") }}
-          </VChip>
+            :icon="mdiBug"
+          />
         </template>
         <div>
           <div>

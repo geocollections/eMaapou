@@ -337,18 +337,11 @@ useHead({
         "
       >
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.drillcore')"
             :to="localePath({ path: '/drillcore', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiScrewMachineFlatTop }}
-            </VIcon>
-            {{ $t("common.drillcore") }}
-          </VChip>
+            :icon="mdiScrewMachineFlatTop"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
