@@ -326,20 +326,13 @@ useSeoMeta({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew class="mb-0">
+      <HeaderDetail class="mb-0">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.specimen')"
             :to="localePath({ path: '/specimen', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiBug }}
-            </VIcon>
-            {{ $t("common.specimen") }}
-          </VChip>
+            :icon="mdiBug"
+          />
         </template>
         <div>
           <div>
@@ -381,7 +374,7 @@ useSeoMeta({
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />
     <template #drawer>

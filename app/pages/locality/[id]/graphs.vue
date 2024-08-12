@@ -10,18 +10,11 @@ const props = withDefaults(defineProps<{
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 
-const lasContent = ref<{ [K: string]: any }>();
-const analysisResults = ref<any[]>([]);
-const sampleResults = ref<any[]>([]);
-const taxaResults = ref<any[]>([]);
-const minDepth = ref<number>(0);
-const maxDepth = ref<number>(0);
-const parameters = ref<any[]>([]);
-const reversed = ref<boolean>(false);
 const route = useRoute();
 
-await useLazyAsyncData("data", async () => {
+const { data } = await useLazyAsyncData("data", async () => {
   let rawLasFileContent;
+  let lasContent: { [K: string]: any } | null = null;
   if (props.attachment) {
     const rawLasfileContentResponse = await $geoloogiaFetch<any>(
       `/file/${props.attachment}/`,
@@ -39,7 +32,7 @@ await useLazyAsyncData("data", async () => {
     ) {
       rawLasFileContent = "";
     }
-    lasContent.value = rawLasFileContent;
+    lasContent = rawLasFileContent;
   }
 
   const analysisResultsPromise = $solrFetch<SolrResponse & { stats: any; facet_counts: any }>("/analysis_results", {
@@ -85,15 +78,10 @@ await useLazyAsyncData("data", async () => {
     },
   });
 
-  // TODO: catch any failing promises
   const [analysisResultsResponse, sampleResponse, taxaResponse]
     = await Promise.all([analysisResultsPromise, samplesPromise, taxaPromise]);
 
-  analysisResults.value = analysisResultsResponse?.response.docs;
-  sampleResults.value = sampleResponse?.response.docs;
-  taxaResults.value = taxaResponse?.response.docs;
-
-  const [_maxDepth, _minDepth, _reversed] = chartRange(
+  const [maxDepth, minDepth, reversed] = chartRange(
     [
       analysisResultsResponse.stats.stats_fields.depth.max,
       sampleResponse.stats.stats_fields.depth.max,
@@ -107,13 +95,31 @@ await useLazyAsyncData("data", async () => {
       taxaResponse.stats.stats_fields.depth.min,
     ],
   );
-  const _parameters = flogParameters(
+  const parameters = flogParameters(
     analysisResultsResponse.facet_counts.facet_pivot,
   );
-  maxDepth.value = _maxDepth;
-  minDepth.value = _minDepth;
-  parameters.value = _parameters;
-  reversed.value = _reversed;
+
+  return {
+    analysisResults: analysisResultsResponse.response.docs,
+    sampleResults: sampleResponse.response.docs,
+    taxaResults: taxaResponse.response.docs,
+    minDepth,
+    maxDepth,
+    parameters,
+    reversed,
+    lasContent,
+  };
+}, {
+  default: () => ({
+    analysisResults: [],
+    sampleResults: [],
+    taxaResults: [],
+    minDepth: 0,
+    maxDepth: 0,
+    parameters: [],
+    reversed: false,
+    lasContent: null,
+  }),
 });
 
 const chartTitle = computed(() => {
@@ -127,29 +133,29 @@ const chartTitle = computed(() => {
 <template>
   <div>
     <ChartFlog
-      v-if="analysisResults.length > 0 && sampleResults.length > 0"
-      :analyses="analysisResults"
-      :samples="sampleResults"
-      :taxa="taxaResults"
-      :min-depth="minDepth"
-      :max-depth="maxDepth"
-      :parameters="parameters"
+      v-if="data.analysisResults.length > 0 && data.sampleResults.length > 0"
+      :analyses="data.analysisResults"
+      :samples="data.sampleResults"
+      :taxa="data.taxaResults"
+      :min-depth="data.minDepth"
+      :max-depth="data.maxDepth"
+      :parameters="data.parameters"
       :title="
         $translate({
           et: localityObject.name,
           en: localityObject.name_en,
         })
       "
-      :reverse="reversed"
+      :reverse="data.reversed"
     />
     <ChartLas
-      v-if="attachment && lasContent"
+      v-if="attachment && data.lasContent"
       class="pa-2"
       :class="{
-        'pt-4': analysisResults.length > 0 && sampleResults.length > 0,
+        'pt-4': data.analysisResults.length > 0 && data.sampleResults.length > 0,
       }"
       :chart-title="chartTitle"
-      :file-data="lasContent"
+      :file-data="data.lasContent"
     />
   </div>
 </template>

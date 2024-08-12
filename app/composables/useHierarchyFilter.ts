@@ -12,7 +12,7 @@ export function useStratigraphyHierarchyFilter(
       query: Ref<string>;
       filter: Ref<(string | { [K: string]: string })[]>;
     };
-    filter: any; // TODO: define type
+    filter: StringIdListFilter;
   },
 ) {
   const { $solrFetch } = useNuxtApp();
@@ -158,7 +158,7 @@ export function useRockHierarchyFilter(
       query: Ref<string>;
       filter: Ref<(string | { [K: string]: string })[]>;
     };
-    filter: any; // TODO: define type
+    filter: StringIdListFilter;
   },
 ) {
   const { $solrFetch } = useNuxtApp();
@@ -302,7 +302,7 @@ export function useTaxonHierarchyFilter(
       query: Ref<string>;
       filter: Ref<(string | { [K: string]: string })[]>;
     };
-    filter: any; // TODO: define type
+    filter: StringIdListFilter;
   },
 ) {
   const { $solrFetch } = useNuxtApp();

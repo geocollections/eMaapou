@@ -439,7 +439,7 @@ useSeoMeta({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew
+      <HeaderDetail
         :title="
           $translate({
             et: data?.locality?.name,
@@ -448,18 +448,11 @@ useSeoMeta({
         "
       >
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.locality')"
             :to="localePath({ path: '/locality', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiMapMarker }}
-            </VIcon>
-            {{ $t("common.locality") }}
-          </VChip>
+            :icon="mdiMapMarker"
+          />
         </template>
         <template #sub>
           <VBtn
@@ -528,7 +521,7 @@ useSeoMeta({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <template #drawer>
       <SearchResultsDrawer

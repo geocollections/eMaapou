@@ -26,7 +26,7 @@ import type {
 import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
 import { CustomChart, LineChart } from "echarts/charts";
 import VChart from "vue-echarts";
-import type { ComposeOption } from "echarts/core";
+import type { ComposeOption, ECElementEvent } from "echarts/core";
 import { use } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 import type { TitleOption } from "echarts/types/dist/shared.js";
@@ -204,10 +204,12 @@ function scaleChartHeight() {
 }
 const router = useRouter();
 
-function handleClick(event: any) {
-  // TODO: `any` should be replaced with the correct event type from echarts
+function handleClick(event: ECElementEvent) {
   if (event.seriesId === "samples-series") {
-    const sampleId = event.data[3];
+    const sampleId = Array.isArray(event.data) ? event.data[3] as string : undefined;
+    if (sampleId === undefined) {
+      return;
+    }
     if (sampleId) {
       const sampleRoute = localeRoute({
         name: "sample-id",

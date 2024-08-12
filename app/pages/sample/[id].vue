@@ -368,25 +368,18 @@ useHead({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew :title="pageTitle">
+      <HeaderDetail :title="pageTitle">
         <template #prepend>
-          <VChip
-            class="text-none"
-            variant="tonal"
-            color="accent"
-            label
+          <CategoryChip
+            :title="$t('common.sample')"
             :to="localePath({ path: '/sample', query: getQueryParams() })"
-          >
-            <VIcon start>
-              {{ mdiImageFilterHdr }}
-            </VIcon>
-            {{ $t("common.sample") }}
-          </VChip>
+            :icon="mdiImageFilterHdr"
+          />
         </template>
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />
     <template #drawer>
