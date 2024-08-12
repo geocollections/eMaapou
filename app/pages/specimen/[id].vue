@@ -326,7 +326,7 @@ useSeoMeta({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew class="mb-0">
+      <HeaderDetail class="mb-0">
         <template #prepend>
           <CategoryChip
             :title="$t('common.specimen')"
@@ -374,7 +374,7 @@ useSeoMeta({
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />
     <template #drawer>

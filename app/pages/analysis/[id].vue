@@ -255,7 +255,7 @@ const searchRoute = computed(() => {
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew :title="pageTitle">
+      <HeaderDetail :title="pageTitle">
         <template #prepend>
           <CategoryChip
             :title="$t('common.analysis')"
@@ -266,7 +266,7 @@ const searchRoute = computed(() => {
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <template #drawer>
       <SearchResultsDrawer

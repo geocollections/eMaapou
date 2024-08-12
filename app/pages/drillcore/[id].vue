@@ -328,7 +328,7 @@ useHead({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew
+      <HeaderDetail
         :title="
           $translate({
             et: data?.drillcore?.name,
@@ -346,7 +346,7 @@ useHead({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <template #drawer>
       <SearchResultsDrawer

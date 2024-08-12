@@ -246,7 +246,7 @@ useSeoMeta({
 <template>
   <TemplateDetail :show-similar="false">
     <template #title>
-      <HeaderDetailNew :title="pageTitle">
+      <HeaderDetail :title="pageTitle">
         <template #prepend>
           <VChip
             class="text-none"
@@ -263,7 +263,7 @@ useSeoMeta({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />
   </TemplateDetail>

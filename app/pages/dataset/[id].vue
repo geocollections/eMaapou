@@ -308,7 +308,7 @@ useSeoMeta({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew :title="data?.dataset?.title">
+      <HeaderDetail :title="data?.dataset?.title">
         <template #prepend>
           <CategoryChip
             :title="$t('common.dataset')"
@@ -319,7 +319,7 @@ useSeoMeta({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <template #drawer>
       <SearchResultsDrawer

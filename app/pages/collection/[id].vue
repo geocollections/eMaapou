@@ -133,7 +133,7 @@ useHead({
 <template>
   <TemplateDetail :show-similar="false">
     <template #title>
-      <HeaderDetailNew :title="title">
+      <HeaderDetail :title="title">
         <template #prepend>
           <VChip
             class="text-none"
@@ -147,7 +147,7 @@ useHead({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />
   </TemplateDetail>

@@ -191,7 +191,7 @@ useHead({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew :title="title">
+      <HeaderDetail :title="title">
         <template #prepend>
           <CategoryChip
             :title="$t('common.preparation')"
@@ -202,7 +202,7 @@ useHead({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <template #drawer>
       <SearchResultsDrawer

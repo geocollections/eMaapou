@@ -368,7 +368,7 @@ useHead({
 <template>
   <TemplateDetail :show-similar="showDrawer">
     <template #title>
-      <HeaderDetailNew :title="pageTitle">
+      <HeaderDetail :title="pageTitle">
         <template #prepend>
           <CategoryChip
             :title="$t('common.sample')"
@@ -379,7 +379,7 @@ useHead({
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>
-      </HeaderDetailNew>
+      </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />
     <template #drawer>
