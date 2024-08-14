@@ -501,7 +501,7 @@ export default {
     coordx: "X (L-EST, m)",
     coordy: "Y (L-EST, m)",
     elevation: "Z (m)",
-    depth: "Depth / thickness (m)",
+    depth: "Depth (m)",
     description: "Description",
     elevationAccuracy: "Elevation accuracy",
     locality: "Locality",

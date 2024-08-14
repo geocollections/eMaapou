@@ -202,7 +202,6 @@ export interface Sample {
     longitude: Nullable<number>;
     latitude: Nullable<number>;
     elevation: Nullable<string>;
-    depth: Nullable<number>;
     country: Nullable<{
       name: string;
       name_en: string;
@@ -278,7 +277,6 @@ const { data } = await useAsyncData("sample", async () => {
         "locality.longitude",
         "locality.latitude",
         "locality.elevation",
-        "locality.depth",
         "locality.country.name",
         "locality.country.name_en",
         "locality.country.iso_3166_1_alpha_2",

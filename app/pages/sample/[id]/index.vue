@@ -261,10 +261,6 @@ const mapOverlays = computed(() => {
               :title="$t('locality.elevation')"
               :value="locality.elevation"
             />
-            <TableRow
-              :title="$t('locality.depth')"
-              :value="locality.depth"
-            />
           </template>
           <template v-if="site">
             <TableRow
