@@ -7,7 +7,7 @@ withDefaults(defineProps<{ color: string }>(), { color: "white" });
 <template>
   <VBtn
     id="lang_switch_btn"
-    aria-label="select language"
+    :aria-label="$t('languagesLabel')"
     variant="text"
     class="montserrat text-capitalize"
     :color="color"

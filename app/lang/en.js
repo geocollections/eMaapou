@@ -43,6 +43,7 @@ export default {
     searchPlaceholder: "Search Geocollections",
     description:
       "Open access geoscience data in Estonia, provided by the national research infrastructure NATARC.",
+    alt: "Landing page",
   },
   common: {
     general: "General info",
@@ -1186,5 +1187,9 @@ export default {
     table: "Table",
     name: "Name",
   },
+  logo: {
+    alt: "Geocollections logo",
+  },
+  languagesLabel: "Languages",
   $vuetify,
 };

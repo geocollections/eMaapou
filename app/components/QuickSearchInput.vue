@@ -40,11 +40,12 @@ function handleClick() {
       <VBtn
         v-bind="hoverProps"
         height="40"
-        :width="$vuetify.display.xs ? 32 : 48"
         elevation="0"
-        :color="isHovering ? 'blue-darken-1' : 'grey'"
         class="rounded-0 rounded-e"
         variant="flat"
+        :color="isHovering ? 'blue-darken-1' : 'grey'"
+        :width="$vuetify.display.xs ? 32 : 48"
+        :aria-label="$t('common.search')"
         @click="handleClick"
       >
         <VIcon>

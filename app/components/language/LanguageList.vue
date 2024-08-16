@@ -8,12 +8,12 @@ const switchLocalePath = useSwitchLocalePath();
 </script>
 
 <template>
-  <VList class="py-1 px-2">
+  <VList class="py-1" :aria-label="$t('languagesLabel')">
     <VListItem
       v-for="(locale, i) in availableLocales"
       :key="i"
-      nuxt
       class="header-menu-item rounded my-1"
+      role="option"
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       :to="switchLocalePath(locale.code)"
     >

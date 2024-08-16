@@ -56,13 +56,13 @@ const state = reactive({
     @update:model-value="emit('update:navigationDrawer', $event)"
   >
     <VContainer class="more-menu py-4 mb-6">
-      <VList class="py-1 px-2">
+      <VList class="py-1" :aria-label="$t('title')">
         <VListItem
           v-for="route in state.routes"
           :key="route.routeName"
-          nuxt
           class="header-menu-item rounded my-1"
-          color="accent-darken-1"
+          color="grey-darken-4"
+          role="option"
           :to="localePath({ name: route.routeName })"
         >
           <VListItemTitle class="d-flex py-1">
@@ -81,60 +81,57 @@ const state = reactive({
 
       <VDivider class="bg-primary" />
 
-      <VList class="py-1 px-2">
+      <VList class="py-1" :aria-label="$t('landing.searchRoutes')">
         <BaseMenuListItem
           v-for="(item, index) in state.browseTaxon"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
           :label="$t(item.label)"
-          nuxt
+          role="option"
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-      </VList>
-      <VDivider class="mx-3 my-1" />
-      <VList class="py-1 px-2">
+        <VDivider class="my-1" aria-hidden="true" />
         <BaseMenuListItem
           v-for="(item, index) in state.browseLab"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
           :label="$t(item.label)"
-          nuxt
+          role="option"
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-      </VList>
 
-      <VDivider class="mx-3 my-1" />
-      <VList class="py-1 px-2">
+        <VDivider class="my-1" aria-hidden="true" />
         <BaseMenuListItem
           v-for="(item, index) in state.browseGeography"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
           :label="$t(item.label)"
-          nuxt
+          role="option"
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
       </VList>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">
-        Services
+        {{ $t("landing.otherServices") }}
       </div>
 
       <VDivider class="bg-primary" />
 
-      <VList class="py-1 px-2">
+      <VList class="py-1" :aria-label="$t('landing.otherServices')">
         <VListItem
           v-for="tabId in state.services.ids"
           :key="state.services[tabId].href"
           tag="a"
           class="header-menu-item rounded my-1"
-          color="accent-darken-1"
+          color="grey-darken-4"
           target="_blank"
+          role="option"
           :href="state.services[tabId].href"
         >
           <VListItemTitle class="py-1">
