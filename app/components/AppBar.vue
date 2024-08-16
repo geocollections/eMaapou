@@ -14,8 +14,6 @@ const emit = defineEmits<{
 
 const localePath = useLocalePath();
 const display = useDisplay();
-
-const logo = "/logos/emaapou5white.svg";
 </script>
 
 <template>
@@ -33,15 +31,7 @@ const logo = "/logos/emaapou5white.svg";
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-    <NuxtLink class="logo-link" :to="localePath({ path: '/' })">
-      <NuxtImg
-        :height="32"
-        contain
-        class="px-0 px-sm-3"
-        :src="logo"
-        style="vertical-align: middle;"
-      />
-    </NuxtLink>
+    <AppBarLogo />
     <VToolbarItems class="w-100 mr-md-2">
       <VBtn
         v-if="display.mdAndUp.value"
@@ -249,22 +239,5 @@ const logo = "/logos/emaapou5white.svg";
   & .v-icon {
     color: rgb(var(--v-theme-accent-lighten1)) !important;
   }
-}
-.logo-link {
-  height: 48px;
-  display: contents;
-}
-.logo-link::before {
-  content: "";
-  height: 48px;
-  width: 104px;
-  position: absolute;
-  opacity: 0;
-  color: #ffffff;
-  background-color: currentColor;
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
-}
-.logo-link:hover::before {
-  opacity: 0.08;
 }
 </style>

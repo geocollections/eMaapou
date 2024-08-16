@@ -44,6 +44,7 @@ export default {
     searchPlaceholder: "Otsi eMaapõuest",
     description:
       "eMaapõu pakub avatud juurdepääsu Eesti maapõue andmetele. Selle arendajaks on teadustaristu teekaart NATARC.",
+    alt: "Esileht",
   },
   common: {
     general: "Üldinfo",
@@ -1186,5 +1187,9 @@ export default {
     table: "Table",
     name: "Nimi",
   },
+  logo: {
+    alt: "eMaapõu logo",
+  },
+  languagesLabel: "Keeled",
   $vuetify,
 };

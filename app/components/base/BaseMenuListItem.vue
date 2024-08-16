@@ -15,9 +15,8 @@ withDefaults(defineProps<{
 <template>
   <VHover v-slot="{ isHovering, props }">
     <VListItem
-
       color="accent"
-      base-color="grey-darken-3"
+      base-color="grey-darken-4"
       class="rounded"
       v-bind="{ ...$attrs, ...props }"
     >
@@ -25,8 +24,8 @@ withDefaults(defineProps<{
         <div v-if="!labelOnly">
           <VIcon
             v-if="icon"
-            :icon="icon"
             start
+            :icon="icon"
           />
           <VIcon
             v-else

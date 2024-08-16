@@ -180,11 +180,12 @@ const routes = [
                 width="60"
                 format="webp"
                 style="margin-bottom: 10px"
+                :alt="$t('logo.alt')"
               />
               <div
                 v-for="link in routes"
                 :key="link.routeName"
-                class="d-flex mb-1"
+                class="d-flex mb-2"
               >
                 <VIcon
                   class="align-self-center"
@@ -193,7 +194,7 @@ const routes = [
                 />
                 <NuxtLink
                   :to="localePath(link.routeName)"
-                  class="text-body-2 text-decoration-none text-grey-darken-2 d-block ml-1"
+                  class="text-body-2 text-decoration-none text-grey-darken-3 d-block ml-1"
                   style="font-weight: 500 !important"
                 >
                   {{ $t(link.text) }}
@@ -211,7 +212,7 @@ const routes = [
                 <div
                   v-for="link in searchRoutes"
                   :key="link.routeName"
-                  class="d-flex mb-1"
+                  class="d-flex mb-2"
                 >
                   <VIcon
                     class="align-self-center"
@@ -220,7 +221,7 @@ const routes = [
                   />
                   <NuxtLink
                     :to="localePath(link.routeName)"
-                    class="text-body-2 text-decoration-none text-grey-darken-2 d-block ml-1"
+                    class="text-body-2 text-decoration-none text-grey-darken-3 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.text) }}
@@ -239,7 +240,7 @@ const routes = [
                 <div
                   v-for="link in links"
                   :key="link.name"
-                  class="d-flex mb-1"
+                  class="d-flex mb-2"
                 >
                   <VIcon
                     class="align-self-center"
@@ -248,7 +249,7 @@ const routes = [
                   />
                   <a
                     :href="link.url"
-                    class="text-body-2 text-decoration-none text-grey-darken-2 d-block ml-1"
+                    class="text-body-2 text-decoration-none text-grey-darken-3 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.name) }}
@@ -273,7 +274,7 @@ const routes = [
                 target="FooterLink"
                 rel="noopener noreferrer"
               >
-                <VTooltip location="top">
+                <VTooltip location="top" :aria-label="item.title">
                   <template #activator="{ props }">
                     <NuxtImg
                       v-bind="props"
@@ -307,7 +308,7 @@ const routes = [
                 >
                   <a
                     href="https://matomo.org"
-                    class="font-weight-bold text-blue text-decoration-none"
+                    class="font-weight-bold text-blue-darken-3 text-decoration-none"
                   >Matomo</a>
                 </I18nT>
               </div>
@@ -328,7 +329,7 @@ const routes = [
                     v-for="(item, index) in textLinks"
                     :key="index"
                     :href="item.href"
-                    class="font-weight-bold text-blue text-decoration-none"
+                    class="font-weight-bold text-blue-darken-3 text-decoration-none"
                   >
                     {{ item.text }}
                   </a>

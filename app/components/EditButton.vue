@@ -19,13 +19,18 @@ function handleClick() {
 <template>
   <VBtn
     id="edit-btn"
-    :icon="mdiSquareEditOutline"
     size="small"
     variant="text"
     color="deep-orange-darken-2"
+    :icon="mdiSquareEditOutline"
+    :aria-label="$t('common.linkToEdit')"
     @click="handleClick"
   />
-  <VTooltip location="bottom" activator="#edit-btn">
+  <VTooltip
+    location="bottom"
+    activator="#edit-btn"
+    :aria-label="$t('common.linkToEdit')"
+  >
     <span>{{ $t("common.linkToEdit") }}</span>
   </VTooltip>
 </template>
