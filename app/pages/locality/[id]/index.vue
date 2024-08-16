@@ -67,7 +67,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays: MapOverlay[] = ["Lokaliteedid / Localities"];
+  const overlays: MapOverlay[] = [];
   if (country.value?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 

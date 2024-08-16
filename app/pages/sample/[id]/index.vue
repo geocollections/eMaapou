@@ -98,7 +98,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays: MapOverlay[] = ["Proovid / Samples"];
+  const overlays: MapOverlay[] = [];
   if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
     overlays.push("Estonian bedrock");
 
