@@ -2,7 +2,7 @@ import { en as $vuetify } from "vuetify/locale";
 
 export default {
   title: "Geocollections",
-  subtitle: "Geoscience data and e\u2011services",
+  subtitle: "Geoscience data and e\u2011services in Estonia",
   slogan: "Estonian geology data portal",
   landing: {
     searchTitle: "Find from e·Maapõu",
@@ -547,7 +547,6 @@ export default {
     parentSpecimen: "Belongs to specimen",
     image: "Image",
     series: "Series",
-
   },
   sampleData: {
     sampleNumber: "Sample",
@@ -642,7 +641,8 @@ export default {
     elm: "Estonian Museum of Natural History",
     el: "European Union",
   },
-  privacyNotice: "This site uses {0} to analyze traffic and help us to improve your user experience. We process your IP address, viewed pages, load times and device information. This data is only processed by us.",
+  privacyNotice:
+    "This site uses {0} to analyze traffic and help us to improve your user experience. We process your IP address, viewed pages, load times and device information. This data is only processed by us.",
   frontDrillcores: {
     title: "Drillcores",
     description: "Catalogue of drillcores",
@@ -839,7 +839,7 @@ export default {
   },
   cookiePolicy: {
     introduction:
-      "This website uses cookies in order to deliver the best possible web experience. By clicking \"Accept\", you consent to our use of cookies.",
+      'This website uses cookies in order to deliver the best possible web experience. By clicking "Accept", you consent to our use of cookies.',
     readMoreButton: "Cookie policy",
     accept: "Accept",
     reject: "Reject",
