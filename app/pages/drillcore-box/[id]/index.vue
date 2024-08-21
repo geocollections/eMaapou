@@ -36,7 +36,6 @@ const activeImage = computed(() => data.value?.activeImage);
   <VContainer style="margin: initial">
     <VRow>
       <VCol>
-        <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
         <VImg
           v-if="activeImage"
           contain
