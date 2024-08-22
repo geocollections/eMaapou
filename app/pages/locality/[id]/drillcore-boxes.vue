@@ -15,7 +15,7 @@ const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    ordering: "depth_start,drillcore_box",
+    ordering: "depth_start,id",
     expand: ["stratigraphy_base", "stratigraphy_top"].join(","),
     fields: [
       "id",
