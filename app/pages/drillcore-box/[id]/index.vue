@@ -147,7 +147,7 @@ const activeImage = computed(() => data.value?.activeImage);
               <BaseLink
                 :to="
                   localePath({
-                    name: 'locality-id',
+                    name: 'drillcore-id',
                     params: { id: value.id },
                   })
                 "

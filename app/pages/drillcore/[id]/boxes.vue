@@ -5,16 +5,50 @@ const { options, searchParams, handleUpdate } = useDataTableGeoloogiaApi({
 });
 const route = useRoute();
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+export interface DrillcoreBox {
+  id: number;
+  number: string;
+  depth_start: Nullable<number>;
+  depth_end: Nullable<number>;
+  depth_other: Nullable<string>;
+  remarks: Nullable<string>;
+  image: Nullable<string>;
+  stratigraphy_top: Nullable<{
+    id: number;
+    name: string;
+    name_en: string;
+  }>;
+  stratigraphy_base: Nullable<{
+    id: number;
+    name: string;
+    name_en: string;
+  }>;
+};
+
+const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${route.params.id}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    ordering: "drillcore_box__depth_start,drillcore_box",
-    drillcore_box__drillcore: route.params.id,
-    attachment__is_preferred: true,
-    nest: 2,
-    ...searchParams.value,
-    search_fields: "drillcore_box__number,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en",
+    ordering: "depth_start,drillcore_box",
+    expand: ["stratigraphy_base", "stratigraphy_top"].join(","),
+    fields: [
+      "id",
+      "number",
+      "depth_start",
+      "depth_end",
+      "depth_other",
+      "remarks",
+      "image",
+      "stratigraphy_top",
+      "stratigraphy_top.id",
+      "stratigraphy_top.name",
+      "stratigraphy_top.name_en",
+      "stratigraphy_base",
+      "stratigraphy_base.id",
+      "stratigraphy_base.name",
+      "stratigraphy_base.name_en",
+    ].join(","),
+    search: searchParams.value?.search,
   })),
 });
 </script>

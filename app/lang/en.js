@@ -267,6 +267,7 @@ export default {
     date: "Image date",
     dateAdded: "Date added",
     dateChanged: "Date changed",
+    noImage: "Box has no image",
   },
   localityDescription: {
     stratigraphy: "Stratigraphy",
@@ -839,7 +840,7 @@ export default {
   },
   cookiePolicy: {
     introduction:
-      'This website uses cookies in order to deliver the best possible web experience. By clicking "Accept", you consent to our use of cookies.',
+      "This website uses cookies in order to deliver the best possible web experience. By clicking \"Accept\", you consent to our use of cookies.",
     readMoreButton: "Cookie policy",
     accept: "Accept",
     reject: "Reject",
