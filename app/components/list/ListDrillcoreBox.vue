@@ -84,7 +84,7 @@ function handleSearch() {
           color="primary-darken-2"
           :label="$t('common.search')"
           :prepend-inner-icon="mdiMagnify"
-          variant="underlined"
+          variant="outlined"
           density="compact"
           single-line
           hide-details
