@@ -35,10 +35,8 @@ const activeImage = computed(() => data.value?.activeImage);
 <template>
   <VContainer style="margin: initial">
     <VRow>
-      <VCol>
-        <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
+      <VCol v-if="activeImage">
         <VImg
-          v-if="activeImage"
           contain
           class="rounded border cursor-pointer transition-swing"
           :lazy-src="
@@ -73,7 +71,7 @@ const activeImage = computed(() => data.value?.activeImage);
           </template>
         </VImg>
 
-        <div v-if="activeImage" class="text-end">
+        <div class="text-end">
           <span v-for="(size, index) in imageSizes" :key="index">
             <a
               class="text-link"
@@ -148,7 +146,7 @@ const activeImage = computed(() => data.value?.activeImage);
               <BaseLink
                 :to="
                   localePath({
-                    name: 'locality-id',
+                    name: 'drillcore-id',
                     params: { id: value.id },
                   })
                 "

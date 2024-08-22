@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { mdiMagnify } from "@mdi/js";
 import type { DataTableOptions } from "~/constants";
+import type { DrillcoreBox } from "~/pages/drillcore/[id]/boxes.vue";
 
 const props = withDefaults(
   defineProps<{
-    items: any[];
+    items: DrillcoreBox[];
     options: DataTableOptions;
     count?: number;
     showSearch?: boolean;
@@ -47,12 +48,12 @@ watch(searchDebounced, () => {
 
 function boxHasInfo(box: any) {
   return (
-    box.drillcore_box?.depth_start
-    || box.drillcore_box?.depth_end
-    || box.drillcore_box?.stratigraphy_top
-    || box.drillcore_box?.stratigraphy_base
-    || box.drillcore_box?.depth_other
-    || box.drillcore_box?.remarks
+    box.depth_start
+    || box.depth_end
+    || box.stratigraphy_top
+    || box.stratigraphy_base
+    || box.depth_other
+    || box.remarks
   );
 }
 
@@ -125,12 +126,12 @@ function handleSearch() {
             :to="
               localeRoute({
                 name: 'drillcore-box-id',
-                params: { id: box.drillcore_box.id },
+                params: { id: box.id },
               })
             "
           >
             <VCardText class="drillcore-box__card">
-              <VRow v-if="box.drillcore_box" align="start">
+              <VRow align="start">
                 <VCol
                   cols="12"
                   sm="8"
@@ -138,6 +139,7 @@ function handleSearch() {
                 >
                   <ClientOnly>
                     <VImg
+                      v-if="box.image"
                       class="mx-auto rounded transition-swing"
                       :class="{
                         'elevation-2': isHovering,
@@ -145,17 +147,16 @@ function handleSearch() {
                       }"
                       max-width="1000"
                       max-height="800"
-                      eager
                       :lazy-src="
                         img(
-                          box.attachment.filename,
+                          box.image,
                           { size: 'small' },
                           { provider: 'geocollections' },
                         )
                       "
                       :src="
                         img(
-                          box.attachment.filename,
+                          box.image,
                           { size: 'medium' },
                           { provider: 'geocollections' },
                         )
@@ -174,13 +175,22 @@ function handleSearch() {
                         </VRow>
                       </template>
                     </VImg>
+                    <div
+                      v-else
+                      class="d-flex align-center justify-center bg-grey-lighten-2 rounded mx-auto"
+                      style="height: 300px; max-width: 1000px;"
+                    >
+                      <div class="text-h5 text-medium-emphasis">
+                        {{ $t('drillcoreBox.noImage') }}
+                      </div>
+                    </div>
                   </ClientOnly>
                 </VCol>
                 <VCol cols="12" sm="4">
                   <VCardTitle class="px-0 pt-0 montserrat">
                     {{
                       $t("drillcoreBox.nr", {
-                        number: box.drillcore_box.number,
+                        number: box.number,
                       })
                     }}
                   </VCardTitle>
@@ -197,16 +207,16 @@ function handleSearch() {
                   >
                     <TableRow
                       :title="$t('drillcoreBox.depthStart')"
-                      :value="box.drillcore_box.depth_start"
+                      :value="box.depth_start"
                     />
                     <TableRow
                       :title="$t('drillcoreBox.depthEnd')"
-                      :value="box.drillcore_box.depth_end"
+                      :value="box.depth_end"
                     />
                     <TableRow
-                      v-if="box.drillcore_box.stratigraphy_top"
+                      v-if="box.stratigraphy_top"
                       :title="$t('drillcoreBox.stratigraphyTop')"
-                      :value="box.drillcore_box.stratigraphy_top"
+                      :value="box.stratigraphy_top"
                     >
                       <template #value="{ value }">
                         <BaseLink
@@ -219,17 +229,17 @@ function handleSearch() {
                         >
                           {{
                             $translate({
-                              et: value.stratigraphy,
-                              en: value.stratigraphy_en,
+                              et: value.name,
+                              en: value.name_en,
                             })
                           }}
                         </BaseLink>
                       </template>
                     </TableRow>
                     <TableRow
-                      v-if="box.drillcore_box.stratigraphy_base"
+                      v-if="box.stratigraphy_base"
                       :title="$t('drillcoreBox.stratigraphyBase')"
-                      :value="box.drillcore_box.stratigraphy_base"
+                      :value="box.stratigraphy_base"
                     >
                       <template #value="{ value }">
                         <BaseLink
@@ -242,8 +252,8 @@ function handleSearch() {
                         >
                           {{
                             $translate({
-                              et: value.stratigraphy,
-                              en: value.stratigraphy_en,
+                              et: value.name,
+                              en: value.name_en,
                             })
                           }}
                         </BaseLink>
@@ -251,11 +261,11 @@ function handleSearch() {
                     </TableRow>
                     <TableRow
                       :title="$t('drillcoreBox.depthOther')"
-                      :value="box.drillcore_box.depth_other"
+                      :value="box.depth_other"
                     />
                     <TableRow
                       :title="$t('drillcoreBox.remarks')"
-                      :value="box.drillcore_box.remarks"
+                      :value="box.remarks"
                     />
                   </BaseTable>
                 </VCol>

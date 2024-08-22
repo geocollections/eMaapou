@@ -269,6 +269,7 @@ export default {
     date: "Foto kuupäev",
     dateAdded: "Kirje lisatud",
     dateChanged: "Kirje muudetud",
+    noImage: "Kastist puudub pilt",
   },
   localityDescription: {
     stratigraphy: "Stratigraafia",

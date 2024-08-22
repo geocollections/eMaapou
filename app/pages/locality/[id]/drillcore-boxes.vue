@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
+import type { DrillcoreBox } from "~/pages/drillcore/[id]/boxes.vue";
 
 const props = defineProps<{
   drillcore: number;
@@ -10,16 +11,30 @@ const { options, handleUpdate, searchParams } = useDataTableGeoloogiaApi({
   initHeaders: HEADERS_ATTACHMENT,
 });
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${props.drillcore}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    ordering: "drillcore_box__depth_start,drillcore_box",
-    drillcore_box__drillcore: props.drillcore,
-    attachment__is_preferred: true,
-    nest: 2,
-    ...searchParams.value,
-    search_fields: "drillcore_box__number,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en",
+    ordering: "depth_start,id",
+    expand: ["stratigraphy_base", "stratigraphy_top"].join(","),
+    fields: [
+      "id",
+      "number",
+      "depth_start",
+      "depth_end",
+      "depth_other",
+      "remarks",
+      "image",
+      "stratigraphy_top",
+      "stratigraphy_top.id",
+      "stratigraphy_top.name",
+      "stratigraphy_top.name_en",
+      "stratigraphy_base",
+      "stratigraphy_base.id",
+      "stratigraphy_base.name",
+      "stratigraphy_base.name_en",
+    ].join(","),
+    search: searchParams.value?.search,
   })),
 });
 </script>
