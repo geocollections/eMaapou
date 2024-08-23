@@ -495,6 +495,41 @@ export const HEADERS_ATTACHMENT: Headers = {
   },
   allIds: ["file", "description", "agent"],
 };
+export const HEADERS_ATTACHMENT_NEW: Headers = {
+  byIds: {
+    file: {
+      title: "attachment.file",
+      value: "file",
+      show: true,
+      sortable: false,
+      ...narrowColumn,
+    },
+    description: {
+      title: "attachment.description",
+      value: "description",
+      show: true,
+      apiFieldValue: {
+        et: "description",
+        en: "description_en",
+      },
+      sortField: {
+        et: ["description"],
+        en: ["description_en"],
+      },
+      ...wideColumn,
+    },
+    agent: {
+      title: "attachment.author",
+      value: "agent",
+      show: true,
+      apiFieldValue: "author__name",
+      sortField: ["author__name"],
+      ...normalColumn,
+    },
+  },
+  allIds: ["file", "description", "agent"],
+};
+
 export const HEADERS_ATTACHMENT_SOLR: Headers = {
   byIds: {
     id: {
