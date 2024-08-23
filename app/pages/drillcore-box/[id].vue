@@ -128,6 +128,7 @@ const { data } = await useAsyncData(
             "drillcore.id",
             "drillcore.name",
             "drillcore.name_en",
+            "drillcore.locality",
             "stratigraphy_top",
             "stratigraphy_top.id",
             "stratigraphy_top.name",
