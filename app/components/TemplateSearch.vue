@@ -26,7 +26,7 @@ function closeMobileSearch() {
   <div>
     <VNavigationDrawer
       :model-value="display.smAndDown.value ? showSearch : true"
-      :style="{ cursor: mini ? 'pointer' : 'auto' }"
+      :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown ? '70%' : 'none' }"
       :permanent="!display.smAndDown.value"
       mobile-breakpoint="md"
       width="300"
