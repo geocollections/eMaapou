@@ -34,7 +34,7 @@ function getSortString({
 }) {
   if (sortBy.length === 0)
     return undefined;
-  return sortBy
+  const sortStr = sortBy
     .filter((sortItem): sortItem is Required<typeof sortItem> => !!sortItem.order)
     .map((sortItem) => {
       const sortKey = sortItem.key;
@@ -60,6 +60,12 @@ function getSortString({
     })
     .filter(sortString => !!sortString)
     .join(",");
+
+  if (sortStr.length < 1) {
+    return undefined;
+  }
+
+  return sortStr;
 }
 
 function geoloogiaSortString(field: string, order: boolean | "asc" | "desc") {
