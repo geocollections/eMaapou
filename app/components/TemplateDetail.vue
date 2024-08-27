@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiChevronDoubleLeft, mdiViewList } from "@mdi/js";
+import { displayPartsToString } from "typescript";
 
 const props = withDefaults(defineProps<{
   showSimilar?: boolean;
@@ -37,7 +38,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
       <VNavigationDrawer
         v-if="drawerActive"
         :model-value="showDrawer"
-        :style="{ cursor: mini ? 'pointer' : 'auto' }"
+        :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown ? '70%' : 'none' }"
         :permanent="!$vuetify.display.smAndDown"
         mobile-breakpoint="md"
         color="grey-lighten-4"
@@ -70,9 +71,6 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               </template>
             </VListItem>
           </VList>
-          <div v-else class="text-h6 py-2 pl-2">
-            {{ $t("common.showSimilar") }}
-          </div>
           <div v-show="mini">
             <div
               class="montserrat font-weight-medium text-body-2 mt-2 ml-auto mr-auto"
@@ -85,7 +83,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               {{ $t("common.showSimilar") }}
             </div>
           </div>
-          <VDivider v-show="!mini" class="mx-2" />
+          <VDivider v-show="!mini && !display.smAndDown.value" class="mx-2" />
           <div v-show="!mini">
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>
@@ -108,7 +106,9 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               @click="showDrawer = !showDrawer"
             >
               <VIcon :icon="mdiViewList" start />
-              {{ $t("common.similar") }}
+              <slot name="mobileDrawerFabContent">
+                {{ $t("common.similar") }}
+              </slot>
             </VBtn>
           </VFabTransition>
         </ClientOnly>
