@@ -15,8 +15,9 @@ const props = withDefaults(
     totalResults: number;
     searchRoute: RouteLocationRaw;
     getResultRoute: (item: T) => RouteLocationRaw;
+    showCheck?: boolean;
   }>(),
-  { perPage: 10 },
+  { perPage: 10, showCheck: true },
 );
 
 const emit = defineEmits<{
@@ -39,7 +40,11 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
     >
       <template #title>
         <span class="text-body-2 text-black font-weight-medium">
-          {{ $t("common.similar") }}
+          <slot name="parentTitle">
+            <span>
+              {{ $t("common.similar") }}
+            </span>
+          </slot>
         </span>
       </template>
       <template #prepend>
@@ -88,7 +93,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
             :index="index"
           />
         </template>
-        <template #append="{ isActive }">
+        <template v-if="showCheck" #append="{ isActive }">
           <VIcon v-if="isActive" color="accent">
             {{ mdiCheck }}
           </VIcon>
