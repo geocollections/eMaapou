@@ -338,6 +338,16 @@ function buildDepthString(depthStart: number, depthEnd: number) {
         </template>
       </SearchResultsDrawer>
     </template>
+    <template #mobileDrawerFabContent>
+      <span>
+        {{
+          $translate({
+            et: data.drillcoreBox?.drillcore.name,
+            en: data.drillcoreBox?.drillcore.name_en,
+          })
+        }}
+      </span>
+    </template>
     <NuxtPage v-bind="activeTabProps" />
   </TemplateDetail>
 </template>
