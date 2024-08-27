@@ -211,7 +211,7 @@ const { data: otherDrillcoreBoxesRes } = await useNewApiFetch<GeoloogiaListRespo
   query: computed(() => ({
     limit: 10,
     offset: getOffset(page.value, 10),
-    fields: "id,number,image",
+    fields: "id,number,image,depth_start,depth_end",
   })),
 });
 
@@ -255,6 +255,12 @@ useSeoMeta({
     )
     : undefined,
 });
+
+function buildDepthString(depthStart: number, depthEnd: number) {
+  const depthStartString = depthStart ? `${depthStart}` : "...";
+  const depthEndString = depthEnd ? `${depthEnd}` : "...";
+  return `${depthStartString} - ${depthEndString} (m)`;
+}
 </script>
 
 <template>
@@ -306,22 +312,29 @@ useSeoMeta({
           </span>
         </template>
         <template #itemTitle="{ item: box }">
-          {{
-            $t("drillcoreBox.nr", {
-              number: box.number,
-            })
-          }}
-          <VImg
-            v-if="box.image"
-            class="rounded"
-            :src="
-              img(
-                box.image,
-                { size: 'small' },
-                { provider: 'geocollections' },
-              )
-            "
-          />
+          <span>
+            {{
+              $t("drillcoreBox.nr", {
+                number: box.number,
+              })
+            }}
+            <VImg
+              v-if="box.image"
+              class="rounded"
+              :src="
+                img(
+                  box.image,
+                  { size: 'small' },
+                  { provider: 'geocollections' },
+                )
+              "
+            />
+          </span>
+        </template>
+        <template #itemSubtitle="{ item: box }">
+          <span>
+            {{ buildDepthString(box.depth_start, box.depth_end) }}
+          </span>
         </template>
       </SearchResultsDrawer>
     </template>
