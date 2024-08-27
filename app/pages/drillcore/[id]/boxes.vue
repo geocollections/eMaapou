@@ -51,6 +51,12 @@ const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox
     search: searchParams.value?.search,
   })),
 });
+
+const { page: otherDrillcoreBoxPage } = storeToRefs(useDrillcoreBoxPosition());
+
+function handleClick(_box: DrillcoreBox, position: number) {
+  otherDrillcoreBoxPage.value = Math.floor(position / 10) + 1;
+}
 </script>
 
 <template>
@@ -60,5 +66,6 @@ const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox
     :items="data?.results ?? []"
     :is-loading="status === 'pending'"
     @update="handleUpdate"
+    @click="handleClick"
   />
 </template>

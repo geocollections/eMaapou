@@ -204,6 +204,19 @@ const { data } = await useAsyncData(
   },
 );
 
+const drillcoreBoxPositionStore = useDrillcoreBoxPosition();
+const { page } = storeToRefs(drillcoreBoxPositionStore);
+
+const { data: otherDrillcoreBoxesRes } = await useNewApiFetch<GeoloogiaListResponse>(`/drillcores/${data.value?.drillcoreBox?.drillcore.id}/drillcore-boxes/`, {
+  query: computed(() => ({
+    limit: 10,
+    offset: getOffset(page.value, 10),
+    fields: "id,number,image,depth_start,depth_end",
+  })),
+});
+
+const otherDrillcoreBoxes = computed(() => otherDrillcoreBoxesRes?.value?.results ?? []);
+
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });
@@ -242,10 +255,16 @@ useSeoMeta({
     )
     : undefined,
 });
+
+function buildDepthString(depthStart: number, depthEnd: number) {
+  const depthStartString = depthStart ? `${depthStart}` : "...";
+  const depthEndString = depthEnd ? `${depthEnd}` : "...";
+  return `${depthStartString} - ${depthEndString} (m)`;
+}
 </script>
 
 <template>
-  <TemplateDetail :show-similar="false">
+  <TemplateDetail :show-similar="true">
     <template #title>
       <HeaderDetail :title="pageTitle">
         <template #prepend>
@@ -265,6 +284,59 @@ useSeoMeta({
           <DetailTabs :tabs="data?.tabs" />
         </template>
       </HeaderDetail>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="otherDrillcoreBoxes"
+        :total-results="otherDrillcoreBoxesRes?.count ?? 0"
+        :search-route="
+          localePath({ path: `/drillcore/${data.drillcoreBox?.drillcore.id}` })
+        "
+        :get-result-route="
+          (item) =>
+            localePath({ name: 'drillcore-box-id', params: { id: item.id } })
+        "
+        :show-check="false"
+        @page:next="page++"
+        @page:previous="page--"
+      >
+        <template #parentTitle>
+          <span>
+            {{
+              $translate({
+                et: data.drillcoreBox?.drillcore.name,
+                en: data.drillcoreBox?.drillcore.name_en,
+              })
+            }}
+          </span>
+        </template>
+        <template #itemTitle="{ item: box }">
+          <span>
+            {{
+              $t("drillcoreBox.nr", {
+                number: box.number,
+              })
+            }}
+            <VImg
+              v-if="box.image"
+              class="rounded"
+              :src="
+                img(
+                  box.image,
+                  { size: 'small' },
+                  { provider: 'geocollections' },
+                )
+              "
+            />
+          </span>
+        </template>
+        <template #itemSubtitle="{ item: box }">
+          <span>
+            {{ buildDepthString(box.depth_start, box.depth_end) }}
+          </span>
+        </template>
+      </SearchResultsDrawer>
     </template>
     <NuxtPage v-bind="activeTabProps" />
   </TemplateDetail>

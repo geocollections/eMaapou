@@ -15,6 +15,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   update: [payload: { options: DataTableOptions; search: string }];
+  click: [box: DrillcoreBox, position: number];
 }>();
 
 const { t } = useI18n();
@@ -66,6 +67,10 @@ function handleSearch() {
   isLoading.value = true;
   emit("update", { options, search: search.value });
 }
+
+function getPosition(index: number, page: number, perPage: number) {
+  return (page - 1) * perPage + index;
+}
 </script>
 
 <template>
@@ -112,7 +117,7 @@ function handleSearch() {
     </VRow>
     <VRow no-gutters>
       <VCol
-        v-for="box in items"
+        v-for="(box, index) in items"
         :key="box.id"
         cols="12"
         class="pa-0 drillcore-box"
@@ -129,6 +134,7 @@ function handleSearch() {
                 params: { id: box.id },
               })
             "
+            @click="emit('click', box, getPosition(index, options.page, options.itemsPerPage))"
           >
             <VCardText class="drillcore-box__card">
               <VRow align="start">
