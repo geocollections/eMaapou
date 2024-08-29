@@ -38,7 +38,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
       <VNavigationDrawer
         v-if="drawerActive"
         :model-value="showDrawer"
-        :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown ? '70%' : 'none' }"
+        :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown.value ? '70%' : 'none' }"
         :permanent="!$vuetify.display.smAndDown"
         mobile-breakpoint="md"
         color="grey-lighten-4"
