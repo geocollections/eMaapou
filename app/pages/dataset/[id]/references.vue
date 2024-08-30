@@ -19,7 +19,7 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dat
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     dataset: route.params.id,
     nest: 2,
-    ordering: sortBy.value,
+    ordering: sortBy.value ?? "-reference__year",
     ...searchParams.value,
   })),
 });
