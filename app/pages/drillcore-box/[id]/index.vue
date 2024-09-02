@@ -20,16 +20,29 @@ const { data } = await useAsyncData("images", async () => {
   });
 
   const drillcoreBoxImages = attachmentLinks.results;
-  const activeImage = drillcoreBoxImages[0];
 
   return {
-    activeImage,
     drillcoreBoxImages,
   };
+}, {
+  default: () => ({
+    drillcoreBoxImages: [],
+  }),
 });
 
+const activeImage = ref(data.value?.drillcoreBoxImages[0] ?? undefined);
 const drillcoreBoxImages = computed(() => data.value?.drillcoreBoxImages);
-const activeImage = computed(() => data.value?.activeImage);
+
+function handleImageSwap(idx: number) {
+  if (data.value === undefined)
+    return;
+
+  activeImage.value = data.value.drillcoreBoxImages[idx];
+}
+
+function isActiveImage(image: { uuid_filename: string }) {
+  return image.uuid_filename === activeImage.value?.uuid_filename;
+}
 </script>
 
 <template>
@@ -83,56 +96,36 @@ const activeImage = computed(() => data.value?.activeImage);
           </span>
         </div>
         <div
-          v-if="drillcoreBoxImages && drillcoreBoxImages.length > 1"
-          class="d-flex ma-2 align-center"
+          v-if="drillcoreBoxImages.length > 1"
+          class="d-flex my-2 align-center"
           style="overflow-x: auto"
         >
-          <div
+          <template
             v-for="(item, index) in drillcoreBoxImages"
             :key="index"
-            class="ma-2"
           >
-            <VHover v-slot="{ isHovering, props: hoverProps }">
-              <VImg
-                v-bind="hoverProps"
-                :src="
-                  img(
-                    item.uuid_filename,
-                    { size: 'small' },
-                    { provider: 'geocollections' },
-                  )
-                "
-                :lazy-src="
-                  img(
-                    item.uuid_filename,
-                    { size: 'small' },
-                    { provider: 'geocollections' },
-                  )
-                "
-                max-width="200"
-                max-height="200"
-                :class="{
-                  'elevation-4': isHovering,
-                  'elevation-2': !isHovering,
-                }"
-                class="rounded cursor-pointer bg-grey-lighten-2 transition-swing"
-                @click="activeImage = drillcoreBoxImages[index]"
-              >
-                <template #placeholder>
-                  <VRow
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <VProgressCircular
-                      indeterminate
-                      color="grey-lighten-5"
-                    />
-                  </VRow>
-                </template>
-              </VImg>
-            </VHover>
-          </div>
+            <NuxtImg
+              :src="item.uuid_filename"
+              provider="geocollections"
+              :modifiers="{ size: 'small' }"
+              height="175"
+              class="rounded cursor-pointer thumbnail-image mr-3"
+              :class="{ 'selected-image': isActiveImage(item) }"
+              @click="
+                handleImageSwap(index)
+              "
+            >
+              <template #placeholder>
+                <VRow
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+                >
+                  <VProgressCircular indeterminate color="grey-lighten-5" />
+                </VRow>
+              </template>
+            </NuxtImg>
+          </template>
         </div>
       </VCol>
       <VCol :cols="12" :xl="4">
@@ -250,3 +243,20 @@ const activeImage = computed(() => data.value?.activeImage);
     </VRow>
   </VContainer>
 </template>
+
+<style lang="scss" scoped>
+.thumbnail-image {
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+
+  &:hover {
+    border: 1px solid #1565C0;
+  }
+}
+
+.selected-image {
+  border: 1px solid #1565C0;
+  opacity: 0.6;
+}
+</style>
