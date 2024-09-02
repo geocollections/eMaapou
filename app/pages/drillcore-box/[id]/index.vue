@@ -48,41 +48,15 @@ function isActiveImage(image: { uuid_filename: string }) {
 <template>
   <VContainer style="margin: initial">
     <VRow>
-      <VCol v-if="activeImage">
-        <VImg
-          contain
-          class="rounded border cursor-pointer transition-swing"
-          :lazy-src="
-            img(
-              activeImage.uuid_filename,
-              { size: 'small' },
-              { provider: 'geocollections' },
-            )
-          "
-          :src="
-            img(
-              activeImage.uuid_filename,
-              { size: 'large' },
-              { provider: 'geocollections' },
-            )
-          "
-          max-width="2000"
-          max-height="1000"
-          @click="$openImage(activeImage.uuid_filename)"
-        >
-          <template #placeholder>
-            <VRow
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <VProgressCircular
-                indeterminate
-                color="grey-lighten-5"
-              />
-            </VRow>
-          </template>
-        </VImg>
+      <VCol v-if="activeImage" :xl="8">
+        <NuxtImg
+          :src="activeImage.uuid_filename"
+          provider="geocollections"
+          :modifiers="{ size: 'large' }"
+          class="rounded"
+          fit="contain"
+          style="width: 100%"
+        />
 
         <div class="text-end">
           <span v-for="(size, index) in imageSizes" :key="index">
@@ -100,32 +74,29 @@ function isActiveImage(image: { uuid_filename: string }) {
           class="d-flex my-2 align-center"
           style="overflow-x: auto"
         >
-          <template
+          <NuxtImg
             v-for="(item, index) in drillcoreBoxImages"
             :key="index"
+            :src="item.uuid_filename"
+            provider="geocollections"
+            :modifiers="{ size: 'small' }"
+            height="175"
+            class="rounded cursor-pointer thumbnail-image mr-3"
+            :class="{ 'selected-image': isActiveImage(item) }"
+            @click="
+              handleImageSwap(index)
+            "
           >
-            <NuxtImg
-              :src="item.uuid_filename"
-              provider="geocollections"
-              :modifiers="{ size: 'small' }"
-              height="175"
-              class="rounded cursor-pointer thumbnail-image mr-3"
-              :class="{ 'selected-image': isActiveImage(item) }"
-              @click="
-                handleImageSwap(index)
-              "
-            >
-              <template #placeholder>
-                <VRow
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <VProgressCircular indeterminate color="grey-lighten-5" />
-                </VRow>
-              </template>
-            </NuxtImg>
-          </template>
+            <template #placeholder>
+              <VRow
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <VProgressCircular indeterminate color="grey-lighten-5" />
+              </VRow>
+            </template>
+          </NuxtImg>
         </div>
       </VCol>
       <VCol :cols="12" :xl="4">
