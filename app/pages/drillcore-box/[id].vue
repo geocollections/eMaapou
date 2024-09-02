@@ -327,6 +327,15 @@ function buildDepthString(depthStart: number, depthEnd: number) {
                 width="200"
                 class="rounded"
               />
+              <div
+                v-else
+                class="d-flex align-center justify-center bg-grey-lighten-2 rounded mb-2"
+                style="height: 120px; width: 200px"
+              >
+                <div class="text-medium-emphasis">
+                  {{ $t('drillcoreBox.noImage') }}
+                </div>
+              </div>
             </div>
           </span>
         </template>
