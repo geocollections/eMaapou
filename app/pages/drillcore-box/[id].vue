@@ -318,17 +318,16 @@ function buildDepthString(depthStart: number, depthEnd: number) {
                 number: box.number,
               })
             }}
-            <VImg
-              v-if="box.image"
-              class="rounded"
-              :src="
-                img(
-                  box.image,
-                  { size: 'small' },
-                  { provider: 'geocollections' },
-                )
-              "
-            />
+            <div>
+              <NuxtImg
+                v-if="box.image"
+                :src="box.image"
+                provider="geocollections"
+                :modifiers="{ size: 'small' }"
+                width="200"
+                class="rounded"
+              />
+            </div>
           </span>
         </template>
         <template #itemSubtitle="{ item: box }">

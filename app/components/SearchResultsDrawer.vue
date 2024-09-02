@@ -26,7 +26,28 @@ const emit = defineEmits<{
   "select": [value: { index: number; id: number }];
 }>();
 
+const itemRefs = ref<Record<number, any>>({});
+
+const route = useRoute();
 const hasNext = computed(() => props.page * props.perPage < props.totalResults);
+
+onMounted(() => {
+  nextTick(() => {
+    scrollToCurrent();
+  });
+});
+
+watch(() => props.results, () => {
+  nextTick(() => {
+    scrollToCurrent();
+  });
+});
+
+function scrollToCurrent() {
+  if (!Object.keys(itemRefs.value).includes(route.params.id as string))
+    return;
+  itemRefs.value[Number.parseInt(route.params.id as string)].$el.scrollIntoView({ block: "center" });
+}
 </script>
 
 <template>
@@ -72,6 +93,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
   <VList class="py-0">
     <template v-for="(item, index) in results" :key="`${index}-${item.id}`">
       <VListItem
+        :ref="(el :any) => (itemRefs[item.id] = el)"
         class="pa-2 my-1 mx-2 text-body-2"
         elevation="0"
         rounded
@@ -102,4 +124,21 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
       <VDivider v-if="index !== perPage - 1" class="mx-2" />
     </template>
   </VList>
+  <div class="d-flex align-center justify-space-around pt-1 pb-10">
+    <VBtn
+      variant="text"
+      size="small"
+      :icon="mdiChevronLeft"
+      :disabled="page <= 1"
+      @click="emit('page:previous', page + 1)"
+    />
+    {{ page }}
+    <VBtn
+      variant="text"
+      size="small"
+      :icon="mdiChevronRight"
+      :disabled="!hasNext"
+      @click="emit('page:next', page + 1)"
+    />
+  </div>
 </template>
