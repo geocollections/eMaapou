@@ -9,17 +9,22 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: ANALYSIS.options,
   initHeaders: HEADERS_ANALYSIS,
 });
+
+const route = useRoute();
+setStateFromQueryParams(route);
+
 const filteredHeaders = computed(() =>
   headers.value.filter((header) => {
     return !(header.value === "locality");
   }),
 );
 
-const { data, status } = await useSolrFetch<{
+const { data, status, refresh } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/analysis", {
   query: computed(() => ({
@@ -31,6 +36,15 @@ const { data, status } = await useSolrFetch<{
       sort: solrSort.value,
     },
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/analysis", {

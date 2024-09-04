@@ -7,13 +7,15 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: FOSSILS.options,
   initHeaders: HEADERS_FOSSIL,
 });
-
 const route = useRoute();
-const { data, status } = await useSolrFetch<{
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/taxon_search", {
   query: computed(() => ({
@@ -26,6 +28,15 @@ const { data, status } = await useSolrFetch<{
         solrSort.value ?? "fossil_group ASC,taxon ASC",
     },
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/taxon_search", {

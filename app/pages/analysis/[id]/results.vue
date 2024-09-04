@@ -7,12 +7,14 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: ANALYSIS_RESULT.options,
   initHeaders: HEADERS_ANALYSIS_RESULT,
 });
 
 const route = useRoute();
+setStateFromQueryParams(route);
 
 const filteredHeaders = computed(() =>
   headers.value.filter((header) => {
@@ -22,7 +24,7 @@ const filteredHeaders = computed(() =>
   }),
 );
 
-const { data, status } = await useSolrFetch("/analysis_results", {
+const { data, status, refresh } = await useSolrFetch("/analysis_results", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -32,6 +34,15 @@ const { data, status } = await useSolrFetch("/analysis_results", {
       sort: solrSort.value,
     },
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/analysis_results", {

@@ -7,14 +7,16 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: PREPARATION.options,
   initHeaders: HEADERS_PREPARATION,
 });
 
 const route = useRoute();
+setStateFromQueryParams(route);
 
-const { data, status } = await useSolrFetch("/preparation", {
+const { data, status, refresh } = await useSolrFetch("/preparation", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -24,6 +26,15 @@ const { data, status } = await useSolrFetch("/preparation", {
       sort: solrSort.value,
     },
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/preparation", {

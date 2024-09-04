@@ -7,13 +7,15 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: STRATIGRAPHY_SYNONYM.options,
   initHeaders: HEADERS_STRATIGRAPHY_SYNONYM,
 });
 const route = useRoute();
+setStateFromQueryParams(route);
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,6 +24,15 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/str
     ordering: sortBy.value,
     ...searchParams.value,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportGeoloogiaApi("/stratigraphy_synonym/", {

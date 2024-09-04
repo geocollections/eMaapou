@@ -9,13 +9,15 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: DESCRIPTION.options,
   initHeaders: HEADERS_DESCRIPTION,
 });
 const route = useRoute();
+setStateFromQueryParams(route);
 
-const { data, status } = await useGeoloogiaApiFetch<{
+const { data, status, refresh } = await useGeoloogiaApiFetch<{
   count: number;
   results: any[];
 }>("/locality_description/", {
@@ -47,6 +49,15 @@ const { data, status } = await useGeoloogiaApiFetch<{
       }),
     };
   },
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 const { exportData } = useExportGeoloogiaApi("/locality_description/", {
   totalRows: computed(() => data.value?.count ?? 0),

@@ -7,13 +7,16 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: DATASET_GEOLOCATIONS.options,
   initHeaders: HEADERS_DATASET_GEOLOCATION,
 });
 
 const route = useRoute();
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dataset_geolocation/", {
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dataset_geolocation/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,7 +25,17 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dat
     ordering: sortBy.value,
     ...searchParams.value,
   })),
+  watch: false,
 });
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
+});
+
 const { exportData } = useExportGeoloogiaApi("/dataset_geolocation/", {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({

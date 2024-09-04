@@ -9,12 +9,14 @@ const {
   handleHeadersChange,
   solrSort,
   solrQuery,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: AREA.options,
   initHeaders: HEADERS_AREA,
 });
 
 const route = useRoute();
+setStateFromQueryParams(route);
 
 const solrFilter = computed(() => {
   return `parent_area_id:${route.params.id}`;
@@ -23,6 +25,7 @@ const solrFilter = computed(() => {
 const {
   data,
   status,
+  refresh,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/area", {
@@ -36,6 +39,14 @@ const {
     },
   })),
   watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/area", {

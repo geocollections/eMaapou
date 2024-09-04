@@ -143,54 +143,27 @@ function getPosition(index: number, page: number, perPage: number) {
                   sm="8"
                   align-self="center"
                 >
-                  <ClientOnly>
-                    <VImg
-                      v-if="box.image"
-                      class="mx-auto rounded transition-swing"
-                      :class="{
-                        'elevation-2': isHovering,
-                        'elevation-0': !isHovering,
-                      }"
-                      max-width="1000"
-                      max-height="800"
-                      :lazy-src="
-                        img(
-                          box.image,
-                          { size: 'small' },
-                          { provider: 'geocollections' },
-                        )
-                      "
-                      :src="
-                        img(
-                          box.image,
-                          { size: 'medium' },
-                          { provider: 'geocollections' },
-                        )
-                      "
-                    >
-                      <template #placeholder>
-                        <VRow
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <VProgressCircular
-                            indeterminate
-                            color="grey-lighten-5"
-                          />
-                        </VRow>
-                      </template>
-                    </VImg>
-                    <div
-                      v-else
-                      class="d-flex align-center justify-center bg-grey-lighten-2 rounded mx-auto"
-                      style="height: 300px; max-width: 1000px;"
-                    >
-                      <div class="text-h5 text-medium-emphasis">
-                        {{ $t('drillcoreBox.noImage') }}
-                      </div>
+                  <div
+                    v-if="box.image"
+                    class="d-flex justify-center"
+                  >
+                    <NuxtImg
+                      :src="box.image"
+                      provider="geocollections"
+                      :modifiers="{ size: 'medium' }"
+                      class="rounded"
+                      style="width: 100%; max-width: 1000px; max-height: 800px"
+                    />
+                  </div>
+                  <div
+                    v-else
+                    class="d-flex align-center justify-center bg-grey-lighten-2 rounded mx-auto"
+                    style="height: 300px; max-width: 1000px;"
+                  >
+                    <div class="text-h5 text-medium-emphasis">
+                      {{ $t('drillcoreBox.noImage') }}
                     </div>
-                  </ClientOnly>
+                  </div>
                 </VCol>
                 <VCol cols="12" sm="4">
                   <VCardTitle class="px-0 pt-0 montserrat">

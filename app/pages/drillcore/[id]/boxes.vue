@@ -1,9 +1,10 @@
 <script setup lang="ts">
-const { options, searchParams, handleUpdate } = useDataTableGeoloogiaApi({
+const { options, searchParams, handleUpdate, setStateFromQueryParams } = useDataTableGeoloogiaApi({
   initOptions: ATTACHMENT_LINK.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
 const route = useRoute();
+setStateFromQueryParams(route);
 
 export interface DrillcoreBox {
   id: number;
@@ -25,7 +26,7 @@ export interface DrillcoreBox {
   }>;
 };
 
-const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${route.params.id}/drillcore-boxes/`, {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${route.params.id}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -50,6 +51,15 @@ const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox
     ].join(","),
     search: searchParams.value?.search,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { page: otherDrillcoreBoxPage } = storeToRefs(useDrillcoreBoxPosition());

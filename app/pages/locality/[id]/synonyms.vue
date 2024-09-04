@@ -8,12 +8,14 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: SYNONYM.options,
   initHeaders: HEADERS_LOCALITY_SYNONYM,
 });
+setStateFromQueryParams(route);
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_synonym/", {
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_synonym/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,6 +24,15 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/loc
     ordering: sortBy.value,
     ...searchParams.value,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportGeoloogiaApi("/locality_synonym/", {
