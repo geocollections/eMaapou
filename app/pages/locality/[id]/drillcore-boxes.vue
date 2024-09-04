@@ -6,12 +6,15 @@ const props = defineProps<{
   drillcore: number;
 }>();
 
-const { options, handleUpdate, searchParams } = useDataTableGeoloogiaApi({
+const { options, handleUpdate, searchParams, setStateFromQueryParams } = useDataTableGeoloogiaApi({
   initOptions: ATTACHMENT_LINK.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
 
-const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${props.drillcore}/drillcore-boxes/`, {
+const route = useRoute();
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${props.drillcore}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -36,6 +39,15 @@ const { data, status } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox
     ].join(","),
     search: searchParams.value?.search,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { page: otherDrillcoreBoxPage } = storeToRefs(useDrillcoreBoxPosition());

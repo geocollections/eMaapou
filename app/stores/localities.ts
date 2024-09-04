@@ -63,7 +63,6 @@ export const useLocalities = defineStore(
     });
 
     const routeQueryFiltersSchema = z.object({
-      q: z.string().catch(""),
       name: textParamParser,
       country: idParamParser(","),
       stratigraphyAge: rangeParamParser,

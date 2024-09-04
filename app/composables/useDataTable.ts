@@ -1,3 +1,4 @@
+import type { LocationQueryRaw, RouteLocation } from "vue-router";
 import { z } from "zod";
 import type { DataTableOptions, Headers, SortItem } from "~/constants";
 
@@ -15,6 +16,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     });
   });
   const routeQueryOptionsSchema = z.object({
+    q: z.string().catch(""),
     page: z
       .string()
       .transform(val => Number.parseInt(val))
@@ -47,6 +49,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
   });
 
   const stateToQueryParamsSchema = z.object({
+    q: stringValueParser,
     page: z.number().transform(val => (val > 1 ? val.toString() : undefined)),
     itemsPerPage: z
       .number()
@@ -69,11 +72,38 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
   function handleUpdate(tableState: { options: DataTableOptions; search: string }) {
     options.value = tableState.options;
     query.value = tableState.search;
+
+    setQueryParamsFromState();
   }
 
   function reset() {
     query.value = "";
     options.value.page = 1;
+
+    setQueryParamsFromState();
+  }
+
+  function getQueryParams() {
+    return stateToQueryParamsSchema.parse({
+      q: query.value,
+      page: options.value.page,
+      itemsPerPage: options.value.itemsPerPage,
+      sortBy: options.value.sortBy,
+    });
+  }
+
+  const router = useRouter();
+  function setQueryParamsFromState() {
+    router.push({ query: getQueryParams() as LocationQueryRaw });
+  }
+
+  function setStateFromQueryParams(route: RouteLocation) {
+    const params = routeQueryOptionsSchema.parse(route.query);
+
+    options.value.page = params.page;
+    options.value.itemsPerPage = params.itemsPerPage;
+    options.value.sortBy = params.sortBy;
+    query.value = params.q;
   }
 
   return {
@@ -89,6 +119,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     routeQueryOptionsSchema,
     stateToQueryParamsSchema,
     reset,
+    setStateFromQueryParams,
   };
 }
 
@@ -107,6 +138,7 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
   });
 
   const routeQueryOptionsSchema = z.object({
+    q: z.string().catch(""),
     page: z
       .string()
       .transform(val => Number.parseInt(val))
@@ -139,6 +171,7 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
   });
 
   const stateToQueryParamsSchema = z.object({
+    q: stringValueParser,
     page: z.number().transform(val => (val > 1 ? val.toString() : undefined)),
     itemsPerPage: z
       .number()
@@ -167,11 +200,36 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
   function handleUpdate(tableState: { options: DataTableOptions; search: string }) {
     options.value = tableState.options;
     query.value = tableState.search;
+    setQueryParamsFromState();
   }
 
   function reset() {
     query.value = "";
     options.value.page = 1;
+    setQueryParamsFromState();
+  }
+
+  function getQueryParams() {
+    return stateToQueryParamsSchema.parse({
+      q: query.value,
+      page: options.value.page,
+      itemsPerPage: options.value.itemsPerPage,
+      sortBy: options.value.sortBy,
+    });
+  }
+
+  const router = useRouter();
+  function setQueryParamsFromState() {
+    router.push({ query: getQueryParams() as LocationQueryRaw });
+  }
+
+  function setStateFromQueryParams(route: RouteLocation) {
+    const params = routeQueryOptionsSchema.parse(route.query);
+
+    options.value.page = params.page;
+    options.value.itemsPerPage = params.itemsPerPage;
+    options.value.sortBy = params.sortBy;
+    query.value = params.q;
   }
 
   return {
@@ -186,6 +244,7 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
     sortBy,
     routeQueryOptionsSchema,
     stateToQueryParamsSchema,
+    setStateFromQueryParams,
     reset,
   };
 }

@@ -8,12 +8,14 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: SPECIMEN_IDENTIFICATION.options,
   initHeaders: HEADERS_SPECIMEN_IDENTIFICATION,
 });
+setStateFromQueryParams(route);
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification/", {
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,7 +24,17 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/spe
     ordering: sortBy.value,
     ...searchParams.value,
   })),
+  watch: false,
 });
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
+});
+
 const { exportData } = useExportGeoloogiaApi("/specimen_identification/", {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({

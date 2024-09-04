@@ -7,13 +7,16 @@ const {
   handleHeadersChange,
   solrSort,
   solrQuery,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: LOCALITY.options,
   initHeaders: HEADERS_AREA_LOCALITY,
 });
 
 const route = useRoute();
-const { data, status } = await useSolrFetch<SolrResponse>("/locality", {
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useSolrFetch<SolrResponse>("/locality", {
   query: computed(() => ({
     q: solrQuery.value,
     limit: options.value.itemsPerPage,
@@ -21,6 +24,15 @@ const { data, status } = await useSolrFetch<SolrResponse>("/locality", {
     fq: `area_id:${route.params.id}`,
     sort: solrSort.value,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/locality", {

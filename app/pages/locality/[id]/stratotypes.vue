@@ -7,13 +7,15 @@ const {
   headers,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: STRATOTYPE.options,
   initHeaders: HEADERS_LOCALITY_STRATOTYPE,
 });
 const route = useRoute();
+setStateFromQueryParams(route);
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
   "/stratigraphy_stratotype/",
   {
     query: computed(() => ({
@@ -24,8 +26,17 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
       ordering: sortBy.value,
       ...searchParams.value,
     })),
+    watch: false,
   },
 );
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
+});
 
 const { exportData } = useExportGeoloogiaApi("/stratigraphy_stratotype/", {
   totalRows: computed(() => data.value?.count ?? 0),

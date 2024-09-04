@@ -13,12 +13,16 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setStateFromQueryParams,
 } = useDataTable({
   initOptions: SPECIMEN.options,
   initHeaders: HEADERS_SPECIMEN,
 });
 
-const { data, status } = await useSolrFetch<{
+const route = useRoute();
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/specimen", {
   query: computed(() => ({
@@ -30,6 +34,15 @@ const { data, status } = await useSolrFetch<{
       sort: solrSort.value,
     },
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportSolr("/specimen", {

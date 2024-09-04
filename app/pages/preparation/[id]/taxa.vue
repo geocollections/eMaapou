@@ -8,12 +8,15 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: TAXON_LIST.options,
   initHeaders: HEADERS_TAXON_LIST,
 });
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/taxon_list/", {
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/taxon_list/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,6 +25,15 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/tax
     ordering: sortBy.value,
     ...searchParams.value,
   },
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportGeoloogiaApi("/taxon_list/", {

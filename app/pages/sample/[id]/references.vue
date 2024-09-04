@@ -8,12 +8,15 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: SAMPLE_REFERENCE.options,
   initHeaders: HEADERS_SAMPLE_REFERENCE,
 });
 
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/sample_reference/", {
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/sample_reference/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,6 +25,15 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/sam
     ordering: sortBy.value ?? "-reference__year",
     ...searchParams.value,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportGeoloogiaApi("/sample_reference/", {

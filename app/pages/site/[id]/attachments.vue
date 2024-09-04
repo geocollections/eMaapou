@@ -7,13 +7,15 @@ const {
   handleHeadersChange,
   sortBy,
   searchParams,
+  setStateFromQueryParams,
 } = useDataTableGeoloogiaApi({
   initOptions: ATTACHMENT.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
-
 const route = useRoute();
-const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+setStateFromQueryParams(route);
+
+const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -22,6 +24,15 @@ const { data, status } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/att
     ordering: sortBy.value,
     ...searchParams.value,
   })),
+  watch: false,
+});
+
+watch(() => route.fullPath, async (toPath, fromPath) => {
+  if (toPath === fromPath)
+    return;
+
+  setStateFromQueryParams(route);
+  await refresh();
 });
 
 const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
