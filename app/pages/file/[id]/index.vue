@@ -170,44 +170,15 @@ const mapOverlays = computed(() => {
   <VContainer style="margin: initial">
     <VRow>
       <VCol>
-        <VImg
+        <NuxtImg
           v-if="isImage"
+          :src="file.filename"
+          provider="geocollections"
+          :modifiers="{ size: 'medium' }"
           class="rounded"
-          content-class="image-content"
-          max-height="700"
-          contain
-          :lazy-src="
-            img(
-              file.filename,
-              { size: 'small' },
-              {
-                provider: 'geocollections',
-              },
-            )
-          "
-          :src="
-            img(
-              file.filename,
-              { size: 'medium' },
-              {
-                provider: 'geocollections',
-              },
-            )
-          "
-        >
-          <template #placeholder>
-            <VRow
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <VProgressCircular
-                indeterminate
-                color="grey-lighten-5"
-              />
-            </VRow>
-          </template>
-        </VImg>
+          fit="contain"
+          style="max-height: 700px; width: 100%"
+        />
 
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>
