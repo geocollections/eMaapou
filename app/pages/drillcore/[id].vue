@@ -269,6 +269,12 @@ const { data } = await useAsyncData("drillcore", async () => {
   const hydratedTabs = await hydrateTabs(tabs, {
     props: {
       general: { drillcore },
+      analysis: { locality: drillcore?.locality?.id },
+      sample: { locality: drillcore?.locality?.id },
+      specimen: { locality: drillcore?.locality?.id },
+      locality_reference: { locality: drillcore?.locality?.id },
+      attachment_link: { locality: drillcore?.locality?.id },
+      locality_description: { locality: drillcore?.locality?.id },
       graphs: {
         drillcoreObject: drillcore,
         locality: drillcore?.locality?.id,
