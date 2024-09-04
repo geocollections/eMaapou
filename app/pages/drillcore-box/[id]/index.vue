@@ -3,7 +3,6 @@ import type { DrillcoreBox } from "../[id].vue";
 
 const props = defineProps<{ drillcoreBox: DrillcoreBox }>();
 
-const img = useImage();
 const localePath = useLocalePath();
 const route = useRoute();
 const { $apiFetch } = useNuxtApp();
