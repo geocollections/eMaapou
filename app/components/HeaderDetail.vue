@@ -17,7 +17,7 @@ defineProps<{
         <slot>
           {{ title }}
         </slot>
-        <EditButton />
+        <slot name="titleAppend" />
       </div>
       <div>
         <slot name="sub" />

@@ -147,6 +147,9 @@ useHead({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
+        <template #titleAppend>
+          <EditButton :id="route.params.id as string" module="collection" />
+        </template>
       </HeaderDetail>
     </template>
     <NuxtPage v-bind="activeTabProps" />

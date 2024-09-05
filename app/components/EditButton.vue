@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { mdiSquareEditOutline } from "@mdi/js";
 
-const { $openEdit } = useNuxtApp();
-const route = useRoute();
+type EditModules =
+  "analysis" |
+  "area" |
+  "attachment" |
+  "collection" |
+  "dataset" |
+  "drillcore" |
+  "drillcore_box" |
+  "locality" |
+  "preparation" |
+  "sample" |
+  "site" |
+  "specimen" |
+  "stratigraphy";
 
-const module = computed(() => {
-  return route.name?.toString().substring(0, route.name.toString().indexOf("-")) ?? "";
-});
+const props = defineProps<{ module: EditModules; id: string }>();
+
+const { $openEdit } = useNuxtApp();
 
 function handleClick() {
-  let editModule = module.value;
-  if (module.value === "photo" || module.value === "file")
-    editModule = "attachment";
-  $openEdit(editModule, route.params.id as string);
+  $openEdit(props.module, props.id);
 }
 </script>
 
