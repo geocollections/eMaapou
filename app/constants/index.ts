@@ -1,6 +1,5 @@
 import type { VDataTable } from "vuetify/components";
 
-export * from "./tabs";
 export * from "./headers";
 export * from "./chart";
 export * from "./browse";
