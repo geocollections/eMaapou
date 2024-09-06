@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FIELDS_SOLR_SAMPLE } from "~/constants";
+
 const props = defineProps<{ locality: number }>();
 
 const {
@@ -28,6 +30,7 @@ const { data, status, refresh } = await useSolrFetch<{
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `locality_id:${props.locality}`,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SAMPLE,
     },
   })),
   watch: false,
