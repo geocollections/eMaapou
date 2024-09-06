@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiTestTube } from "@mdi/js";
+import { FIELDS_SOLR_ANALYSIS } from "~/constants";
 
 const analysesStore = useAnalyses();
 const { resetFilters, resetDataTable } = analysesStore;
@@ -30,6 +31,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_ANALYSIS,
     },
   })),
   watch: false,

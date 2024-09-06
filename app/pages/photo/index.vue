@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiFileImageOutline } from "@mdi/js";
+import { FIELDS_SOLR_PHOTO } from "~/constants";
 
 const views = computed(() => ["table", "image", "gallery"]);
 
@@ -40,7 +41,8 @@ const {
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
-      sort: solrSort.value ?? "id_sl desc",
+      sort: solrSort.value ?? "id_l desc",
+      fields: FIELDS_SOLR_PHOTO,
     },
   })),
   watch: false,

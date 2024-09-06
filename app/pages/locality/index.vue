@@ -27,7 +27,6 @@ const {
   response: { numFound: number; docs: any[] };
 }>("/locality", {
   query: computed(() => ({
-    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
@@ -36,6 +35,7 @@ const {
       sort:
         solrSort.value
         ?? $translate({ et: "locality asc", en: "locality_en asc" }),
+      fields: FIELDS_SOLR_LOCALITY,
     },
   })),
   watch: false,

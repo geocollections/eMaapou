@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiImageFilterHdr } from "@mdi/js";
+import { FIELDS_SOLR_SAMPLE } from "~/constants";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -35,6 +36,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SAMPLE,
     },
   })),
   watch: false,
