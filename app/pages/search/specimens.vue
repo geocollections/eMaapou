@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FIELDS_SOLR_SPECIMEN } from "~/constants";
+
 const props = defineProps<{ query: string }>();
 
 const {
@@ -19,6 +21,7 @@ const { data, status } = await useSolrFetch<SolrResponse>("/specimen", {
     rows: options.value.itemsPerPage,
     start: getOffset(options.value.page, options.value.itemsPerPage),
     sort: solrSort.value,
+    fields: FIELDS_SOLR_SPECIMEN,
   })),
 });
 </script>

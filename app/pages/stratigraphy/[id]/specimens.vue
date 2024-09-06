@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FIELDS_SOLR_SPECIMEN } from "~/constants";
+
 const props = defineProps<{
   stratigraphy: any;
 }>();
@@ -30,6 +32,7 @@ const { data, status, refresh } = await useSolrFetch<{
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `(stratigraphy_hierarchy:(${props.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${props.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${props.stratigraphy.hierarchy_string}*))`,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SPECIMEN,
     },
   })),
   watch: false,

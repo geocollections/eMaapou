@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FIELDS_SOLR_SPECIMEN } from "~/constants";
+
 const props = defineProps<{
   locality: number;
   depthStart: number;
@@ -32,6 +34,7 @@ const { data, status, refresh } = await useSolrFetch<{
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `locality_id:${props.locality} AND (depth:[${props.depthStart} TO ${props.depthEnd}] OR depth_interval:[${props.depthStart} TO ${props.depthEnd}])`,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SPECIMEN,
     },
   })),
   watch: false,
