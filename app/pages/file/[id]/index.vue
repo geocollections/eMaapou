@@ -170,15 +170,19 @@ const mapOverlays = computed(() => {
   <VContainer style="margin: initial">
     <VRow>
       <VCol>
-        <NuxtImg
+        <div
           v-if="isImage"
-          :src="file.filename"
-          provider="geocollections"
-          :modifiers="{ size: 'medium' }"
-          class="rounded"
-          fit="contain"
-          style="max-height: 700px; width: 100%"
-        />
+          style="width: 100%; max-height: 700px; margin-left: auto; margin-right: auto;"
+          class="d-flex justify-center rounded bg-grey-lighten-4"
+        >
+          <NuxtImg
+            :src="file.filename"
+            provider="geocollections"
+            :modifiers="{ size: 'large' }"
+            fit="inside"
+            style="max-height: 700px; max-width: 100%; margin-left: auto; margin-right: auto;"
+          />
+        </div>
 
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>
@@ -253,6 +257,7 @@ const mapOverlays = computed(() => {
         </div>
       </VCol>
       <VCol
+        :cols="12"
         :sm="12"
         :md="6"
         :lg="5"
