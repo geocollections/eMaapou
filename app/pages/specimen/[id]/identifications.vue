@@ -42,7 +42,7 @@ const { exportData } = useExportGeoloogiaApi("/specimen_identification/", {
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     specimen: route.params.id,
     nest: 1,
-    ordering: sortBy,
+    ordering: sortBy.value,
     ...searchParams.value,
   })),
 });

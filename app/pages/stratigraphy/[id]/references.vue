@@ -42,7 +42,7 @@ const { exportData } = useExportGeoloogiaApi("/stratigraphy_reference/", {
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     stratigraphy: route.params.id,
     nest: 1,
-    ordering: sortBy,
+    ordering: sortBy.value,
     ...searchParams.value,
   })),
 });
