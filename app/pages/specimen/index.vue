@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiBug } from "@mdi/js";
+import { FIELDS_SOLR_SPECIMEN } from "~/constants";
 
 const route = useRoute();
 
@@ -30,6 +31,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SPECIMEN,
     },
   })),
   watch: false,

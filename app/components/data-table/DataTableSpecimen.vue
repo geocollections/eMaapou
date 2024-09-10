@@ -112,7 +112,7 @@ function handleEnd() {
     <template #item.image="{ item }">
       <div class="d-flex align-center">
         <ThumbnailImage
-          v-if="item.image_preview_url"
+          v-if="item.image !== undefined"
           class="my-1"
           :src="
             img(item.image, { size: 'small' }, { provider: 'geocollections' })

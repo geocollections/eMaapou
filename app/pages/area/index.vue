@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import type { LocationQueryRaw } from "vue-router";
+import { FIELDS_SOLR_AREA } from "~/constants";
 
 const areasStore = useAreas();
 const {
@@ -32,6 +33,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_AREA,
     },
   })),
   watch: false,

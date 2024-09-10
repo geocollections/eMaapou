@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { mdiChartLine } from "@mdi/js";
 import cloneDeep from "lodash/cloneDeep";
+import { FIELDS_SOLR_ANALYTICAL_DATA } from "~/constants";
 
 const route = useRoute();
 
@@ -17,25 +18,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filter
   = storeToRefs(analyticalDataStore);
 
 setStateFromQueryParams(route);
-
-const {
-  data,
-  status,
-  refresh: refreshAnalyticalData,
-} = await useSolrFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/analytical_data", {
-  query: computed(() => ({
-    json: {
-      query: solrQuery.value,
-      limit: options.value.itemsPerPage,
-      offset: getOffset(options.value.page, options.value.itemsPerPage),
-      filter: solrFilters.value,
-      sort: solrSort.value,
-    },
-  })),
-  watch: false,
-});
 
 const { $solrFetch } = useNuxtApp();
 
@@ -70,6 +52,26 @@ const { data: parameterHeaders } = await useAsyncData(async () => {
     acc.allIds.push(doc.parameter_index);
     return acc;
   }, { byIds: {}, allIds: [] });
+});
+
+const {
+  data,
+  status,
+  refresh: refreshAnalyticalData,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/analytical_data", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+      fields: FIELDS_SOLR_ANALYTICAL_DATA.concat(",", Object.values(parameterHeaders.value.byIds).map(header => header.value).join(",")),
+    },
+  })),
+  watch: false,
 });
 
 addHeaders(parameterHeaders.value);

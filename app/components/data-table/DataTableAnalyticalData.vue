@@ -111,7 +111,7 @@ const localePath = useLocalePath();
           localePath({ name: 'dataset-id', params: { id: item.dataset_id } })
         "
       >
-        {{ item.dataset_id }}
+        {{ item.dataset_name }}
       </NuxtLink>
     </template>
     <template #item.analysis_id="{ item }">

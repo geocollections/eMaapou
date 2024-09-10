@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiEyedropper } from "@mdi/js";
+import { FIELDS_SOLR_PREPARATION } from "~/constants";
 
 const preparationsStore = usePreparations();
 const { resetFilters, resetDataTable } = preparationsStore;
@@ -36,6 +37,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_PREPARATION,
     },
   })),
   watch: false,

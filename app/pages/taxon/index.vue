@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiFamilyTree } from "@mdi/js";
+import { FIELDS_SOLR_TAXON } from "~/constants";
 
 const route = useRoute();
 
@@ -30,6 +31,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_TAXON,
     },
   })),
   watch: false,

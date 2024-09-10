@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiDatabaseOutline } from "@mdi/js";
+import { FIELDS_SOLR_DATASET } from "~/constants";
 
 const datasetsStore = useDatasets();
 const { resetFilters, resetDataTable } = datasetsStore;
@@ -30,6 +31,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_DATASET,
     },
   })),
   watch: false,

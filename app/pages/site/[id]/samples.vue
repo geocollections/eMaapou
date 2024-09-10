@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FIELDS_SOLR_SAMPLE } from "~/constants";
+
 const {
   options,
   solrQuery,
@@ -25,6 +27,7 @@ const { data, status, refresh } = await useSolrFetch<{
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `site_id:${route.params.id}`,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SAMPLE,
     },
   })),
   watch: false,

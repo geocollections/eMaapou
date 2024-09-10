@@ -25,13 +25,13 @@ const {
   response: { numFound: number; docs: any[] };
 }>("/drillcore", {
   query: computed(() => ({
-    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_DRILLCORE,
     },
   })),
   watch: false,

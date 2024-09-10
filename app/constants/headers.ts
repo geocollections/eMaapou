@@ -324,7 +324,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       show: true,
       apiFieldValue: "dataset_id_sl,dataset_name",
       sortField: ["dataset_name"],
-      ...normalColumn,
+      ...wideColumn,
     },
   },
   allIds: [
@@ -636,7 +636,7 @@ export const HEADERS_DATASET: Headers = {
       value: "id",
       show: false,
       apiFieldValue: "dataset_id",
-      sortField: ["dataset_id"],
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     name: {
@@ -2080,7 +2080,7 @@ export const HEADERS_SPECIMEN: Headers = {
       value: "id",
       show: false,
       apiFieldValue: "id",
-      sortField: ["id"],
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     specimen_full_name: {
@@ -2413,7 +2413,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       value: "id",
       show: false,
       apiFieldValue: "id",
-      sortField: ["id"],
+      sortField: ["id_l"],
       ...narrowColumn,
     },
     stratigraphy: {

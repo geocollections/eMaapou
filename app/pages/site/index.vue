@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiMapMarkerOutline } from "@mdi/js";
-import type { DataTableOptions } from "~/constants";
+import { type DataTableOptions, FIELDS_SOLR_SITE } from "~/constants";
 
 const sitesStore = useSites();
 const {
@@ -38,6 +38,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
+      fields: FIELDS_SOLR_SITE,
     },
   })),
   watch: false,

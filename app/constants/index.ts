@@ -1,10 +1,10 @@
 import type { VDataTable } from "vuetify/components";
 
-export * from "./tabs";
 export * from "./headers";
 export * from "./chart";
 export * from "./browse";
 export * from "./services";
+export * from "./fields";
 
 export type SortItem = InstanceType<typeof VDataTable>["sortBy"][0];
 
