@@ -15,12 +15,12 @@ const {
 });
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/specimens/${route.params.id}/specimen-taxa/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     specimen: route.params.id,
-    nest: 1,
+    expand: "taxon,agent,reference,identification_type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
