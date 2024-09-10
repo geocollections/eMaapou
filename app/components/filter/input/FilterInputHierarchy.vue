@@ -81,6 +81,8 @@ const { refresh: refreshAutocomplete, status } = await useAsyncData(
       suggestions.value = [...suggestions.value, ...res];
     else
       suggestions.value = res;
+
+    return suggestions.value;
   },
 );
 
