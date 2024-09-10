@@ -43,7 +43,7 @@ const { exportData } = useExportGeoloogiaApi("/dataset_author/", {
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     dataset: route.params.id,
     nest: 1,
-    ordering: sortBy,
+    ordering: sortBy.value,
     ...searchParams.value,
   })),
 });

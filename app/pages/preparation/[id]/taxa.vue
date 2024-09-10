@@ -43,7 +43,7 @@ const { exportData } = useExportGeoloogiaApi("/taxon_list/", {
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     preparation: route.params.id,
     nest: 1,
-    ordering: sortBy,
+    ordering: sortBy.value,
     ...searchParams.value,
   })),
 });

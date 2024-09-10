@@ -55,7 +55,7 @@ const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     or_search: orSearch.value,
     nest: 2,
-    ordering: sortBy,
+    ordering: sortBy.value,
     ...searchParams.value,
   })),
 });

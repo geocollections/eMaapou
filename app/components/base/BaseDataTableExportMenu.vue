@@ -48,9 +48,13 @@ function handleExport() {
         v-model="exportType"
         class="mb-2"
         density="compact"
+        mandatory
       >
         <VBtn value="csv">
           CSV
+        </VBtn>
+        <VBtn value="xlsx">
+          XLSX
         </VBtn>
       </VBtnToggle>
       <VSelect

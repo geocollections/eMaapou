@@ -40,6 +40,15 @@ export function useExportSolr(path: string, { query, totalRows }: {
       link.click();
       URL.revokeObjectURL(link.href);
     }
+    else if (type === "xlsx") {
+      const label = `${filename}.${type}`;
+      const blob = new Blob([data], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = label;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
   };
 
   const maxRows = 10000;
@@ -50,7 +59,7 @@ export function useExportSolr(path: string, { query, totalRows }: {
         limit: totalRows.value > maxRows ? maxRows : totalRows.value,
       };
     }
-    const limit = query.value.limit ?? maxRows > totalRows.value ? totalRows.value : query.value.limit;
+    const limit = (query.value.limit ?? 25) > totalRows.value ? totalRows.value : query.value.limit;
     return {
       limit,
       offset: query.value.offset,
@@ -90,6 +99,15 @@ export function useExportGeoloogiaApi(path: string, { query, totalRows }: {
       link.click();
       URL.revokeObjectURL(link.href);
     }
+    else if (type === "xlsx") {
+      const label = `${filename}.${type}`;
+      const blob = new Blob([data], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = label;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
   };
 
   const maxRows = 1000;
@@ -100,7 +118,7 @@ export function useExportGeoloogiaApi(path: string, { query, totalRows }: {
         limit: totalRows.value > maxRows ? maxRows : totalRows.value,
       };
     }
-    const limit = query.value.limit ?? maxRows > totalRows.value ? totalRows.value : query.value.limit;
+    const limit = (query.value.limit ?? 25) > totalRows.value ? totalRows.value : query.value.limit;
     return {
       limit,
       offset: query.value.offset,
