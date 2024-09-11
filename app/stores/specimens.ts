@@ -268,8 +268,8 @@ export const useSpecimens = defineStore(
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query", "imageOptions", "currentView"],
-      storage: persistedState.sessionStorage,
+      pick: ["options", "filters", "headers", "query", "imageOptions", "currentView"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );

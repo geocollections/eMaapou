@@ -37,8 +37,8 @@ export const useSearchPosition = defineStore(
   },
   {
     persist: {
-      paths: ["page", "searchPosition", "searchModule"],
-      storage: persistedState.sessionStorage,
+      pick: ["page", "searchPosition", "searchModule"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );

@@ -184,8 +184,8 @@ export const usePhotos = defineStore(
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query", "currentView"],
-      storage: persistedState.sessionStorage,
+      pick: ["options", "filters", "headers", "query", "currentView"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );

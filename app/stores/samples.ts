@@ -180,8 +180,8 @@ export const useSamples = defineStore(
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query"],
-      storage: persistedState.sessionStorage,
+      pick: ["options", "filters", "headers", "query"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );
