@@ -251,6 +251,7 @@ const { data } = await useAsyncData("drillcore", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });

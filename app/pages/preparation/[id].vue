@@ -150,6 +150,7 @@ const { data } = await useAsyncData("preparation", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });

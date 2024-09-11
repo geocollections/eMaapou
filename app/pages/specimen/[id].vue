@@ -222,6 +222,7 @@ const { data } = await useAsyncData("specimen", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -273,7 +274,7 @@ const isRock = computed(() => !!data.value.specimenAlt?.rock);
 const isTaxon = computed(() => !!data.value.specimenAlt?.taxon);
 const title = computed(
   () =>
-        `${data.value.specimen?.database?.acronym} ${data.value.specimen?.number}`,
+    `${data.value.specimen?.database?.acronym} ${data.value.specimen?.number}`,
 );
 const titleAlt = computed(() => {
   if (data.value.specimenAlt?.rock) {

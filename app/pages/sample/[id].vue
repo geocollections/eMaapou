@@ -300,6 +300,7 @@ const { data } = await useAsyncData("sample", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -345,7 +346,7 @@ const title = computed(() =>
   || data.value.sample?.number_additional
   || data.value.sample?.number_field
   || data.value.sample?.id
-    }`.trim(),
+  }`.trim(),
 );
 const pageTitle = computed(() => `${t("sample.number")} ${title.value}`);
 

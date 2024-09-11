@@ -10,12 +10,15 @@ export async function redirectInvalidTab({
   const route = useRoute();
   const router = useRouter();
   const getRouteBaseName = useRouteBaseName();
+  const error = useError();
 
   const isCurrentRouteValid = computed(() => {
     return tabs.some((tab) => {
       return tab.routeName === getRouteBaseName(route);
     });
   });
+  if (error.value)
+    return;
 
   if (!isCurrentRouteValid.value)
     await router.replace(redirectRoute);

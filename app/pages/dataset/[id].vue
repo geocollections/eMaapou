@@ -229,6 +229,7 @@ const { data } = await useAsyncData("dataset", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });

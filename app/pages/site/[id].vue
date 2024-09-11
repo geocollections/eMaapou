@@ -193,6 +193,7 @@ const { data } = await useAsyncData("site", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });

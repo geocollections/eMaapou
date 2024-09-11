@@ -185,6 +185,7 @@ const { data } = await useAsyncData("data", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -260,11 +261,11 @@ const img = useImage();
 useSeoMeta({
   ogImage: isImage.value
     ? img(
-        `${file.value?.filename}`,
-        { size: "medium" },
-        {
-          provider: "geocollections",
-        },
+      `${file.value?.filename}`,
+      { size: "medium" },
+      {
+        provider: "geocollections",
+      },
     )
     : null,
   ogVideo: isVideo.value

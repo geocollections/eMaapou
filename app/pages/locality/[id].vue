@@ -313,6 +313,7 @@ const { data } = await useAsyncData("locality", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -426,11 +427,11 @@ useHead({
 useSeoMeta({
   ogImage: data.value?.images[0]?.attachment?.filename
     ? img(
-        `${data.value.images[0].attachment.filename}`,
-        { size: "medium" },
-        {
-          provider: "geocollections",
-        },
+      `${data.value.images[0].attachment.filename}`,
+      { size: "medium" },
+      {
+        provider: "geocollections",
+      },
     )
     : null,
 });
