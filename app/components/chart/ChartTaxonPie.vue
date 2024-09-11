@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import VChart from "vue-echarts";
-import { use } from "echarts/core";
-import { PieChart } from "echarts/charts";
 import deepmerge from "deepmerge";
-import { CanvasRenderer } from "echarts/renderers";
+import { PieChart } from "echarts/charts";
 import {
   GridComponent,
   LegendComponent,
   TitleComponent,
   ToolboxComponent,
 } from "echarts/components";
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import VChart from "vue-echarts";
 import { useDisplay } from "vuetify";
 import {
   LEGEND_TOP,

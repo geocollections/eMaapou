@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<
     images: Image<T>[];
     initialSlide?: number;
   }
-  >(), { initialSlide: 0 });
+>(), { initialSlide: 0 });
 
 const emit = defineEmits<{
   end: [];
@@ -65,7 +65,7 @@ onMounted(() => {
         reachEnd: handleReachEnd,
       },
       injectStyles: [
-      `
+        `
       :host .swiper-pagination {
         bottom: unset;
         top: 0;

@@ -1,5 +1,5 @@
-import type { UseFetchOptions } from "nuxt/app";
 import { defu } from "defu";
+import type { UseFetchOptions } from "nuxt/app";
 
 type Request = Parameters<typeof useFetch>[0];
 

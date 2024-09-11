@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Locality } from "../[id].vue";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+import type { Locality } from "../[id].vue";
 
 const props = defineProps<{ locality: Locality }>();
 

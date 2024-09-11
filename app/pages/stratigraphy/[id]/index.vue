@@ -42,12 +42,12 @@ const stratigraphyMarkers = computed((): MapMarker[] => {
         latitude: stratotype?.locality?.latitude,
         longitude: stratotype?.locality?.longitude,
         text: `${$translate({
-              et: stratotype?.locality?.locality,
-              en: stratotype?.locality?.locality_en,
-            })} (${$translate({
-              et: stratotype?.stratotype_type?.value,
-              en: stratotype?.stratotype_type?.value_en,
-            })})`,
+          et: stratotype?.locality?.locality,
+          en: stratotype?.locality?.locality_en,
+        })} (${$translate({
+          et: stratotype?.stratotype_type?.value,
+          en: stratotype?.stratotype_type?.value_en,
+        })})`,
       });
     }
     return prev;

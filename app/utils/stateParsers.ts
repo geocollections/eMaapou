@@ -1,6 +1,6 @@
-import { z } from "zod";
-import uniq from "lodash/uniq";
 import isNil from "lodash/isNil";
+import uniq from "lodash/uniq";
+import { z } from "zod";
 
 // Parsers that convert values to URL params
 
@@ -58,7 +58,8 @@ export const parameterValueParser = z
   .object({
     value: z.array(z.number().nullable()).length(2),
     parameter: z.string().nullable(),
-  }).array()
+  })
+  .array()
   .transform((val) => {
     const validValues = val.filter(v => v.parameter !== null);
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Sample } from "../[id].vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+import type { Sample } from "../[id].vue";
 
 const props = defineProps<{
   sample: Sample;

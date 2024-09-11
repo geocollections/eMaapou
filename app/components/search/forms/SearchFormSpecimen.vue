@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
+import type { ComponentExposed } from "vue-component-type-helpers";
 
 defineProps<{ resultView: "table" | "image" }>();
 

@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<
     maxWidth?: number;
     rounded?: number;
   }
-  >(), {
+>(), {
   showButton: false,
   iconButton: false,
   dense: false,

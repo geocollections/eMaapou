@@ -4,16 +4,15 @@ import {
   mdiFileMusicOutline,
   mdiFileVideoOutline,
 } from "@mdi/js";
-import type { File } from "../[id].vue";
-import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+import type { File } from "../[id].vue";
 
 const props = defineProps<{
   file: File;
 }>();
 
 const { $translate, $geoloogiaFetch } = useNuxtApp();
-const img = useImage();
 const localePath = useLocalePath();
 const route = useRoute();
 
@@ -91,8 +90,8 @@ const showMap = computed(() => {
   return (
     (props.file.locality?.latitude && props.file.locality?.longitude)
     || (props.file.specimen?.locality?.latitude
-    && props.file.specimen?.locality?.longitude)
-    || (props.file.image_latitude && props.file.image_longitude)
+      && props.file.specimen?.locality?.longitude)
+      || (props.file.image_latitude && props.file.image_longitude)
   );
 });
 

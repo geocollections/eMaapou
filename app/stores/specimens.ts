@@ -1,5 +1,5 @@
-import type { RouteLocation } from "vue-router";
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import type {
   BooleanFilter,
   GeomFilter,

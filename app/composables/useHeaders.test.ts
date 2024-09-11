@@ -1,6 +1,6 @@
 // @vitest-environment nuxt
-import { describe, expect, it } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { describe, expect, it } from "vitest";
 import type { Headers } from "#imports";
 
 const testHeaders = {

@@ -83,18 +83,18 @@ export const SERVICES = {
     "sarv",
   ] as
     ("kirjandus" |
-    "fossiilid" |
-    "kivid" |
-    "fond" |
-    "maardlad" |
-    "stratigraphy" |
-    "gmre" |
-    "turba" |
-    "geocase" |
-    "eurocore" |
-    "geocollections" |
-    "doi" |
-    "sarv")[]
+      "fossiilid" |
+      "kivid" |
+      "fond" |
+      "maardlad" |
+      "stratigraphy" |
+      "gmre" |
+      "turba" |
+      "geocase" |
+      "eurocore" |
+      "geocollections" |
+      "doi" |
+      "sarv")[]
 
   ,
 };

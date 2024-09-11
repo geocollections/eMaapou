@@ -21,7 +21,6 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const localePath = useLocalePath();
 const localeRoute = useLocaleRoute();
-const img = useImage();
 
 const search = ref("");
 const searchDebounced = useDebounce(search, 250);

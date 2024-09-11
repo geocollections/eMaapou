@@ -1,11 +1,11 @@
-import type { RouteLocation } from "vue-router";
 import { z } from "zod";
-import { STRATIGRAPHY } from "~/constants";
+import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { STRATIGRAPHY } from "~/constants";
 
 export const useStratigraphies = defineStore(
   "stratigraphies",

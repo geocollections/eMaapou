@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete } from "#components";
+import type { ComponentExposed } from "vue-component-type-helpers";
 
 const emit = defineEmits<{
   update: [];

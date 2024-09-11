@@ -9,7 +9,7 @@ withDefaults(defineProps<
     images: Image<T>[];
     initialSlide?: number;
   }
-  >(), {
+>(), {
   initialSlide: 0,
 });
 

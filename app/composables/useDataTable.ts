@@ -1,5 +1,5 @@
-import type { LocationQueryRaw, RouteLocation } from "vue-router";
 import { z } from "zod";
+import type { LocationQueryRaw, RouteLocation } from "vue-router";
 import type { DataTableOptions, Headers, SortItem } from "~/constants";
 
 export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: Headers }) {

@@ -7,11 +7,11 @@ import {
 } from "echarts/components";
 import { type ComposeOption, use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
+import VChart from "vue-echarts";
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
 } from "echarts/types/dist/echarts.js";
-import VChart from "vue-echarts";
 import type { BarSeriesOption, TooltipOption } from "echarts/types/dist/shared.js";
 
 type ECOption = ComposeOption<

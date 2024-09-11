@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { mdiClose } from "@mdi/js";
-import isEqual from "lodash/isEqual";
 import cloneDeep from "lodash/cloneDeep";
 import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
 import isNull from "lodash/isNull";
-import type { Suggestion } from "./FilterInputAutocomplete.vue";
 import type { ParameterValue } from "~/composables/useFilter";
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 const props = withDefaults(defineProps<{
   modelValue: ParameterValue[];
