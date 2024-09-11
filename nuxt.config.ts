@@ -90,13 +90,13 @@ export default defineNuxtConfig({
     locales: [
       {
         code: "en",
-        iso: "et-US",
+        language: "et-US",
         file: "en.js",
         name: "English",
       },
       {
         code: "et",
-        iso: "et-EE",
+        language: "et-EE",
         file: "et.js",
         name: "Eesti",
       },
@@ -146,4 +146,3 @@ export default defineNuxtConfig({
     client: true,
   },
 });
-
