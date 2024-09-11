@@ -4,10 +4,8 @@ import et from "./app/lang/et";
 export default defineI18nConfig(() => {
   return {
     legacy: false,
-    locale: "et",
-    messages: {
-      en,
-      et,
-    },
+    availableLocales: ["et", "en"],
+    fallbackLocale: "et",
+    fallbackWarn: true,
   };
 });

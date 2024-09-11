@@ -41,6 +41,7 @@ watch(() => display.smAndDown.value, (value) => {
       app
       :rail="railDrawer"
       color="grey-darken-3"
+      style="z-index:1004"
       elevation="2"
       permanent
       :width="200"

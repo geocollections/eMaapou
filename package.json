@@ -13,7 +13,7 @@
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.16.0",
     "@mdi/js": "^7.4.47",
-    "@nuxt/image": "^1.2.0",
+    "@nuxt/image": "^1.8.0",
     "@pinia/nuxt": "^0.5.1",
     "@terraformer/wkt": "^2.2.0",
     "earcut": "^2.2.4",
@@ -49,10 +49,10 @@
     "leaflet": "^1.9.4",
     "leaflet-gesture-handling": "^1.2.2",
     "leaflet.fullscreen": "^3.0.0",
-    "nuxt": "^3.12.2",
+    "nuxt": "^3.13.1",
     "playwright-core": "^1.44.0",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.69.7",
+    "sass-embedded": "^1.78.0",
     "typescript": "^5.5.2",
     "vite-plugin-vuetify": "^2.0.1",
     "vitest": "^1.6.0",
@@ -60,5 +60,8 @@
     "vue-router": "^4.2.5",
     "vue-tsc": "^2.0.22",
     "vuetify-nuxt-module": "^0.18.2"
+  },
+  "overrides": {
+    "sharp": "0.33.4"
   }
 }
