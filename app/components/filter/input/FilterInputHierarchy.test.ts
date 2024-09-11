@@ -1,8 +1,8 @@
 // @vitest-environment nuxt
-import { afterEach, describe, expect, it } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
-import { createVuetify } from "vuetify";
+import { afterEach, describe, expect, it } from "vitest";
 import { createI18n } from "vue-i18n";
+import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import FilterInputHierarchy, { type TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";

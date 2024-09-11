@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import orderBy from "lodash/orderBy";
 import difference from "lodash/difference";
+import orderBy from "lodash/orderBy";
 import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 export interface TreeNode {
@@ -218,6 +218,8 @@ function handleListEnd(isIntersecting: boolean) {
 const input = ref();
 
 function handleOpen(value: { value: boolean }) {
+  if (!input.value)
+    return;
   if (!value.value)
     return;
 
