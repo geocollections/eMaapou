@@ -68,7 +68,7 @@ const {
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
       sort: solrSort.value,
-      fields: FIELDS_SOLR_ANALYTICAL_DATA.concat(",", Object.values(parameterHeaders.value.byIds).map(header => header.value).join(",")),
+      fields: FIELDS_SOLR_ANALYTICAL_DATA.concat(",", Object.values(parameterHeaders.value.byIds).map((header: any) => header.value).join(",")),
     },
   })),
   watch: false,

@@ -24,7 +24,7 @@ import type {
   TitleComponentOption,
   TooltipComponentOption,
 } from "echarts/components";
-import type { ComposeOption, ECElementEvent } from "echarts/core";
+import type { ComposeOption } from "echarts/core";
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
@@ -204,9 +204,9 @@ function scaleChartHeight() {
 }
 const router = useRouter();
 
-function handleClick(event: ECElementEvent) {
-  if (event.seriesId === "samples-series") {
-    const sampleId = Array.isArray(event.data) ? event.data[3] as string : undefined;
+function handleClick(params: echarts.ECElementEvent): any {
+  if (params.seriesId === "samples-series") {
+    const sampleId = Array.isArray(params.data) ? params.data[3] as string : undefined;
     if (sampleId === undefined) {
       return;
     }
