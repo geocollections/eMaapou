@@ -68,26 +68,6 @@ const tabs = {
   } satisfies Tab,
 };
 
-const specimensStore = useSpecimens();
-const { getQueryParams } = specimensStore;
-const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
-
-const {
-  data: specimensRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/specimen", {
-  routeName: "specimen-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-
-const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
-
 export interface Specimen {
   id: number;
   number: Nullable<string>;
@@ -269,6 +249,26 @@ const { data } = await useAsyncData("specimen", async () => {
     images: [],
   }),
 });
+
+const specimensStore = useSpecimens();
+const { getQueryParams } = specimensStore;
+const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
+
+const {
+  data: specimensRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/specimen", {
+  routeName: "specimen-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
 
 const isRock = computed(() => !!data.value.specimenAlt?.rock);
 const isTaxon = computed(() => !!data.value.specimenAlt?.taxon);

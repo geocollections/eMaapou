@@ -7,26 +7,6 @@ const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
 
-const preparationsStore = usePreparations();
-const { getQueryParams } = preparationsStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(preparationsStore);
-const {
-  data: preparationsRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/preparation", {
-  routeName: "preparation-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-const similarPreparations = computed(
-  () => preparationsRes.value?.response.docs ?? [],
-);
-
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
   general: {
@@ -169,6 +149,26 @@ const { data } = await useAsyncData("preparation", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
+
+const preparationsStore = usePreparations();
+const { getQueryParams } = preparationsStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(preparationsStore);
+const {
+  data: preparationsRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/preparation", {
+  routeName: "preparation-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+const similarPreparations = computed(
+  () => preparationsRes.value?.response.docs ?? [],
+);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value.tabs);

@@ -16,34 +16,6 @@ const localePath = useLocalePath();
 const { t } = useI18n();
 const route = useRoute();
 
-const localitiesStore = useLocalities();
-const { getQueryParams } = localitiesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
-
-const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
-
-const {
-  data: localitiesRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/locality", {
-  routeName: "locality-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: computed(
-      () =>
-        solrSort.value
-        ?? $translate({ et: "locality asc", en: "locality_en asc" }),
-    ),
-  },
-});
-
-const similarLocalities = computed(
-  () => localitiesRes.value?.response.docs ?? [],
-);
-
 const tabs = {
   general: {
     type: "static",
@@ -399,6 +371,34 @@ const { data } = await useAsyncData("locality", async () => {
     images: [],
   }),
 });
+
+const localitiesStore = useLocalities();
+const { getQueryParams } = localitiesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
+
+const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
+
+const {
+  data: localitiesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/locality", {
+  routeName: "locality-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: computed(
+      () =>
+        solrSort.value
+        ?? $translate({ et: "locality asc", en: "locality_en asc" }),
+    ),
+  },
+});
+
+const similarLocalities = computed(
+  () => localitiesRes.value?.response.docs ?? [],
+);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);

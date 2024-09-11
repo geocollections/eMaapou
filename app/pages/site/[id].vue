@@ -8,25 +8,6 @@ const { t } = useI18n();
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
-const sitesStore = useSites();
-const { getQueryParams } = sitesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(sitesStore);
-const {
-  data: sitesRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/site", {
-  routeName: "site-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-
-const similarSites = computed(() => sitesRes.value?.response.docs ?? []);
-
 const tabs = {
   general: {
     type: "static",
@@ -231,6 +212,26 @@ const { data } = await useAsyncData("site", async () => {
     images: [],
   }),
 });
+
+const sitesStore = useSites();
+const { getQueryParams } = sitesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(sitesStore);
+const {
+  data: sitesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/site", {
+  routeName: "site-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarSites = computed(() => sitesRes.value?.response.docs ?? []);
+
 const title = computed(() => {
   const engTitle = data.value?.site?.name_en
     ? data.value?.site?.name_en
