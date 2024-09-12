@@ -84,6 +84,9 @@ const { refresh: refreshAutocomplete, status } = await useAsyncData(
 
     return suggestions.value;
   },
+  {
+    immediate: false,
+  },
 );
 
 const selectedItems = ref<SelectedItem[]>([]);
