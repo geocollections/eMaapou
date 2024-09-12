@@ -7,27 +7,6 @@ const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
 
-const drillcoresStore = useDrillcores();
-const { getQueryParams } = drillcoresStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(drillcoresStore);
-
-const {
-  data: drillcoresRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/drillcore", {
-  routeName: "drillcore-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-
-const similarDrillcores = computed(
-  () => drillcoresRes.value?.response.docs ?? [],
-);
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
   general: {
@@ -251,6 +230,7 @@ const { data } = await useAsyncData("drillcore", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -307,6 +287,28 @@ const { data } = await useAsyncData("drillcore", async () => {
     tabs: [],
   }),
 });
+
+const drillcoresStore = useDrillcores();
+const { getQueryParams } = drillcoresStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(drillcoresStore);
+
+const {
+  data: drillcoresRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/drillcore", {
+  routeName: "drillcore-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarDrillcores = computed(
+  () => drillcoresRes.value?.response.docs ?? [],
+);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);

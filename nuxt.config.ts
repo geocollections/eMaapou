@@ -3,7 +3,10 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+    componentInspector: false,
+  },
   components: {
     dirs: [
       {
@@ -19,7 +22,7 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@nuxt/image",
     "@pinia/nuxt",
-    "@pinia-plugin-persistedstate/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
     "@nuxtjs/seo",
@@ -35,6 +38,7 @@ export default defineNuxtConfig({
     moduleOptions: {
       ssrClientHints: {
         viewportSize: true,
+        prefersReducedMotion: true,
       },
     },
     vuetifyOptions: {
@@ -86,19 +90,19 @@ export default defineNuxtConfig({
     locales: [
       {
         code: "en",
-        iso: "et-US",
-        // file: "en.js",
+        language: "et-US",
+        file: "en.js",
         name: "English",
       },
       {
         code: "et",
-        iso: "et-EE",
-        // file: "et.js",
+        language: "et-EE",
+        file: "et.js",
         name: "Eesti",
       },
     ],
-    // lazy: true,
-    // langDir: "lang/",
+    lazy: true,
+    langDir: "lang/",
     defaultLocale: "et",
     strategy: "prefix_and_default",
     baseUrl: "https://geoloogia.info",
@@ -135,5 +139,10 @@ export default defineNuxtConfig({
     config: {
       standalone: false,
     },
+  },
+  compatibilityDate: "2024-09-10",
+  sourcemap: {
+    server: false,
+    client: true,
   },
 });

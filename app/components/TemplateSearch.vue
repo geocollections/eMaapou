@@ -31,6 +31,7 @@ function closeMobileSearch() {
       mobile-breakpoint="md"
       width="300"
       color="grey-lighten-4"
+      style="z-index:1004"
       :rail="mini"
       :location="display.smAndDown.value ? 'bottom' : 'left'"
       @update:model-value="showSearch = $event"

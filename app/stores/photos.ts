@@ -1,13 +1,13 @@
 import { z } from "zod";
 import type { RouteLocation } from "vue-router";
-import { IMAGE } from "~/constants";
-import { HEADERS_PHOTO } from "~/constants/headers";
 import type {
   DateListFilter,
   GeomFilter,
   IdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { IMAGE } from "~/constants";
+import { HEADERS_PHOTO } from "~/constants/headers";
 
 export const usePhotos = defineStore(
   "photos",
@@ -184,8 +184,8 @@ export const usePhotos = defineStore(
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query", "currentView"],
-      storage: persistedState.sessionStorage,
+      pick: ["options", "filters", "headers", "query", "currentView"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );

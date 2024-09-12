@@ -5,7 +5,7 @@ withDefaults(defineProps<
     longitude?: number;
     tooltip?: string;
   }
-  >(), {
+>(), {
   latitude: 0,
   longitude: 0,
   tooltip: "",

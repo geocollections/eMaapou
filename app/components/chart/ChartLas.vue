@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VChart from "vue-echarts";
+import { LineChart } from "echarts/charts";
 import {
   AxisPointerComponent,
   DataZoomComponent,
@@ -10,8 +10,8 @@ import {
   TooltipComponent,
 } from "echarts/components";
 import { use } from "echarts/core";
-import { LineChart } from "echarts/charts";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
+import VChart from "vue-echarts";
 import {
   DATAZOOM_Y_SLIDER_LEFT,
   DATAZOOM_Y_SLIDER_LEFT_SMALL,

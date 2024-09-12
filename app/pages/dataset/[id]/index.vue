@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
-import type { Dataset } from "../[id].vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
+import type { Dataset } from "../[id].vue";
 
 defineProps<{ dataset: Dataset; parameters: any }>();
 

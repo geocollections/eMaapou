@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import { mdiCog, mdiRefresh } from "@mdi/js";
-import groupBy from "lodash/groupBy";
-import orderBy from "lodash/orderBy";
-import differenceBy from "lodash/differenceBy";
-import type {
-  AxisPointerComponentOption,
-  DataZoomComponentOption,
-  GridComponentOption,
-  TitleComponentOption,
-  TooltipComponentOption,
-} from "echarts/components";
+import { CustomChart, LineChart } from "echarts/charts";
 import {
   AxisPointerComponent,
   DataZoomComponent,
@@ -19,23 +10,32 @@ import {
   ToolboxComponent,
   TooltipComponent,
 } from "echarts/components";
+import { use } from "echarts/core";
+import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
+import differenceBy from "lodash/differenceBy";
+import groupBy from "lodash/groupBy";
+import orderBy from "lodash/orderBy";
+import VChart from "vue-echarts";
+import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
+import type {
+  AxisPointerComponentOption,
+  DataZoomComponentOption,
+  GridComponentOption,
+  TitleComponentOption,
+  TooltipComponentOption,
+} from "echarts/components";
+import type { ComposeOption } from "echarts/core";
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
 } from "echarts/types/dist/echarts.js";
-import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
-import { CustomChart, LineChart } from "echarts/charts";
-import VChart from "vue-echarts";
-import type { ComposeOption, ECElementEvent } from "echarts/core";
-import { use } from "echarts/core";
-import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 import type { TitleOption } from "echarts/types/dist/shared.js";
-import range from "~/utils/range";
+import type { Renderer } from "~/types/enums";
 import clipRectByRect from "~/utils/clipRectByRect";
+import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
 import mm2px from "~/utils/mm2px";
 import px2mm from "~/utils/px2mm";
-import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
-import type { Renderer } from "~/types/enums";
+import range from "~/utils/range";
 
 type ECOption = ComposeOption<
   | GridComponentOption
@@ -204,9 +204,9 @@ function scaleChartHeight() {
 }
 const router = useRouter();
 
-function handleClick(event: ECElementEvent) {
-  if (event.seriesId === "samples-series") {
-    const sampleId = Array.isArray(event.data) ? event.data[3] as string : undefined;
+function handleClick(params: echarts.ECElementEvent): any {
+  if (params.seriesId === "samples-series") {
+    const sampleId = Array.isArray(params.data) ? params.data[3] as string : undefined;
     if (sampleId === undefined) {
       return;
     }
@@ -309,7 +309,8 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
         if (groupedNewParameters[addedParameter.value]!.length > 1) {
           const series = chart
             ?.getOption()
-            .series.find((series: LineSeriesOption) =>
+            .series
+            .find((series: LineSeriesOption) =>
               (series.id as string)?.endsWith(`-${addedParameter.value}`),
             );
           const newChartComponents = createParameterChartComponents(
@@ -491,7 +492,8 @@ function handleParameterChartWidthChange(newParameterChartWidth: string) {
   state.option = {
     grid: flogChart.value
       ?.getOption()
-      .grid.map((grid: GridComponentOption, i: number) => {
+      .grid
+      .map((grid: GridComponentOption, i: number) => {
         if (!(grid.id as string)?.startsWith("parameter"))
           return { id: grid.id };
 
@@ -617,8 +619,8 @@ function createParameterChartComponents<
             const data: [number, number, number, number, string] = params.data;
             return `
                 <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
-                  params.color
-                }"></span>
+  params.color
+}"></span>
                 <span>
                   ${data[4]}<br />
                   ${params.seriesName}: <b>${data[0]}</b><br />
@@ -819,8 +821,8 @@ function createOption(): ECOption {
 
             return `
               <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
-                params.color
-              }"></span>
+  params.color
+}"></span>
               <span>
                 ${data[4]}<br />
                 Depth: <b>${data[1]}</b><br />

@@ -7,25 +7,6 @@ const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
 
-const datasetsStore = useDatasets();
-const { getQueryParams } = datasetsStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(datasetsStore);
-
-const {
-  data: datasetsRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/dataset", {
-  routeName: "dataset-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-const similarDatasets = computed(() => datasetsRes.value?.response.docs ?? []);
-
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
   general: {
@@ -229,6 +210,7 @@ const { data } = await useAsyncData("dataset", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -283,6 +265,26 @@ const { data } = await useAsyncData("dataset", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
+
+const datasetsStore = useDatasets();
+const { getQueryParams } = datasetsStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(datasetsStore);
+
+const {
+  data: datasetsRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/dataset", {
+  routeName: "dataset-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+const similarDatasets = computed(() => datasetsRes.value?.response.docs ?? []);
+
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });

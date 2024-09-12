@@ -148,6 +148,7 @@ const { data } = await useAsyncData(
           showError({
             statusCode: 404,
             message: t("error.notFound"),
+            fatal: true,
           });
         },
       },

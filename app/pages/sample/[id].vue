@@ -115,26 +115,6 @@ const localePath = useLocalePath();
 const { t } = useI18n();
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
-const samplesStore = useSamples();
-const { getQueryParams } = samplesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
-
-const {
-  data: samplesRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/sample", {
-  routeName: "sample-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-
-const similarSamples = computed(() => samplesRes.value?.response.docs ?? []);
-
 export interface Sample {
   id: number;
   number: Nullable<string>;
@@ -300,6 +280,7 @@ const { data } = await useAsyncData("sample", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -328,6 +309,26 @@ const { data } = await useAsyncData("sample", async () => {
   }),
 });
 
+const samplesStore = useSamples();
+const { getQueryParams } = samplesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
+
+const {
+  data: samplesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/sample", {
+  routeName: "sample-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarSamples = computed(() => samplesRes.value?.response.docs ?? []);
+
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });
@@ -345,7 +346,7 @@ const title = computed(() =>
   || data.value.sample?.number_additional
   || data.value.sample?.number_field
   || data.value.sample?.id
-    }`.trim(),
+  }`.trim(),
 );
 const pageTitle = computed(() => `${t("sample.number")} ${title.value}`);
 

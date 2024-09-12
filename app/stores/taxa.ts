@@ -1,5 +1,5 @@
-import type { RouteLocation } from "vue-router";
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import type {
   GeomFilter,
   IdListFilter,
@@ -132,8 +132,8 @@ export const useTaxa = defineStore(
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query"],
-      storage: persistedState.sessionStorage,
+      pick: ["options", "filters", "headers", "query"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );

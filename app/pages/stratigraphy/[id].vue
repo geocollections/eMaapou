@@ -110,26 +110,6 @@ const tabs = {
   } satisfies Tab,
 };
 
-const stratigraphiesStore = useStratigraphies();
-const { getQueryParams } = stratigraphiesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(stratigraphiesStore);
-
-const {
-  data: stratigraphiesRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/stratigraphy", {
-  routeName: "stratigraphy-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-
-const similarStratigraphies = computed(() => stratigraphiesRes.value?.response.docs ?? []);
-
 export interface Stratigraphy {
   id: number;
   name: string;
@@ -224,6 +204,7 @@ const { data } = await useAsyncData("stratigraphy", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -251,6 +232,26 @@ const { data } = await useAsyncData("stratigraphy", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
+
+const stratigraphiesStore = useStratigraphies();
+const { getQueryParams } = stratigraphiesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(stratigraphiesStore);
+
+const {
+  data: stratigraphiesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/stratigraphy", {
+  routeName: "stratigraphy-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarStratigraphies = computed(() => stratigraphiesRes.value?.response.docs ?? []);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);

@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
-import orderBy from "lodash/orderBy";
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
+import orderBy from "lodash/orderBy";
 
 // @ts-expect-error - this should work
 export interface Suggestion { id: T; name: string; count: number }

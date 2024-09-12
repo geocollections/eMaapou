@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import type { GeoJsonObject } from "geojson";
+import "leaflet/dist/leaflet.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
@@ -152,8 +152,6 @@ const overlays = computed(() => {
 });
 
 const router = useRouter();
-const localePath = useLocalePath();
-const getRouteBaseName = useRouteBaseName();
 const route = useRoute();
 
 const mapLayers = computed(() => {

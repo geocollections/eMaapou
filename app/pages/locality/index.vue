@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { LocationQueryRaw } from "vue-router";
 import { mdiMapMarker } from "@mdi/js";
+import type { LocationQueryRaw } from "vue-router";
 
 const { $translate } = useNuxtApp();
 

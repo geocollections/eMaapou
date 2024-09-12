@@ -17,44 +17,6 @@ const { getQueryParams: getQueryParamsAnalyticalData } = analyticalDataStore;
 const { solrFilters: analyticalDataSolrFilters, solrQuery: analyticalDataSolrQuery, solrSort: analyticalDataSolrSort }
   = storeToRefs(analyticalDataStore);
 
-const searchPositionStore = useSearchPosition();
-const { searchModule } = storeToRefs(searchPositionStore);
-
-const searchUrl = computed(() => {
-  if (searchModule.value === "analyticalData")
-    return "/analytical_data";
-
-  return "/analysis";
-});
-
-const searchParams = computed(() => {
-  if (searchModule.value === "analyticalData") {
-    return {
-      query: analyticalDataSolrQuery,
-      filter: analyticalDataSolrFilters,
-      sort: analyticalDataSolrSort,
-    };
-  }
-
-  return {
-    query: analysisSolrQuery,
-    filter: analysisSolrFilters,
-    sort: analysisSolrSort,
-  };
-});
-
-const {
-  data: analysesRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer(searchUrl.value, {
-  routeName: "analysis-id",
-  solrParams: searchParams.value,
-});
-
-const similarAnalysis = computed(() => analysesRes.value?.response.docs ?? []);
-
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
 const tabs = {
@@ -186,6 +148,7 @@ const { data } = await useAsyncData("analysis", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -210,6 +173,44 @@ const { data } = await useAsyncData("analysis", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
+
+const searchPositionStore = useSearchPosition();
+const { searchModule } = storeToRefs(searchPositionStore);
+
+const searchUrl = computed(() => {
+  if (searchModule.value === "analyticalData")
+    return "/analytical_data";
+
+  return "/analysis";
+});
+
+const searchParams = computed(() => {
+  if (searchModule.value === "analyticalData") {
+    return {
+      query: analyticalDataSolrQuery,
+      filter: analyticalDataSolrFilters,
+      sort: analyticalDataSolrSort,
+    };
+  }
+
+  return {
+    query: analysisSolrQuery,
+    filter: analysisSolrFilters,
+    sort: analysisSolrSort,
+  };
+});
+
+const {
+  data: analysesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer(searchUrl.value, {
+  routeName: "analysis-id",
+  solrParams: searchParams.value,
+});
+
+const similarAnalysis = computed(() => analysesRes.value?.response.docs ?? []);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);

@@ -1,6 +1,6 @@
-import cloneDeep from "lodash/cloneDeep";
 import { geojsonToWKT } from "@terraformer/wkt";
 import earcut from "earcut";
+import cloneDeep from "lodash/cloneDeep";
 import isNil from "lodash/isNil";
 import type { Position } from "geojson";
 
@@ -111,7 +111,6 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
   });
 
   function reset() {
-    // @ts-expect-error - Do not know why this is a error
     filters.value = cloneDeep(initFilters);
   }
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { mdiFileDownloadOutline } from "@mdi/js";
 import isEmpty from "lodash/isEmpty";
-import type { Area } from "../[id].vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
+import type { Area } from "../[id].vue";
 
 const props = defineProps<{ area: Area }>();
 

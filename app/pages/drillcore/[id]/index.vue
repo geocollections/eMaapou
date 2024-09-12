@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Drillcore } from "../[id].vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+import type { Drillcore } from "../[id].vue";
 
 const props = defineProps<{
   drillcore: Drillcore;

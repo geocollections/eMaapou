@@ -85,6 +85,7 @@ const { data } = await useAsyncData("collection", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
 import { mdiChevronDoubleLeft, mdiChevronDoubleRight } from "@mdi/js";
+import { useDisplay } from "vuetify";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -41,6 +41,7 @@ watch(() => display.smAndDown.value, (value) => {
       app
       :rail="railDrawer"
       color="grey-darken-3"
+      style="z-index:1004"
       elevation="2"
       permanent
       :width="200"

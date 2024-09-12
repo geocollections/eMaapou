@@ -7,25 +7,6 @@ const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
 
-const areasStore = useAreas();
-const { getQueryParams } = areasStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(areasStore);
-
-const {
-  data: areasRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/area", {
-  routeName: "area-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-const similarAreas = computed(() => areasRes.value?.response.docs ?? []);
-
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
   general: {
@@ -193,6 +174,7 @@ const { data } = await useAsyncData("area", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -219,6 +201,25 @@ const { data } = await useAsyncData("area", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
+
+const areasStore = useAreas();
+const { getQueryParams } = areasStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(areasStore);
+
+const {
+  data: areasRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/area", {
+  routeName: "area-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+const similarAreas = computed(() => areasRes.value?.response.docs ?? []);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);

@@ -47,6 +47,8 @@ $heading-font: "Montserrat", sans-serif;
 
 .text-link {
   // @extend .underline;
+  @include transition(color 200ms ease);
+
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
@@ -55,8 +57,6 @@ $heading-font: "Montserrat", sans-serif;
   .v-icon {
     color: map-get($map: $blue, $key: "darken-1") !important;
   }
-
-  @include transition(color 200ms ease);
 
   &:hover {
     color: map-get($map: $blue, $key: "darken-3") !important;
@@ -76,6 +76,7 @@ $heading-font: "Montserrat", sans-serif;
 }
 .text-link-visit {
   // @extend .underline;
+  @include transition(color 200ms ease);
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
@@ -84,8 +85,6 @@ $heading-font: "Montserrat", sans-serif;
   .v-icon {
     color: map-get($map: $blue, $key: "darken-1") !important;
   }
-
-  @include transition(color 200ms ease);
 
   &:hover {
     color: map-get($map: $blue, $key: "darken-3") !important;
@@ -106,6 +105,7 @@ $heading-font: "Montserrat", sans-serif;
 
 .text-link-footer {
   // @extend .underline;
+  @include transition(color 200ms ease);
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
@@ -116,8 +116,6 @@ $heading-font: "Montserrat", sans-serif;
     color: white !important;
     text-decoration: none;
   }
-
-  @include transition(color 200ms ease);
 
   &:hover {
     /*color: var(--v-primary-lighten3) !important;*/

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import sumBy from "lodash/sumBy";
 import sortBy from "lodash/sortBy";
+import sumBy from "lodash/sumBy";
 import type { Analysis } from "../[id].vue";
 
 const props = defineProps<{

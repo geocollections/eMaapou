@@ -68,26 +68,6 @@ const tabs = {
   } satisfies Tab,
 };
 
-const specimensStore = useSpecimens();
-const { getQueryParams } = specimensStore;
-const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
-
-const {
-  data: specimensRes,
-  page,
-  handleSelect,
-  showDrawer,
-} = await useSearchResultsDrawer("/specimen", {
-  routeName: "specimen-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
-});
-
-const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
-
 export interface Specimen {
   id: number;
   number: Nullable<string>;
@@ -222,6 +202,7 @@ const { data } = await useAsyncData("specimen", async () => {
       showError({
         statusCode: 404,
         message: t("error.notFound"),
+        fatal: true,
       });
     },
   });
@@ -269,11 +250,31 @@ const { data } = await useAsyncData("specimen", async () => {
   }),
 });
 
+const specimensStore = useSpecimens();
+const { getQueryParams } = specimensStore;
+const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
+
+const {
+  data: specimensRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/specimen", {
+  routeName: "specimen-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
+
 const isRock = computed(() => !!data.value.specimenAlt?.rock);
 const isTaxon = computed(() => !!data.value.specimenAlt?.taxon);
 const title = computed(
   () =>
-        `${data.value.specimen?.database?.acronym} ${data.value.specimen?.number}`,
+    `${data.value.specimen?.database?.acronym} ${data.value.specimen?.number}`,
 );
 const titleAlt = computed(() => {
   if (data.value.specimenAlt?.rock) {

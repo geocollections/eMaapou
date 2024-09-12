@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { mdiChevronDoubleLeft, mdiViewList } from "@mdi/js";
-import { displayPartsToString } from "typescript";
 
 const props = withDefaults(defineProps<{
   showSimilar?: boolean;

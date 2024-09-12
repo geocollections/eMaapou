@@ -21,8 +21,8 @@ export const useDrillcoreBoxPosition = defineStore(
   },
   {
     persist: {
-      paths: ["page"],
-      storage: persistedState.sessionStorage,
+      pick: ["page"],
+      storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },
 );
