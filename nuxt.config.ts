@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     moduleOptions: {
       ssrClientHints: {
         viewportSize: true,
-        prefersReducedMotion: true,
+        reloadOnFirstRequest: true,
       },
     },
     vuetifyOptions: {
