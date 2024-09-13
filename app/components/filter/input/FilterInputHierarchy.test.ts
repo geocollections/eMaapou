@@ -100,6 +100,7 @@ describe("filterInputHierarchy", () => {
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
+    await nextTick();
 
     const treeItem = wrapper.get("[data-test=\"tree-item\"]");
 
@@ -150,6 +151,7 @@ describe("filterInputHierarchy", () => {
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
+    await nextTick();
 
     const rootTreeItem = wrapper.get("[data-test=\"tree-item\"]");
     await rootTreeItem.get("[data-test=\"show-children\"]").trigger("click");
@@ -210,6 +212,7 @@ describe("filterInputHierarchy", () => {
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
+    await nextTick();
 
     const rootTreeItem = wrapper.get("[data-test=\"tree-item\"]");
     await rootTreeItem.get("[data-test=\"show-children\"]").trigger("click");
@@ -269,6 +272,7 @@ describe("filterInputHierarchy", () => {
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
+    await nextTick();
 
     const rootTreeItem = wrapper.get("[data-test=\"tree-item\"]");
     await rootTreeItem.get("[data-test=\"show-children\"]").trigger("click");
