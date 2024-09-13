@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     "vuetify-nuxt-module",
     "@nuxt/test-utils/module",
     "@nuxt/eslint",
+    "@nuxt/scripts",
   ],
   imports: {
     dirs: ["types", "constants"],
@@ -144,5 +145,13 @@ export default defineNuxtConfig({
   sourcemap: {
     server: false,
     client: true,
+  },
+  scripts: {
+    registry: {
+      matomoAnalytics: {
+        siteId: "20",
+        matomoUrl: "https://matomo.geoloogia.info/",
+      },
+    },
   },
 });
