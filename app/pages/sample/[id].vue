@@ -4,6 +4,8 @@ import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
 const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+
+const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
   general: {
     type: "static",
@@ -113,7 +115,6 @@ const tabs = {
 
 const localePath = useLocalePath();
 const { t } = useI18n();
-const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
 export interface Sample {
   id: number;

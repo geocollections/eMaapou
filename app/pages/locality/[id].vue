@@ -16,6 +16,8 @@ const localePath = useLocalePath();
 const { t } = useI18n();
 const route = useRoute();
 
+const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
+
 const tabs = {
   general: {
     type: "static",
@@ -375,8 +377,6 @@ const { data } = await useAsyncData("locality", async () => {
 const localitiesStore = useLocalities();
 const { getQueryParams } = localitiesStore;
 const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
-
-const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
 const {
   data: localitiesRes,
