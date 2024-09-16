@@ -8,10 +8,15 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setQueryParamsFromState,
 } = useDataTable({
   initOptions: DRILLCORE.options,
   initHeaders: HEADERS_DRILLCORE,
+  initQuery: computed(() => props.query),
+  overrideInternalSearch: true,
 });
+
+setQueryParamsFromState();
 
 const { data, status } = await useSolrFetch<SolrResponse>("/drillcore", {
   query: computed(() => ({

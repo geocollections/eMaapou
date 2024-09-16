@@ -8,10 +8,15 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setQueryParamsFromState,
 } = useDataTable({
   initOptions: SAMPLE.options,
   initHeaders: HEADERS_SAMPLE,
+  initQuery: computed(() => props.query),
+  overrideInternalSearch: true,
 });
+
+setQueryParamsFromState();
 
 const { data, status } = await useSolrFetch<SolrResponse>("/sample", {
   query: computed(() => ({

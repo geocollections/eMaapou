@@ -8,10 +8,15 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   solrSort,
+  setQueryParamsFromState,
 } = useDataTable({
   initOptions: ROCK.options,
   initHeaders: HEADERS_ROCK,
+  initQuery: computed(() => props.query),
+  overrideInternalSearch: true,
 });
+
+setQueryParamsFromState();
 
 const { data, status } = await useSolrFetch<SolrResponse>("/rock", {
   query: computed(() => ({
