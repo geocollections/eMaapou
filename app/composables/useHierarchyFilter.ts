@@ -127,6 +127,7 @@ export function useStratigraphyHierarchyFilter(
     const res = await $solrFetch<any>("/stratigraphy", {
       query: {
         q: queryStr,
+        fq: "hierarchy_string:*",
         rows: pagination.perPage,
         start: (pagination.page - 1) * pagination.perPage,
         sort: `${searchField} asc`,
@@ -271,6 +272,7 @@ export function useRockHierarchyFilter(
       query: {
         q: queryStr,
         rows: pagination.perPage,
+        fq: "hierarchy_strings:*",
         start: (pagination.page - 1) * pagination.perPage,
         sort: `${searchField} asc`,
       },
@@ -422,6 +424,7 @@ export function useTaxonHierarchyFilter(
     const res = await $solrFetch<any>("/taxon", {
       query: {
         q: queryStr,
+        fq: "hierarchy_string:*",
         rows: pagination.perPage,
         start: (pagination.page - 1) * pagination.perPage,
         sort: `${searchField} asc`,

@@ -60,7 +60,7 @@ const { data: tree, refresh: refreshTree } = await useAsyncData<TreeNode[]>(
     paginationMap.value[props.rootValue] = 1;
     return tree;
   },
-  { deep: true },
+  { deep: true, immediate: false },
 );
 
 const autocompletePage = ref(1);
@@ -83,6 +83,9 @@ const { refresh: refreshAutocomplete, status } = await useAsyncData(
       suggestions.value = res;
 
     return suggestions.value;
+  },
+  {
+    immediate: false,
   },
 );
 
@@ -216,8 +219,14 @@ function handleListEnd(isIntersecting: boolean) {
 }
 
 const input = ref();
+const isFirstOpen = ref(true);
 
-function handleOpen(value: { value: boolean }) {
+async function handleOpen(value: { value: boolean }) {
+  if (isFirstOpen.value) {
+    await refreshTree();
+    isFirstOpen.value = false;
+  }
+
   if (!input.value)
     return;
   if (!value.value)

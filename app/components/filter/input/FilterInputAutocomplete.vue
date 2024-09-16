@@ -69,6 +69,7 @@ const { data: suggestions, refresh } = await useAsyncData(
       values: selectedIds.value,
     });
   },
+  { immediate: false },
 );
 
 watch(queryDebounced, () => {
@@ -128,8 +129,14 @@ function refreshSuggestions() {
 }
 
 const input = ref();
+const isFirstOpen = ref(true);
 
-function handleOpen(value: { value: boolean }) {
+async function handleOpen(value: { value: boolean }) {
+  if (isFirstOpen.value) {
+    await refresh();
+    isFirstOpen.value = false;
+  }
+
   if (!input.value)
     return;
   if (!value.value)
