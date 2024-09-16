@@ -58,7 +58,7 @@
     "vue": "^3.4.10",
     "vue-router": "^4.2.5",
     "vue-tsc": "^2.0.22",
-    "vuetify-nuxt-module": "^0.18.2"
+    "vuetify-nuxt-module": "^0.18.3"
   },
   "overrides": {
     "sharp": "0.33.4"
