@@ -201,7 +201,6 @@ const { data } = await useAsyncData("area", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
-
 const areasStore = useAreas();
 const { getQueryParams } = areasStore;
 const { solrFilters, solrQuery, solrSort } = storeToRefs(areasStore);
