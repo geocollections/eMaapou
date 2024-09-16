@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { LocationQueryRaw, RouteLocation } from "vue-router";
 import type { DataTableOptions, Headers, SortItem } from "~/constants";
 
-export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: Headers }) {
+export function useDataTable({ initOptions, initHeaders, initQuery = ref(""), overrideInternalSearch = false }: { initOptions: DataTableOptions; initHeaders: Headers; initQuery?: Ref<string>; overrideInternalSearch?: boolean }) {
   const options = ref(initOptions);
 
   const { headers, handleHeadersReset, handleHeadersChange, addHeaders } = useHeaders(initHeaders);
@@ -64,14 +64,21 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
       }),
   });
 
-  const query = ref("");
+  const query = ref(initQuery.value);
+
+  watch(initQuery, (newVal) => {
+    query.value = newVal;
+  });
+
   const solrQuery = computed(() => {
     return query.value.length > 0 ? query.value : "*";
   });
 
   function handleUpdate(tableState: { options: DataTableOptions; search: string }) {
     options.value = tableState.options;
-    query.value = tableState.search;
+    if (!overrideInternalSearch) {
+      query.value = tableState.search;
+    }
 
     setQueryParamsFromState();
   }
@@ -120,6 +127,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     stateToQueryParamsSchema,
     reset,
     setStateFromQueryParams,
+    setQueryParamsFromState,
   };
 }
 

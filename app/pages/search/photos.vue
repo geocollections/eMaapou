@@ -8,10 +8,15 @@ const {
   solrSort,
   handleHeadersReset,
   handleHeadersChange,
+  setQueryParamsFromState,
 } = useDataTable({
   initOptions: IMAGE.options,
   initHeaders: HEADERS_PHOTO,
+  initQuery: computed(() => props.query),
+  overrideInternalSearch: true,
 });
+
+setQueryParamsFromState();
 
 const { data, status } = await useSolrFetch<SolrResponse>("/attachment", {
   query: computed(() => ({
