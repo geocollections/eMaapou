@@ -49,7 +49,7 @@
     "leaflet-gesture-handling": "^1.2.2",
     "leaflet.fullscreen": "^3.0.0",
     "nuxt": "^3.13.1",
-    "playwright-core": "^1.44.0",
+    "playwright-core": "^1.47.2",
     "resize-observer-polyfill": "^1.5.1",
     "sass-embedded": "^1.78.0",
     "typescript": "^5.5.2",
