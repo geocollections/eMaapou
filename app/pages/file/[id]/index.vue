@@ -205,16 +205,24 @@ const mapOverlays = computed(() => {
         <div
           v-else
           class="rounded file-download text-primary"
-          @click="
-            $openWindow(
-              `https://files.geocollections.info/${file.filename}`,
-            )
-          "
         >
-          <VIcon size="large" color="primary-darken-2">
-            {{ mdiFileDownloadOutline }}
-          </VIcon>
-          {{ $t("file.download") }}
+          <VBtn
+            variant="outlined"
+            @click="
+              $openWindow(
+                `https://files.geocollections.info/${file.filename}`,
+              )
+            "
+          >
+            <VIcon
+              start
+              size="large"
+              color="primary-darken-2"
+            >
+              {{ mdiFileDownloadOutline }}
+            </VIcon>
+            {{ $t("file.download") }}
+          </VBtn>
         </div>
 
         <div
