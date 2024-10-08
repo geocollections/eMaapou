@@ -60,7 +60,7 @@ function getAttachmentType(type: number) {
 
       <template #item.image="{ item }">
         <ThumbnailImage
-          v-if="item.uuid_filename"
+          v-if="item.format_value.startsWith('image') && item.uuid_filename"
           class="my-1"
           :src="
             img(
