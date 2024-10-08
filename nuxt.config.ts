@@ -110,7 +110,6 @@ export default defineNuxtConfig({
         name: "Eesti",
       },
     ],
-    lazy: true,
     langDir: "lang/",
     defaultLocale: "et",
     strategy: "prefix_and_default",
