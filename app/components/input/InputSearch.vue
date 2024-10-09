@@ -30,7 +30,6 @@ const emit = defineEmits<{
   "focus": [event: any];
   "blur": [event: any];
 }>();
-const searchFocused = ref(false);
 const searchInput = ref();
 const inputStyle = computed(() => ({
   maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : "inherit",
@@ -61,7 +60,6 @@ const inputStyle = computed(() => ({
       @focus="emit('focus', $event)"
       @blur="emit('blur', $event)"
     />
-    <SearchHints v-model="searchFocused" :activator="searchInput" />
   </div>
 </template>
 
