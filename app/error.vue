@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiHome, mdiMagnify, mdiRefresh } from "@mdi/js";
 import type { NuxtError } from "#app";
+import { mdiHome, mdiMagnify, mdiRefresh } from "@mdi/js";
 
 const props = defineProps<{
   error: NuxtError;
