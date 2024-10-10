@@ -18,5 +18,5 @@ FROM base
 
 COPY --from=build /code/.output /code/.output
 
-CMD [ "node", "--inspect", "./.output/server/index.mjs" ]
+CMD [ "node", "--inspect=0.0.0.0:9229", "./.output/server/index.mjs" ]
 
