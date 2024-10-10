@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiMagnify, mdiMenu } from "@mdi/js";
+import { mdiChevronDown, mdiMenu } from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -17,23 +17,7 @@ const emit = defineEmits<{
   "toggle:navigationDrawer": [];
 }>();
 
-const route = useRoute();
 const localePath = useLocalePath();
-const state = reactive({
-  browseGeography: BROWSE_GEOLOGY_LIST,
-  browseLab: BROWSE_LAB_LIST,
-  browseTaxon: BROWSE_TAXON_LIST,
-  services: SERVICES,
-  query: (route.query.q as string) ?? "",
-  searchFocused: false,
-});
-const icons = computed(() => {
-  return {
-    mdiMagnify,
-    mdiMenu,
-    mdiChevronDown,
-  };
-});
 
 const cssProps = computed(() => {
   return {
@@ -72,7 +56,7 @@ const cssProps = computed(() => {
       >
         {{ $t("common.browse") }}
         <VIcon color="accent" end>
-          {{ icons.mdiChevronDown }}
+          {{ mdiChevronDown }}
         </VIcon>
       </VBtn>
       <VMenu
@@ -87,7 +71,7 @@ const cssProps = computed(() => {
           <VCardActions class="d-flex align-baseline">
             <VList class="mx-3" width="250">
               <BaseMenuListItem
-                v-for="(item, index) in state.browseTaxon"
+                v-for="(item, index) in BROWSE_TAXON_LIST"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
@@ -102,7 +86,7 @@ const cssProps = computed(() => {
             />
             <VList class="mx-3" width="250">
               <BaseMenuListItem
-                v-for="(item, index) in state.browseLab"
+                v-for="(item, index) in BROWSE_LAB_LIST"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
@@ -118,7 +102,7 @@ const cssProps = computed(() => {
             />
             <VList class="mx-3" width="250">
               <BaseMenuListItem
-                v-for="(item, index) in state.browseGeography"
+                v-for="(item, index) in BROWSE_GEOLOGY_LIST"
                 :key="`browse-geography-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
@@ -176,13 +160,13 @@ const cssProps = computed(() => {
               class="d-flex"
             >
               <BaseMenuListItem
-                v-for="(tabId, index) in state.services.ids"
+                v-for="(tabId, index) in SERVICES.ids"
                 :key="`service-${index}`"
                 class="my-1"
                 target="_blank"
                 style="width: 250px"
-                :href="state.services[tabId].href"
-                :label="$t(state.services[tabId].title)"
+                :href="SERVICES[tabId].href"
+                :label="$t(SERVICES[tabId].title)"
                 label-only
               />
             </VList>
@@ -203,7 +187,7 @@ const cssProps = computed(() => {
         @click.stop="emit('toggle:navigationDrawer')"
       >
         <VIcon color="accent" size="font-size: 24px">
-          {{ icons.mdiMenu }}
+          {{ mdiMenu }}
         </VIcon>
       </VBtn>
     </VToolbarItems>
