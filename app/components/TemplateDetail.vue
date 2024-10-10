@@ -111,7 +111,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
             </VBtn>
           </VFabTransition>
         </ClientOnly>
-        <FabScrollTop />
+        <!-- <FabScrollTop /> -->
       </div>
       <AppFooter />
     </VMain>

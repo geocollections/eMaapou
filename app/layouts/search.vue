@@ -187,7 +187,7 @@ function closeMobileSearch() {
             {{ $t("common.searchCommand") }}
           </VBtn>
         </VFabTransition>
-        <FabScrollTop />
+        <!-- <FabScrollTop /> -->
       </VContainer>
       <AppFooter />
     </VMain>
