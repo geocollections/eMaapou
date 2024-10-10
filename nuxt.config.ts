@@ -154,4 +154,7 @@ export default defineNuxtConfig({
     server: false,
     client: true,
   },
+  site: {
+    indexable: false,
+  },
 });
