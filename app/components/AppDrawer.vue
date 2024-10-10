@@ -19,29 +19,23 @@ const emit = defineEmits<{
 
 const localePath = useLocalePath();
 
-const state = reactive({
-  browseGeography: BROWSE_GEOLOGY_LIST,
-  browseLab: BROWSE_LAB_LIST,
-  browseTaxon: BROWSE_TAXON_LIST,
-  services: SERVICES,
-  routes: [
-    {
-      routeName: "search",
-      text: "common.search",
-      icon: mdiMagnify,
-    },
-    {
-      routeName: "about",
-      text: "common.about",
-      icon: mdiInformationOutline,
-    },
-    {
-      routeName: "news",
-      text: "common.news",
-      icon: mdiNewspaperVariantOutline,
-    },
-  ],
-});
+const routes = [
+  {
+    routeName: "search",
+    text: "common.search",
+    icon: mdiMagnify,
+  },
+  {
+    routeName: "about",
+    text: "common.about",
+    icon: mdiInformationOutline,
+  },
+  {
+    routeName: "news",
+    text: "common.news",
+    icon: mdiNewspaperVariantOutline,
+  },
+];
 </script>
 
 <template>
@@ -58,7 +52,7 @@ const state = reactive({
     <VContainer class="more-menu py-4 mb-6">
       <VList class="py-1" :aria-label="$t('title')">
         <VListItem
-          v-for="route in state.routes"
+          v-for="route in routes"
           :key="route.routeName"
           class="header-menu-item rounded my-1"
           color="grey-darken-4"
@@ -83,7 +77,7 @@ const state = reactive({
 
       <VList class="py-1" :aria-label="$t('landing.searchRoutes')">
         <BaseMenuListItem
-          v-for="(item, index) in state.browseTaxon"
+          v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
@@ -94,7 +88,7 @@ const state = reactive({
         />
         <VDivider class="my-1" aria-hidden="true" />
         <BaseMenuListItem
-          v-for="(item, index) in state.browseLab"
+          v-for="(item, index) in BROWSE_LAB_LIST"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
@@ -106,7 +100,7 @@ const state = reactive({
 
         <VDivider class="my-1" aria-hidden="true" />
         <BaseMenuListItem
-          v-for="(item, index) in state.browseGeography"
+          v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
@@ -125,18 +119,18 @@ const state = reactive({
 
       <VList class="py-1" :aria-label="$t('landing.otherServices')">
         <VListItem
-          v-for="tabId in state.services.ids"
-          :key="state.services[tabId].href"
+          v-for="tabId in SERVICES.ids"
+          :key="SERVICES[tabId].href"
           tag="a"
           class="header-menu-item rounded my-1"
           color="grey-darken-4"
           target="_blank"
           role="option"
-          :href="state.services[tabId].href"
+          :href="SERVICES[tabId].href"
         >
           <VListItemTitle class="py-1">
             <span class="montserrat">{{
-              $t(state.services[tabId].title)
+              $t(SERVICES[tabId].title)
             }}</span>
           </VListItemTitle>
         </VListItem>
