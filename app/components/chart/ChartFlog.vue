@@ -930,7 +930,7 @@ state.option = createOption();
         :initial-selection="state.selectedParameters"
         @input="handleParametersUpdate"
       />
-      <VMenu
+      <div
         transition="slide-y-transition"
         offset="10"
         content-class="white"
@@ -1010,7 +1010,7 @@ state.option = createOption();
             />
           </div>
         </div>
-      </VMenu>
+      </div>
     </VToolbar>
     <div id="divider" />
     <div ref="containerFlogChart" class="overflow-x-auto">

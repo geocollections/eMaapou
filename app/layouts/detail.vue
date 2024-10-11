@@ -44,13 +44,13 @@ const { mdAndUp } = useDisplay();
 </script>
 
 <template>
-  <VApp>
+  <div>
     <AppBar @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
-    <VNavigationDrawer
+    <div
       :model-value="mdAndUp"
       app
       :rail="railDrawer"
@@ -113,9 +113,9 @@ const { mdAndUp } = useDisplay();
           <div>{{ $t(item.label) }}</div>
         </li>
       </ul>
-    </VNavigationDrawer>
+    </div>
     <ClientOnly>
-      <VNavigationDrawer
+      <div
         v-if="drawerActive"
         :model-value="showDrawer"
         :style="{ cursor: mini ? 'pointer' : 'auto' }"
@@ -173,7 +173,7 @@ const { mdAndUp } = useDisplay();
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>
         </div>
-      </VNavigationDrawer>
+      </div>
     </ClientOnly>
     <main style="min-height: 100vh " :style="{ 'padding-top': topPadding }">
       <div class="fill-height pb-10">
@@ -199,7 +199,7 @@ const { mdAndUp } = useDisplay();
       </div>
       <AppFooter />
     </main>
-  </VApp>
+  </div>
 </template>
 
 <i18n lang="yaml">

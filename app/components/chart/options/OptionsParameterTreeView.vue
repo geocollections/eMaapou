@@ -45,7 +45,7 @@ function isParameterSelected(parameter: any) {
 </script>
 
 <template>
-  <VMenu
+  <div
     transition="slide-y-transition"
     :offset="10"
     content-class="white"
@@ -126,5 +126,5 @@ function isParameterSelected(parameter: any) {
         <!-- </v-treeview> -->
       </div>
     </div>
-  </VMenu>
+  </div>
 </template>

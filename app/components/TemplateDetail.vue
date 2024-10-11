@@ -34,7 +34,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
 <template>
   <div>
     <ClientOnly>
-      <VNavigationDrawer
+      <div
         v-if="drawerActive"
         :model-value="showDrawer"
         :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown.value ? '70%' : 'none' }"
@@ -88,7 +88,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>
         </div>
-      </VNavigationDrawer>
+      </div>
     </ClientOnly>
     <main :style="{ 'padding-top': topPadding }">
       <div class="fill-height pb-10" style="min-height: 100vh">

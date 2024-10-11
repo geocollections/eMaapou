@@ -32,38 +32,33 @@ function handleEnd() {
       :key="index"
       class="mr-3 "
     >
-      <VTooltip location="bottom" color="accent">
-        <template #activator="{ props: tooltipProps }">
-          <slot name="image" :item="item">
-            <NuxtImg
-              v-bind="tooltipProps"
-              :src="item.filename"
-              provider="geocollections"
-              :modifiers="{ size: 'medium' }"
-              height="175"
-              class="rounded cursor-pointer thumbnail-image"
-              @click="
-                openOverlay(index)
-              "
+      <slot name="image" :item="item">
+        <NuxtImg
+          :src="item.filename"
+          provider="geocollections"
+          :modifiers="{ size: 'medium' }"
+          height="175"
+          class="rounded cursor-pointer thumbnail-image"
+          @click="
+            openOverlay(index)
+          "
+        >
+          <template #placeholder>
+            <div
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
             >
-              <template #placeholder>
-                <div
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <VProgressCircular indeterminate color="grey-lighten-5" />
-                </div>
-              </template>
-            </NuxtImg>
-          </slot>
-        </template>
-        <slot name="tooltipInfo" :item="item">
-          <div>
-            {{ $t("common.clickToOpen") }}
-          </div>
-        </slot>
-      </VTooltip>
+              <VProgressCircular indeterminate color="grey-lighten-5" />
+            </div>
+          </template>
+        </NuxtImg>
+      </slot>
+      <slot name="tooltipInfo" :item="item">
+        <div>
+          {{ $t("common.clickToOpen") }}
+        </div>
+      </slot>
     </div>
     <div v-intersect="loadMore" />
     <ImageOverlay

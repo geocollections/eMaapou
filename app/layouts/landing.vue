@@ -3,7 +3,7 @@ const drawer = ref(false);
 </script>
 
 <template>
-  <VApp dark>
+  <div dark>
     <AppDrawer
       v-if="true"
       :drawer="drawer"
@@ -25,5 +25,5 @@ const drawer = ref(false);
     </main>
 
     <AppFooter />
-  </VApp>
+  </div>
 </template>

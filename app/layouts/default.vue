@@ -29,14 +29,14 @@ watch(() => display.smAndDown.value, (value) => {
 </script>
 
 <template>
-  <VApp>
+  <div>
     <AppBar @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
       v-if="!mdAndUp"
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
-    <VNavigationDrawer
+    <div
       v-else
       app
       :rail="railDrawer"
@@ -100,9 +100,9 @@ watch(() => display.smAndDown.value, (value) => {
           <div>{{ $t(item.label) }}</div>
         </li>
       </ul>
-    </VNavigationDrawer>
+    </div>
     <slot />
-  </VApp>
+  </div>
 </template>
 
 <i18n lang="yaml">

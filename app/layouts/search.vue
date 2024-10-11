@@ -33,13 +33,13 @@ function closeMobileSearch() {
 </script>
 
 <template>
-  <VApp>
+  <div>
     <AppBar @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
-    <VNavigationDrawer
+    <div
       :model-value="mdAndUp"
       :rail="railDrawer"
       color="grey-darken-3"
@@ -101,8 +101,8 @@ function closeMobileSearch() {
           <div>{{ $t(item.label) }}</div>
         </li>
       </ul>
-    </VNavigationDrawer>
-    <VNavigationDrawer
+    </div>
+    <div
       :model-value="display.smAndDown.value ? showSearch : true"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
       :permanent="!display.smAndDown.value"
@@ -158,7 +158,7 @@ function closeMobileSearch() {
           <slot name="form" :close-mobile-search="closeMobileSearch" />
         </div>
       </div>
-    </VNavigationDrawer>
+    </div>
     <main>
       <div
         class="py-0 pb-10 px-0"
@@ -191,7 +191,7 @@ function closeMobileSearch() {
       </div>
       <AppFooter />
     </main>
-  </VApp>
+  </div>
 </template>
 
 <i18n lang="yaml">

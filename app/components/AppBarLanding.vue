@@ -42,7 +42,7 @@ const cssProps = computed(() => {
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
     <AppBarLogo />
-    <VToolbarItems class="w-100 mr-md-2">
+    <div class="w-100 mr-md-2">
       <button
         id="browse_menu_btn"
         aria-label="browse"
@@ -56,7 +56,7 @@ const cssProps = computed(() => {
           {{ mdiChevronDown }}
         </div>
       </button>
-      <VMenu
+      <div
         activator="#browse_menu_btn"
         content-class="mt-1"
         transition="slide-y-transition"
@@ -110,9 +110,9 @@ const cssProps = computed(() => {
             </ul>
           </div>
         </div>
-      </VMenu>
-    </VToolbarItems>
-    <VToolbarItems
+      </div>
+    </div>
+    <div
       class="ml-auto"
     >
       <button
@@ -141,7 +141,7 @@ const cssProps = computed(() => {
           end
         />
       </button>
-      <VMenu
+      <div
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
@@ -167,7 +167,7 @@ const cssProps = computed(() => {
             </ul>
           </div>
         </div>
-      </VMenu>
+      </div>
       <LanguageSwitcher
         color="white"
         class="ml-auto"
@@ -183,7 +183,7 @@ const cssProps = computed(() => {
           {{ mdiMenu }}
         </div>
       </button>
-    </VToolbarItems>
+    </div>
   </div>
 </template>
 

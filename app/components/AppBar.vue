@@ -32,7 +32,7 @@ const display = useDisplay();
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
     <AppBarLogo />
-    <VToolbarItems class="w-100 mr-md-2">
+    <div class="w-100 mr-md-2">
       <button
         v-if="display.mdAndUp.value"
         id="browse_menu_btn"
@@ -47,7 +47,7 @@ const display = useDisplay();
           {{ mdiChevronDown }}
         </div>
       </button>
-      <VMenu
+      <div
         v-if="display.mdAndUp.value"
         activator="#browse_menu_btn"
         content-class="mt-1"
@@ -102,7 +102,7 @@ const display = useDisplay();
             </ul>
           </div>
         </div>
-      </VMenu>
+      </div>
       <div
         class="d-flex align-center elevation-0 ml-2 mr-0 mr-sm-2"
         style="width: 100%"
@@ -110,8 +110,8 @@ const display = useDisplay();
       >
         <QuickSearchInput />
       </div>
-    </VToolbarItems>
-    <VToolbarItems
+    </div>
+    <div
       class="ml-auto"
     >
       <button
@@ -142,7 +142,7 @@ const display = useDisplay();
           end
         />
       </button>
-      <VMenu
+      <div
         v-if="display.mdAndUp.value"
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
@@ -169,7 +169,7 @@ const display = useDisplay();
             </ul>
           </div>
         </div>
-      </VMenu>
+      </div>
       <LanguageSwitcher
         v-if="display.mdAndUp.value"
         color="white"
@@ -187,7 +187,7 @@ const display = useDisplay();
           {{ mdiMenu }}
         </div>
       </button>
-    </VToolbarItems>
+    </div>
   </div>
 </template>
 

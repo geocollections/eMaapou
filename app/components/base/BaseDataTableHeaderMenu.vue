@@ -35,55 +35,38 @@ const filteredHeaders = computed(() => {
     Right now the button does not appear immediately when page is loading.
     This is something to do with transitions. https://github.com/vuetifyjs/vuetify/issues/10578
   -->
-  <VMenu
+  <div
     transition="slide-y-transition"
     :offset="10"
     position="bottom"
     z-index="4"
     :close-on-content-click="false"
   >
-    <template #activator="menu">
-      <VTooltip location="bottom" open-delay="500">
-        <template #activator="tooltip">
-          <button
-            variant="text"
-            :icon="mdiTableCog"
-            v-bind="{ ...menu.props, ...tooltip.props }"
-          />
-        </template>
-        <span>{{ $t("table.tooltipConfig") }}</span>
-      </VTooltip>
-    </template>
+    <button
+      variant="text"
+      :icon="mdiTableCog"
+    />
+    <span>{{ $t("table.tooltipConfig") }}</span>
     <div>
       <ul flat>
         <div class="px-2 montserrat align-center">
           {{ $t("common.headers") }}
-          <VTooltip location="bottom" open-delay="500">
-            <template #activator="{ props: tooltip }">
-              <button
-                v-bind="tooltip"
-                :icon="mdiRefresh"
-                variant="text"
-                @click="emit('reset')"
-              />
-            </template>
-            {{ $t("table.tooltipResetHeaders") }}
-          </VTooltip>
+          <button
+            :icon="mdiRefresh"
+            variant="text"
+            @click="emit('reset')"
+          />
+          {{ $t("table.tooltipResetHeaders") }}
 
-          <VTooltip open-delay="500" location="bottom">
-            <template #activator="{ props: tooltip }">
-              <button
-                v-bind="tooltip"
-                variant="text"
-                :icon="!onlyVisible ? mdiEye : mdiEyeOff"
-                @click="onlyVisible = !onlyVisible"
-              />
-            </template>
-            <span v-if="!onlyVisible">
-              {{ $t("table.tooltipShowActiveHeaders") }}
-            </span>
-            <span v-else>{{ $t("table.tooltipShowAllHeaders") }}</span>
-          </VTooltip>
+          <button
+            variant="text"
+            :icon="!onlyVisible ? mdiEye : mdiEyeOff"
+            @click="onlyVisible = !onlyVisible"
+          />
+          <span v-if="!onlyVisible">
+            {{ $t("table.tooltipShowActiveHeaders") }}
+          </span>
+          <span v-else>{{ $t("table.tooltipShowAllHeaders") }}</span>
           <VTextField
             v-model="filter"
             class="py-2"
@@ -100,34 +83,27 @@ const filteredHeaders = computed(() => {
           :width="300"
         >
           <template #default="{ item }">
-            <VTooltip location="left" :disabled="!sortBy.some((sortItem) => sortItem.key === item.value)">
-              <template #activator="{ props: tooltip }">
-                <li
-                  v-bind="tooltip"
+            <li
+              density="compact"
+              variant="text"
+              slim
+              :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
+              @click.prevent="emit('change', item)"
+            >
+              <div start class="mr-2">
+                <VCheckboxBtn
                   density="compact"
-                  variant="text"
-                  slim
                   :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
-                  @click.prevent="emit('change', item)"
-                >
-                  <template #prepend>
-                    <div start class="mr-2">
-                      <VCheckboxBtn
-                        density="compact"
-                        :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
-                        :model-value="item.show"
-                        color="accent"
-                      />
-                    </div>
-                  </template>
-                  <div>{{ item.title }}</div>
-                </li>
-              </template>
-              {{ $t("common.headerSelectDisabled") }}
-            </VTooltip>
+                  :model-value="item.show"
+                  color="accent"
+                />
+              </div>
+              <div>{{ item.title }}</div>
+            </li>
+            {{ $t("common.headerSelectDisabled") }}
           </template>
         </VVirtualScroll>
       </ul>
     </div>
-  </VMenu>
+  </div>
 </template>

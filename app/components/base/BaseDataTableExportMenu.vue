@@ -18,7 +18,7 @@ function handleExport() {
 </script>
 
 <template>
-  <VMenu
+  <div
     transition="slide-y-transition"
     offset="10"
     position="bottom"
@@ -26,20 +26,13 @@ function handleExport() {
     :close-on-content-click="false"
     z-index="4"
   >
-    <template #activator="menu">
-      <VTooltip location="bottom" open-delay="500">
-        <template #activator="tooltip">
-          <button
-            aria-label="export table"
-            variant="text"
-            class="mr-1"
-            v-bind="{ ...menu.props, ...tooltip.props }"
-            :icon="mdiFileExportOutline"
-          />
-        </template>
-        <span>{{ $t("table.tooltipExport") }}</span>
-      </VTooltip>
-    </template>
+    <button
+      aria-label="export table"
+      variant="text"
+      class="mr-1"
+      :icon="mdiFileExportOutline"
+    />
+    <span>{{ $t("table.tooltipExport") }}</span>
     <div class="pa-2">
       <div class="text-subtitle-2">
         {{ t("exportType") }}
@@ -102,7 +95,7 @@ function handleExport() {
       <!-- </li> -->
       <!-- </ul> -->
     </div>
-  </VMenu>
+  </div>
 </template>
 
 <i18n lang="yaml">

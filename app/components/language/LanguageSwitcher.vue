@@ -23,7 +23,7 @@ withDefaults(defineProps<{ color: string }>(), { color: "white" });
       end
       color="accent"
     />
-    <VMenu
+    <div
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"
       transition="slide-y-transition"
@@ -31,7 +31,7 @@ withDefaults(defineProps<{ color: string }>(), { color: "white" });
       location="bottom right"
     >
       <LanguageList />
-    </VMenu>
+    </div>
   </button>
 </template>
 

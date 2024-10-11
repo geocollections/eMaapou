@@ -118,7 +118,7 @@ function pageLimitRule(value: number) {
         @click="previous"
       />
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
-      <VMenu
+      <div
         location="bottom"
         :offset="10"
         :close-on-content-click="false"
@@ -162,7 +162,7 @@ function pageLimitRule(value: number) {
             </div>
           </button>
         </div>
-      </VMenu>
+      </div>
       <button
         :disabled="options.page === pageCount"
         :icon="mdiChevronRight"

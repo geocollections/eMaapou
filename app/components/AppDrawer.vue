@@ -39,7 +39,7 @@ const routes = [
 </script>
 
 <template>
-  <VNavigationDrawer
+  <div
     :model-value="drawer"
     app
     clipped
@@ -152,7 +152,7 @@ const routes = [
 
       <LanguageList class="py-0" />
     </div>
-  </VNavigationDrawer>
+  </div>
 </template>
 
 <style scoped>

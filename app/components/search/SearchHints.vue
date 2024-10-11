@@ -10,7 +10,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <VMenu
+  <div
     :model-value="modelValue"
     :activator="activator"
     offset-y
@@ -72,5 +72,5 @@ const emit = defineEmits<{
         </div>
       </div>
     </div>
-  </VMenu>
+  </div>
 </template>

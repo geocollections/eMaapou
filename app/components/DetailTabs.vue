@@ -51,7 +51,7 @@ function translateTitle(tab: HydratedTab) {
       {{ translateTitle(item) }}
     </VTab>
   </VTabs>
-  <VMenu v-else>
+  <div v-else>
     <template #activator="{ props: menuProps, isActive }">
       <button
         class="text-capitalize mb-1 ml-auto"
@@ -80,7 +80,7 @@ function translateTitle(tab: HydratedTab) {
         <div>{{ translateTitle(item) }}</div>
       </li>
     </ul>
-  </VMenu>
+  </div>
 </template>
 
 <style lang="scss" scoped>

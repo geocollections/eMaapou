@@ -30,13 +30,7 @@ const linkWidth = computed(() => {
           :to="localePath({ path: entry.to })"
         >
           {{ entry.title }}
-          <VTooltip
-            open-delay="500"
-            location="bottom"
-            :activator="`#history-${index}`"
-          >
-            <span>{{ entry.title }}</span>
-          </VTooltip>
+          <span>{{ entry.title }}</span>
         </NuxtLink>
         <div
           v-if="index !== historyEntries.length - 1"

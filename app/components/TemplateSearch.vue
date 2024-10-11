@@ -24,7 +24,7 @@ function closeMobileSearch() {
 
 <template>
   <div>
-    <VNavigationDrawer
+    <div
       :model-value="display.smAndDown.value ? showSearch : true"
       :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown.value ? '70%' : 'none' }"
       :permanent="!display.smAndDown.value"
@@ -80,7 +80,7 @@ function closeMobileSearch() {
           <slot name="form" :close-mobile-search="closeMobileSearch" />
         </div>
       </div>
-    </VNavigationDrawer>
+    </div>
     <main>
       <div
         class="py-0 pb-10 px-0"

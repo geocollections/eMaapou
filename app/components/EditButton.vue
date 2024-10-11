@@ -35,11 +35,5 @@ function handleClick() {
     :aria-label="$t('common.linkToEdit')"
     @click="handleClick"
   />
-  <VTooltip
-    location="bottom"
-    activator="#edit-btn"
-    :aria-label="$t('common.linkToEdit')"
-  >
-    <span>{{ $t("common.linkToEdit") }}</span>
-  </VTooltip>
+  <span>{{ $t("common.linkToEdit") }}</span>
 </template>

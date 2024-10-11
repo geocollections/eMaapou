@@ -51,7 +51,7 @@ function handleEnd(isIntersecting: boolean) {
       :append-inner-icon="mdiMenuDown"
       @update:model-value="emit('update:search', $event)"
     >
-      <VMenu
+      <div
         ref="menuRef"
         v-model="menuOpen"
         activator="parent"
@@ -69,7 +69,7 @@ function handleEnd(isIntersecting: boolean) {
           </li>
           <div v-intersect="handleEnd" />
         </ul>
-      </VMenu>
+      </div>
     </VTextField>
   </div>
 </template>
