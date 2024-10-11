@@ -59,8 +59,8 @@ const { mdAndUp } = useDisplay();
       permanent
       :width="200"
     >
-      <VList density="compact" nav>
-        <VListItem
+      <ul density="compact" nav>
+        <li
           :title="t('closeSidebar')"
           @click="railDrawer = !railDrawer"
         >
@@ -72,9 +72,9 @@ const { mdAndUp } = useDisplay();
               {{ mdiChevronDoubleLeft }}
             </div>
           </template>
-        </VListItem>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="index"
           link
@@ -84,10 +84,10 @@ const { mdAndUp } = useDisplay();
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
+          <div>{{ $t(item.label) }}</div>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="index"
           link
@@ -97,10 +97,10 @@ const { mdAndUp } = useDisplay();
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
+          <div>{{ $t(item.label) }}</div>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="index"
           link
@@ -110,9 +110,9 @@ const { mdAndUp } = useDisplay();
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
-      </VList>
+          <div>{{ $t(item.label) }}</div>
+        </li>
+      </ul>
     </VNavigationDrawer>
     <ClientOnly>
       <VNavigationDrawer
@@ -126,12 +126,12 @@ const { mdAndUp } = useDisplay();
         @update:model-value="showDrawer = $event"
       >
         <div style="height: 100%" tile>
-          <VList
+          <ul
             density="compact"
             class="pb-1"
             nav
           >
-            <VListItem
+            <li
               :ripple="false"
               slim
               @click="mini = !mini"
@@ -147,8 +147,8 @@ const { mdAndUp } = useDisplay();
                   {{ $t("common.hideSimilar") }}
                 </div>
               </template>
-            </VListItem>
-          </VList>
+            </li>
+          </ul>
           <div v-else class="text-h6 py-2 pl-2">
             {{ $t("common.showSimilar") }}
           </div>
@@ -164,7 +164,11 @@ const { mdAndUp } = useDisplay();
               {{ $t("common.showSimilar") }}
             </div>
           </div>
-          <div id="divider" v-show="!mini" class="mx-2" />
+          <div
+            v-show="!mini"
+            id="divider"
+            class="mx-2"
+          />
           <div v-show="!mini">
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>

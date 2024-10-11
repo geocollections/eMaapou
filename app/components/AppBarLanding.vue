@@ -65,7 +65,7 @@ const cssProps = computed(() => {
       >
         <div max-width="1000">
           <div class="d-flex align-baseline">
-            <VList class="mx-3" width="250">
+            <ul class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in BROWSE_TAXON_LIST"
                 :key="`browse-lab-item-${index}`"
@@ -74,14 +74,14 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               />
-            </VList>
+            </ul>
             <div
               id="divider"
               class="mx-3 my-2"
               vertical
               style="height: inherit"
             />
-            <VList class="mx-3" width="250">
+            <ul class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in BROWSE_LAB_LIST"
                 :key="`browse-lab-item-${index}`"
@@ -90,7 +90,7 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               />
-            </VList>
+            </ul>
 
             <div
               id="divider"
@@ -98,7 +98,7 @@ const cssProps = computed(() => {
               vertical
               style="height: inherit"
             />
-            <VList class="mx-3" width="250">
+            <ul class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in BROWSE_GEOLOGY_LIST"
                 :key="`browse-geography-item-${index}`"
@@ -107,7 +107,7 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               />
-            </VList>
+            </ul>
           </div>
         </div>
       </VMenu>
@@ -150,7 +150,7 @@ const cssProps = computed(() => {
       >
         <div width="550">
           <div class="d-block">
-            <VList
+            <ul
               style="max-height: 450px; flex-flow: column wrap"
               class="d-flex"
             >
@@ -164,7 +164,7 @@ const cssProps = computed(() => {
                 :label="$t(SERVICES[tabId].title)"
                 label-only
               />
-            </VList>
+            </ul>
           </div>
         </div>
       </VMenu>

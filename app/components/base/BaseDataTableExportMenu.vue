@@ -88,19 +88,19 @@ function handleExport() {
         </button>
       </div>
 
-      <!-- <VList> -->
-      <!--   <VListItem @click="handleExportCsv"> -->
-      <!--     <VListItemTitle>CSV</VListItemTitle> -->
-      <!--   </VListItem> -->
-      <!-- <VListItem @click="handleExportExcel"> -->
-      <!--   <VListItemTitle>XLSX (Excel)</VListItemTitle> -->
-      <!-- </VListItem> -->
-      <!-- <VListItem @click="handleClipboard"> -->
-      <!--   <VListItemTitle> -->
+      <!-- <ul> -->
+      <!--   <li @click="handleExportCsv"> -->
+      <!--     <liTitle>CSV</liTitle> -->
+      <!--   </li> -->
+      <!-- <li @click="handleExportExcel"> -->
+      <!--   <liTitle>XLSX (Excel)</liTitle> -->
+      <!-- </li> -->
+      <!-- <li @click="handleClipboard"> -->
+      <!--   <liTitle> -->
       <!--     {{ $t("common.clipboard") }} -->
-      <!--   </VListItemTitle> -->
-      <!-- </VListItem> -->
-      <!-- </VList> -->
+      <!--   </liTitle> -->
+      <!-- </li> -->
+      <!-- </ul> -->
     </div>
   </VMenu>
 </template>

@@ -46,8 +46,8 @@ watch(() => display.smAndDown.value, (value) => {
       permanent
       :width="200"
     >
-      <VList density="compact" nav>
-        <VListItem
+      <ul density="compact" nav>
+        <li
           :title="t('closeSidebar')"
           @click="railDrawer = !railDrawer"
         >
@@ -59,9 +59,9 @@ watch(() => display.smAndDown.value, (value) => {
               {{ mdiChevronDoubleLeft }}
             </div>
           </template>
-        </VListItem>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="index"
           link
@@ -71,10 +71,10 @@ watch(() => display.smAndDown.value, (value) => {
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
+          <div>{{ $t(item.label) }}</div>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="index"
           link
@@ -84,10 +84,10 @@ watch(() => display.smAndDown.value, (value) => {
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
+          <div>{{ $t(item.label) }}</div>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="index"
           link
@@ -97,9 +97,9 @@ watch(() => display.smAndDown.value, (value) => {
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
-      </VList>
+          <div>{{ $t(item.label) }}</div>
+        </li>
+      </ul>
     </VNavigationDrawer>
     <slot />
   </VApp>

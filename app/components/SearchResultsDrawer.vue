@@ -51,8 +51,8 @@ function scrollToCurrent() {
 </script>
 
 <template>
-  <VList nav>
-    <VListItem
+  <ul nav>
+    <li
       :to="searchRoute"
       slim
       base-color="accent"
@@ -71,8 +71,8 @@ function scrollToCurrent() {
       <template #prepend>
         <div :icon="mdiArrowLeft" />
       </template>
-    </VListItem>
-  </VList>
+    </li>
+  </ul>
   <div class="d-flex align-center justify-space-around">
     <button
       variant="text"
@@ -90,9 +90,9 @@ function scrollToCurrent() {
       @click="emit('page:next', page + 1)"
     />
   </div>
-  <VList class="py-0">
+  <ul class="py-0">
     <template v-for="(item, index) in results" :key="`${index}-${item.id}`">
-      <VListItem
+      <li
         :ref="(el :any) => (itemRefs[item.id] = el)"
         class="pa-2 my-1 mx-2 text-body-2"
         elevation="0"
@@ -120,14 +120,14 @@ function scrollToCurrent() {
             {{ mdiCheck }}
           </div>
         </template>
-      </VListItem>
+      </li>
       <div
         v-if="index !== perPage - 1"
         id="divider"
         class="mx-2"
       />
     </template>
-  </VList>
+  </ul>
   <div class="d-flex align-center justify-space-around pt-1 pb-10">
     <button
       variant="text"

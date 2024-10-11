@@ -37,13 +37,13 @@ function closeMobileSearch() {
       @update:model-value="showSearch = $event"
     >
       <div style="height: 100%" tile>
-        <VList
+        <ul
           v-if="!display.smAndDown.value"
           density="compact"
           class="pb-1"
           nav
         >
-          <VListItem
+          <li
             :ripple="false"
             slim
             @click="mini = !mini"
@@ -59,8 +59,8 @@ function closeMobileSearch() {
                 {{ $t("common.hideFilters") }}
               </div>
             </template>
-          </VListItem>
-        </VList>
+          </li>
+        </ul>
         <div v-else class="text-h6 py-2 pl-2">
           {{ $t("common.showSearchFields") }}
         </div>

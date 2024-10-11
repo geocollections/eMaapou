@@ -50,8 +50,8 @@ const routes = [
     @update:model-value="emit('update:navigationDrawer', $event)"
   >
     <div class="more-menu py-4 mb-6">
-      <VList class="py-1" :aria-label="$t('title')">
-        <VListItem
+      <ul class="py-1" :aria-label="$t('title')">
+        <li
           v-for="route in routes"
           :key="route.routeName"
           class="header-menu-item rounded my-1"
@@ -59,23 +59,23 @@ const routes = [
           role="option"
           :to="localePath({ name: route.routeName })"
         >
-          <VListItemTitle class="d-flex py-1">
+          <div class="d-flex py-1">
             <div class="mr-1">
               {{ route.icon }}
             </div>
             <span class="align-self-center montserrat">{{
               $t(route.text)
             }}</span>
-          </VListItemTitle>
-        </VListItem>
-      </VList>
+          </div>
+        </li>
+      </ul>
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t("landing.searchRoutes") }}
       </div>
 
       <div id="divider" class="bg-primary" />
 
-      <VList class="py-1" :aria-label="$t('landing.searchRoutes')">
+      <ul class="py-1" :aria-label="$t('landing.searchRoutes')">
         <BaseMenuListItem
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="`browse-geography-item-${index}`"
@@ -86,7 +86,11 @@ const routes = [
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-        <div id="divider" class="my-1" aria-hidden="true" />
+        <div
+          id="divider"
+          class="my-1"
+          aria-hidden="true"
+        />
         <BaseMenuListItem
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="`browse-geography-item-${index}`"
@@ -98,7 +102,11 @@ const routes = [
           :to="localePath({ name: item.routeName })"
         />
 
-        <div id="divider" class="my-1" aria-hidden="true" />
+        <div
+          id="divider"
+          class="my-1"
+          aria-hidden="true"
+        />
         <BaseMenuListItem
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="`browse-geography-item-${index}`"
@@ -109,7 +117,7 @@ const routes = [
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-      </VList>
+      </ul>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t("landing.otherServices") }}
@@ -117,8 +125,8 @@ const routes = [
 
       <div id="divider" class="bg-primary" />
 
-      <VList class="py-1" :aria-label="$t('landing.otherServices')">
-        <VListItem
+      <ul class="py-1" :aria-label="$t('landing.otherServices')">
+        <li
           v-for="tabId in SERVICES.ids"
           :key="SERVICES[tabId].href"
           tag="a"
@@ -128,13 +136,13 @@ const routes = [
           role="option"
           :href="SERVICES[tabId].href"
         >
-          <VListItemTitle class="py-1">
+          <div class="py-1">
             <span class="montserrat">{{
               $t(SERVICES[tabId].title)
             }}</span>
-          </VListItemTitle>
-        </VListItem>
-      </VList>
+          </div>
+        </li>
+      </ul>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t("common.lang") }}

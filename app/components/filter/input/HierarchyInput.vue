@@ -59,16 +59,16 @@ function handleEnd(isIntersecting: boolean) {
         max-height="400px"
         :close-on-content-click="false"
       >
-        <VList elevation="0" class="border">
-          <VListItem
+        <ul elevation="0" class="border">
+          <li
             v-for="(item, index) in items"
             :key="index"
             @click="emit('select', item)"
           >
-            <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
-          </VListItem>
+            <div>{{ $translate(item.name) }}</div>
+          </li>
           <div v-intersect="handleEnd" />
-        </VList>
+        </ul>
       </VMenu>
     </VTextField>
   </div>

@@ -44,12 +44,12 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         @update:model-value="showDrawer = $event"
       >
         <div style="height: 100%" tile>
-          <VList
+          <ul
             density="compact"
             class="pb-1"
             nav
           >
-            <VListItem
+            <li
               :ripple="false"
               slim
               @click="mini = !mini"
@@ -65,8 +65,8 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
                   {{ $t("common.hideSimilar") }}
                 </div>
               </template>
-            </VListItem>
-          </VList>
+            </li>
+          </ul>
           <div v-show="mini">
             <div
               class="montserrat font-weight-medium text-body-2 mt-2 ml-auto mr-auto"

@@ -86,13 +86,13 @@ function isParameterSelected(parameter: any) {
           item-height="40px"
         >
           <template #default="{ item }">
-            <VListItem
+            <li
               @click="handleInput(item)"
             >
               <template #prepend>
-                <VListItemAction start>
+                <div start>
                   <VCheckboxBtn :model-value="isParameterSelected(item)" />
-                </VListItemAction>
+                </div>
               </template>
               <div>
                 <span class="text-medium-emphasis font-italic">
@@ -103,7 +103,7 @@ function isParameterSelected(parameter: any) {
                   {{ item.count }}
                 </VChip>
               </div>
-            </VListItem>
+            </li>
           </template>
         </VVirtualScroll>
         <!-- TODO: Reimplement treeview when vuetify 3 adds it -->

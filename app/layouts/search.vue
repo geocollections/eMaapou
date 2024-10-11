@@ -47,8 +47,8 @@ function closeMobileSearch() {
       permanent
       :width="200"
     >
-      <VList density="compact" nav>
-        <VListItem
+      <ul density="compact" nav>
+        <li
           :title="t('closeSidebar')"
           @click="railDrawer = !railDrawer"
         >
@@ -60,9 +60,9 @@ function closeMobileSearch() {
               {{ mdiChevronDoubleLeft }}
             </div>
           </template>
-        </VListItem>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="index"
           link
@@ -72,10 +72,10 @@ function closeMobileSearch() {
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
+          <div>{{ $t(item.label) }}</div>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="index"
           link
@@ -85,10 +85,10 @@ function closeMobileSearch() {
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
+          <div>{{ $t(item.label) }}</div>
+        </li>
         <div id="divider" class="mb-1" />
-        <VListItem
+        <li
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="index"
           link
@@ -98,9 +98,9 @@ function closeMobileSearch() {
           <template #prepend>
             <div>{{ item.icon }}</div>
           </template>
-          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-        </VListItem>
-      </VList>
+          <div>{{ $t(item.label) }}</div>
+        </li>
+      </ul>
     </VNavigationDrawer>
     <VNavigationDrawer
       :model-value="display.smAndDown.value ? showSearch : true"
@@ -115,13 +115,13 @@ function closeMobileSearch() {
       @update:model-value="showSearch = $event"
     >
       <div style="height: 100%" tile>
-        <VList
+        <ul
           v-if="!display.smAndDown.value"
           density="compact"
           class="pb-1"
           nav
         >
-          <VListItem
+          <li
             :ripple="false"
             slim
             @click="mini = !mini"
@@ -137,8 +137,8 @@ function closeMobileSearch() {
                 {{ $t("common.hideFilters") }}
               </div>
             </template>
-          </VListItem>
-        </VList>
+          </li>
+        </ul>
         <div v-else class="text-h6 py-2 pl-2">
           {{ $t("common.showSearchFields") }}
         </div>

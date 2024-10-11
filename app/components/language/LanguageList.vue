@@ -8,8 +8,8 @@ const switchLocalePath = useSwitchLocalePath();
 </script>
 
 <template>
-  <VList class="py-1" :aria-label="$t('languagesLabel')">
-    <VListItem
+  <ul class="py-1" :aria-label="$t('languagesLabel')">
+    <li
       v-for="(locale, i) in availableLocales"
       :key="i"
       class="header-menu-item rounded my-1"
@@ -17,7 +17,7 @@ const switchLocalePath = useSwitchLocalePath();
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       :to="switchLocalePath(locale.code)"
     >
-      <VListItemTitle class="d-flex py-1">
+      <div class="d-flex py-1">
         <div
           v-show="$i18n.locale === locale.code"
           :icon="mdiCheck"
@@ -25,9 +25,9 @@ const switchLocalePath = useSwitchLocalePath();
           color="accent"
         />
         <span class="align-self-center montserrat">{{ locale.name }}</span>
-      </VListItemTitle>
-    </VListItem>
-  </VList>
+      </div>
+    </li>
+  </ul>
 </template>
 
 <style scoped>

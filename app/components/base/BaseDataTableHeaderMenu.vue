@@ -55,8 +55,8 @@ const filteredHeaders = computed(() => {
       </VTooltip>
     </template>
     <div>
-      <VList flat>
-        <VListItemTitle class="px-2 montserrat align-center">
+      <ul flat>
+        <div class="px-2 montserrat align-center">
           {{ $t("common.headers") }}
           <VTooltip location="bottom" open-delay="500">
             <template #activator="{ props: tooltip }">
@@ -92,7 +92,7 @@ const filteredHeaders = computed(() => {
             hide-details
             :label="$t('common.filter')"
           />
-        </VListItemTitle>
+        </div>
         <VVirtualScroll
           :items="filteredHeaders"
           :height="500"
@@ -102,7 +102,7 @@ const filteredHeaders = computed(() => {
           <template #default="{ item }">
             <VTooltip location="left" :disabled="!sortBy.some((sortItem) => sortItem.key === item.value)">
               <template #activator="{ props: tooltip }">
-                <VListItem
+                <li
                   v-bind="tooltip"
                   density="compact"
                   variant="text"
@@ -111,23 +111,23 @@ const filteredHeaders = computed(() => {
                   @click.prevent="emit('change', item)"
                 >
                   <template #prepend>
-                    <VListItemAction start class="mr-2">
+                    <div start class="mr-2">
                       <VCheckboxBtn
                         density="compact"
                         :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
                         :model-value="item.show"
                         color="accent"
                       />
-                    </VListItemAction>
+                    </div>
                   </template>
-                  <VListItemTitle>{{ item.title }}</VListItemTitle>
-                </VListItem>
+                  <div>{{ item.title }}</div>
+                </li>
               </template>
               {{ $t("common.headerSelectDisabled") }}
             </VTooltip>
           </template>
         </VVirtualScroll>
-      </VList>
+      </ul>
     </div>
   </VMenu>
 </template>

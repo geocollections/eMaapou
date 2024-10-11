@@ -66,8 +66,8 @@ function translateTitle(tab: HydratedTab) {
         {{ translateTitle(currentTab) }}
       </button>
     </template>
-    <VList>
-      <VListItem
+    <ul>
+      <li
         v-for="(item, index) in tabs"
         :key="index"
         :to="
@@ -77,9 +77,9 @@ function translateTitle(tab: HydratedTab) {
           })
         "
       >
-        <VListItemTitle>{{ translateTitle(item) }}</VListItemTitle>
-      </VListItem>
-    </VList>
+        <div>{{ translateTitle(item) }}</div>
+      </li>
+    </ul>
   </VMenu>
 </template>
 
