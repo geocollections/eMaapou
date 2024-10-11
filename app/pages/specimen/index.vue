@@ -156,57 +156,57 @@ useHead({
     </template>
 
     <ClientOnly>
-      <VTabs
-        v-model="currentView"
-        bg-color="white"
-        color="accent"
-        density="compact"
-      >
-        <VTab
-          value="table"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.table`) }}
-        </VTab>
-        <VTab
-          value="image"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.image`) }}
-          <div class="ml-2" size="small">
-            {{ imageData?.response.numFound ?? 0 }}
-          </div>
-        </VTab>
-      </VTabs>
-      <VWindow v-model="currentView" :touch="false">
-        <VWindowItem value="table">
-          <DataTableSpecimen
-            class="border-t border-b"
-            :show-search="false"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :headers="headers"
-            :options="options"
-            :is-loading="status === 'pending'"
-            :export-func="exportData"
-            @update="handleDataTableUpdate"
-            @change:headers="handleHeadersChange"
-            @reset:headers="handleHeadersReset(options)"
-            @click:row="handleClickRow"
-          />
-        </VWindowItem>
-        <VWindowItem value="image">
-          <SpecimenImageView
-            class="border-t border-b"
-            :items="imageData?.response.docs ?? []"
-            :count="imageData?.response.numFound ?? 0"
-            :options="imageOptions"
-            @update="handleImageUpdate"
-          />
-        </VWindowItem>
-      </VWindow>
+      <!-- <VTabs -->
+      <!--   v-model="currentView" -->
+      <!--   bg-color="white" -->
+      <!--   color="accent" -->
+      <!--   density="compact" -->
+      <!-- > -->
+      <!--   <VTab -->
+      <!--     value="table" -->
+      <!--     active-class="active-tab" -->
+      <!--     class="montserrat text-capitalize" -->
+      <!--   > -->
+      <!--     {{ $t(`common.table`) }} -->
+      <!--   </VTab> -->
+      <!--   <VTab -->
+      <!--     value="image" -->
+      <!--     active-class="active-tab" -->
+      <!--     class="montserrat text-capitalize" -->
+      <!--   > -->
+      <!--     {{ $t(`common.image`) }} -->
+      <!--     <div class="ml-2" size="small"> -->
+      <!--       {{ imageData?.response.numFound ?? 0 }} -->
+      <!--     </div> -->
+      <!--   </VTab> -->
+      <!-- </VTabs> -->
+      <!-- <VWindow v-model="currentView" :touch="false"> -->
+      <!--   <VWindowItem value="table"> -->
+      <!--     <DataTableSpecimen -->
+      <!--       class="border-t border-b" -->
+      <!--       :show-search="false" -->
+      <!--       :items="data?.response.docs ?? []" -->
+      <!--       :count="data?.response.numFound ?? 0" -->
+      <!--       :headers="headers" -->
+      <!--       :options="options" -->
+      <!--       :is-loading="status === 'pending'" -->
+      <!--       :export-func="exportData" -->
+      <!--       @update="handleDataTableUpdate" -->
+      <!--       @change:headers="handleHeadersChange" -->
+      <!--       @reset:headers="handleHeadersReset(options)" -->
+      <!--       @click:row="handleClickRow" -->
+      <!--     /> -->
+      <!--   </VWindowItem> -->
+      <!--   <VWindowItem value="image"> -->
+      <!--     <SpecimenImageView -->
+      <!--       class="border-t border-b" -->
+      <!--       :items="imageData?.response.docs ?? []" -->
+      <!--       :count="imageData?.response.numFound ?? 0" -->
+      <!--       :options="imageOptions" -->
+      <!--       @update="handleImageUpdate" -->
+      <!--     /> -->
+      <!--   </VWindowItem> -->
+      <!-- </VWindow> -->
     </ClientOnly>
   </TemplateSearch>
 </template>

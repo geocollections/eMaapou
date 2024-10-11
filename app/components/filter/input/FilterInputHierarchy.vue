@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
 import difference from "lodash/difference";
 import orderBy from "lodash/orderBy";
-import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 export interface TreeNode {
   id: number;
@@ -239,19 +239,19 @@ async function handleOpen(value: { value: boolean }) {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     bg-color="transparent"
     elevation="0"
     :rounded="0"
     @group:selected="handleOpen"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px;"
       data-test="title"
     >
       {{ title }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
@@ -283,7 +283,7 @@ async function handleOpen(value: { value: boolean }) {
         </span>
       </div>
     </div>
-    <VExpansionPanelText
+    <div
       color="white"
     >
       <HierarchyInput
@@ -314,8 +314,8 @@ async function handleOpen(value: { value: boolean }) {
           @select="handleSelect"
         />
       </ul>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style scoped>

@@ -20,7 +20,7 @@ describe("filterInputText", () => {
 
   it("should render title", () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       data() {
         return {
@@ -39,7 +39,7 @@ describe("filterInputText", () => {
 
   it("should show selected items", () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       components: { FilterInputText },
       data() {
@@ -60,7 +60,7 @@ describe("filterInputText", () => {
 
   it("should remove selected item when checkbox clicked", async () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       components: { FilterInputText },
       data() {
@@ -87,7 +87,7 @@ describe("filterInputText", () => {
 
   it("should open panel when selected item clicked and fill input", async () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       attachTo: document.body,
       components: { FilterInputText },
@@ -114,7 +114,7 @@ describe("filterInputText", () => {
 
   it("should add new value when input entered and enter pressed", async () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       components: { FilterInputText },
       data() {
@@ -142,7 +142,7 @@ describe("filterInputText", () => {
 
   it("should add new value when input entered and add button pressed", async () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       components: { FilterInputText },
       data() {
@@ -170,7 +170,7 @@ describe("filterInputText", () => {
 
   it("should trim input value when adding new value", async () => {
     const wrapper = mount({
-      template: "<VExpansionPanels><FilterInputText :title=\"title\" v-model=\"modelValue\"/></VExpansionPanels>",
+      template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
       components: { FilterInputText },
       data() {

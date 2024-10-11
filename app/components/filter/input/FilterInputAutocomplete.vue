@@ -149,18 +149,18 @@ async function handleOpen(value: { value: boolean }) {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     bg-color="transparent"
     elevation="0"
     :rounded="0"
     @group:selected="handleOpen"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px;"
     >
       {{ title }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
@@ -192,7 +192,7 @@ async function handleOpen(value: { value: boolean }) {
         </span>
       </div>
     </div>
-    <VExpansionPanelText
+    <div
       class="py-0"
       color="white"
     >
@@ -263,8 +263,8 @@ async function handleOpen(value: { value: boolean }) {
           />
         </div>
       </div>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

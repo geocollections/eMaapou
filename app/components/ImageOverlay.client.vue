@@ -34,7 +34,7 @@ defineExpose({
 </script>
 
 <template>
-  <VOverlay
+  <div
     :model-value="modelValue"
     eager
     content-class="w-100 h-100"
@@ -65,7 +65,7 @@ defineExpose({
         <slot name="overlayInfo" :item="item" />
       </template>
     </SwiperLightbox>
-  </VOverlay>
+  </div>
 </template>
 
 <style scoped>

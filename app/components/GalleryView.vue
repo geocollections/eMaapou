@@ -108,49 +108,49 @@ function updateOptions(event: DataTableOptions) {
               :key="index"
               class="my-2 mx-2"
             >
-              <VImg
-                :src="
-                  img(
-                    `${item.uuid_filename}`,
-                    { size: 'small' },
-                    { provider: 'geocollections' },
-                  )
-                "
-                :lazy-src="
-                  img(
-                    `${item.uuid_filename}`,
-                    { size: 'small' },
-                    { provider: 'geocollections' },
-                  )
-                "
-                width="100"
-                cover
-                aspect-ratio="1"
-              />
+              <!-- <VImg -->
+              <!--   :src=" -->
+              <!--     img( -->
+              <!--       `${item.uuid_filename}`, -->
+              <!--       { size: 'small' }, -->
+              <!--       { provider: 'geocollections' }, -->
+              <!--     ) -->
+              <!--   " -->
+              <!--   :lazy-src=" -->
+              <!--     img( -->
+              <!--       `${item.uuid_filename}`, -->
+              <!--       { size: 'small' }, -->
+              <!--       { provider: 'geocollections' }, -->
+              <!--     ) -->
+              <!--   " -->
+              <!--   width="100" -->
+              <!--   cover -->
+              <!--   aspect-ratio="1" -->
+              <!-- /> -->
             </div>
           </div>
-          <VCarousel
-            v-model="activeIndex"
-            style="max-width: 1000px"
-            :height="carouselHeight"
-            hide-delimiters
-            hide-delimiter-background
-            class="mt-2 rounded mx-auto gallery__v-carousel"
-          >
-            <VCarouselItem
-              v-for="(item, index) in items"
-              :key="index"
-              nuxt
-              :to="localePath({ name: 'file-id', params: { id: item.id } })"
-              :src="
-                img(
-                  `${item.uuid_filename}`,
-                  { size: 'medium' },
-                  { provider: 'geocollections' },
-                )
-              "
-            />
-          </VCarousel>
+          <!-- <VCarousel -->
+          <!--   v-model="activeIndex" -->
+          <!--   style="max-width: 1000px" -->
+          <!--   :height="carouselHeight" -->
+          <!--   hide-delimiters -->
+          <!--   hide-delimiter-background -->
+          <!--   class="mt-2 rounded mx-auto gallery__v-carousel" -->
+          <!-- > -->
+          <!--   <VCarouselItem -->
+          <!--     v-for="(item, index) in items" -->
+          <!--     :key="index" -->
+          <!--     nuxt -->
+          <!--     :to="localePath({ name: 'file-id', params: { id: item.id } })" -->
+          <!--     :src=" -->
+          <!--       img( -->
+          <!--         `${item.uuid_filename}`, -->
+          <!--         { size: 'medium' }, -->
+          <!--         { provider: 'geocollections' }, -->
+          <!--       ) -->
+          <!--     " -->
+          <!--   /> -->
+          <!-- </VCarousel> -->
 
           <div
             class="d-flex justify-center flex-column justify-sm-space-between flex-sm-row"

@@ -92,7 +92,7 @@ function isActiveImage(image: { uuid_filename: string }) {
                 align="center"
                 justify="center"
               >
-                <VProgressCircular indeterminate color="grey-lighten-5" />
+                <!-- <VProgressCircular indeterminate color="grey-lighten-5" /> -->
               </div>
             </template>
           </NuxtImg>

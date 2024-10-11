@@ -41,14 +41,14 @@ function updateOptions(event: DataTableOptions) {
         class="px-3 my-1 my-sm-4"
         align-self="center"
       >
-        <VSwitch
-          v-model="cropImages"
-          density="compact"
-          class="mt-0 montserrat"
-          hide-details
-          color="header"
-          :label="$t('common.containImages')"
-        />
+        <!-- <VSwitch -->
+        <!--   v-model="cropImages" -->
+        <!--   density="compact" -->
+        <!--   class="mt-0 montserrat" -->
+        <!--   hide-details -->
+        <!--   color="header" -->
+        <!--   :label="$t('common.containImages')" -->
+        <!-- /> -->
       </div>
       <div class="d-flex justify-end">
         <BaseDataTablePagination
@@ -93,50 +93,50 @@ function updateOptions(event: DataTableOptions) {
             :class="{ 'image-hover-elevation': !!cropImages }"
             @click="emit('click:row', index)"
           >
-            <VImg
-              v-if="image.uuid_filename"
-              position="top"
-              max-height="400"
-              aspect-ratio="1"
-              :cover="cropImages"
-              :lazy-src="
-                img(
-                  `${image.uuid_filename}`,
-                  { size: 'small' },
-                  { provider: 'geocollections' },
-                )
-              "
-              :src="
-                img(
-                  `${image.uuid_filename}`,
-                  { size: 'small' },
-                  { provider: 'geocollections' },
-                )
-              "
-            >
-              <template #placeholder>
-                <div
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <VProgressCircular
-                    indeterminate
-                    color="grey-lighten-5"
-                  />
-                </div>
-              </template>
-            </VImg>
-
-            <div v-else align="center">
-              <div class="text-center">
-                <div class="py-3">
-                  <div style="font-size: 6rem" class="text-grey">
-                    {{ mdiFileImageOutline }}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- <VImg -->
+            <!--   v-if="image.uuid_filename" -->
+            <!--   position="top" -->
+            <!--   max-height="400" -->
+            <!--   aspect-ratio="1" -->
+            <!--   :cover="cropImages" -->
+            <!--   :lazy-src=" -->
+            <!--     img( -->
+            <!--       `${image.uuid_filename}`, -->
+            <!--       { size: 'small' }, -->
+            <!--       { provider: 'geocollections' }, -->
+            <!--     ) -->
+            <!--   " -->
+            <!--   :src=" -->
+            <!--     img( -->
+            <!--       `${image.uuid_filename}`, -->
+            <!--       { size: 'small' }, -->
+            <!--       { provider: 'geocollections' }, -->
+            <!--     ) -->
+            <!--   " -->
+            <!-- > -->
+            <!--   <template #placeholder> -->
+            <!--     <div -->
+            <!--       class="fill-height ma-0" -->
+            <!--       align="center" -->
+            <!--       justify="center" -->
+            <!--     > -->
+            <!--       <VProgressCircular -->
+            <!--         indeterminate -->
+            <!--         color="grey-lighten-5" -->
+            <!--       /> -->
+            <!--     </div> -->
+            <!--   </template> -->
+            <!-- </VImg> -->
+            <!---->
+            <!-- <div v-else align="center"> -->
+            <!--   <div class="text-center"> -->
+            <!--     <div class="py-3"> -->
+            <!--       <div style="font-size: 6rem" class="text-grey"> -->
+            <!--         {{ mdiFileImageOutline }} -->
+            <!--       </div> -->
+            <!--     </div> -->
+            <!--   </div> -->
+            <!-- </div> -->
           </div>
 
           <span>

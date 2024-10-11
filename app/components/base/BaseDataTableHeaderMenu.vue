@@ -76,33 +76,33 @@ const filteredHeaders = computed(() => {
             :label="$t('common.filter')"
           >
         </div>
-        <VVirtualScroll
-          :items="filteredHeaders"
-          :height="500"
-          :item-height="35"
-          :width="300"
-        >
-          <template #default="{ item }">
-            <li
-              density="compact"
-              variant="text"
-              slim
-              :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
-              @click.prevent="emit('change', item)"
-            >
-              <div start class="mr-2">
-                <VCheckboxBtn
-                  density="compact"
-                  :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
-                  :model-value="item.show"
-                  color="accent"
-                />
-              </div>
-              <div>{{ item.title }}</div>
-            </li>
-            {{ $t("common.headerSelectDisabled") }}
-          </template>
-        </VVirtualScroll>
+        <!-- <VVirtualScroll -->
+        <!--   :items="filteredHeaders" -->
+        <!--   :height="500" -->
+        <!--   :item-height="35" -->
+        <!--   :width="300" -->
+        <!-- > -->
+        <!--   <template #default="{ item }"> -->
+        <!--     <li -->
+        <!--       density="compact" -->
+        <!--       variant="text" -->
+        <!--       slim -->
+        <!--       :disabled="sortBy.some((sortItem) => sortItem.key === item.value)" -->
+        <!--       @click.prevent="emit('change', item)" -->
+        <!--     > -->
+        <!--       <div start class="mr-2"> -->
+        <!--         <VCheckboxBtn -->
+        <!--           density="compact" -->
+        <!--           :disabled="sortBy.some((sortItem) => sortItem.key === item.value)" -->
+        <!--           :model-value="item.show" -->
+        <!--           color="accent" -->
+        <!--         /> -->
+        <!--       </div> -->
+        <!--       <div>{{ item.title }}</div> -->
+        <!--     </li> -->
+        <!--     {{ $t("common.headerSelectDisabled") }} -->
+        <!--   </template> -->
+        <!-- </VVirtualScroll> -->
       </ul>
     </div>
   </div>

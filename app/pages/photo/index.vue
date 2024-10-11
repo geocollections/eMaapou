@@ -132,79 +132,79 @@ useHead({
     </template>
 
     <ClientOnly>
-      <VTabs
-        v-model="currentView"
-        bg-color="white"
-        color="accent"
-        density="compact"
-      >
-        <!-- <VTab -->
-        <!--   v-for="view in views" -->
-        <!--   :key="view" -->
-        <!--   selected-class="active-tab" -->
-        <!--   class="montserrat text-capitalize" -->
-        <!-- > -->
-        <!--   {{ $t(`common.${view}`) }} -->
-        <!-- </VTab> -->
-        <VTab
-          :value="0"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.table`) }}
-        </VTab>
-        <VTab
-          :value="1"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.image`) }}
-        </VTab>
-        <VTab
-          :value="2"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.gallery`) }}
-        </VTab>
-      </VTabs>
-      <VWindow v-model="currentView" :touch="false">
-        <VWindowItem :value="0">
-          <DataTablePhoto
-            class="border-t border-b"
-            flat
-            :show-search="false"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :headers="headers"
-            :options="options"
-            :is-loading="status === 'pending'"
-            :export-func="exportData"
-            @update="handleDataTableUpdate"
-            @change:headers="handleHeadersChange"
-            @reset:headers="handleHeadersReset(options)"
-            @click:row="handleClickRow"
-          />
-        </VWindowItem>
-        <VWindowItem :value="1">
-          <ImageView
-            class="border-t border-b"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :options="options"
-            @update="handleDataTableUpdate"
-          />
-        </VWindowItem>
-        <VWindowItem :value="2">
-          <GalleryView
-            class="border-t border-b"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :options="options"
-            @update="handleDataTableUpdate"
-          />
-        </VWindowItem>
-      </VWindow>
+      <!-- <VTabs -->
+      <!--   v-model="currentView" -->
+      <!--   bg-color="white" -->
+      <!--   color="accent" -->
+      <!--   density="compact" -->
+      <!-- > -->
+      <!-- <VTab -->
+      <!--   v-for="view in views" -->
+      <!--   :key="view" -->
+      <!--   selected-class="active-tab" -->
+      <!--   class="montserrat text-capitalize" -->
+      <!-- > -->
+      <!--   {{ $t(`common.${view}`) }} -->
+      <!-- </VTab> -->
+      <!--   <VTab -->
+      <!--     :value="0" -->
+      <!--     active-class="active-tab" -->
+      <!--     class="montserrat text-capitalize" -->
+      <!--   > -->
+      <!--     {{ $t(`common.table`) }} -->
+      <!--   </VTab> -->
+      <!--   <VTab -->
+      <!--     :value="1" -->
+      <!--     active-class="active-tab" -->
+      <!--     class="montserrat text-capitalize" -->
+      <!--   > -->
+      <!--     {{ $t(`common.image`) }} -->
+      <!--   </VTab> -->
+      <!--   <VTab -->
+      <!--     :value="2" -->
+      <!--     active-class="active-tab" -->
+      <!--     class="montserrat text-capitalize" -->
+      <!--   > -->
+      <!--     {{ $t(`common.gallery`) }} -->
+      <!--   </VTab> -->
+      <!-- </VTabs> -->
+      <!-- <VWindow v-model="currentView" :touch="false"> -->
+      <!--   <VWindowItem :value="0"> -->
+      <!--     <DataTablePhoto -->
+      <!--       class="border-t border-b" -->
+      <!--       flat -->
+      <!--       :show-search="false" -->
+      <!--       :items="data?.response.docs ?? []" -->
+      <!--       :count="data?.response.numFound ?? 0" -->
+      <!--       :headers="headers" -->
+      <!--       :options="options" -->
+      <!--       :is-loading="status === 'pending'" -->
+      <!--       :export-func="exportData" -->
+      <!--       @update="handleDataTableUpdate" -->
+      <!--       @change:headers="handleHeadersChange" -->
+      <!--       @reset:headers="handleHeadersReset(options)" -->
+      <!--       @click:row="handleClickRow" -->
+      <!--     /> -->
+      <!--   </VWindowItem> -->
+      <!--   <VWindowItem :value="1"> -->
+      <!--     <ImageView -->
+      <!--       class="border-t border-b" -->
+      <!--       :items="data?.response.docs ?? []" -->
+      <!--       :count="data?.response.numFound ?? 0" -->
+      <!--       :options="options" -->
+      <!--       @update="handleDataTableUpdate" -->
+      <!--     /> -->
+      <!--   </VWindowItem> -->
+      <!--   <VWindowItem :value="2"> -->
+      <!--     <GalleryView -->
+      <!--       class="border-t border-b" -->
+      <!--       :items="data?.response.docs ?? []" -->
+      <!--       :count="data?.response.numFound ?? 0" -->
+      <!--       :options="options" -->
+      <!--       @update="handleDataTableUpdate" -->
+      <!--     /> -->
+      <!--   </VWindowItem> -->
+      <!-- </VWindow> -->
     </ClientOnly>
   </TemplateSearch>
 </template>

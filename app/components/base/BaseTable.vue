@@ -1,11 +1,9 @@
 <template>
-  <VTable density="compact">
-    <template #default>
-      <tbody>
-        <slot />
-      </tbody>
-    </template>
-  </VTable>
+  <table density="compact">
+    <tbody>
+      <slot />
+    </tbody>
+  </table>
 </template>
 
 <style lang="scss" scoped>

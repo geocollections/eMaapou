@@ -176,18 +176,18 @@ function valueString(value: ParameterValue["value"]) {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     ref="panel"
     bg-color="transparent"
     elevation="0"
     :rounded="0"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px; "
     >
       {{ label }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="validFilters.length > 0 && !isPanelOpen"
       class="bg-white "
@@ -217,7 +217,7 @@ function valueString(value: ParameterValue["value"]) {
         </span>
       </div>
     </div>
-    <VExpansionPanelText
+    <div
       class="py-0"
       color="white"
     >
@@ -228,20 +228,20 @@ function valueString(value: ParameterValue["value"]) {
       >
         <div no-gutters class="px-2 ">
           <div cols="8">
-            <VAutocomplete
-              :model-value="v.parameter"
-              hide-details
-              density="compact"
-              item-title="name"
-              item-value="id"
-              variant="outlined"
-              bg-color="white"
-              :placeholder="$t('filters.parameter')"
-              persistent-placeholder
-              :items="suggestions ?? []"
-              @update:model-value="handleParameter($event, i)"
-              @update:search="handleSearch"
-            />
+            <!-- <VAutocomplete -->
+            <!--   :model-value="v.parameter" -->
+            <!--   hide-details -->
+            <!--   density="compact" -->
+            <!--   item-title="name" -->
+            <!--   item-value="id" -->
+            <!--   variant="outlined" -->
+            <!--   bg-color="white" -->
+            <!--   :placeholder="$t('filters.parameter')" -->
+            <!--   persistent-placeholder -->
+            <!--   :items="suggestions ?? []" -->
+            <!--   @update:model-value="handleParameter($event, i)" -->
+            <!--   @update:search="handleSearch" -->
+            <!-- /> -->
           </div>
           <div class="d-flex justify-end">
             <button
@@ -320,8 +320,8 @@ function valueString(value: ParameterValue["value"]) {
           </button>
         </div>
       </div>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style scoped>

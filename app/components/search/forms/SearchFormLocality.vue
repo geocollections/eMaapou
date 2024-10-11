@@ -60,7 +60,7 @@ function handleSubmit() {
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <div id="divider" class="mx-2" />
-      <VExpansionPanels
+      <div
         variant="accordion"
         class="px-2"
         multiple
@@ -100,7 +100,7 @@ function handleSubmit() {
           value="reference"
           @update:model-value="handleUpdate('reference')"
         />
-      </VExpansionPanels>
+      </div>
       <div id="divider" class="mx-2" />
     </form>
   </div>

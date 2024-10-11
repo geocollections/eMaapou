@@ -95,20 +95,18 @@ function closeMobileSearch() {
             <slot />
           </div>
         </div>
-        <VFabTransition v-if="display.smAndDown.value">
-          <button
-            position="fixed"
-            class="mb-2 text-capitalize"
-            style="z-index: 1"
-            location="bottom center"
-            rounded
-            color="warning"
-            @click="showSearch = !showSearch"
-          >
-            <div :icon="mdiMagnify" start />
-            {{ $t("common.searchCommand") }}
-          </button>
-        </VFabTransition>
+        <button
+          position="fixed"
+          class="mb-2 text-capitalize"
+          style="z-index: 1"
+          location="bottom center"
+          rounded
+          color="warning"
+          @click="showSearch = !showSearch"
+        >
+          <div :icon="mdiMagnify" start />
+          {{ $t("common.searchCommand") }}
+        </button>
         <!-- <FabScrollTop /> -->
       </div>
       <AppFooter />

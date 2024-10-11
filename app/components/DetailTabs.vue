@@ -28,14 +28,14 @@ function translateTitle(tab: HydratedTab) {
 </script>
 
 <template>
-  <VTabs
+  <div
     ref="tabsEl"
     class="tabs mt-1"
     height="32"
     slider-color="accent"
     show-arrows
   >
-    <VTab
+    <NuxtLink
       v-for="(item, index) in tabs"
       :key="index"
       class="montserrat tab text-none text-grey-darken-3 text-body-2"
@@ -49,8 +49,8 @@ function translateTitle(tab: HydratedTab) {
       "
     >
       {{ translateTitle(item) }}
-    </VTab>
-  </VTabs>
+    </NuxtLink>
+  </div>
   <div v-else>
     <template #activator="{ props: menuProps, isActive }">
       <button

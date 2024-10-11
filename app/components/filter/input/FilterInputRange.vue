@@ -91,18 +91,18 @@ function handleOpen(value: { value: boolean }) {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     style="background-color: transparent"
     elevation="0"
     :rounded="0"
     @group:selected="handleOpen"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
       style="min-height: 40px;"
     >
       {{ title }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="modelValue[0] !== null || modelValue[1] !== null"
       class="bg-white"
@@ -121,7 +121,7 @@ function handleOpen(value: { value: boolean }) {
         </span>
       </div>
     </div>
-    <VExpansionPanelText
+    <div
       class="pt-1"
       color="white"
     >
@@ -162,8 +162,8 @@ function handleOpen(value: { value: boolean }) {
           >
         </div>
       </div>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>

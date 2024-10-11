@@ -61,7 +61,7 @@ function handleOpen(value: { value: boolean }) {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     ref="panel"
     data-test="panel"
     bg-color="transparent"
@@ -69,13 +69,13 @@ function handleOpen(value: { value: boolean }) {
     :rounded="0"
     @group:selected="handleOpen"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
       style="min-height: 40px;"
       data-test="title"
     >
       {{ title }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
@@ -105,7 +105,7 @@ function handleOpen(value: { value: boolean }) {
         </span>
       </div>
     </div>
-    <VExpansionPanelText
+    <div
       class="py-2 text-right"
       color="white"
     >
@@ -131,8 +131,8 @@ function handleOpen(value: { value: boolean }) {
       >
         {{ t("filter.add") }}
       </button>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

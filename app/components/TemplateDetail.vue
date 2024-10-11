@@ -95,22 +95,22 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         <slot name="title" />
         <slot />
         <ClientOnly>
-          <VFabTransition v-if="showSimilar && display.smAndDown.value">
-            <button
-              position="fixed"
-              class="mb-2 text-capitalize"
-              location="bottom center"
-              rounded
-              style="z-index: 1000"
-              color="warning"
-              @click="showDrawer = !showDrawer"
-            >
-              <div :icon="mdiViewList" start />
-              <slot name="mobileDrawerFabContent">
-                {{ $t("common.similar") }}
-              </slot>
-            </button>
-          </VFabTransition>
+          <!-- <VFabTransition v-if="showSimilar && display.smAndDown.value"> -->
+          <button
+            position="fixed"
+            class="mb-2 text-capitalize"
+            location="bottom center"
+            rounded
+            style="z-index: 1000"
+            color="warning"
+            @click="showDrawer = !showDrawer"
+          >
+            <div :icon="mdiViewList" start />
+            <slot name="mobileDrawerFabContent">
+              {{ $t("common.similar") }}
+            </slot>
+          </button>
+          <!-- </VFabTransition> -->
         </ClientOnly>
         <!-- <FabScrollTop /> -->
       </div>

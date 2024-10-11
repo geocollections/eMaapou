@@ -96,7 +96,7 @@ function handleSubmit() {
         @update:model-value="handleUpdate()"
       />
       <div id="divider" class="mx-2" />
-      <VExpansionPanels
+      <div
         variant="accordion"
         class="px-2"
         multiple
@@ -168,7 +168,7 @@ function handleSubmit() {
           value="institution"
           @update:model-value="handleUpdate('institution')"
         />
-      </VExpansionPanels>
+      </div>
       <div id="divider" class="mx-2" />
     </form>
   </div>

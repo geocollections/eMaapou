@@ -80,32 +80,32 @@ function isParameterSelected(parameter: any) {
           variant="outlined"
           hide-details
         >
-        <VVirtualScroll
-          :items="filteredParameters"
-          height="500px"
-          item-height="40px"
-        >
-          <template #default="{ item }">
-            <li
-              @click="handleInput(item)"
-            >
-              <template #prepend>
-                <div start>
-                  <VCheckboxBtn :model-value="isParameterSelected(item)" />
-                </div>
-              </template>
-              <div>
-                <span class="text-medium-emphasis font-italic">
-                  ({{ $translate({ et: item.method, en: item.method }) }})
-                </span>
-                {{ $translate({ et: item.name, en: item.name_en ?? item.name }) }}
-                <div small>
-                  {{ item.count }}
-                </div>
-              </div>
-            </li>
-          </template>
-        </VVirtualScroll>
+        <!-- <VVirtualScroll -->
+        <!--   :items="filteredParameters" -->
+        <!--   height="500px" -->
+        <!--   item-height="40px" -->
+        <!-- > -->
+        <!--   <template #default="{ item }"> -->
+        <!--     <li -->
+        <!--       @click="handleInput(item)" -->
+        <!--     > -->
+        <!--       <template #prepend> -->
+        <!--         <div start> -->
+        <!--           <VCheckboxBtn :model-value="isParameterSelected(item)" /> -->
+        <!--         </div> -->
+        <!--       </template> -->
+        <!--       <div> -->
+        <!--         <span class="text-medium-emphasis font-italic"> -->
+        <!--           ({{ $translate({ et: item.method, en: item.method }) }}) -->
+        <!--         </span> -->
+        <!--         {{ $translate({ et: item.name, en: item.name_en ?? item.name }) }} -->
+        <!--         <div small> -->
+        <!--           {{ item.count }} -->
+        <!--         </div> -->
+        <!--       </div> -->
+        <!--     </li> -->
+        <!--   </template> -->
+        <!-- </VVirtualScroll> -->
         <!-- TODO: Reimplement treeview when vuetify 3 adds it -->
         <!-- <v-treeview -->
         <!--   style="max-height: 500px" -->

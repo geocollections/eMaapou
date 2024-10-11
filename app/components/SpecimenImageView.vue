@@ -87,48 +87,48 @@ function updateOptions(event: DataTableOptions) {
             :to="localePath({ name: 'file-id', params: { id: image.id } })"
             :class="{ 'image-hover-elevation': !!cropImages }"
           >
-            <VImg
-              v-if="image.image"
-              position="top"
-              :contain="!cropImages"
-              :lazy-src="
-                img(
-                  `${image.image}`,
-                  { size: 'small' },
-                  { provider: 'geocollections' },
-                )
-              "
-              :src="
-                img(
-                  `${image.image}`,
-                  { size: 'small' },
-                  { provider: 'geocollections' },
-                )
-              "
-            >
-              <template #placeholder>
-                <div
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <VProgressCircular
-                    indeterminate
-                    color="grey-lighten-5"
-                  />
-                </div>
-              </template>
-            </VImg>
-
-            <div v-else align="center">
-              <div class="text-center">
-                <div class="py-3">
-                  <div style="font-size: 6rem" class="text-grey">
-                    {{ mdiFileImageOutline }}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- <VImg -->
+            <!--   v-if="image.image" -->
+            <!--   position="top" -->
+            <!--   :contain="!cropImages" -->
+            <!--   :lazy-src=" -->
+            <!--     img( -->
+            <!--       `${image.image}`, -->
+            <!--       { size: 'small' }, -->
+            <!--       { provider: 'geocollections' }, -->
+            <!--     ) -->
+            <!--   " -->
+            <!--   :src=" -->
+            <!--     img( -->
+            <!--       `${image.image}`, -->
+            <!--       { size: 'small' }, -->
+            <!--       { provider: 'geocollections' }, -->
+            <!--     ) -->
+            <!--   " -->
+            <!-- > -->
+            <!--   <template #placeholder> -->
+            <!--     <div -->
+            <!--       class="fill-height ma-0" -->
+            <!--       align="center" -->
+            <!--       justify="center" -->
+            <!--     > -->
+            <!--       <VProgressCircular -->
+            <!--         indeterminate -->
+            <!--         color="grey-lighten-5" -->
+            <!--       /> -->
+            <!--     </div> -->
+            <!--   </template> -->
+            <!-- </VImg> -->
+            <!---->
+            <!-- <div v-else align="center"> -->
+            <!--   <div class="text-center"> -->
+            <!--     <div class="py-3"> -->
+            <!--       <div style="font-size: 6rem" class="text-grey"> -->
+            <!--         {{ mdiFileImageOutline }} -->
+            <!--       </div> -->
+            <!--     </div> -->
+            <!--   </div> -->
+            <!-- </div> -->
           </div>
 
           <span>

@@ -22,7 +22,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -31,7 +31,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>
 `,
     }, {
@@ -60,7 +60,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -69,7 +69,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>
 `,
     }, {
@@ -112,7 +112,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -121,7 +121,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>`,
     }, {
       components: { FilterInputHierarchy },
@@ -170,7 +170,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -179,7 +179,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>`,
     }, {
       components: { FilterInputHierarchy },
@@ -230,7 +230,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -239,7 +239,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>`,
     }, {
       components: { FilterInputHierarchy },

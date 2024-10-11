@@ -14,7 +14,8 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <VCheckbox
+  <input
+    type="checkbox"
     class="ml-2"
     hide-details
     color="blue-darken-2"
@@ -23,12 +24,12 @@ const emit = defineEmits<{
     :disabled="disabled"
     @update:model-value="emit('update:modelValue', $event as boolean)"
   >
-    <template #label>
-      <div
-        class="font-weight-medium text-body-2 "
-      >
-        {{ label }}
-      </div>
-    </template>
+  <template #label>
+    <div
+      class="font-weight-medium text-body-2 "
+    >
+      {{ label }}
+    </div>
+  </template>
   </VCheckbox>
 </template>

@@ -93,16 +93,16 @@ function pageLimitRule(value: number) {
 <template>
   <div class="d-inline-flex align-center mr-2 mr-sm-3">
     <div class="">
-      <VSelect
-        density="compact"
-        hide-details
-        variant="outlined"
-        style="min-width: 50px"
-        :items="itemsPerPageOptions"
-        :model-value="options.itemsPerPage"
-        :menu-props="{ location: 'bottom', zIndex: 4 }"
-        @update:model-value="changeRowsPerPage"
-      />
+      <!-- <VSelect -->
+      <!--   density="compact" -->
+      <!--   hide-details -->
+      <!--   variant="outlined" -->
+      <!--   style="min-width: 50px" -->
+      <!--   :items="itemsPerPageOptions" -->
+      <!--   :model-value="options.itemsPerPage" -->
+      <!--   :menu-props="{ location: 'bottom', zIndex: 4 }" -->
+      <!--   @update:model-value="changeRowsPerPage" -->
+      <!-- /> -->
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
       <button

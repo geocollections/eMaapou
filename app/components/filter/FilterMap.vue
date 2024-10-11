@@ -23,19 +23,19 @@ const valueString = computed(() => {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     bg-color="transparent"
     elevation="0"
     :rounded="0"
     style="background-color: transparent"
     @group:selected="handleOpen"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px"
     >
       {{ $t("filters.map") }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="modelValue !== null"
       class="bg-white"
@@ -56,15 +56,15 @@ const valueString = computed(() => {
         </span>
       </div>
     </div>
-    <VExpansionPanelText>
+    <div>
       <div class="pa-0">
         <MapSearch
           :model-value="modelValue"
           @update:model-value="$emit('update:model-value', $event)"
         />
       </div>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style scoped>

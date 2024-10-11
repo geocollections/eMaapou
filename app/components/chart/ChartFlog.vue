@@ -920,7 +920,7 @@ state.option = createOption();
 
 <template>
   <div class="">
-    <VToolbar
+    <div
       flat
       color="white"
       density="compact"
@@ -1011,7 +1011,7 @@ state.option = createOption();
           </div>
         </div>
       </div>
-    </VToolbar>
+    </div>
     <div id="divider" />
     <div ref="containerFlogChart" class="overflow-x-auto">
       <ClientOnly>
@@ -1035,12 +1035,12 @@ state.option = createOption();
             :style="`height: ${state.initialHeight + 200}px; width: 100%`"
             class="d-flex align-center justify-center"
           >
-            <VProgressCircular
-              indeterminate
-              color="accent"
-              :size="100"
-              :width="6"
-            />
+            <!-- <VProgressCircular -->
+            <!--   indeterminate -->
+            <!--   color="accent" -->
+            <!--   :size="100" -->
+            <!--   :width="6" -->
+            <!-- /> -->
           </div>
         </template>
       </ClientOnly>

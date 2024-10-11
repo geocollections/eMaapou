@@ -180,20 +180,20 @@ const { mdAndUp } = useDisplay();
         <slot name="title" />
         <slot />
         <ClientOnly>
-          <VFabTransition v-if="$attrs['show-similar'] && display.smAndDown.value">
-            <button
-              position="fixed"
-              class="mb-2 text-capitalize"
-              location="bottom center"
-              rounded
-              style="z-index: 1000"
-              color="warning"
-              @click="showDrawer = !showDrawer"
-            >
-              <div :icon="mdiViewList" start />
-              {{ $t("common.similar") }}
-            </button>
-          </VFabTransition>
+          <!-- <VFabTransition v-if="$attrs['show-similar'] && display.smAndDown.value"> -->
+          <button
+            position="fixed"
+            class="mb-2 text-capitalize"
+            location="bottom center"
+            rounded
+            style="z-index: 1000"
+            color="warning"
+            @click="showDrawer = !showDrawer"
+          >
+            <div :icon="mdiViewList" start />
+            {{ $t("common.similar") }}
+          </button>
+          <!-- </VFabTransition> -->
         </ClientOnly>
         <!-- <FabScrollTop /> -->
       </div>

@@ -79,18 +79,18 @@ const maxDate = computed(() => {
 </script>
 
 <template>
-  <VExpansionPanel
+  <div
     ref="panel"
     bg-color="transparent"
     elevation="0"
     :rounded="0"
   >
-    <VExpansionPanelTitle
+    <div
       class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
       style="min-height: 40px;"
     >
       {{ title }}
-    </VExpansionPanelTitle>
+    </div>
     <div
       v-if="internalValue.length > 0"
       class="bg-white"
@@ -117,21 +117,21 @@ const maxDate = computed(() => {
         </span>
       </div>
     </div>
-    <VExpansionPanelText
+    <div
       color="white"
       :class="{ 'border-t': internalValue.length > 0 }"
     >
-      <VDatePicker
-        :model-value="currentDatePickerValue"
-        color="accent"
-        multiple="range"
-        hide-header
-        first-day-of-week="1"
-        show-adjacent-months
-        :max="maxDate"
-        :locale="$i18n.locale === 'et' ? 'et-EE' : 'en-US'"
-        @update:model-value="handleDatePickerInput"
-      />
+      <!-- <VDatePicker -->
+      <!--   :model-value="currentDatePickerValue" -->
+      <!--   color="accent" -->
+      <!--   multiple="range" -->
+      <!--   hide-header -->
+      <!--   first-day-of-week="1" -->
+      <!--   show-adjacent-months -->
+      <!--   :max="maxDate" -->
+      <!--   :locale="$i18n.locale === 'et' ? 'et-EE' : 'en-US'" -->
+      <!--   @update:model-value="handleDatePickerInput" -->
+      <!-- /> -->
       <div
         style="border-top: 1px solid lightgray !important"
         no-gutters
@@ -165,8 +165,8 @@ const maxDate = computed(() => {
           </button>
         </div>
       </div>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </div>
+  </div>
 </template>
 
 <style scoped>

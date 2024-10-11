@@ -253,7 +253,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           <div class="text-h6 py-2">
             {{ $t("area.deposit") }}
           </div>
-          <VAlert
+          <div
             density="compact"
             type="info"
             color="accent"
@@ -261,7 +261,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             class="text-body-2 mb-2"
           >
             {{ $t("alert.estonianLandBoardDatabase") }}
-          </VAlert>
+          </div>
           <BaseTable class="border rounded">
             <TableRow
               v-if="deposit"
@@ -325,7 +325,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
           <div class="text-h6 py-2">
             {{ $t("area.miningClaim") }}
           </div>
-          <VAlert
+          <div
             density="compact"
             type="info"
             color="accent"
@@ -333,7 +333,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             class="text-body-2 mb-2"
           >
             {{ $t("alert.estonianLandBoardDatabase") }}
-          </VAlert>
+          </div>
           <BaseTable class="border rounded">
             <TableRow
               v-if="miningClaim.loa_number"

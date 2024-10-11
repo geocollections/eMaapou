@@ -66,7 +66,7 @@ function handleSubmit() {
         @update:model-value="handleUpdate()"
       />
       <div id="divider" class="mx-2" />
-      <VExpansionPanels
+      <div
         class="px-2"
         variant="accordion"
         multiple
@@ -106,7 +106,7 @@ function handleSubmit() {
           value="stratigraphy"
           @update:model-value="handleUpdate('stratigraphy')"
         />
-      </VExpansionPanels>
+      </div>
       <div id="divider" class="mx-2" />
     </form>
   </div>

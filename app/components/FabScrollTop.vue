@@ -18,18 +18,16 @@ function toTop() {
 </script>
 
 <template>
-  <VFabTransition>
-    <button
-      v-show="showFab"
-      v-scroll="onScroll"
-      position="fixed"
-      class="mb-2 mr-2"
-      location="bottom right"
-      icon
-      color="accent"
-      @click="toTop"
-    >
-      <div>{{ mdiChevronUp }}</div>
-    </button>
-  </VFabTransition>
+  <button
+    v-show="showFab"
+    v-scroll="onScroll"
+    position="fixed"
+    class="mb-2 mr-2"
+    location="bottom right"
+    icon
+    color="accent"
+    @click="toTop"
+  >
+    <div>{{ mdiChevronUp }}</div>
+  </button>
 </template>

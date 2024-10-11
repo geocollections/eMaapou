@@ -50,14 +50,14 @@ function handleExport() {
           XLSX
         </button>
       </ButtonToggle>
-      <VSelect
-        v-model="selection"
-        :items="[{ title: t('currentPage'), value: 'page' }, { title: t('allResults'), value: 'all' }]"
-        :label="t('selection')"
-        density="compact"
-        variant="outlined"
-        hide-details
-      />
+      <!-- <VSelect -->
+      <!--   v-model="selection" -->
+      <!--   :items="[{ title: t('currentPage'), value: 'page' }, { title: t('allResults'), value: 'all' }]" -->
+      <!--   :label="t('selection')" -->
+      <!--   density="compact" -->
+      <!--   variant="outlined" -->
+      <!--   hide-details -->
+      <!-- /> -->
       <input
         v-model="filename"
         class="py-2"
