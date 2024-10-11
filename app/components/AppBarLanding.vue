@@ -27,7 +27,7 @@ const cssProps = computed(() => {
 </script>
 
 <template>
-  <VAppBar
+  <div
     :height="48"
     flat
     absolute
@@ -43,7 +43,7 @@ const cssProps = computed(() => {
          -->
     <AppBarLogo />
     <VToolbarItems class="w-100 mr-md-2">
-      <VBtn
+      <button
         id="browse_menu_btn"
         aria-label="browse"
         variant="text"
@@ -55,7 +55,7 @@ const cssProps = computed(() => {
         <VIcon color="accent" end>
           {{ mdiChevronDown }}
         </VIcon>
-      </VBtn>
+      </button>
       <VMenu
         activator="#browse_menu_btn"
         content-class="mt-1"
@@ -63,8 +63,8 @@ const cssProps = computed(() => {
         location="bottom"
         offset="10"
       >
-        <VCard max-width="1000">
-          <VCardActions class="d-flex align-baseline">
+        <div max-width="1000">
+          <div class="d-flex align-baseline">
             <VList class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in BROWSE_TAXON_LIST"
@@ -106,14 +106,14 @@ const cssProps = computed(() => {
                 :to="localePath({ name: item.routeName })"
               />
             </VList>
-          </VCardActions>
-        </VCard>
+          </div>
+        </div>
       </VMenu>
     </VToolbarItems>
     <VToolbarItems
       class="ml-auto"
     >
-      <VBtn
+      <button
         aria-label="about page"
         variant="text"
         class="montserrat font-weight-medium"
@@ -122,9 +122,9 @@ const cssProps = computed(() => {
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
-      </VBtn>
+      </button>
 
-      <VBtn
+      <button
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
@@ -138,7 +138,7 @@ const cssProps = computed(() => {
           color="accent"
           end
         />
-      </VBtn>
+      </button>
       <VMenu
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
@@ -146,8 +146,8 @@ const cssProps = computed(() => {
         location="bottom"
         offset="10"
       >
-        <VCard width="550">
-          <VCardActions class="d-block">
+        <div width="550">
+          <div class="d-block">
             <VList
               style="max-height: 450px; flex-flow: column wrap"
               class="d-flex"
@@ -163,14 +163,14 @@ const cssProps = computed(() => {
                 label-only
               />
             </VList>
-          </VCardActions>
-        </VCard>
+          </div>
+        </div>
       </VMenu>
       <LanguageSwitcher
         color="white"
         class="ml-auto"
       />
-      <VBtn
+      <button
         variant="text"
         class="montserrat ml-auto"
         aria-label="Open navigation drawer"
@@ -180,9 +180,9 @@ const cssProps = computed(() => {
         <VIcon color="accent" size="font-size: 24px">
           {{ mdiMenu }}
         </VIcon>
-      </VBtn>
+      </button>
     </VToolbarItems>
-  </VAppBar>
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -7,7 +7,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <VBtn
+  <button
     variant="text"
     color="grey-darken-1"
     class="reset-search mr-2 montserrat rounded text-capitalize"
@@ -20,7 +20,7 @@ const emit = defineEmits<{
     <span class="montserrat">
       {{ $t("common.resetSearch") }}
     </span>
-  </VBtn>
+  </button>
 </template>
 
 <style scoped>

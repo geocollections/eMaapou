@@ -52,7 +52,7 @@ function isParameterSelected(parameter: any) {
     :close-on-content-click="false"
   >
     <template #activator="{ props: menu }">
-      <VBtn
+      <button
         color="accent"
         class="montserrat text-none"
         size="small"
@@ -63,15 +63,15 @@ function isParameterSelected(parameter: any) {
           {{ mdiChartLineVariant }}
         </VIcon>
         {{ $t("common.parameters") }}
-      </VBtn>
+      </button>
     </template>
-    <VCard flat style="min-width: 400px">
-      <VCardTitle class="text-body-1 pb-0 px-2">
+    <div flat style="min-width: 400px">
+      <div class="text-body-1 pb-0 px-2">
         <div class="montserrat">
           {{ $t("common.parameters") }}
         </div>
-      </VCardTitle>
-      <VCardText class="px-2">
+      </div>
+      <div class="px-2">
         <VTextField
           v-model="search"
           :label="$t('common.filter')"
@@ -124,7 +124,7 @@ function isParameterSelected(parameter: any) {
         <!--     </div> -->
         <!--   </template> -->
         <!-- </v-treeview> -->
-      </VCardText>
-    </VCard>
+      </div>
+    </div>
   </VMenu>
 </template>

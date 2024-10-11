@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
-import { mdiClose } from "@mdi/js";
 import type { Image } from "./ImageBar.vue";
+import { mdiClose } from "@mdi/js";
 
 withDefaults(defineProps<
   {
@@ -41,7 +41,7 @@ defineExpose({
     opacity="0.85"
     @update:model-value="emit('update:model-value', !modelValue)"
   >
-    <VBtn
+    <button
       position="absolute"
       location="top right"
       style="z-index: 10;"
@@ -52,7 +52,7 @@ defineExpose({
       @click="emit('update:model-value', !modelValue)"
     >
       <VIcon>{{ mdiClose }}</VIcon>
-    </VBtn>
+    </button>
     <SwiperLightbox
       ref="swiper"
       :images="images"

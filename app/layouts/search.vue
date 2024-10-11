@@ -174,7 +174,7 @@ function closeMobileSearch() {
           </div>
         </div>
         <VFabTransition v-if="display.smAndDown.value">
-          <VBtn
+          <button
             position="fixed"
             class="mb-2 text-capitalize"
             style="z-index: 1"
@@ -185,7 +185,7 @@ function closeMobileSearch() {
           >
             <VIcon :icon="mdiMagnify" start />
             {{ $t("common.searchCommand") }}
-          </VBtn>
+          </button>
         </VFabTransition>
         <!-- <FabScrollTop /> -->
       </div>

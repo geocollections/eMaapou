@@ -288,13 +288,13 @@ function handleSearch() {
         </div>
         <div>
           <div cols="12" md="5">
-            <VCard
+            <div
               class=""
               rounded="0"
               flat
               color="transparent"
             >
-              <VCardActions class="px-0 pt-md-6">
+              <div class="px-0 pt-md-6">
                 <VForm
                   class="d-flex text-right"
                   style="width: 100%"
@@ -305,7 +305,7 @@ function handleSearch() {
                     :rounded="5"
                     :placeholder="$t('landing.searchPlaceholder')"
                   />
-                  <VBtn
+                  <button
                     height="56"
                     width="84px"
                     class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0 border"
@@ -314,25 +314,25 @@ function handleSearch() {
                     color="blue"
                   >
                     <VIcon :icon="mdiMagnify" size="large" />
-                  </VBtn>
+                  </button>
                 </VForm>
-              </VCardActions>
-              <VCardText
+              </div>
+              <div
                 style="word-break: break-word"
                 :class="{
                 }"
                 class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
               >
                 {{ $t("landing.description") }}
-              </VCardText>
-            </VCard>
+              </div>
+            </div>
           </div>
           <div
             cols="12"
             md="7"
             class="pl-lg-10"
           >
-            <VCard color="transparent" flat>
+            <div color="transparent" flat>
               <div no-gutters justify="center">
                 <div class="col-12 col-xl-auto d-flex flex-wrap">
                   <div
@@ -348,7 +348,7 @@ function handleSearch() {
                   </div>
                 </div>
               </div>
-            </VCard>
+            </div>
           </div>
         </div>
       </div>

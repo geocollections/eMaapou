@@ -244,7 +244,7 @@ function valueString(value: ParameterValue["value"]) {
             />
           </div>
           <div class="d-flex justify-end">
-            <VBtn
+            <button
               class="mt-1"
               :icon="mdiClose"
               size="x-small"
@@ -293,7 +293,7 @@ function valueString(value: ParameterValue["value"]) {
       </div>
       <div no-gutters class="pt-2 px-4">
         <div cols="6">
-          <VBtn
+          <button
             size="small"
             variant="text"
             block
@@ -303,11 +303,11 @@ function valueString(value: ParameterValue["value"]) {
             @click="handleClear"
           >
             {{ $t('filter.clear') }}
-          </VBtn>
+          </button>
         </div>
 
         <div cols="6">
-          <VBtn
+          <button
             size="small"
             variant="text"
             block
@@ -317,7 +317,7 @@ function valueString(value: ParameterValue["value"]) {
             @click="handleAdd"
           >
             {{ $t('filter.add') }}
-          </VBtn>
+          </button>
         </div>
       </div>
     </VExpansionPanelText>

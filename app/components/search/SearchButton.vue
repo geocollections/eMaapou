@@ -3,7 +3,7 @@ import { mdiMagnify } from "@mdi/js";
 </script>
 
 <template>
-  <VBtn
+  <button
     type="submit"
     color="blue-darken-1"
     variant="flat"
@@ -15,5 +15,5 @@ import { mdiMagnify } from "@mdi/js";
     <div class="montserrat">
       {{ $t('common.searchCommand') }}
     </div>
-  </VBtn>
+  </button>
 </template>

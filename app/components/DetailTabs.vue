@@ -53,7 +53,7 @@ function translateTitle(tab: HydratedTab) {
   </VTabs>
   <VMenu v-else>
     <template #activator="{ props: menuProps, isActive }">
-      <VBtn
+      <button
         class="text-capitalize mb-1 ml-auto"
         variant="outlined"
         height="32"
@@ -64,7 +64,7 @@ function translateTitle(tab: HydratedTab) {
         :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
       >
         {{ translateTitle(currentTab) }}
-      </VBtn>
+      </button>
     </template>
     <VList>
       <VListItem

@@ -36,32 +36,32 @@ function extractContent(html: string) {
 </script>
 
 <template>
-    <VCard
-      class="py-2"
-      flat
-      :to="to"
+  <div
+    class="py-2"
+    flat
+    :to="to"
+  >
+    <div
+      v-if="date"
+      class="text-right pr-4 montserrat text--secondary"
+      :class="{ 'white--text': dark }"
     >
-      <div
-        v-if="date"
-        class="text-right pr-4 montserrat text--secondary"
-        :class="{ 'white--text': dark }"
-      >
-        {{ $formatDate(date) }}
-      </div>
-      <VCardTitle
-        class="pt-0 text-h6"
-        :class="{ 'white--text': dark }"
-        style="word-break: normal"
-      >
-        {{ title }}
-      </VCardTitle>
+      {{ $formatDate(date) }}
+    </div>
+    <div
+      class="pt-0 text-h6"
+      :class="{ 'white--text': dark }"
+      style="word-break: normal"
+    >
+      {{ title }}
+    </div>
 
-      <VCardText
-        class="pb-0 text-body-1"
-        style="color: rgba(0, 0, 0, 0.7)"
-        :class="{ 'white--text': dark }"
-      >
-        {{ truncatedText }}
-      </VCardText>
-  </VCard>
+    <div
+      class="pb-0 text-body-1"
+      style="color: rgba(0, 0, 0, 0.7)"
+      :class="{ 'white--text': dark }"
+    >
+      {{ truncatedText }}
+    </div>
+  </div>
 </template>

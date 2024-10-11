@@ -1,4 +1,18 @@
 <script setup lang="ts">
+import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
+import type {
+  AxisPointerComponentOption,
+  DataZoomComponentOption,
+  GridComponentOption,
+  TitleComponentOption,
+  TooltipComponentOption,
+} from "echarts/components";
+import type { ComposeOption } from "echarts/core";
+import type {
+  XAXisComponentOption,
+  YAXisComponentOption,
+} from "echarts/types/dist/echarts.js";
+import type { TitleOption } from "echarts/types/dist/shared.js";
 import { mdiCog, mdiRefresh } from "@mdi/js";
 import { CustomChart, LineChart } from "echarts/charts";
 import {
@@ -16,20 +30,6 @@ import differenceBy from "lodash/differenceBy";
 import groupBy from "lodash/groupBy";
 import orderBy from "lodash/orderBy";
 import VChart from "vue-echarts";
-import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
-import type {
-  AxisPointerComponentOption,
-  DataZoomComponentOption,
-  GridComponentOption,
-  TitleComponentOption,
-  TooltipComponentOption,
-} from "echarts/components";
-import type { ComposeOption } from "echarts/core";
-import type {
-  XAXisComponentOption,
-  YAXisComponentOption,
-} from "echarts/types/dist/echarts.js";
-import type { TitleOption } from "echarts/types/dist/shared.js";
 import type { Renderer } from "~/types/enums";
 import clipRectByRect from "~/utils/clipRectByRect";
 import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
@@ -937,20 +937,20 @@ state.option = createOption();
         :close-on-content-click="false"
       >
         <template #activator="{ props: menu }">
-          <VBtn
+          <button
             class="ml-3"
             icon
             size="small"
             v-bind="menu"
           >
             <VIcon> {{ icons.mdiCog }} </VIcon>
-          </VBtn>
+          </button>
         </template>
-        <VCard>
-          <VCardTitle class="montserrat pb-2">
+        <div>
+          <div class="montserrat pb-2">
             {{ $t("flogChart.settings") }}
-          </VCardTitle>
-          <VCardText>
+          </div>
+          <div>
             <RendererSwitch
               :renderer="renderer"
               @update="handleRenderSwitch"
@@ -971,13 +971,13 @@ state.option = createOption();
                 </VIcon>
               </template>
               <template #append>
-                <VBtnToggle
+                <ButtonToggle
                   density="compact"
                   color="accent"
                   :model-value="ppi"
                   @update:model-value="handlePpiChange"
                 >
-                  <VBtn
+                  <button
                     width="65"
                     size="small"
                     class="text-none montserrat"
@@ -985,8 +985,8 @@ state.option = createOption();
                     :value="96"
                   >
                     96 PPI
-                  </VBtn>
-                  <VBtn
+                  </button>
+                  <button
                     width="65"
                     size="small"
                     class="text-none montserrat"
@@ -994,8 +994,8 @@ state.option = createOption();
                     :value="72"
                   >
                     72 PPI
-                  </VBtn>
-                </VBtnToggle>
+                  </button>
+                </ButtonToggle>
               </template>
             </VTextField>
             <VTextField
@@ -1008,8 +1008,8 @@ state.option = createOption();
               :label="$t('flogChart.parameterChartWidth')"
               @change="handleParameterChartWidthChange"
             />
-          </VCardText>
-        </VCard>
+          </div>
+        </div>
       </VMenu>
     </VToolbar>
     <VDivider />

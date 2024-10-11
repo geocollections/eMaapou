@@ -246,7 +246,7 @@ async function handleOpen(value: { value: boolean }) {
           v-if="showPagination"
           class="d-flex align-center justify-space-around"
         >
-          <VBtn
+          <button
             :icon="mdiChevronLeft"
             variant="text"
             size="small"
@@ -254,7 +254,7 @@ async function handleOpen(value: { value: boolean }) {
             @click="prevPage"
           />
           <span>{{ pagination.page }}</span>
-          <VBtn
+          <button
             :icon="mdiChevronRight"
             variant="text"
             size="small"

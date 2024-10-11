@@ -120,7 +120,7 @@ function handleOpen(value: { value: boolean }) {
         :placeholder="t('filters.filter')"
         @keydown.enter="handleAdd"
       />
-      <VBtn
+      <button
         class="mt-2"
         color="accent"
         variant="tonal"
@@ -130,7 +130,7 @@ function handleOpen(value: { value: boolean }) {
         @click="handleAdd"
       >
         {{ t("filter.add") }}
-      </VBtn>
+      </button>
     </VExpansionPanelText>
   </VExpansionPanel>
 </template>

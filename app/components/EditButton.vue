@@ -26,7 +26,7 @@ function handleClick() {
 </script>
 
 <template>
-  <VBtn
+  <button
     id="edit-btn"
     size="small"
     variant="text"

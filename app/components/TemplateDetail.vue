@@ -92,7 +92,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         <slot />
         <ClientOnly>
           <VFabTransition v-if="showSimilar && display.smAndDown.value">
-            <VBtn
+            <button
               position="fixed"
               class="mb-2 text-capitalize"
               location="bottom center"
@@ -105,7 +105,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               <slot name="mobileDrawerFabContent">
                 {{ $t("common.similar") }}
               </slot>
-            </VBtn>
+            </button>
           </VFabTransition>
         </ClientOnly>
         <!-- <FabScrollTop /> -->

@@ -29,7 +29,7 @@ function handleExport() {
     <template #activator="menu">
       <VTooltip location="bottom" open-delay="500">
         <template #activator="tooltip">
-          <VBtn
+          <button
             aria-label="export table"
             variant="text"
             class="mr-1"
@@ -40,23 +40,23 @@ function handleExport() {
         <span>{{ $t("table.tooltipExport") }}</span>
       </VTooltip>
     </template>
-    <VCard class="pa-2">
+    <div class="pa-2">
       <div class="text-subtitle-2">
         {{ t("exportType") }}
       </div>
-      <VBtnToggle
+      <ButtonToggle
         v-model="exportType"
         class="mb-2"
         density="compact"
         mandatory
       >
-        <VBtn value="csv">
+        <button value="csv">
           CSV
-        </VBtn>
-        <VBtn value="xlsx">
+        </button>
+        <button value="xlsx">
           XLSX
-        </VBtn>
-      </VBtnToggle>
+        </button>
+      </ButtonToggle>
       <VSelect
         v-model="selection"
         :items="[{ title: t('currentPage'), value: 'page' }, { title: t('allResults'), value: 'all' }]"
@@ -75,7 +75,7 @@ function handleExport() {
         :suffix="`.${exportType}`"
       />
       <div class="text-right">
-        <VBtn
+        <button
           flat
           color="blue"
           class="text-none"
@@ -85,7 +85,7 @@ function handleExport() {
             {{ mdiFileExportOutline }}
           </VIcon>
           {{ t("export") }}
-        </VBtn>
+        </button>
       </div>
 
       <!-- <VList> -->
@@ -101,7 +101,7 @@ function handleExport() {
       <!--   </VListItemTitle> -->
       <!-- </VListItem> -->
       <!-- </VList> -->
-    </VCard>
+    </div>
   </VMenu>
 </template>
 

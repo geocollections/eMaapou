@@ -20,8 +20,8 @@ const emit = defineEmits<{
     max-width="650"
     @update:model-value="emit('update:model-value', $event)"
   >
-    <VCard elevation="0">
-      <VCardText class="pa-3">
+    <div elevation="0">
+      <div class="pa-3">
         <div no-gutters>
           <div cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
@@ -70,7 +70,7 @@ const emit = defineEmits<{
             </div>
           </div>
         </div>
-      </VCardText>
-    </VCard>
+      </div>
+    </div>
   </VMenu>
 </template>

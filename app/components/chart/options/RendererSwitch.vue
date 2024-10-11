@@ -11,13 +11,13 @@ const emit = defineEmits<{
 <template>
   <div>
     <div class="text-caption" v-text="$t('common.render')" />
-    <VBtnToggle
+    <ButtonToggle
       density="compact"
       color="accent"
       :model-value="renderer"
       @update:model-value="emit('update', $event)"
     >
-      <VBtn
+      <button
         width="65"
         size="small"
         class="text-none montserrat"
@@ -25,8 +25,8 @@ const emit = defineEmits<{
         value="canvas"
       >
         Canvas
-      </VBtn>
-      <VBtn
+      </button>
+      <button
         width="65"
         size="small"
         class="text-none montserrat"
@@ -34,7 +34,7 @@ const emit = defineEmits<{
         value="svg"
       >
         SVG
-      </VBtn>
-    </VBtnToggle>
+      </button>
+    </ButtonToggle>
   </div>
 </template>

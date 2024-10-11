@@ -5,7 +5,7 @@ withDefaults(defineProps<{ color: string }>(), { color: "white" });
 </script>
 
 <template>
-  <VBtn
+  <button
     id="lang_switch_btn"
     :aria-label="$t('languagesLabel')"
     variant="text"
@@ -32,7 +32,7 @@ withDefaults(defineProps<{ color: string }>(), { color: "white" });
     >
       <LanguageList />
     </VMenu>
-  </VBtn>
+  </button>
 </template>
 
 <style scoped lang="scss">

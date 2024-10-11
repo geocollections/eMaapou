@@ -69,7 +69,7 @@ function updateOptions(event: DataTableOptions) {
         />
       </div>
     </div>
-    <VCard flat>
+    <div flat>
       <div
         v-if="count > 0"
         no-gutters
@@ -91,7 +91,7 @@ function updateOptions(event: DataTableOptions) {
             max-width="250"
           >
             <template #activator="{ props: tooltipProps }">
-              <VCard
+              <div
                 flat
                 class="d-flex image-hover"
                 color="transparent"
@@ -145,7 +145,7 @@ function updateOptions(event: DataTableOptions) {
                     </div>
                   </div>
                 </div>
-              </VCard>
+              </div>
             </template>
 
             <span>
@@ -171,6 +171,6 @@ function updateOptions(event: DataTableOptions) {
           </VTooltip>
         </div>
       </div>
-    </VCard>
+    </div>
   </div>
 </template>

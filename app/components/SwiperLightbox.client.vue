@@ -1,8 +1,8 @@
 <script setup lang="ts" generic="T">
+import type { Image } from "./ImageBar.vue";
 import { mdiFileDownloadOutline, mdiInformationOutline } from "@mdi/js";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
-import type { Image } from "./ImageBar.vue";
 
 const props = withDefaults(defineProps<
   {
@@ -152,7 +152,7 @@ function reset() {
               </div>
               <div>
                 <div class="mb-2">
-                  <VBtn
+                  <button
                     class="montserrat text-capitalize font-weight-regular mr-2"
                     :to="
                       localePath({
@@ -168,7 +168,7 @@ function reset() {
                       {{ mdiInformationOutline }}
                     </VIcon>
                     {{ $t("photo.viewDetail") }}
-                  </VBtn>
+                  </button>
                 </div>
                 <div class="rounded d-inline-block px-1">
                   <VIcon
@@ -177,7 +177,7 @@ function reset() {
                   >
                     {{ mdiFileDownloadOutline }}
                   </VIcon>
-                  <VBtn
+                  <button
                     variant="text"
                     size="small"
                     color="white"
@@ -186,8 +186,8 @@ function reset() {
                     target="_blank"
                   >
                     {{ $t("common.small") }}
-                  </VBtn>
-                  <VBtn
+                  </button>
+                  <button
                     variant="text"
                     size="small"
                     color="white"
@@ -196,8 +196,8 @@ function reset() {
                     target="_blank"
                   >
                     {{ $t("common.medium") }}
-                  </VBtn>
-                  <VBtn
+                  </button>
+                  <button
                     variant="text"
                     size="small"
                     color="white"
@@ -206,8 +206,8 @@ function reset() {
                     target="_blank"
                   >
                     {{ $t("common.large") }}
-                  </VBtn>
-                  <VBtn
+                  </button>
+                  <button
                     variant="text"
                     size="small"
                     color="white"
@@ -216,7 +216,7 @@ function reset() {
                     target="_blank"
                   >
                     {{ $t("common.original") }}
-                  </VBtn>
+                  </button>
                 </div>
               </div>
             </div>

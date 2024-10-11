@@ -206,7 +206,7 @@ const mapOverlays = computed(() => {
           v-else
           class="rounded file-download text-primary"
         >
-          <VBtn
+          <button
             variant="outlined"
             @click="
               $openWindow(
@@ -222,7 +222,7 @@ const mapOverlays = computed(() => {
               {{ mdiFileDownloadOutline }}
             </VIcon>
             {{ $t("file.download") }}
-          </VBtn>
+          </button>
         </div>
 
         <div

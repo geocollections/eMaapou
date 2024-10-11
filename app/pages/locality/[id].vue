@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Nullable } from "vitest";
 import {
   mdiBookOpenPageVariantOutline,
   mdiChartScatterPlot,
@@ -7,7 +8,6 @@ import {
   mdiOpenInNew,
   mdiScrewMachineFlatTop,
 } from "@mdi/js";
-import type { Nullable } from "vitest";
 import type { Tab } from "~/composables/useTabs";
 
 const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
@@ -456,7 +456,7 @@ useSeoMeta({
           />
         </template>
         <template #sub>
-          <VBtn
+          <button
             v-if="data?.drillcore"
             size="small"
             rounded
@@ -481,8 +481,8 @@ useSeoMeta({
                 en: data?.drillcore.name_en,
               })
             }}
-          </VBtn>
-          <VBtn
+          </button>
+          <button
             v-if="data?.analysisResultsCount > 0"
             size="small"
             rounded
@@ -500,8 +500,8 @@ useSeoMeta({
               {{ mdiChartScatterPlot }}
             </VIcon>
             {{ $t("locality.linkToAnalyticalData") }}
-          </VBtn>
-          <VBtn
+          </button>
+          <button
             v-if="data?.referenceCount > 0"
             size="small"
             rounded
@@ -517,7 +517,7 @@ useSeoMeta({
             <VIcon end>
               {{ mdiOpenInNew }}
             </VIcon>
-          </VBtn>
+          </button>
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

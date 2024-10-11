@@ -79,7 +79,7 @@ function updateOptions(event: DataTableOptions) {
 </script>
 
 <template>
-  <VCard v-if="items && items.length > 0" flat>
+  <div v-if="items && items.length > 0" flat>
     <div class="d-flex justify-end">
       <BaseDataTablePagination
         :options="options"
@@ -99,9 +99,9 @@ function updateOptions(event: DataTableOptions) {
       />
     </div>
 
-    <VCard flat>
+    <div flat>
       <div class="px-4">
-        <VCardText v-if="items && items.length > 1" class="px-0 pt-0">
+        <div v-if="items && items.length > 1" class="px-0 pt-0">
           <div class="d-flex align-center" style="overflow-x: auto">
             <div
               v-for="(item, index) in items"
@@ -199,10 +199,10 @@ function updateOptions(event: DataTableOptions) {
               </span>
             </div>
           </div>
-        </VCardText>
+        </div>
       </div>
-    </VCard>
-  </VCard>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

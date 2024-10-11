@@ -140,7 +140,7 @@ const localePath = useLocalePath();
       </span>
     </template>
     <template #item.data-table-expand="{ item, internalItem, toggleExpand, isExpanded }">
-      <VBtn
+      <button
         v-if="item.canExpand"
         icon
         variant="text"
@@ -154,7 +154,7 @@ const localePath = useLocalePath();
               : mdiChevronDown
           }}
         </VIcon>
-      </VBtn>
+      </button>
     </template>
   </BaseDataTable>
 </template>

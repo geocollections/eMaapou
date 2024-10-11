@@ -27,7 +27,7 @@ const { data: newsList } = await useNewApiFetch<any>("/web-news/", {
     </div>
     <div>
       <VSpacer />
-      <VBtn
+      <button
         nuxt
         color="accent"
         class="montserrat text-none"
@@ -35,7 +35,7 @@ const { data: newsList } = await useNewApiFetch<any>("/web-news/", {
         variant="text"
       >
         {{ $t("common.viewNews") }}
-      </VBtn>
+      </button>
     </div>
   </div>
 </template>

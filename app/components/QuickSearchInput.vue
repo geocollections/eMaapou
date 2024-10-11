@@ -35,7 +35,7 @@ function handleClick() {
       :placeholder="$t('common.search')"
       @keydown.enter="handleClick"
     />
-    <VBtn
+    <button
       height="40"
       elevation="0"
       class="
@@ -48,7 +48,7 @@ function handleClick() {
       <VIcon>
         {{ mdiMagnify }}
       </VIcon>
-    </VBtn>
+    </button>
   </div>
 </template>
 

@@ -138,7 +138,7 @@ const maxDate = computed(() => {
         class="py-2 px-4"
       >
         <div cols="6">
-          <VBtn
+          <button
             size="small"
             variant="text"
             block
@@ -148,11 +148,11 @@ const maxDate = computed(() => {
             @click="handleClear"
           >
             {{ $t("filter.clear") }}
-          </VBtn>
+          </button>
         </div>
 
         <div cols="6">
-          <VBtn
+          <button
             size="small"
             variant="text"
             block
@@ -162,7 +162,7 @@ const maxDate = computed(() => {
             @click="handleAdd"
           >
             {{ $t("filter.add") }}
-          </VBtn>
+          </button>
         </div>
       </div>
     </VExpansionPanelText>

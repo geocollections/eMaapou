@@ -17,7 +17,7 @@ const display = useDisplay();
 </script>
 
 <template>
-  <VAppBar
+  <div
     :height="48"
     :elevation="2"
     :class="{
@@ -33,7 +33,7 @@ const display = useDisplay();
          -->
     <AppBarLogo />
     <VToolbarItems class="w-100 mr-md-2">
-      <VBtn
+      <button
         v-if="display.mdAndUp.value"
         id="browse_menu_btn"
         aria-label="browse"
@@ -46,7 +46,7 @@ const display = useDisplay();
         <VIcon color="accent" end>
           {{ mdiChevronDown }}
         </VIcon>
-      </VBtn>
+      </button>
       <VMenu
         v-if="display.mdAndUp.value"
         activator="#browse_menu_btn"
@@ -55,8 +55,8 @@ const display = useDisplay();
         location="bottom"
         offset="10"
       >
-        <VCard max-width="1000">
-          <VCardActions class="d-flex align-baseline">
+        <div max-width="1000">
+          <div class="d-flex align-baseline">
             <VList class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in BROWSE_TAXON_LIST"
@@ -98,8 +98,8 @@ const display = useDisplay();
                 :to="localePath({ name: item.routeName })"
               />
             </VList>
-          </VCardActions>
-        </VCard>
+          </div>
+        </div>
       </VMenu>
       <div
         class="d-flex align-center elevation-0 ml-2 mr-0 mr-sm-2"
@@ -112,7 +112,7 @@ const display = useDisplay();
     <VToolbarItems
       class="ml-auto"
     >
-      <VBtn
+      <button
         v-if="display.mdAndUp.value"
         aria-label="about page"
         variant="text"
@@ -122,9 +122,9 @@ const display = useDisplay();
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
-      </VBtn>
+      </button>
 
-      <VBtn
+      <button
         v-if="display.mdAndUp.value"
         id="services_menu_btn"
         aria-label="browse"
@@ -139,7 +139,7 @@ const display = useDisplay();
           color="accent"
           end
         />
-      </VBtn>
+      </button>
       <VMenu
         v-if="display.mdAndUp.value"
         activator="#services_menu_btn"
@@ -148,8 +148,8 @@ const display = useDisplay();
         location="bottom"
         offset="10"
       >
-        <VCard width="550">
-          <VCardActions class="d-block">
+        <div width="550">
+          <div class="d-block">
             <VList
               style="max-height: 450px; flex-flow: column wrap"
               class="d-flex"
@@ -165,15 +165,15 @@ const display = useDisplay();
                 label-only
               />
             </VList>
-          </VCardActions>
-        </VCard>
+          </div>
+        </div>
       </VMenu>
       <LanguageSwitcher
         v-if="display.mdAndUp.value"
         color="white"
         class="ml-auto"
       />
-      <VBtn
+      <button
         v-if="!display.mdAndUp.value"
         variant="text"
         class="montserrat ml-auto"
@@ -184,9 +184,9 @@ const display = useDisplay();
         <VIcon color="accent">
           {{ mdiMenu }}
         </VIcon>
-      </VBtn>
+      </button>
     </VToolbarItems>
-  </VAppBar>
+  </div>
 </template>
 
 <style scoped lang="scss">

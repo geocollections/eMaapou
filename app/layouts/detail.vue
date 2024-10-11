@@ -177,7 +177,7 @@ const { mdAndUp } = useDisplay();
         <slot />
         <ClientOnly>
           <VFabTransition v-if="$attrs['show-similar'] && display.smAndDown.value">
-            <VBtn
+            <button
               position="fixed"
               class="mb-2 text-capitalize"
               location="bottom center"
@@ -188,7 +188,7 @@ const { mdAndUp } = useDisplay();
             >
               <VIcon :icon="mdiViewList" start />
               {{ $t("common.similar") }}
-            </VBtn>
+            </button>
           </VFabTransition>
         </ClientOnly>
         <!-- <FabScrollTop /> -->

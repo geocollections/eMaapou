@@ -17,7 +17,7 @@ useHead({
         class="mb-2 mx-3"
         style="border-color: var(--v-header-darken1)"
       />
-      <VCard
+      <div
         v-if="page"
         width="100%"
         tile
@@ -30,7 +30,7 @@ useHead({
           style="max-width: 700px"
           v-html="$translate({ et: page.content_et, en: page.content_en })"
         />
-      </VCard>
+      </div>
     </div>
   </main>
 </template>

@@ -45,7 +45,7 @@ const filteredHeaders = computed(() => {
     <template #activator="menu">
       <VTooltip location="bottom" open-delay="500">
         <template #activator="tooltip">
-          <VBtn
+          <button
             variant="text"
             :icon="mdiTableCog"
             v-bind="{ ...menu.props, ...tooltip.props }"
@@ -54,13 +54,13 @@ const filteredHeaders = computed(() => {
         <span>{{ $t("table.tooltipConfig") }}</span>
       </VTooltip>
     </template>
-    <VCard>
+    <div>
       <VList flat>
         <VListItemTitle class="px-2 montserrat align-center">
           {{ $t("common.headers") }}
           <VTooltip location="bottom" open-delay="500">
             <template #activator="{ props: tooltip }">
-              <VBtn
+              <button
                 v-bind="tooltip"
                 :icon="mdiRefresh"
                 variant="text"
@@ -72,7 +72,7 @@ const filteredHeaders = computed(() => {
 
           <VTooltip open-delay="500" location="bottom">
             <template #activator="{ props: tooltip }">
-              <VBtn
+              <button
                 v-bind="tooltip"
                 variant="text"
                 :icon="!onlyVisible ? mdiEye : mdiEyeOff"
@@ -128,6 +128,6 @@ const filteredHeaders = computed(() => {
           </template>
         </VVirtualScroll>
       </VList>
-    </VCard>
+    </div>
   </VMenu>
 </template>

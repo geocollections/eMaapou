@@ -19,7 +19,7 @@ function toTop() {
 
 <template>
   <VFabTransition>
-    <VBtn
+    <button
       v-show="showFab"
       v-scroll="onScroll"
       position="fixed"
@@ -30,6 +30,6 @@ function toTop() {
       @click="toTop"
     >
       <VIcon>{{ mdiChevronUp }}</VIcon>
-    </VBtn>
+    </button>
   </VFabTransition>
 </template>

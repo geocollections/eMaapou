@@ -37,7 +37,7 @@ function handleSearch() {
                 {{ error.message }}
               </h1>
 
-              <VBtn
+              <button
                 variant="text"
                 size="large"
                 elevation="0"
@@ -48,8 +48,8 @@ function handleSearch() {
                   {{ mdiRefresh }}
                 </VIcon>
                 Refresh
-              </VBtn>
-              <VBtn
+              </button>
+              <button
                 size="large"
                 variant="text"
                 elevation="0"
@@ -61,7 +61,7 @@ function handleSearch() {
                   {{ mdiHome }}
                 </VIcon>
                 {{ $t("common.backToLanding") }}
-              </VBtn>
+              </button>
               <VForm class="d-flex text-right my-4" @submit.prevent="handleSearch">
                 <InputSearch
                   v-model="query"
@@ -70,7 +70,7 @@ function handleSearch() {
                   height="56"
                   :placeholder="$t('landing.searchPlaceholder')"
                 />
-                <VBtn
+                <button
                   height="49px"
                   width="84px"
                   class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
@@ -79,7 +79,7 @@ function handleSearch() {
                   dark
                 >
                   <VIcon>{{ mdiMagnify }}</VIcon>
-                </VBtn>
+                </button>
               </VForm>
             </div>
           </div>

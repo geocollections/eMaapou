@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import type { TreeNode } from "./FilterInputHierarchy.vue";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 
 const props = defineProps<{
   node: TreeNode;
@@ -97,7 +97,7 @@ async function handleAddSiblings() {
           </label>
         </div>
       </div>
-      <VBtn
+      <button
         v-if="!node.leaf"
         variant="text"
         class="text-body-2"
@@ -125,7 +125,7 @@ async function handleAddSiblings() {
         :child="true"
         @select="select"
       />
-      <VBtn
+      <button
         v-if="!node.childrenLoaded"
         class="ml-1 text-none text-body-2"
         data-test="show-more"
@@ -134,7 +134,7 @@ async function handleAddSiblings() {
         @click="handleAddSiblings"
       >
         {{ t("more") }}
-      </VBtn>
+      </button>
     </ul>
   </li>
 </template>

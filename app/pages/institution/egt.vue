@@ -20,7 +20,7 @@ useHead({
             class="mb-4"
             :title="$translate({ et: page.title_et, en: page.title_en })"
           />
-          <VCard
+          <div
             v-if="page"
             width=""
             tile
@@ -31,7 +31,7 @@ useHead({
               class="mx-3 aboutpage"
               v-html="$translate({ et: page.content_et, en: page.content_en })"
             />
-          </VCard>
+          </div>
         </div>
       </div>
     </div>

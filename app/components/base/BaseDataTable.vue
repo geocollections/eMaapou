@@ -188,7 +188,7 @@ onMounted(() => {
         {{ $t("table.noData") }}
       </template>
       <template v-if="itemTo" #item.to="{ item, index }">
-        <VBtn
+        <button
           v-if="externalTo"
           icon
           variant="text"
@@ -200,8 +200,8 @@ onMounted(() => {
           <VIcon size="x-large">
             {{ mdiEyeArrowRight }}
           </VIcon>
-        </VBtn>
-        <VBtn
+        </button>
+        <button
           v-else
           icon
           variant="text"
@@ -213,7 +213,7 @@ onMounted(() => {
           <VIcon size="x-large">
             {{ mdiEye }}
           </VIcon>
-        </VBtn>
+        </button>
       </template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
       <template v-if="!onlyTable" #top="{ pageCount }">
@@ -308,7 +308,7 @@ onMounted(() => {
           internalItem,
         }"
       >
-        <VBtn
+        <button
           v-if="item.canExpand"
           :icon="!isExpanded(internalItem) ? mdiChevronDown : mdiChevronUp"
           variant="text"

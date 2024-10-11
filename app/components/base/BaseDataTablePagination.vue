@@ -105,13 +105,13 @@ function pageLimitRule(value: number) {
       />
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
-      <VBtn
+      <button
         :disabled="options.page === 1"
         variant="text"
         :icon="mdiPageFirst"
         @click="first"
       />
-      <VBtn
+      <button
         :disabled="options.page === 1"
         variant="text"
         :icon="mdiChevronLeft"
@@ -125,15 +125,15 @@ function pageLimitRule(value: number) {
         z-index="4"
       >
         <template #activator="{ props: activator }">
-          <VBtn
+          <button
             v-bind="activator"
             variant="text"
             class="text-no-wrap text-caption"
           >
             {{ pageSelectText }}
-          </VBtn>
+          </button>
         </template>
-        <VCard class="px-2 py-2 d-flex align-center">
+        <div class="px-2 py-2 d-flex align-center">
           <div class="mr-2 text-no-wrap text-caption">
             {{ goToText }}
           </div>
@@ -149,7 +149,7 @@ function pageLimitRule(value: number) {
             :rules="[pageLimitRule]"
             @keyup.enter="selectPage"
           />
-          <VBtn
+          <button
             :disabled="!pageLimitRule(goToValue)"
             class="px-2 ml-2"
             size="small"
@@ -160,23 +160,23 @@ function pageLimitRule(value: number) {
             <VIcon size="small">
               {{ mdiChevronRight }}
             </VIcon>
-          </VBtn>
-        </VCard>
+          </button>
+        </div>
       </VMenu>
-      <VBtn
+      <button
         :disabled="options.page === pageCount"
         :icon="mdiChevronRight"
         variant="text"
         @click="next"
       />
-      <VBtn
+      <button
         :disabled="options.page === pageCount"
         variant="text"
         :icon="mdiPageLast"
         @click="last"
       >
         <VIcon>{{ mdiPageLast }}</VIcon>
-      </VBtn>
+      </button>
     </div>
   </div>
 </template>
