@@ -64,14 +64,12 @@ const { mdAndUp } = useDisplay();
           :title="t('closeSidebar')"
           @click="railDrawer = !railDrawer"
         >
-          <template #prepend>
-            <div v-if="railDrawer">
-              {{ mdiChevronDoubleRight }}
-            </div>
-            <div v-else>
-              {{ mdiChevronDoubleLeft }}
-            </div>
-          </template>
+          <div v-if="railDrawer">
+            {{ mdiChevronDoubleRight }}
+          </div>
+          <div v-else>
+            {{ mdiChevronDoubleLeft }}
+          </div>
         </li>
         <div id="divider" class="mb-1" />
         <li
@@ -81,9 +79,7 @@ const { mdAndUp } = useDisplay();
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
         <div id="divider" class="mb-1" />
@@ -94,9 +90,7 @@ const { mdAndUp } = useDisplay();
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
         <div id="divider" class="mb-1" />
@@ -107,9 +101,7 @@ const { mdAndUp } = useDisplay();
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
       </ul>
@@ -136,22 +128,18 @@ const { mdAndUp } = useDisplay();
               slim
               @click="mini = !mini"
             >
-              <template #prepend>
-                <div
-                  :icon="mdiChevronDoubleLeft"
-                  :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
-                />
-              </template>
-              <template #title>
-                <div class="montserrat font-weight-medium">
-                  {{ $t("common.hideSimilar") }}
-                </div>
-              </template>
+              <div
+                :icon="mdiChevronDoubleLeft"
+                :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
+              />
+              <div class="montserrat font-weight-medium">
+                {{ $t("common.hideSimilar") }}
+              </div>
             </li>
           </ul>
-          <div v-else class="text-h6 py-2 pl-2">
-            {{ $t("common.showSimilar") }}
-          </div>
+          <!-- <div v-else class="text-h6 py-2 pl-2"> -->
+          <!--   {{ $t("common.showSimilar") }} -->
+          <!-- </div> -->
           <div v-show="mini">
             <div
               class="montserrat font-weight-medium text-body-2 mt-2 ml-auto mr-auto"
