@@ -59,18 +59,14 @@ function scrollToCurrent() {
       :ripple="false"
       density="compact"
     >
-      <template #title>
-        <span class="text-body-2 text-black font-weight-medium">
-          <slot name="parentTitle">
-            <span>
-              {{ $t("common.similar") }}
-            </span>
-          </slot>
-        </span>
-      </template>
-      <template #prepend>
-        <div :icon="mdiArrowLeft" />
-      </template>
+      <span class="text-body-2 text-black font-weight-medium">
+        <slot name="parentTitle">
+          <span>
+            {{ $t("common.similar") }}
+          </span>
+        </slot>
+      </span>
+      <div :icon="mdiArrowLeft" />
     </li>
   </ul>
   <div class="d-flex align-center justify-space-around">
@@ -101,25 +97,19 @@ function scrollToCurrent() {
         color="accent-darken-1"
         @click="emit('select', { index, id: item.id })"
       >
-        <template #title>
-          <slot
-            name="itemTitle"
-            :item="item"
-            :index="index"
-          />
-        </template>
-        <template #subtitle>
-          <slot
-            name="itemSubtitle"
-            :item="item"
-            :index="index"
-          />
-        </template>
-        <template v-if="showCheck" #append="{ isActive }">
-          <div v-if="isActive" color="accent">
-            {{ mdiCheck }}
-          </div>
-        </template>
+        <slot
+          name="itemTitle"
+          :item="item"
+          :index="index"
+        />
+        <slot
+          name="itemSubtitle"
+          :item="item"
+          :index="index"
+        />
+        <div v-if="isActive" color="accent">
+          {{ mdiCheck }}
+        </div>
       </li>
       <div
         v-if="index !== perPage - 1"
@@ -142,7 +132,11 @@ function scrollToCurrent() {
       size="small"
       :icon="mdiChevronRight"
       :disabled="!hasNext"
+      <
+      template
+    >
       @click="emit('page:next', page + 1)"
-    />
+      />
+    </button>
   </div>
 </template>

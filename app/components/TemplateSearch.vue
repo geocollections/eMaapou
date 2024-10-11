@@ -48,17 +48,13 @@ function closeMobileSearch() {
             slim
             @click="mini = !mini"
           >
-            <template #prepend>
-              <div
-                :icon="mdiChevronDoubleLeft"
-                :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
-              />
-            </template>
-            <template #title>
-              <div class="montserrat font-weight-medium ">
-                {{ $t("common.hideFilters") }}
-              </div>
-            </template>
+            <div
+              :icon="mdiChevronDoubleLeft"
+              :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
+            />
+            <div class="montserrat font-weight-medium ">
+              {{ $t("common.hideFilters") }}
+            </div>
           </li>
         </ul>
         <div v-else class="text-h6 py-2 pl-2">

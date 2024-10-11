@@ -29,6 +29,7 @@ function translateTitle(tab: HydratedTab) {
 
 <template>
   <div
+    v-if="true"
     ref="tabsEl"
     class="tabs mt-1"
     height="32"
@@ -52,20 +53,17 @@ function translateTitle(tab: HydratedTab) {
     </NuxtLink>
   </div>
   <div v-else>
-    <template #activator="{ props: menuProps, isActive }">
-      <button
-        class="text-capitalize mb-1 ml-auto"
-        variant="outlined"
-        height="32"
-        color="accent"
-        style="background-color: #fafafa"
-        dark
-        v-bind="menuProps"
-        :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
-      >
-        {{ translateTitle(currentTab) }}
-      </button>
-    </template>
+    <button
+      class="text-capitalize mb-1 ml-auto"
+      variant="outlined"
+      height="32"
+      color="accent"
+      style="background-color: #fafafa"
+      dark
+      :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
+    >
+      {{ translateTitle(currentTab) }}
+    </button>
     <ul>
       <li
         v-for="(item, index) in tabs"

@@ -53,7 +53,6 @@ function handleEnd(isIntersecting: boolean) {
     >
     <div
       ref="menuRef"
-      v-model="menuOpen"
       activator="parent"
       location="bottom"
       max-height="400px"

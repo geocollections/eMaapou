@@ -936,16 +936,14 @@ state.option = createOption();
         content-class="white"
         :close-on-content-click="false"
       >
-        <template #activator="{ props: menu }">
-          <button
-            class="ml-3"
-            icon
-            size="small"
-            v-bind="menu"
-          >
-            <div> {{ icons.mdiCog }} </div>
-          </button>
-        </template>
+        <button
+          class="ml-3"
+          icon
+          size="small"
+          v-bind="menu"
+        >
+          <div> {{ icons.mdiCog }} </div>
+        </button>
         <div>
           <div class="montserrat pb-2">
             {{ $t("flogChart.settings") }}

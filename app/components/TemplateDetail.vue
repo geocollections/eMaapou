@@ -54,17 +54,13 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               slim
               @click="mini = !mini"
             >
-              <template #prepend>
-                <div
-                  :icon="mdiChevronDoubleLeft"
-                  :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
-                />
-              </template>
-              <template #title>
-                <div class="montserrat font-weight-medium">
-                  {{ $t("common.hideSimilar") }}
-                </div>
-              </template>
+              <div
+                :icon="mdiChevronDoubleLeft"
+                :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
+              />
+              <div class="montserrat font-weight-medium">
+                {{ $t("common.hideSimilar") }}
+              </div>
             </li>
           </ul>
           <div v-show="mini">

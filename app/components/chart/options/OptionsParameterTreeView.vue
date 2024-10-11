@@ -51,20 +51,18 @@ function isParameterSelected(parameter: any) {
     content-class="white"
     :close-on-content-click="false"
   >
-    <template #activator="{ props: menu }">
-      <button
-        color="accent"
-        class="montserrat text-none"
-        size="small"
-        variant="outlined"
-        v-bind="menu"
-      >
-        <div start>
-          {{ mdiChartLineVariant }}
-        </div>
-        {{ $t("common.parameters") }}
-      </button>
-    </template>
+    <button
+      color="accent"
+      class="montserrat text-none"
+      size="small"
+      variant="outlined"
+      v-bind="menu"
+    >
+      <div start>
+        {{ mdiChartLineVariant }}
+      </div>
+      {{ $t("common.parameters") }}
+    </button>
     <div flat style="min-width: 400px">
       <div class="text-body-1 pb-0 px-2">
         <div class="montserrat">

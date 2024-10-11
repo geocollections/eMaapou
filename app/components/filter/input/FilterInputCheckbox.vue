@@ -24,12 +24,9 @@ const emit = defineEmits<{
     :disabled="disabled"
     @update:model-value="emit('update:modelValue', $event as boolean)"
   >
-  <template #label>
-    <div
-      class="font-weight-medium text-body-2 "
-    >
-      {{ label }}
-    </div>
-  </template>
-  </VCheckbox>
+  <!-- <div -->
+  <!--   class="font-weight-medium text-body-2 " -->
+  <!-- > -->
+  <!--   {{ label }} -->
+  <!-- </div> -->
 </template>

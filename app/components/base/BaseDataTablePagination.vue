@@ -124,15 +124,13 @@ function pageLimitRule(value: number) {
         :close-on-content-click="false"
         z-index="4"
       >
-        <template #activator="{ props: activator }">
-          <button
-            v-bind="activator"
-            variant="text"
-            class="text-no-wrap text-caption"
-          >
-            {{ pageSelectText }}
-          </button>
-        </template>
+        <button
+          v-bind="activator"
+          variant="text"
+          class="text-no-wrap text-caption"
+        >
+          {{ pageSelectText }}
+        </button>
         <div class="px-2 py-2 d-flex align-center">
           <div class="mr-2 text-no-wrap text-caption">
             {{ goToText }}
