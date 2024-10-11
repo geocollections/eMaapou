@@ -17,6 +17,9 @@ const { getQueryParams: getQueryParamsAnalyticalData } = analyticalDataStore;
 const { solrFilters: analyticalDataSolrFilters, solrQuery: analyticalDataSolrQuery, solrSort: analyticalDataSolrSort }
   = storeToRefs(analyticalDataStore);
 
+const searchPositionStore = useSearchPosition();
+const { searchModule } = storeToRefs(searchPositionStore);
+
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
 const tabs = {
@@ -173,9 +176,6 @@ const { data } = await useAsyncData("analysis", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
-
-const searchPositionStore = useSearchPosition();
-const { searchModule } = storeToRefs(searchPositionStore);
 
 const searchUrl = computed(() => {
   if (searchModule.value === "analyticalData")

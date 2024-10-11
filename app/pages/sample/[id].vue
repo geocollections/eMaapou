@@ -4,6 +4,9 @@ import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
 const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const samplesStore = useSamples();
+const { getQueryParams } = samplesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -309,10 +312,6 @@ const { data } = await useAsyncData("sample", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
-
-const samplesStore = useSamples();
-const { getQueryParams } = samplesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
 
 const {
   data: samplesRes,

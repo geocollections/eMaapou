@@ -6,6 +6,9 @@ const { $geoloogiaFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
+const preparationsStore = usePreparations();
+const { getQueryParams } = preparationsStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(preparationsStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -150,9 +153,6 @@ const { data } = await useAsyncData("preparation", async () => {
   }),
 });
 
-const preparationsStore = usePreparations();
-const { getQueryParams } = preparationsStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(preparationsStore);
 const {
   data: preparationsRes,
   page,

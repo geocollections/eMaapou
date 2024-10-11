@@ -6,6 +6,9 @@ const { $solrFetch, $apiFetch, $translate } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
+const areasStore = useAreas();
+const { getQueryParams } = areasStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(areasStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -201,9 +204,6 @@ const { data } = await useAsyncData("area", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
-const areasStore = useAreas();
-const { getQueryParams } = areasStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(areasStore);
 
 const {
   data: areasRes,

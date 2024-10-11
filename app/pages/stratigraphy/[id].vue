@@ -6,6 +6,10 @@ const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
 const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const stratigraphiesStore = useStratigraphies();
+const { getQueryParams } = stratigraphiesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(stratigraphiesStore);
+
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
 const tabs = {
@@ -232,10 +236,6 @@ const { data } = await useAsyncData("stratigraphy", async () => {
     tabs: [] as HydratedTab[],
   }),
 });
-
-const stratigraphiesStore = useStratigraphies();
-const { getQueryParams } = stratigraphiesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(stratigraphiesStore);
 
 const {
   data: stratigraphiesRes,

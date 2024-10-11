@@ -6,6 +6,9 @@ const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
 const { $geoloogiaFetch, $solrFetch, $translate, $apiFetch } = useNuxtApp();
+const specimensStore = useSpecimens();
+const { getQueryParams } = specimensStore;
+const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -249,10 +252,6 @@ const { data } = await useAsyncData("specimen", async () => {
     images: [],
   }),
 });
-
-const specimensStore = useSpecimens();
-const { getQueryParams } = specimensStore;
-const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
 
 const {
   data: specimensRes,
