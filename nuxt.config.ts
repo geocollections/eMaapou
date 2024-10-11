@@ -45,10 +45,10 @@ export default defineNuxtConfig({
   },
   vuetify: {
     moduleOptions: {
-      ssrClientHints: {
-        viewportSize: true,
-        reloadOnFirstRequest: true,
-      },
+      // ssrClientHints: {
+      // viewportSize: true,
+      // reloadOnFirstRequest: true,
+      // },
     },
     vuetifyOptions: {
       icons: {
