@@ -109,7 +109,7 @@ function handleOpen(value: { value: boolean }) {
       class="py-2 text-right"
       color="white"
     >
-      <VTextField
+      <input
         ref="input"
         v-model="internalValue"
         data-test="text-input"
@@ -119,7 +119,7 @@ function handleOpen(value: { value: boolean }) {
         density="compact"
         :placeholder="t('filters.filter')"
         @keydown.enter="handleAdd"
-      />
+      >
       <button
         class="mt-2"
         color="accent"

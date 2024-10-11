@@ -67,14 +67,14 @@ const filteredHeaders = computed(() => {
             {{ $t("table.tooltipShowActiveHeaders") }}
           </span>
           <span v-else>{{ $t("table.tooltipShowAllHeaders") }}</span>
-          <VTextField
+          <input
             v-model="filter"
             class="py-2"
             density="compact"
             variant="underlined"
             hide-details
             :label="$t('common.filter')"
-          />
+          >
         </div>
         <VVirtualScroll
           :items="filteredHeaders"

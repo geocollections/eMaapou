@@ -62,7 +62,7 @@ function handleSearch() {
                 </div>
                 {{ $t("common.backToLanding") }}
               </button>
-              <VForm class="d-flex text-right my-4" @submit.prevent="handleSearch">
+              <form class="d-flex text-right my-4" @submit.prevent="handleSearch">
                 <InputSearch
                   v-model="query"
                   :rounded="5"
@@ -80,7 +80,7 @@ function handleSearch() {
                 >
                   <div>{{ mdiMagnify }}</div>
                 </button>
-              </VForm>
+              </form>
             </div>
           </div>
         </div>

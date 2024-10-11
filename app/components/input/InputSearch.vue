@@ -39,7 +39,7 @@ const inputStyle = computed(() => ({
 
 <template>
   <div style="display: contents">
-    <VTextField
+    <input
       ref="searchInput"
       :model-value="modelValue"
       color="accent"
@@ -59,7 +59,7 @@ const inputStyle = computed(() => ({
       @keyup.enter="emit('enter', $event)"
       @focus="emit('focus', $event)"
       @blur="emit('blur', $event)"
-    />
+    >
   </div>
 </template>
 

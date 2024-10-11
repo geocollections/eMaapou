@@ -127,7 +127,7 @@ function handleOpen(value: { value: boolean }) {
     >
       <div no-gutters>
         <div cols="6" class="">
-          <VTextField
+          <input
             ref="input"
             :model-value="modelValue[0]"
             color="primary-darken-3"
@@ -142,10 +142,10 @@ function handleOpen(value: { value: boolean }) {
             @update:model-value="handleInput($event, true)"
             @keydown.enter.prevent.stop="handleEnter"
             @blur="handleEnter"
-          />
+          >
         </div>
         <div cols="6" class="pl-1">
-          <VTextField
+          <input
             :model-value="modelValue[1]"
             color="primary-darken-3"
             :label="fieldLabels.max"
@@ -159,7 +159,7 @@ function handleOpen(value: { value: boolean }) {
             @update:model-value="handleInput($event, false)"
             @keydown.enter.prevent.stop="handleEnter"
             @blur="handleEnter"
-          />
+          >
         </div>
       </div>
     </VExpansionPanelText>

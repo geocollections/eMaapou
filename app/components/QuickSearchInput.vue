@@ -21,7 +21,7 @@ function handleClick() {
 
 <template>
   <div class="d-flex w-100">
-    <VTextField
+    <input
       v-model="query"
       class="montserrat quick-search"
       single-line
@@ -34,7 +34,7 @@ function handleClick() {
       :autofocus="false"
       :placeholder="$t('common.search')"
       @keydown.enter="handleClick"
-    />
+    >
     <button
       height="40"
       elevation="0"

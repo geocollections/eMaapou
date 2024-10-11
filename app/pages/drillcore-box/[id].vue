@@ -269,7 +269,7 @@ function buildDepthString(depthStart: number, depthEnd: number) {
     <template #title>
       <HeaderDetail :title="pageTitle">
         <template #prepend>
-          <VChip
+          <div
             class="text-none"
             variant="tonal"
             color="accent"
@@ -279,7 +279,7 @@ function buildDepthString(depthStart: number, depthEnd: number) {
               {{ mdiArchive }}
             </div>
             {{ $t("common.drillcoreBox") }}
-          </VChip>
+          </div>
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

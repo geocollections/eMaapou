@@ -95,7 +95,7 @@ function handleSubmit() {
 </script>
 
 <template>
-  <VForm class="pb-10" @submit.prevent="handleSubmit">
+  <form class="pb-10" @submit.prevent="handleSubmit">
     <SearchFormInput v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <div id="divider" class="mx-2" />
@@ -163,5 +163,5 @@ function handleSubmit() {
       />
     </VExpansionPanels>
     <div id="divider" class="mx-2" />
-  </VForm>
+  </form>
 </template>

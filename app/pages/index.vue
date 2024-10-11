@@ -295,7 +295,7 @@ function handleSearch() {
               color="transparent"
             >
               <div class="px-0 pt-md-6">
-                <VForm
+                <form
                   class="d-flex text-right"
                   style="width: 100%"
                   @submit.prevent="handleSearch"
@@ -315,7 +315,7 @@ function handleSearch() {
                   >
                     <div :icon="mdiMagnify" size="large" />
                   </button>
-                </VForm>
+                </form>
               </div>
               <div
                 style="word-break: break-word"

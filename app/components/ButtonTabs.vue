@@ -13,11 +13,9 @@ const selectedIndex = computed(() => {
 </script>
 
 <template>
-  <VChipGroup
-    column
-  >
+  <div>
     <TransitionGroup name="flip-list">
-      <VChip
+      <div
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
         class="mx-1 mb-1 pl-1"
@@ -31,17 +29,17 @@ const selectedIndex = computed(() => {
           })
         "
       >
-        <VChip
+        <div
           size="small"
           :ripple="false"
           class="bg-accent-darken-2 font-weight-regular mr-1 ma-0"
         >
           {{ item.count }}
-        </VChip>
+        </div>
         {{ $t(item.title, { number: item.count }) }}
-      </VChip>
+      </div>
     </TransitionGroup>
-  </VChipGroup>
+  </div>
 </template>
 
 <style lang="scss" scoped>

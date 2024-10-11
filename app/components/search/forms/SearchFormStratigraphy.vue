@@ -77,7 +77,7 @@ function handleReset() {
 </script>
 
 <template>
-  <VForm @submit.prevent="handleSubmit">
+  <form @submit.prevent="handleSubmit">
     <SearchFormInput v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <div id="divider" class="mx-2" />
@@ -138,5 +138,5 @@ function handleReset() {
       />
     </VExpansionPanels>
     <div id="divider" class="mx-2" />
-  </VForm>
+  </form>
 </template>

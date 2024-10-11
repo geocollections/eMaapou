@@ -58,7 +58,7 @@ function handleExport() {
         variant="outlined"
         hide-details
       />
-      <VTextField
+      <input
         v-model="filename"
         class="py-2"
         density="compact"
@@ -66,7 +66,7 @@ function handleExport() {
         variant="outlined"
         :label="t('filename')"
         :suffix="`.${exportType}`"
-      />
+      >
       <div class="text-right">
         <button
           flat

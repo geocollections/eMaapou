@@ -227,7 +227,7 @@ onMounted(() => {
               align-self="center"
               class="pr-3 d-flex align-center"
             >
-              <VTextField
+              <input
                 v-if="showSearch"
                 v-model="search"
                 style="max-width: 400px"
@@ -241,7 +241,7 @@ onMounted(() => {
                 single-line
                 clearable
                 @update:model-value="handleSearch"
-              />
+              >
               <BaseDataTableExportMenu
                 v-if="exportFunc"
                 :table-element="tableElement"

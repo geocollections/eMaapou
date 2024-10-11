@@ -72,14 +72,14 @@ function isParameterSelected(parameter: any) {
         </div>
       </div>
       <div class="px-2">
-        <VTextField
+        <input
           v-model="search"
           :label="$t('common.filter')"
           class="py-2"
           density="compact"
           variant="outlined"
           hide-details
-        />
+        >
         <VVirtualScroll
           :items="filteredParameters"
           height="500px"
@@ -99,9 +99,9 @@ function isParameterSelected(parameter: any) {
                   ({{ $translate({ et: item.method, en: item.method }) }})
                 </span>
                 {{ $translate({ et: item.name, en: item.name_en ?? item.name }) }}
-                <VChip small>
+                <div small>
                   {{ item.count }}
-                </VChip>
+                </div>
               </div>
             </li>
           </template>

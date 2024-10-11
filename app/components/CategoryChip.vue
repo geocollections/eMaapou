@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <ClientOnly>
-    <VChip
+    <div
       class="text-none"
       variant="tonal"
       color="accent"
@@ -21,9 +21,9 @@ defineProps<{
         {{ icon }}
       </div>
       {{ title }}
-    </VChip>
+    </div>
     <template #fallback>
-      <VChip
+      <div
         class="text-none"
         variant="tonal"
         color="accent"
@@ -33,7 +33,7 @@ defineProps<{
           {{ icon }}
         </div>
         {{ title }}
-      </VChip>
+      </div>
     </template>
   </ClientOnly>
 </template>

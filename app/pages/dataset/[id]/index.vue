@@ -239,14 +239,14 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             :value="parameters"
           >
             <template #value>
-              <VChip
+              <div
                 v-for="(parameter, i) in parameters"
                 :key="i"
                 size="small"
                 class="mr-1 mb-1"
               >
                 {{ parameter.title }}
-              </VChip>
+              </div>
             </template>
           </TableRow>
         </BaseTable>

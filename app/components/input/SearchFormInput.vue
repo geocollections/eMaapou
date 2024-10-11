@@ -9,7 +9,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <VTextField
+  <input
     :model-value="modelValue"
     variant="outlined"
     bg-color="white"
@@ -21,5 +21,5 @@ const emit = defineEmits<{
     clearable
     :clear-icon="mdiClose"
     @update:model-value="emit('update:model-value', $event)"
-  />
+  >
 </template>

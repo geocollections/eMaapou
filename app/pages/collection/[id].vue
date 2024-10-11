@@ -136,14 +136,14 @@ useHead({
     <template #title>
       <HeaderDetail :title="title">
         <template #prepend>
-          <VChip
+          <div
             class="text-none"
             variant="tonal"
             color="accent"
             label
           >
             {{ $t("common.collection") }}
-          </VChip>
+          </div>
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />

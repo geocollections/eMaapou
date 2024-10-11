@@ -26,7 +26,7 @@ const { data: newsList } = await useNewApiFetch<any>("/web-news/", {
       />
     </div>
     <div>
-      <VSpacer />
+      <!-- <VSpacer /> -->
       <button
         nuxt
         color="accent"

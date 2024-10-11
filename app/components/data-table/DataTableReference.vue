@@ -36,7 +36,7 @@ function openPDF(link: string) {
       </BaseLinkExternal>
     </template>
     <template #item.pdf="{ item }">
-      <VChip
+      <div
         v-if="item.pdf"
         color="red "
         :ripple="false"
@@ -51,7 +51,7 @@ function openPDF(link: string) {
           {{ mdiFilePdfBox }}
         </div>
         <b>PDF</b>
-      </VChip>
+      </div>
     </template>
   </BaseDataTable>
 </template>

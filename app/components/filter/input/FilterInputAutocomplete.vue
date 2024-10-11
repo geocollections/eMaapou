@@ -197,7 +197,7 @@ async function handleOpen(value: { value: boolean }) {
       color="white"
     >
       <div class="my-2">
-        <VTextField
+        <input
           v-if="showFilter"
           ref="input"
           v-model="query"
@@ -207,7 +207,7 @@ async function handleOpen(value: { value: boolean }) {
           density="compact"
           class="mb-2"
           :placeholder="$t('filters.filter')"
-        />
+        >
         <div
           v-if="(suggestions?.length ?? 0) < 1"
           class="text-medium-emphasis text-body-2"

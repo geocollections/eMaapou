@@ -255,7 +255,7 @@ function valueString(value: ParameterValue["value"]) {
         </div>
         <div no-gutters>
           <div cols="6" class="pl-2 pr-1">
-            <VTextField
+            <input
               class="pt-4"
               hide-details
               type="number"
@@ -269,11 +269,11 @@ function valueString(value: ParameterValue["value"]) {
               @update:model-value="handleValue([parseInput($event), v.value[1]], i)"
               @keydown.enter="handleEnter"
               @update:focused="handleFocus"
-            />
+            >
           </div>
 
           <div cols="6" class="pl-1 pr-2">
-            <VTextField
+            <input
               class="pt-4"
               hide-details
               type="number"
@@ -287,7 +287,7 @@ function valueString(value: ParameterValue["value"]) {
               @update:model-value="handleValue([v.value[0], parseInput($event)], i)"
               @keydown.enter="handleEnter"
               @update:focused="handleFocus"
-            />
+            >
           </div>
         </div>
       </div>

@@ -175,9 +175,9 @@ useHead({
           class="montserrat text-capitalize"
         >
           {{ $t(`common.image`) }}
-          <VChip class="ml-2" size="small">
+          <div class="ml-2" size="small">
             {{ imageData?.response.numFound ?? 0 }}
-          </VChip>
+          </div>
         </VTab>
       </VTabs>
       <VWindow v-model="currentView" :touch="false">

@@ -956,49 +956,49 @@ state.option = createOption();
               @update="handleRenderSwitch"
             />
             <div id="divider" class="my-2" />
-            <VTextField
-              v-model="state.scale"
-              type="number"
-              :label="$t('flogChart.heightScale')"
-              prefix="1:"
-              variant="underlined"
-              hide-details
-              @change="handleScaleChange"
-            >
-              <template #append-inner>
-                <div @click="handleScaleReset">
-                  {{ icons.mdiRefresh }}
-                </div>
-              </template>
-              <template #append>
-                <ButtonToggle
-                  density="compact"
-                  color="accent"
-                  :model-value="ppi"
-                  @update:model-value="handlePpiChange"
-                >
-                  <button
-                    width="65"
-                    size="small"
-                    class="text-none montserrat"
-                    :variant="ppi !== 96 ? 'outlined' : undefined"
-                    :value="96"
-                  >
-                    96 PPI
-                  </button>
-                  <button
-                    width="65"
-                    size="small"
-                    class="text-none montserrat"
-                    :variant="ppi !== 72 ? 'outlined' : undefined"
-                    :value="72"
-                  >
-                    72 PPI
-                  </button>
-                </ButtonToggle>
-              </template>
-            </VTextField>
-            <VTextField
+            <!-- <VTextField -->
+            <!--   v-model="state.scale" -->
+            <!--   type="number" -->
+            <!--   :label="$t('flogChart.heightScale')" -->
+            <!--   prefix="1:" -->
+            <!--   variant="underlined" -->
+            <!--   hide-details -->
+            <!--   @change="handleScaleChange" -->
+            <!-- > -->
+            <!--   <template #append-inner> -->
+            <!--     <div @click="handleScaleReset"> -->
+            <!--       {{ icons.mdiRefresh }} -->
+            <!--     </div> -->
+            <!--   </template> -->
+            <!--   <template #append> -->
+            <!--     <ButtonToggle -->
+            <!--       density="compact" -->
+            <!--       color="accent" -->
+            <!--       :model-value="ppi" -->
+            <!--       @update:model-value="handlePpiChange" -->
+            <!--     > -->
+            <!--       <button -->
+            <!--         width="65" -->
+            <!--         size="small" -->
+            <!--         class="text-none montserrat" -->
+            <!--         :variant="ppi !== 96 ? 'outlined' : undefined" -->
+            <!--         :value="96" -->
+            <!--       > -->
+            <!--         96 PPI -->
+            <!--       </button> -->
+            <!--       <button -->
+            <!--         width="65" -->
+            <!--         size="small" -->
+            <!--         class="text-none montserrat" -->
+            <!--         :variant="ppi !== 72 ? 'outlined' : undefined" -->
+            <!--         :value="72" -->
+            <!--       > -->
+            <!--         72 PPI -->
+            <!--       </button> -->
+            <!--     </ButtonToggle> -->
+            <!--   </template> -->
+            <!-- </VTextField> -->
+            <input
               :model-value="state.parameterChartWidth"
               type="number"
               class="d-inline-flex"
@@ -1007,7 +1007,7 @@ state.option = createOption();
               suffix="px"
               :label="$t('flogChart.parameterChartWidth')"
               @change="handleParameterChartWidthChange"
-            />
+            >
           </div>
         </div>
       </div>

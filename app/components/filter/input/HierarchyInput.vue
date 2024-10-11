@@ -40,7 +40,7 @@ function handleEnd(isIntersecting: boolean) {
 
 <template>
   <div>
-    <VTextField
+    <input
       ref="input"
       :model-value="search"
       variant="outlined"
@@ -51,26 +51,25 @@ function handleEnd(isIntersecting: boolean) {
       :append-inner-icon="mdiMenuDown"
       @update:model-value="emit('update:search', $event)"
     >
-      <div
-        ref="menuRef"
-        v-model="menuOpen"
-        activator="parent"
-        location="bottom"
-        max-height="400px"
-        :close-on-content-click="false"
-      >
-        <ul elevation="0" class="border">
-          <li
-            v-for="(item, index) in items"
-            :key="index"
-            @click="emit('select', item)"
-          >
-            <div>{{ $translate(item.name) }}</div>
-          </li>
-          <div v-intersect="handleEnd" />
-        </ul>
-      </div>
-    </VTextField>
+    <div
+      ref="menuRef"
+      v-model="menuOpen"
+      activator="parent"
+      location="bottom"
+      max-height="400px"
+      :close-on-content-click="false"
+    >
+      <ul elevation="0" class="border">
+        <li
+          v-for="(item, index) in items"
+          :key="index"
+          @click="emit('select', item)"
+        >
+          <div>{{ $translate(item.name) }}</div>
+        </li>
+        <div v-intersect="handleEnd" />
+      </ul>
+    </div>
   </div>
 </template>
 

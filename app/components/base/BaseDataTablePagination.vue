@@ -137,7 +137,7 @@ function pageLimitRule(value: number) {
           <div class="mr-2 text-no-wrap text-caption">
             {{ goToText }}
           </div>
-          <VTextField
+          <input
             ref="goToField"
             v-model.number="goToValue"
             class="mt-0 text-caption"
@@ -148,7 +148,7 @@ function pageLimitRule(value: number) {
             type="number"
             :rules="[pageLimitRule]"
             @keyup.enter="selectPage"
-          />
+          >
           <button
             :disabled="!pageLimitRule(goToValue)"
             class="px-2 ml-2"

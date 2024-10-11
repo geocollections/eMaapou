@@ -286,7 +286,7 @@ useSeoMeta({
         :title="pageTitle"
       >
         <template #prepend>
-          <VChip
+          <div
             class="text-none"
             variant="tonal"
             color="accent"
@@ -296,7 +296,7 @@ useSeoMeta({
               {{ mdiFile }}
             </div>
             {{ $t("common.file") }}
-          </VChip>
+          </div>
         </template>
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
