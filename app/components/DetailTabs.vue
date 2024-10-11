@@ -29,7 +29,6 @@ function translateTitle(tab: HydratedTab) {
 
 <template>
   <VTabs
-    v-if="$vuetify.display.smAndUp"
     ref="tabsEl"
     class="tabs mt-1"
     height="32"
@@ -52,36 +51,36 @@ function translateTitle(tab: HydratedTab) {
       {{ translateTitle(item) }}
     </VTab>
   </VTabs>
-  <VMenu v-else>
-    <template #activator="{ props: menuProps, isActive }">
-      <VBtn
-        class="text-capitalize mb-1 ml-auto"
-        variant="outlined"
-        height="32"
-        color="accent"
-        style="background-color: #fafafa"
-        dark
-        v-bind="menuProps"
-        :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
-      >
-        {{ translateTitle(currentTab) }}
-      </VBtn>
-    </template>
-    <VList>
-      <VListItem
-        v-for="(item, index) in tabs"
-        :key="index"
-        :to="
-          localePath({
-            name: item.routeName,
-            params: route.params,
-          })
-        "
-      >
-        <VListItemTitle>{{ translateTitle(item) }}</VListItemTitle>
-      </VListItem>
-    </VList>
-  </VMenu>
+  <!-- <VMenu v-else> -->
+  <!--   <template #activator="{ props: menuProps, isActive }"> -->
+  <!--     <VBtn -->
+  <!--       class="text-capitalize mb-1 ml-auto" -->
+  <!--       variant="outlined" -->
+  <!--       height="32" -->
+  <!--       color="accent" -->
+  <!--       style="background-color: #fafafa" -->
+  <!--       dark -->
+  <!--       v-bind="menuProps" -->
+  <!--       :append-icon="isActive ? mdiChevronUp : mdiChevronDown" -->
+  <!--     > -->
+  <!--       {{ translateTitle(currentTab) }} -->
+  <!--     </VBtn> -->
+  <!--   </template> -->
+  <!--   <VList> -->
+  <!--     <VListItem -->
+  <!--       v-for="(item, index) in tabs" -->
+  <!--       :key="index" -->
+  <!--       :to=" -->
+  <!--         localePath({ -->
+  <!--           name: item.routeName, -->
+  <!--           params: route.params, -->
+  <!--         }) -->
+  <!--       " -->
+  <!--     > -->
+  <!--       <VListItemTitle>{{ translateTitle(item) }}</VListItemTitle> -->
+  <!--     </VListItem> -->
+  <!--   </VList> -->
+  <!-- </VMenu> -->
 </template>
 
 <style lang="scss" scoped>
