@@ -51,14 +51,12 @@ watch(() => display.smAndDown.value, (value) => {
           :title="t('closeSidebar')"
           @click="railDrawer = !railDrawer"
         >
-          <template #prepend>
-            <div v-if="railDrawer">
-              {{ mdiChevronDoubleRight }}
-            </div>
-            <div v-else>
-              {{ mdiChevronDoubleLeft }}
-            </div>
-          </template>
+          <div v-if="railDrawer">
+            {{ mdiChevronDoubleRight }}
+          </div>
+          <div v-else>
+            {{ mdiChevronDoubleLeft }}
+          </div>
         </li>
         <div id="divider" class="mb-1" />
         <li
@@ -68,9 +66,7 @@ watch(() => display.smAndDown.value, (value) => {
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
         <div id="divider" class="mb-1" />
@@ -81,9 +77,7 @@ watch(() => display.smAndDown.value, (value) => {
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
         <div id="divider" class="mb-1" />
@@ -94,9 +88,7 @@ watch(() => display.smAndDown.value, (value) => {
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
       </ul>

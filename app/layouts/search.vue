@@ -52,14 +52,12 @@ function closeMobileSearch() {
           :title="t('closeSidebar')"
           @click="railDrawer = !railDrawer"
         >
-          <template #prepend>
-            <div v-if="railDrawer">
-              {{ mdiChevronDoubleRight }}
-            </div>
-            <div v-else>
-              {{ mdiChevronDoubleLeft }}
-            </div>
-          </template>
+          <div v-if="railDrawer">
+            {{ mdiChevronDoubleRight }}
+          </div>
+          <div v-else>
+            {{ mdiChevronDoubleLeft }}
+          </div>
         </li>
         <div id="divider" class="mb-1" />
         <li
@@ -69,9 +67,7 @@ function closeMobileSearch() {
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
         <div id="divider" class="mb-1" />
@@ -82,9 +78,7 @@ function closeMobileSearch() {
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
         <div id="divider" class="mb-1" />
@@ -95,9 +89,7 @@ function closeMobileSearch() {
           color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
-          <template #prepend>
-            <div>{{ item.icon }}</div>
-          </template>
+          <div>{{ item.icon }}</div>
           <div>{{ $t(item.label) }}</div>
         </li>
       </ul>
@@ -126,17 +118,13 @@ function closeMobileSearch() {
             slim
             @click="mini = !mini"
           >
-            <template #prepend>
-              <div
-                :icon="mdiChevronDoubleLeft"
-                :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
-              />
-            </template>
-            <template #title>
-              <div class="montserrat font-weight-medium ">
-                {{ $t("common.hideFilters") }}
-              </div>
-            </template>
+            <div
+              :icon="mdiChevronDoubleLeft"
+              :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
+            />
+            <div class="montserrat font-weight-medium ">
+              {{ $t("common.hideFilters") }}
+            </div>
           </li>
         </ul>
         <div v-else class="text-h6 py-2 pl-2">
