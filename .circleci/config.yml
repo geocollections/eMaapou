@@ -95,6 +95,19 @@ workflows:
       - run-stage:
           requires:
             - publish-image
+  build_deploy_no_vuetify:
+    when:
+      equal: [remove-vuetify, << pipeline.git.branch >>]
+    jobs:
+      - build-image:
+          tags: -t $IMAGE_NAME:no-vuetify
+      - publish-image:
+          requires:
+            - build-image
+          tag: $IMAGE_NAME:no-vuetify
+      - run-stage:
+          requires:
+            - publish-image
   build_deploy_prod:
     when:
       equal: [main, << pipeline.git.branch >>]
