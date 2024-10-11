@@ -31,28 +31,24 @@ function handleClick() {
       flat
       bg-color="grey-darken-1"
       variant="solo"
-      :style="{ maxWidth: $vuetify.display.mdAndUp ? '450px' : 'inherit' }"
       :autofocus="false"
       :placeholder="$t('common.search')"
       @keydown.enter="handleClick"
     />
-    <VHover v-slot="{ isHovering, props: hoverProps }">
-      <VBtn
-        v-bind="hoverProps"
-        height="40"
-        elevation="0"
-        class="rounded-0 rounded-e"
-        variant="flat"
-        :color="isHovering ? 'blue-darken-1' : 'grey'"
-        :width="$vuetify.display.xs ? 32 : 48"
-        :aria-label="$t('common.search')"
-        @click="handleClick"
-      >
-        <VIcon>
-          {{ mdiMagnify }}
-        </VIcon>
-      </VBtn>
-    </VHover>
+    <VBtn
+      height="40"
+      elevation="0"
+      class="
+      rounded-0
+      rounded-e"
+      variant="flat"
+
+      :aria-label="$t('common.search')"
+    >
+      <VIcon>
+        {{ mdiMagnify }}
+      </VIcon>
+    </VBtn>
   </div>
 </template>
 

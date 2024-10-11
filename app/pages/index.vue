@@ -8,7 +8,7 @@ import {
   mdiMapMarker,
   mdiScrewMachineFlatTop,
 } from "@mdi/js";
-import { useDisplay } from "vuetify";
+// import { useDisplay } from "vuetify";
 
 const img = useImage();
 
@@ -267,7 +267,6 @@ function handleSearch() {
       }"
     >
       <VContainer
-        :fluid="$vuetify.display.smAndDown"
         style="max-width: 1185px !important"
       >
         <VRow class="mb-lg-5">
@@ -319,10 +318,8 @@ function handleSearch() {
                 </VForm>
               </VCardActions>
               <VCardText
-                v-show="$vuetify.display.mdAndUp"
                 style="word-break: break-word"
                 :class="{
-                  'font-small montserrat': $vuetify.display.smAndDown,
                 }"
                 class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
               >
@@ -357,7 +354,6 @@ function handleSearch() {
       </VContainer>
     </div>
     <VContainer
-      :fluid="$vuetify.display.smAndDown"
       style="max-width: 1185px !important"
     >
       <VRow justify="center" class="mt-4">

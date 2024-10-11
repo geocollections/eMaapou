@@ -12,31 +12,27 @@ defineProps<{ route: RouteExternalService }>();
 
 <template>
   <div>
-    <VHover v-slot="{ isHovering, props: hoverProps }">
-      <VCard
-        v-bind="hoverProps"
-        :href="route.href"
-        class="d-flex py-2 border"
-        :elevation="0"
-        :color="isHovering ? 'grey-lighten-2' : 'grey-lighten-3'"
-      >
-        <div>
-          <VCardTitle
-            style="width: 100%"
-            class="text-h6 py-0"
-          >
-            {{ $t(route.title) }}
-          </VCardTitle>
-          <VCardText class="py-0  text-grey">
-            {{ $t(route.description) }}
-          </VCardText>
+    <div
+      :href="route.href"
+      class="d-flex py-2 border"
+      :elevation="0"
+    >
+      <div>
+        <div
+          style="width: 100%"
+          class="text-h6 py-0"
+        >
+          {{ $t(route.title) }}
         </div>
-        <VIcon
-          :icon="mdiOpenInNew"
-          size="x-small"
-          class="ml-auto mr-2 align-self-baseline"
-        />
-      </VCard>
-    </VHover>
+        <div class="py-0  text-grey">
+          {{ $t(route.description) }}
+        </div>
+      </div>
+      <div
+        :icon="mdiOpenInNew"
+        size="x-small"
+        class="ml-auto mr-2 align-self-baseline"
+      />
+    </div>
   </div>
 </template>

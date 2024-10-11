@@ -169,7 +169,7 @@ const routes = [
 
 <template>
   <div class="bg-grey-lighten-5 border-t">
-    <VContainer :fluid="$vuetify.display.lgAndDown">
+    <VContainer>
       <VRow no-gutters>
         <VCol cols="12" lg="auto">
           <div class="d-md-flex justify-center">
@@ -295,66 +295,64 @@ const routes = [
       </VRow>
     </VContainer>
     <VContainer fluid class="border-t">
-      <VContainer :fluid="$vuetify.display.lgAndDown">
-        <VRow class="pb-2">
-          <VCol class="text-body-2 text-center">
-            <div class="text-center d-flex justify-center align-center">
-              <div style="max-width: 700px">
-                <I18nT
-                  class="text-body-2 "
-                  keypath="privacyNotice"
-                  scope="global"
-                  tag="div"
-                >
-                  <a
-                    href="https://matomo.org"
-                    class="font-weight-bold text-blue-darken-3 text-decoration-none"
-                  >Matomo</a>
-                </I18nT>
-              </div>
+      <VRow class="pb-2">
+        <VCol class="text-body-2 text-center">
+          <div class="text-center d-flex justify-center align-center">
+            <div style="max-width: 700px">
+              <I18nT
+                class="text-body-2 "
+                keypath="privacyNotice"
+                scope="global"
+                tag="div"
+              >
+                <a
+                  href="https://matomo.org"
+                  class="font-weight-bold text-blue-darken-3 text-decoration-none"
+                >Matomo</a>
+              </I18nT>
             </div>
-          </VCol>
-        </VRow>
-        <VRow no-gutters>
-          <VCol cols="12" align-self="center">
-            <div class="text-center d-flex justify-center align-center">
-              <div style="max-width: 700px">
-                <I18nT
-                  class="text-body-2 "
-                  keypath="footer"
-                  scope="global"
-                  tag="div"
+          </div>
+        </VCol>
+      </VRow>
+      <VRow no-gutters>
+        <VCol cols="12" align-self="center">
+          <div class="text-center d-flex justify-center align-center">
+            <div style="max-width: 700px">
+              <I18nT
+                class="text-body-2 "
+                keypath="footer"
+                scope="global"
+                tag="div"
+              >
+                <a
+                  v-for="(item, index) in textLinks"
+                  :key="index"
+                  :href="item.href"
+                  class="font-weight-bold text-blue-darken-3 text-decoration-none"
                 >
-                  <a
-                    v-for="(item, index) in textLinks"
-                    :key="index"
-                    :href="item.href"
-                    class="font-weight-bold text-blue-darken-3 text-decoration-none"
-                  >
-                    {{ item.text }}
-                  </a>
-                </I18nT>
-              </div>
+                  {{ item.text }}
+                </a>
+              </I18nT>
             </div>
-          </VCol>
-          <VCol
-            cols="12"
-            align-self="center"
-            class="text-center mt-3"
-          >
-            <a href="https://github.com/geocollections/eMaapou">
-              <NuxtImg
-                src="/logos/github-mark.png"
-                alt="GitHub"
-                format="webp"
-                class="github-logo py-1 py-sm-0 px-3"
-                width="32"
-                height="32"
-              />
-            </a>
-          </VCol>
-        </VRow>
-      </VContainer>
+          </div>
+        </VCol>
+        <VCol
+          cols="12"
+          align-self="center"
+          class="text-center mt-3"
+        >
+          <a href="https://github.com/geocollections/eMaapou">
+            <NuxtImg
+              src="/logos/github-mark.png"
+              alt="GitHub"
+              format="webp"
+              class="github-logo py-1 py-sm-0 px-3"
+              width="32"
+              height="32"
+            />
+          </a>
+        </VCol>
+      </VRow>
     </VContainer>
   </div>
 </template>

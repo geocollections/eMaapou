@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiChevronDown, mdiMenu } from "@mdi/js";
-import { useDisplay } from "vuetify";
+// import { useDisplay } from "vuetify";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,

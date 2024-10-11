@@ -29,7 +29,6 @@ function translateTitle(tab: HydratedTab) {
 
 <template>
   <VTabs
-    v-if="$vuetify.display.smAndUp"
     ref="tabsEl"
     class="tabs mt-1"
     height="32"

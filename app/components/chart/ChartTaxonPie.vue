@@ -10,7 +10,7 @@ import {
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import VChart from "vue-echarts";
-import { useDisplay } from "vuetify";
+// import { useDisplay } from "vuetify";
 import {
   LEGEND_TOP,
   TITLE_FONT_SIZE,

@@ -5,7 +5,7 @@ const drawer = ref(false);
 <template>
   <VApp dark>
     <AppDrawer
-      v-if="!$vuetify.display.mdAndUp"
+      v-if="true"
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />

@@ -25,7 +25,6 @@
   <!--       <div -->
   <!--         class="align-self-center pr-3" -->
   <!--         :class="{ -->
-  <!--           'text-sm': $vuetify.display.xs, -->
   <!--         }" -->
   <!--       > -->
   <!--         {{ $t("cookiePolicy.introduction") }} -->

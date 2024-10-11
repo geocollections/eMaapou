@@ -74,15 +74,15 @@ function getPosition(index: number, page: number, perPage: number) {
 
 <template>
   <div>
-    <VRow class="py-2" no-gutters>
-      <VCol
+    <div class="py-2" no-gutters>
+      <div
         v-if="showSearch"
         align-self="center"
         cols="12"
         sm="4"
         class="px-3"
       >
-        <VTextField
+        <input
           v-model="search"
           class="pt-0 mt-0"
           color="primary-darken-2"
@@ -93,9 +93,9 @@ function getPosition(index: number, page: number, perPage: number) {
           single-line
           hide-details
           clearable
-        />
-      </VCol>
-      <VCol class="d-flex justify-end" align-self="center">
+        >
+      </div>
+      <div class="d-flex justify-end" align-self="center">
         <BaseDataTablePagination
           :options="options"
           :page-count="pagination.pageCount"
@@ -112,147 +112,141 @@ function getPosition(index: number, page: number, perPage: number) {
           select-page-id="header-select-btn"
           @update:options="handleChange"
         />
-      </VCol>
-    </VRow>
-    <VRow no-gutters>
-      <VCol
+      </div>
+    </div>
+    <div no-gutters>
+      <div
         v-for="(box, index) in items"
         :key="box.id"
         cols="12"
         class="pa-0 drillcore-box"
       >
-        <VDivider />
-        <VHover v-slot="{ isHovering, props: hoverProps }">
-          <VCard
-            v-bind="hoverProps"
-            flat
-            :ripple="false"
-            :to="
-              localeRoute({
-                name: 'drillcore-box-id',
-                params: { id: box.id },
-              })
-            "
-            @click="emit('click', box, getPosition(index, options.page, options.itemsPerPage))"
-          >
-            <VCardText class="drillcore-box__card">
-              <VRow align="start">
-                <VCol
-                  cols="12"
-                  sm="8"
-                  align-self="center"
+        <div id="divider" />
+        <div
+          flat
+          :ripple="false"
+          :to="
+            localeRoute({
+              name: 'drillcore-box-id',
+              params: { id: box.id },
+            })
+          "
+          @click="emit('click', box, getPosition(index, options.page, options.itemsPerPage))"
+        >
+          <div class="drillcore-box__card">
+            <div align="start">
+              <div
+                cols="12"
+                sm="8"
+                align-self="center"
+              >
+                <div
+                  v-if="box.image"
+                  class="d-flex justify-center"
                 >
-                  <div
-                    v-if="box.image"
-                    class="d-flex justify-center"
-                  >
-                    <NuxtImg
-                      :src="box.image"
-                      provider="geocollections"
-                      :modifiers="{ size: 'medium' }"
-                      class="rounded"
-                      style="width: 100%; max-width: 1000px; max-height: 800px"
-                    />
+                  <NuxtImg
+                    :src="box.image"
+                    provider="geocollections"
+                    :modifiers="{ size: 'medium' }"
+                    class="rounded"
+                    style="width: 100%; max-width: 1000px; max-height: 800px"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="d-flex align-center justify-center bg-grey-lighten-2 rounded mx-auto"
+                  style="height: 300px; max-width: 1000px;"
+                >
+                  <div class="text-h5 text-medium-emphasis">
+                    {{ $t('drillcoreBox.noImage') }}
                   </div>
-                  <div
-                    v-else
-                    class="d-flex align-center justify-center bg-grey-lighten-2 rounded mx-auto"
-                    style="height: 300px; max-width: 1000px;"
+                </div>
+              </div>
+              <div cols="12" sm="4">
+                <DivTitle class="px-0 pt-0 montserrat">
+                  {{
+                    $t("drillcoreBox.nr", {
+                      number: box.number,
+                    })
+                  }}
+                </DivTitle>
+                <BaseTable
+                  v-if="boxHasInfo(box)"
+                  class="transition-swing"
+                  :class="{
+                  }"
+                  :style="{
+                  }"
+                >
+                  <TableRow
+                    :title="$t('drillcoreBox.depthStart')"
+                    :value="box.depth_start"
+                  />
+                  <TableRow
+                    :title="$t('drillcoreBox.depthEnd')"
+                    :value="box.depth_end"
+                  />
+                  <TableRow
+                    v-if="box.stratigraphy_top"
+                    :title="$t('drillcoreBox.stratigraphyTop')"
+                    :value="box.stratigraphy_top"
                   >
-                    <div class="text-h5 text-medium-emphasis">
-                      {{ $t('drillcoreBox.noImage') }}
-                    </div>
-                  </div>
-                </VCol>
-                <VCol cols="12" sm="4">
-                  <VCardTitle class="px-0 pt-0 montserrat">
-                    {{
-                      $t("drillcoreBox.nr", {
-                        number: box.number,
-                      })
-                    }}
-                  </VCardTitle>
-                  <BaseTable
-                    v-if="boxHasInfo(box)"
-                    class="transition-swing"
-                    :class="{
-                      'elevation-2': isHovering,
-                      'elevation-0': !isHovering,
-                    }"
-                    :style="{
-                      'background-color': isHovering ? 'white' : 'transparent',
-                    }"
+                    <template #value="{ value }">
+                      <BaseLink
+                        :to="
+                          localePath({
+                            name: 'stratigraphy-id',
+                            params: { id: value.id },
+                          })
+                        "
+                      >
+                        {{
+                          $translate({
+                            et: value.name,
+                            en: value.name_en,
+                          })
+                        }}
+                      </BaseLink>
+                    </template>
+                  </TableRow>
+                  <TableRow
+                    v-if="box.stratigraphy_base"
+                    :title="$t('drillcoreBox.stratigraphyBase')"
+                    :value="box.stratigraphy_base"
                   >
-                    <TableRow
-                      :title="$t('drillcoreBox.depthStart')"
-                      :value="box.depth_start"
-                    />
-                    <TableRow
-                      :title="$t('drillcoreBox.depthEnd')"
-                      :value="box.depth_end"
-                    />
-                    <TableRow
-                      v-if="box.stratigraphy_top"
-                      :title="$t('drillcoreBox.stratigraphyTop')"
-                      :value="box.stratigraphy_top"
-                    >
-                      <template #value="{ value }">
-                        <BaseLink
-                          :to="
-                            localePath({
-                              name: 'stratigraphy-id',
-                              params: { id: value.id },
-                            })
-                          "
-                        >
-                          {{
-                            $translate({
-                              et: value.name,
-                              en: value.name_en,
-                            })
-                          }}
-                        </BaseLink>
-                      </template>
-                    </TableRow>
-                    <TableRow
-                      v-if="box.stratigraphy_base"
-                      :title="$t('drillcoreBox.stratigraphyBase')"
-                      :value="box.stratigraphy_base"
-                    >
-                      <template #value="{ value }">
-                        <BaseLink
-                          :to="
-                            localePath({
-                              name: 'stratigraphy-id',
-                              params: { id: value.id },
-                            })
-                          "
-                        >
-                          {{
-                            $translate({
-                              et: value.name,
-                              en: value.name_en,
-                            })
-                          }}
-                        </BaseLink>
-                      </template>
-                    </TableRow>
-                    <TableRow
-                      :title="$t('drillcoreBox.depthOther')"
-                      :value="box.depth_other"
-                    />
-                    <TableRow
-                      :title="$t('drillcoreBox.remarks')"
-                      :value="box.remarks"
-                    />
-                  </BaseTable>
-                </VCol>
-              </VRow>
-            </VCardText>
-          </VCard>
-        </VHover>
-      </VCol>
-    </VRow>
+                    <template #value="{ value }">
+                      <BaseLink
+                        :to="
+                          localePath({
+                            name: 'stratigraphy-id',
+                            params: { id: value.id },
+                          })
+                        "
+                      >
+                        {{
+                          $translate({
+                            et: value.name,
+                            en: value.name_en,
+                          })
+                        }}
+                      </BaseLink>
+                    </template>
+                  </TableRow>
+                  <TableRow
+                    :title="$t('drillcoreBox.depthOther')"
+                    :value="box.depth_other"
+                  />
+                  <TableRow
+                    :title="$t('drillcoreBox.remarks')"
+                    :value="box.remarks"
+                  />
+                </BaseTable>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

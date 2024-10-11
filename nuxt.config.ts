@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
     "@nuxtjs/seo",
-    "vuetify-nuxt-module",
+    // "vuetify-nuxt-module",
     "@nuxt/test-utils/module",
     "@nuxt/eslint",
   ],
@@ -43,58 +43,58 @@ export default defineNuxtConfig({
       },
     },
   },
-  vuetify: {
-    moduleOptions: {
-      // ssrClientHints: {
-      // viewportSize: true,
-      // reloadOnFirstRequest: true,
-      // },
-    },
-    vuetifyOptions: {
-      icons: {
-        defaultSet: "mdi-svg",
-      },
-      theme: {
-
-        defaultTheme: "light",
-        variations: {
-          colors: ["primary", "secondary", "accent"],
-          lighten: 5,
-          darken: 5,
-        },
-        themes: {
-          dark: {
-            dark: true,
-            colors: {
-              primary: "#7c8996",
-              secondary: "#cfd6dc",
-              tertiary: "#333333",
-              quaternary: "#fff",
-              quinary: "#fcf2df",
-              anchor: "#5a5957",
-              header: "#3091b5",
-              accent: "#577daf",
-            },
-          },
-          light: {
-            dark: false,
-            colors: {
-              background: "#ffffff",
-              primary: "#7c8996",
-              secondary: "#cfd6dc",
-              tertiary: "#333333",
-              quaternary: "#fff",
-              quinary: "#fcf2df",
-              anchor: "#5a5957",
-              header: "#3091b5",
-              // accent: "#577daf",
-              accent: "#ec643b",
-            },
-          },
-        },
-      },
-    },
-  },
+  // vuetify: {
+  //   moduleOptions: {
+  // ssrClientHints: {
+  // viewportSize: true,
+  // reloadOnFirstRequest: true,
+  // },
+  //   },
+  //   vuetifyOptions: {
+  //     icons: {
+  //       defaultSet: "mdi-svg",
+  //     },
+  //     theme: {
+  //
+  //       defaultTheme: "light",
+  //       variations: {
+  //         colors: ["primary", "secondary", "accent"],
+  //         lighten: 5,
+  //         darken: 5,
+  //       },
+  //       themes: {
+  //         dark: {
+  //           dark: true,
+  //           colors: {
+  //             primary: "#7c8996",
+  //             secondary: "#cfd6dc",
+  //             tertiary: "#333333",
+  //             quaternary: "#fff",
+  //             quinary: "#fcf2df",
+  //             anchor: "#5a5957",
+  //             header: "#3091b5",
+  //             accent: "#577daf",
+  //           },
+  //         },
+  //         light: {
+  //           dark: false,
+  //           colors: {
+  //             background: "#ffffff",
+  //             primary: "#7c8996",
+  //             secondary: "#cfd6dc",
+  //             tertiary: "#333333",
+  //             quaternary: "#fff",
+  //             quinary: "#fcf2df",
+  //             anchor: "#5a5957",
+  //             header: "#3091b5",
+  //             // accent: "#577daf",
+  //             accent: "#ec643b",
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
   i18n: {
     locales: [
       {

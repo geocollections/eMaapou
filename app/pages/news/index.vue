@@ -49,7 +49,6 @@ useHead({
     <VContainer
       class="pt-1 pb-10 mx-auto"
       style="min-height: 100vh; max-width: 800px;"
-      :fluid="$vuetify.display.lgAndDown"
     >
       <div>
         <BaseHeader class="py-4" :title="$t('common.news')" />

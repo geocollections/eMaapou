@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiFileDownloadOutline } from "@mdi/js";
-import { useDisplay } from "vuetify";
+// import { useDisplay } from "vuetify";
 
 const props = defineProps<{
   items: any[];
@@ -108,48 +108,25 @@ function updateOptions(event: DataTableOptions) {
               :key="index"
               class="my-2 mx-2"
             >
-              <VHover v-slot="{ isHovering, props: hoverProps }">
-                <VImg
-                  v-bind="hoverProps"
-                  :src="
-                    img(
-                      `${item.uuid_filename}`,
-                      { size: 'small' },
-                      { provider: 'geocollections' },
-                    )
-                  "
-                  :lazy-src="
-                    img(
-                      `${item.uuid_filename}`,
-                      { size: 'small' },
-                      { provider: 'geocollections' },
-                    )
-                  "
-                  width="100"
-                  cover
-                  aspect-ratio="1"
-                  :class="{
-                    'elevation-4': isHovering,
-                    'elevation-2': !isHovering,
-                    'active-thumbnail': activeIndex === index,
-                  }"
-                  class="rounded transition-swing cursor-pointer"
-                  @click="handleThumbnailClick(index)"
-                >
-                  <template #placeholder>
-                    <VRow
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <VProgressCircular
-                        indeterminate
-                        color="grey-lighten-5"
-                      />
-                    </VRow>
-                  </template>
-                </VImg>
-              </VHover>
+              <VImg
+                :src="
+                  img(
+                    `${item.uuid_filename}`,
+                    { size: 'small' },
+                    { provider: 'geocollections' },
+                  )
+                "
+                :lazy-src="
+                  img(
+                    `${item.uuid_filename}`,
+                    { size: 'small' },
+                    { provider: 'geocollections' },
+                  )
+                "
+                width="100"
+                cover
+                aspect-ratio="1"
+              />
             </div>
           </div>
           <VCarousel

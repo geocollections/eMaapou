@@ -36,12 +36,9 @@ function extractContent(html: string) {
 </script>
 
 <template>
-  <VHover v-slot="{ isHovering, props: hoverProps }">
     <VCard
-      v-bind="{ ...$attrs, ...hoverProps }"
       class="py-2"
       flat
-      :color="isHovering ? 'grey-lighten-4' : 'transparent'"
       :to="to"
     >
       <div
@@ -66,6 +63,5 @@ function extractContent(html: string) {
       >
         {{ truncatedText }}
       </VCardText>
-    </VCard>
-  </VHover>
+  </VCard>
 </template>

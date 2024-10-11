@@ -38,16 +38,13 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         v-if="drawerActive"
         :model-value="showDrawer"
         :style="{ cursor: mini ? 'pointer' : 'auto', maxHeight: display.smAndDown.value ? '70%' : 'none' }"
-        :permanent="!$vuetify.display.smAndDown"
         mobile-breakpoint="md"
         color="grey-lighten-4"
         :rail="mini"
-        :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
         @update:model-value="showDrawer = $event"
       >
         <div style="height: 100%" tile>
           <VList
-            v-if="!$vuetify.display.smAndDown"
             density="compact"
             class="pb-1"
             nav

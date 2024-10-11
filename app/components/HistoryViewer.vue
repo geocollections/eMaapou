@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiArrowLeft } from "@mdi/js";
-import { useDisplay } from "vuetify";
+// import { useDisplay } from "vuetify";
 
 const display = useDisplay();
 const localePath = useLocalePath();

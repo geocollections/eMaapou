@@ -32,8 +32,6 @@ const cssProps = computed(() => {
     flat
     absolute
     :class="{
-      'app-bar-full': $vuetify.display.mdAndUp,
-      'app-bar-mobile': !$vuetify.display.mdAndUp,
     }"
     color="transparent"
     :style="cssProps"
@@ -46,7 +44,6 @@ const cssProps = computed(() => {
     <AppBarLogo />
     <VToolbarItems class="w-100 mr-md-2">
       <VBtn
-        v-if="$vuetify.display.mdAndUp"
         id="browse_menu_btn"
         aria-label="browse"
         variant="text"
@@ -60,7 +57,6 @@ const cssProps = computed(() => {
         </VIcon>
       </VBtn>
       <VMenu
-        v-if="$vuetify.display.mdAndUp"
         activator="#browse_menu_btn"
         content-class="mt-1"
         transition="slide-y-transition"
@@ -118,7 +114,6 @@ const cssProps = computed(() => {
       class="ml-auto"
     >
       <VBtn
-        v-if="$vuetify.display.mdAndUp"
         aria-label="about page"
         variant="text"
         class="montserrat font-weight-medium"
@@ -130,7 +125,6 @@ const cssProps = computed(() => {
       </VBtn>
 
       <VBtn
-        v-if="$vuetify.display.mdAndUp"
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
@@ -146,7 +140,6 @@ const cssProps = computed(() => {
         />
       </VBtn>
       <VMenu
-        v-if="$vuetify.display.mdAndUp"
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
@@ -174,12 +167,10 @@ const cssProps = computed(() => {
         </VCard>
       </VMenu>
       <LanguageSwitcher
-        v-if="$vuetify.display.mdAndUp"
         color="white"
         class="ml-auto"
       />
       <VBtn
-        v-if="!$vuetify.display.mdAndUp"
         variant="text"
         class="montserrat ml-auto"
         aria-label="Open navigation drawer"

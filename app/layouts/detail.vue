@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiViewList } from "@mdi/js";
-import { useDisplay } from "vuetify";
+// import { useDisplay } from "vuetify";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -119,16 +119,14 @@ const { mdAndUp } = useDisplay();
         v-if="drawerActive"
         :model-value="showDrawer"
         :style="{ cursor: mini ? 'pointer' : 'auto' }"
-        :permanent="!$vuetify.display.smAndDown"
+        :permanent="true"
         mobile-breakpoint="md"
         color="grey-lighten-4"
         :rail="mini"
-        :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
         @update:model-value="showDrawer = $event"
       >
         <div style="height: 100%" tile>
           <VList
-            v-if="!$vuetify.display.smAndDown"
             density="compact"
             class="pb-1"
             nav

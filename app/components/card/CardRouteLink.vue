@@ -15,17 +15,13 @@ const localePath = useLocalePath();
 
 <template>
   <div>
-    <VHover v-slot="{ isHovering, props: hoverProps }">
       <VCard
-        v-bind="hoverProps"
         :to="localePath(route.routeName)"
         class="mx-sm-1 mb-1 mb-sm-2 d-flex border"
         :elevation="0"
-        :color="isHovering ? 'accent-lighten-1' : 'accent'"
       >
         <div class="py-2 d-flex d-sm-block align-center">
           <VIcon
-            v-if="$vuetify.display.smAndUp"
             :icon="route.icon"
             color="accent-lighten-3"
             end
@@ -45,7 +41,6 @@ const localePath = useLocalePath();
           <div
             class="font-weight-regular text-h6 pl-3 pt-0 text-white"
             :class="{
-              'text-body-1': $vuetify.display.smAndDown,
             }"
           >
             <div class="montserrat">
@@ -59,7 +54,6 @@ const localePath = useLocalePath();
           class="ml-auto my-auto"
           start
         />
-      </VCard>
-    </VHover>
+    </VCard>
   </div>
 </template>

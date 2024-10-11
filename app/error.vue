@@ -25,7 +25,7 @@ function handleSearch() {
 <template>
   <NuxtLayout>
     <VMain>
-      <VContainer :fluid="$vuetify.display.lgAndDown">
+      <VContainer :fluid="true">
         <VRow justify="center">
           <VCol
             sm="8"
