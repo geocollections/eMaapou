@@ -943,7 +943,7 @@ state.option = createOption();
             size="small"
             v-bind="menu"
           >
-            <VIcon> {{ icons.mdiCog }} </VIcon>
+            <div> {{ icons.mdiCog }} </div>
           </button>
         </template>
         <div>
@@ -955,7 +955,7 @@ state.option = createOption();
               :renderer="renderer"
               @update="handleRenderSwitch"
             />
-            <VDivider class="my-2" />
+            <div id="divider" class="my-2" />
             <VTextField
               v-model="state.scale"
               type="number"
@@ -966,9 +966,9 @@ state.option = createOption();
               @change="handleScaleChange"
             >
               <template #append-inner>
-                <VIcon @click="handleScaleReset">
+                <div @click="handleScaleReset">
                   {{ icons.mdiRefresh }}
-                </VIcon>
+                </div>
               </template>
               <template #append>
                 <ButtonToggle
@@ -1012,7 +1012,7 @@ state.option = createOption();
         </div>
       </VMenu>
     </VToolbar>
-    <VDivider />
+    <div id="divider" />
     <div ref="containerFlogChart" class="overflow-x-auto">
       <ClientOnly>
         <VChart

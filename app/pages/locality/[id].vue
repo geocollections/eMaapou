@@ -472,9 +472,9 @@ useSeoMeta({
               )
             "
           >
-            <VIcon start>
+            <div start>
               {{ mdiScrewMachineFlatTop }}
-            </VIcon>
+            </div>
             {{
               $translate({
                 et: data?.drillcore.name,
@@ -496,9 +496,9 @@ useSeoMeta({
               })
             "
           >
-            <VIcon start>
+            <div start>
               {{ mdiChartScatterPlot }}
-            </VIcon>
+            </div>
             {{ $t("locality.linkToAnalyticalData") }}
           </button>
           <button
@@ -510,13 +510,13 @@ useSeoMeta({
             class="mt-2 montserrat text-none"
             :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
           >
-            <VIcon start>
+            <div start>
               {{ mdiBookOpenPageVariantOutline }}
-            </VIcon>
+            </div>
             {{ $t("locality.linkGeoscienceLiterature") }}
-            <VIcon end>
+            <div end>
               {{ mdiOpenInNew }}
-            </VIcon>
+            </div>
           </button>
         </template>
         <template #tabs>
@@ -551,9 +551,9 @@ useSeoMeta({
         </template>
         <template #itemSubtitle="{ item: locality }">
           <div v-if="locality.country_id" class="d-flex align-center">
-            <VIcon start size="small">
+            <div start size="small">
               {{ mdiEarth }}
-            </VIcon>
+            </div>
             <span class="text--secondary">
               {{
                 $translate({

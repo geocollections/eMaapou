@@ -28,29 +28,29 @@ const isVideo = computed(() => props.type?.startsWith("video"));
       :preview-src="previewSrc"
       @click="emit('click:image')"
     />
-    <VIcon
+    <div
       v-else-if="isImage"
       color="primary-darken-2"
       size="large"
       @click="emit('click')"
     >
       {{ mdiFileImageOutline }}
-    </VIcon>
-    <VIcon
+    </div>
+    <div
       v-else-if="isVideo"
       color="primary-darken-2"
       size="large"
       @click="emit('click')"
     >
       {{ mdiFileVideoOutline }}
-    </VIcon>
-    <VIcon
+    </div>
+    <div
       v-else
       color="primary-darken-2"
       size="large"
       @click="emit('click')"
     >
       {{ mdiFileOutline }}
-    </VIcon>
+    </div>
   </div>
 </template>

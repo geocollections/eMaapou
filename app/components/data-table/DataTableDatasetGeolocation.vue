@@ -30,20 +30,20 @@ const localePath = useLocalePath();
       </span>
     </template>
     <template #item.is_polygon="{ item }">
-      <VIcon
+      <div
         v-if="item.polygon"
         color="green"
         size="small"
       >
         {{ mdiCheckBold }}
-      </VIcon>
-      <VIcon
+      </div>
+      <div
         v-else
         color="red"
         size="small"
       >
         {{ mdiCloseThick }}
-      </VIcon>
+      </div>
     </template>
   </BaseDataTable>
 </template>

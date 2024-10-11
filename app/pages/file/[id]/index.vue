@@ -189,7 +189,7 @@ const mapOverlays = computed(() => {
             :src="`https://files.geocollections.info/${file.filename}`"
           >
           Your browser does not support the audio element.
-          <VIcon>{{ mdiFileMusicOutline }}</VIcon>
+          <div>{{ mdiFileMusicOutline }}</div>
         </audio>
 
         <!-- Video -->
@@ -198,7 +198,7 @@ const mapOverlays = computed(() => {
             :src="`https://files.geocollections.info/${file.filename}`"
           >
           Your browser does not support the video element.
-          <VIcon>{{ mdiFileVideoOutline }}</VIcon>
+          <div>{{ mdiFileVideoOutline }}</div>
         </video>
 
         <!-- File -->
@@ -214,13 +214,13 @@ const mapOverlays = computed(() => {
               )
             "
           >
-            <VIcon
+            <div
               start
               size="large"
               color="primary-darken-2"
             >
               {{ mdiFileDownloadOutline }}
-            </VIcon>
+            </div>
             {{ $t("file.download") }}
           </button>
         </div>
@@ -250,13 +250,13 @@ const mapOverlays = computed(() => {
                 @click="$openImage(file.filename, size)"
               >
                 {{ $t(`common.${size}`) }}
-                <VIcon
+                <div
                   v-if="size === 'original'"
                   size="small"
                   color="primary-darken-2"
                 >
                   {{ mdiFileDownloadOutline }}
-                </VIcon>
+                </div>
               </a>
               <span v-if="index < imageSizes.length - 1">| </span>
             </span>

@@ -47,9 +47,9 @@ function openPDF(link: string) {
         class="d-print-none ml-1 my-1 link"
         @click.stop="openPDF(item.pdf)"
       >
-        <VIcon class="pr-1">
+        <div class="pr-1">
           {{ mdiFilePdfBox }}
-        </VIcon>
+        </div>
         <b>PDF</b>
       </VChip>
     </template>

@@ -69,7 +69,7 @@ function scrollToCurrent() {
         </span>
       </template>
       <template #prepend>
-        <VIcon :icon="mdiArrowLeft" />
+        <div :icon="mdiArrowLeft" />
       </template>
     </VListItem>
   </VList>
@@ -116,12 +116,16 @@ function scrollToCurrent() {
           />
         </template>
         <template v-if="showCheck" #append="{ isActive }">
-          <VIcon v-if="isActive" color="accent">
+          <div v-if="isActive" color="accent">
             {{ mdiCheck }}
-          </VIcon>
+          </div>
         </template>
       </VListItem>
-      <VDivider v-if="index !== perPage - 1" class="mx-2" />
+      <div
+        v-if="index !== perPage - 1"
+        id="divider"
+        class="mx-2"
+      />
     </template>
   </VList>
   <div class="d-flex align-center justify-space-around pt-1 pb-10">

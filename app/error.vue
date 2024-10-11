@@ -44,9 +44,9 @@ function handleSearch() {
                 class="text-capitalize montserrat"
                 @click="router.go(0)"
               >
-                <VIcon start>
+                <div start>
                   {{ mdiRefresh }}
-                </VIcon>
+                </div>
                 Refresh
               </button>
               <button
@@ -57,9 +57,9 @@ function handleSearch() {
                 to="/"
                 class="montserrat text-capitalize"
               >
-                <VIcon start>
+                <div start>
                   {{ mdiHome }}
-                </VIcon>
+                </div>
                 {{ $t("common.backToLanding") }}
               </button>
               <VForm class="d-flex text-right my-4" @submit.prevent="handleSearch">
@@ -78,7 +78,7 @@ function handleSearch() {
                   color="warning"
                   dark
                 >
-                  <VIcon>{{ mdiMagnify }}</VIcon>
+                  <div>{{ mdiMagnify }}</div>
                 </button>
               </VForm>
             </div>

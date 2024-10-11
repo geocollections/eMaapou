@@ -361,9 +361,9 @@ useSeoMeta({
         </div>
         <template #sub>
           <div v-if="data.specimen?.fossil?.id === 9">
-            <VIcon color="warning-lighten-2" right>
+            <div color="warning-lighten-2" right>
               {{ mdiContentCopy }}
-            </VIcon>
+            </div>
             {{
               $translate({
                 et: data.specimen?.fossil.value,

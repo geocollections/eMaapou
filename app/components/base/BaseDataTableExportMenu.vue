@@ -81,9 +81,9 @@ function handleExport() {
           class="text-none"
           @click="handleExport"
         >
-          <VIcon start>
+          <div start>
             {{ mdiFileExportOutline }}
-          </VIcon>
+          </div>
           {{ t("export") }}
         </button>
       </div>

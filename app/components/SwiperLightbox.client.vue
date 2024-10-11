@@ -145,7 +145,7 @@ function reset() {
             style="position: absolute; bottom: 0; background-color: rgba(0, 0, 0, 0.65);"
             class="w-100"
           >
-            <VDivider class="mb-2 text-white" />
+            <div id="divider" class="mb-2 text-white" />
             <div class="mx-4 mb-4">
               <div class="text-white my-2">
                 <slot name="info" :item="image" />
@@ -164,19 +164,19 @@ function reset() {
                     size="small"
                     color="info"
                   >
-                    <VIcon start>
+                    <div start>
                       {{ mdiInformationOutline }}
-                    </VIcon>
+                    </div>
                     {{ $t("photo.viewDetail") }}
                   </button>
                 </div>
                 <div class="rounded d-inline-block px-1">
-                  <VIcon
+                  <div
                     start
                     color="white"
                   >
                     {{ mdiFileDownloadOutline }}
-                  </VIcon>
+                  </div>
                   <button
                     variant="text"
                     size="small"

@@ -52,15 +52,15 @@ watch(() => display.smAndDown.value, (value) => {
           @click="railDrawer = !railDrawer"
         >
           <template #prepend>
-            <VIcon v-if="railDrawer">
+            <div v-if="railDrawer">
               {{ mdiChevronDoubleRight }}
-            </VIcon>
-            <VIcon v-else>
+            </div>
+            <div v-else>
               {{ mdiChevronDoubleLeft }}
-            </VIcon>
+            </div>
           </template>
         </VListItem>
-        <VDivider class="mb-1" />
+        <div id="divider" class="mb-1" />
         <VListItem
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="index"
@@ -69,11 +69,11 @@ watch(() => display.smAndDown.value, (value) => {
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
-            <VIcon>{{ item.icon }}</VIcon>
+            <div>{{ item.icon }}</div>
           </template>
           <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
         </VListItem>
-        <VDivider class="mb-1" />
+        <div id="divider" class="mb-1" />
         <VListItem
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="index"
@@ -82,11 +82,11 @@ watch(() => display.smAndDown.value, (value) => {
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
-            <VIcon>{{ item.icon }}</VIcon>
+            <div>{{ item.icon }}</div>
           </template>
           <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
         </VListItem>
-        <VDivider class="mb-1" />
+        <div id="divider" class="mb-1" />
         <VListItem
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="index"
@@ -95,7 +95,7 @@ watch(() => display.smAndDown.value, (value) => {
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
-            <VIcon>{{ item.icon }}</VIcon>
+            <div>{{ item.icon }}</div>
           </template>
           <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
         </VListItem>

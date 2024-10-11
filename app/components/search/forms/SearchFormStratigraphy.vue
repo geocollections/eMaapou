@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits<{
   update: [];
@@ -80,7 +80,7 @@ function handleReset() {
   <VForm @submit.prevent="handleSubmit">
     <SearchFormInput v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
-    <VDivider class="mx-2" />
+    <div id="divider" class="mx-2" />
     <VExpansionPanels
       variant="accordion"
       class="px-2"
@@ -137,6 +137,6 @@ function handleReset() {
         @update:model-value="handleUpdate('scope')"
       />
     </VExpansionPanels>
-    <VDivider class="mx-2" />
+    <div id="divider" class="mx-2" />
   </VForm>
 </template>

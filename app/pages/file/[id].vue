@@ -292,9 +292,9 @@ useSeoMeta({
             color="accent"
             label
           >
-            <VIcon start>
+            <div start>
               {{ mdiFile }}
-            </VIcon>
+            </div>
             {{ $t("common.file") }}
           </VChip>
         </template>

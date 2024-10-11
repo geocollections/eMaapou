@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiArrowTopRight } from "@mdi/js";
 import type { RouteLocationRaw } from "vue-router";
+import { mdiArrowTopRight } from "@mdi/js";
 
 defineProps<{
   href?: RouteLocationRaw;
@@ -17,7 +17,7 @@ defineProps<{
     <slot />
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
-        <VIcon class="open-new-icon" size="x-small">{{ mdiArrowTopRight }}</VIcon>
+        <div class="open-new-icon" size="x-small">{{ mdiArrowTopRight }}</div>
       </slot>
     </span>
   </NuxtLink>

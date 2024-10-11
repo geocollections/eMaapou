@@ -65,15 +65,15 @@ const { mdAndUp } = useDisplay();
           @click="railDrawer = !railDrawer"
         >
           <template #prepend>
-            <VIcon v-if="railDrawer">
+            <div v-if="railDrawer">
               {{ mdiChevronDoubleRight }}
-            </VIcon>
-            <VIcon v-else>
+            </div>
+            <div v-else>
               {{ mdiChevronDoubleLeft }}
-            </VIcon>
+            </div>
           </template>
         </VListItem>
-        <VDivider class="mb-1" />
+        <div id="divider" class="mb-1" />
         <VListItem
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="index"
@@ -82,11 +82,11 @@ const { mdAndUp } = useDisplay();
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
-            <VIcon>{{ item.icon }}</VIcon>
+            <div>{{ item.icon }}</div>
           </template>
           <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
         </VListItem>
-        <VDivider class="mb-1" />
+        <div id="divider" class="mb-1" />
         <VListItem
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="index"
@@ -95,11 +95,11 @@ const { mdAndUp } = useDisplay();
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
-            <VIcon>{{ item.icon }}</VIcon>
+            <div>{{ item.icon }}</div>
           </template>
           <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
         </VListItem>
-        <VDivider class="mb-1" />
+        <div id="divider" class="mb-1" />
         <VListItem
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="index"
@@ -108,7 +108,7 @@ const { mdAndUp } = useDisplay();
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
-            <VIcon>{{ item.icon }}</VIcon>
+            <div>{{ item.icon }}</div>
           </template>
           <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
         </VListItem>
@@ -137,7 +137,7 @@ const { mdAndUp } = useDisplay();
               @click="mini = !mini"
             >
               <template #prepend>
-                <VIcon
+                <div
                   :icon="mdiChevronDoubleLeft"
                   :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
                 />
@@ -164,7 +164,7 @@ const { mdAndUp } = useDisplay();
               {{ $t("common.showSimilar") }}
             </div>
           </div>
-          <VDivider v-show="!mini" class="mx-2" />
+          <div id="divider" v-show="!mini" class="mx-2" />
           <div v-show="!mini">
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>
@@ -186,7 +186,7 @@ const { mdAndUp } = useDisplay();
               color="warning"
               @click="showDrawer = !showDrawer"
             >
-              <VIcon :icon="mdiViewList" start />
+              <div :icon="mdiViewList" start />
               {{ $t("common.similar") }}
             </button>
           </VFabTransition>

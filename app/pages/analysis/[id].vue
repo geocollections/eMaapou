@@ -294,9 +294,9 @@ const searchRoute = computed(() => {
         </template>
         <template #itemSubtitle="{ item: analysis }">
           <div v-if="analysis.sample_name" class="d-flex align-center">
-            <VIcon start size="small">
+            <div start size="small">
               {{ mdiImageFilterHdr }}
-            </VIcon>
+            </div>
             <span class="text--secondary">
               {{ analysis.sample_name }}
             </span>

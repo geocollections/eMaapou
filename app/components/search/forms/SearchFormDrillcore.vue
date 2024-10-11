@@ -69,7 +69,7 @@ function handleSubmit() {
     <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
-      <VDivider class="mx-2" />
+      <div id="divider" class="mx-2" />
       <VExpansionPanels
         class="px-2"
         variant="accordion"
@@ -126,7 +126,7 @@ function handleSubmit() {
           @update:model-value="handleUpdate('institution')"
         />
       </VExpansionPanels>
-      <VDivider class="mx-2" />
+      <div id="divider" class="mx-2" />
     </VForm>
   </div>
 </template>

@@ -309,9 +309,9 @@ useSeoMeta({
         </template>
         <template #itemSubtitle="{ item: site }">
           <div v-if="site.area_id" class="d-flex align-center">
-            <VIcon start size="small">
+            <div start size="small">
               {{ mdiTextureBox }}
-            </VIcon>
+            </div>
             <span class="text--secondary">
               {{
                 $translate({

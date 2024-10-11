@@ -55,7 +55,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               @click="mini = !mini"
             >
               <template #prepend>
-                <VIcon
+                <div
                   :icon="mdiChevronDoubleLeft"
                   :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
                 />
@@ -79,7 +79,11 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               {{ $t("common.showSimilar") }}
             </div>
           </div>
-          <VDivider v-show="!mini && !display.smAndDown.value" class="mx-2" />
+          <div
+            v-show="!mini && !display.smAndDown.value"
+            id="divider"
+            class="mx-2"
+          />
           <div v-show="!mini">
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>
@@ -101,7 +105,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               color="warning"
               @click="showDrawer = !showDrawer"
             >
-              <VIcon :icon="mdiViewList" start />
+              <div :icon="mdiViewList" start />
               <slot name="mobileDrawerFabContent">
                 {{ $t("common.similar") }}
               </slot>

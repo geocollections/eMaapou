@@ -13,7 +13,7 @@ const emit = defineEmits<{
     class="reset-search mr-2 montserrat rounded text-capitalize"
     @click="emit('click')"
   >
-    <VIcon
+    <div
       :icon="mdiEraser"
       start
     />

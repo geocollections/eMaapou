@@ -187,7 +187,7 @@ const routes = [
                 :key="link.routeName"
                 class="d-flex mb-2"
               >
-                <VIcon
+                <div
                   class="align-self-center"
                   :icon="mdiChevronRight"
                   size="x-small"
@@ -214,7 +214,7 @@ const routes = [
                   :key="link.routeName"
                   class="d-flex mb-2"
                 >
-                  <VIcon
+                  <div
                     class="align-self-center"
                     :icon="mdiChevronRight"
                     size="x-small"
@@ -242,7 +242,7 @@ const routes = [
                   :key="link.name"
                   class="d-flex mb-2"
                 >
-                  <VIcon
+                  <div
                     class="align-self-center"
                     :icon="mdiChevronRight"
                     size="x-small"

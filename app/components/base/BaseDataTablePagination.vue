@@ -157,9 +157,9 @@ function pageLimitRule(value: number) {
             @click="selectPage"
           >
             {{ goToButtonText }}
-            <VIcon size="small">
+            <div size="small">
               {{ mdiChevronRight }}
-            </VIcon>
+            </div>
           </button>
         </div>
       </VMenu>
@@ -175,7 +175,7 @@ function pageLimitRule(value: number) {
         :icon="mdiPageLast"
         @click="last"
       >
-        <VIcon>{{ mdiPageLast }}</VIcon>
+        <div>{{ mdiPageLast }}</div>
       </button>
     </div>
   </div>

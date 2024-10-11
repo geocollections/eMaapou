@@ -179,9 +179,9 @@ const mapOverlays = computed(() => {
                   :download="item.trim()"
                 >
                   {{ item }}
-                  <VIcon size="small" color="primary-darken-2">
+                  <div size="small" color="primary-darken-2">
                     {{ mdiFileDownloadOutline }}
-                  </VIcon>
+                  </div>
                 </a>
                 <span v-if="index !== planArray.length - 1" class="mr-1">|</span>
               </span>

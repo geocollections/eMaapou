@@ -21,12 +21,12 @@ import { mdiMinus, mdiPlus } from "@mdi/js";
     </template>
 
     <template #item.extra="{ item }">
-      <VIcon v-if="item.extra">
+      <div v-if="item.extra">
         {{ mdiPlus }}
-      </VIcon>
-      <VIcon v-else>
+      </div>
+      <div v-else>
         {{ mdiMinus }}
-      </VIcon>
+      </div>
     </template>
   </BaseDataTable>
 </template>

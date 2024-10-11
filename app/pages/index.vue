@@ -313,7 +313,7 @@ function handleSearch() {
                     variant="flat"
                     color="blue"
                   >
-                    <VIcon :icon="mdiMagnify" size="large" />
+                    <div :icon="mdiMagnify" size="large" />
                   </button>
                 </VForm>
               </div>

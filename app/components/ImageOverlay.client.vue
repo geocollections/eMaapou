@@ -51,7 +51,7 @@ defineExpose({
       icon
       @click="emit('update:model-value', !modelValue)"
     >
-      <VIcon>{{ mdiClose }}</VIcon>
+      <div>{{ mdiClose }}</div>
     </button>
     <SwiperLightbox
       ref="swiper"

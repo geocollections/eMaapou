@@ -19,9 +19,9 @@
   <!-- > -->
   <!--   <div class="cookie-policy-card py-3 px-3" elevation="2"> -->
   <!--     <div class="d-flex justify-center mb-2"> -->
-  <!--       <VIcon start color="accent"> -->
+  <!--       <div start color="accent"> -->
   <!--         {{ icons.mdiCookie }} -->
-  <!--       </VIcon> -->
+  <!--       </div> -->
   <!--       <div -->
   <!--         class="align-self-center pr-3" -->
   <!--         :class="{ -->

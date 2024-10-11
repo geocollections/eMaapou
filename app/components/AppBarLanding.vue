@@ -52,9 +52,9 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
-        <VIcon color="accent" end>
+        <div color="accent" end>
           {{ mdiChevronDown }}
-        </VIcon>
+        </div>
       </button>
       <VMenu
         activator="#browse_menu_btn"
@@ -75,7 +75,8 @@ const cssProps = computed(() => {
                 :to="localePath({ name: item.routeName })"
               />
             </VList>
-            <VDivider
+            <div
+              id="divider"
               class="mx-3 my-2"
               vertical
               style="height: inherit"
@@ -91,7 +92,8 @@ const cssProps = computed(() => {
               />
             </VList>
 
-            <VDivider
+            <div
+              id="divider"
               class="mx-3 my-2"
               vertical
               style="height: inherit"
@@ -133,7 +135,7 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
       >
         {{ $t("common.services") }}
-        <VIcon
+        <div
           :icon="mdiChevronDown"
           color="accent"
           end
@@ -177,9 +179,9 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
         @click.stop="emit('toggle:navigationDrawer')"
       >
-        <VIcon color="accent" size="font-size: 24px">
+        <div color="accent" size="font-size: 24px">
           {{ mdiMenu }}
-        </VIcon>
+        </div>
       </button>
     </VToolbarItems>
   </div>

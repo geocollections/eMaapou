@@ -275,9 +275,9 @@ function buildDepthString(depthStart: number, depthEnd: number) {
             color="accent"
             label
           >
-            <VIcon start>
+            <div start>
               {{ mdiArchive }}
-            </VIcon>
+            </div>
             {{ $t("common.drillcoreBox") }}
           </VChip>
         </template>

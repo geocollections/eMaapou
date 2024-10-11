@@ -12,13 +12,13 @@ withDefaults(defineProps<{ color: string }>(), { color: "white" });
     class="montserrat text-capitalize"
     :color="color"
   >
-    <VIcon
+    <div
       :icon="mdiWeb"
       start
       color="accent"
     />
     {{ $i18n.localeProperties.name }}
-    <VIcon
+    <div
       :icon="mdiChevronDown"
       end
       color="accent"

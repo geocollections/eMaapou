@@ -29,7 +29,7 @@ function toTop() {
       color="accent"
       @click="toTop"
     >
-      <VIcon>{{ mdiChevronUp }}</VIcon>
+      <div>{{ mdiChevronUp }}</div>
     </button>
   </VFabTransition>
 </template>

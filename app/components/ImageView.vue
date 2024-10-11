@@ -139,9 +139,9 @@ function updateOptions(event: DataTableOptions) {
                 <div v-else align="center">
                   <div class="text-center">
                     <div class="py-3">
-                      <VIcon style="font-size: 6rem" class="text-grey">
+                      <div style="font-size: 6rem" class="text-grey">
                         {{ mdiFileImageOutline }}
-                      </VIcon>
+                      </div>
                     </div>
                   </div>
                 </div>

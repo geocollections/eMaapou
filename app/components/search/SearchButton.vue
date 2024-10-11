@@ -9,9 +9,9 @@ import { mdiMagnify } from "@mdi/js";
     variant="flat"
     class="px-3 text-capitalize"
   >
-    <VIcon start>
+    <div start>
       {{ mdiMagnify }}
-    </VIcon>
+    </div>
     <div class="montserrat">
       {{ $t('common.searchCommand') }}
     </div>

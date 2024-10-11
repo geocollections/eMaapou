@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiCheck } from "@mdi/js";
 import type { LocaleObject } from "@nuxtjs/i18n";
+import { mdiCheck } from "@mdi/js";
 
 const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
 
@@ -18,7 +18,7 @@ const switchLocalePath = useSwitchLocalePath();
       :to="switchLocalePath(locale.code)"
     >
       <VListItemTitle class="d-flex py-1">
-        <VIcon
+        <div
           v-show="$i18n.locale === locale.code"
           :icon="mdiCheck"
           start

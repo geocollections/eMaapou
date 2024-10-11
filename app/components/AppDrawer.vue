@@ -60,9 +60,9 @@ const routes = [
           :to="localePath({ name: route.routeName })"
         >
           <VListItemTitle class="d-flex py-1">
-            <VIcon class="mr-1">
+            <div class="mr-1">
               {{ route.icon }}
-            </VIcon>
+            </div>
             <span class="align-self-center montserrat">{{
               $t(route.text)
             }}</span>
@@ -73,7 +73,7 @@ const routes = [
         {{ $t("landing.searchRoutes") }}
       </div>
 
-      <VDivider class="bg-primary" />
+      <div id="divider" class="bg-primary" />
 
       <VList class="py-1" :aria-label="$t('landing.searchRoutes')">
         <BaseMenuListItem
@@ -86,7 +86,7 @@ const routes = [
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-        <VDivider class="my-1" aria-hidden="true" />
+        <div id="divider" class="my-1" aria-hidden="true" />
         <BaseMenuListItem
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="`browse-geography-item-${index}`"
@@ -98,7 +98,7 @@ const routes = [
           :to="localePath({ name: item.routeName })"
         />
 
-        <VDivider class="my-1" aria-hidden="true" />
+        <div id="divider" class="my-1" aria-hidden="true" />
         <BaseMenuListItem
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="`browse-geography-item-${index}`"
@@ -115,7 +115,7 @@ const routes = [
         {{ $t("landing.otherServices") }}
       </div>
 
-      <VDivider class="bg-primary" />
+      <div id="divider" class="bg-primary" />
 
       <VList class="py-1" :aria-label="$t('landing.otherServices')">
         <VListItem
@@ -140,7 +140,7 @@ const routes = [
         {{ $t("common.lang") }}
       </div>
 
-      <VDivider class="bg-primary" />
+      <div id="divider" class="bg-primary" />
 
       <LanguageList class="py-0" />
     </div>

@@ -147,13 +147,13 @@ const localePath = useLocalePath();
         size="small"
         @click="toggleExpand(internalItem)"
       >
-        <VIcon>
+        <div>
           {{
             isExpanded(internalItem)
               ? mdiChevronUp
               : mdiChevronDown
           }}
-        </VIcon>
+        </div>
       </button>
     </template>
   </BaseDataTable>

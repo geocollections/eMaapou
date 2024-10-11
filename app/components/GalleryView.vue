@@ -187,13 +187,13 @@ function updateOptions(event: DataTableOptions) {
                   @click="$openImage(items[activeIndex].uuid_filename, size)"
                 >
                   {{ $t(`common.${size}`) }}
-                  <VIcon
+                  <div
                     v-if="size === 'original'"
                     size="small"
                     color="primary-darken-2"
                   >
                     {{ mdiFileDownloadOutline }}
-                  </VIcon>
+                  </div>
                 </a>
                 <span v-if="index < imageSizes.length - 1">| </span>
               </span>

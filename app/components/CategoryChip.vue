@@ -17,9 +17,9 @@ defineProps<{
       label
       :to="to"
     >
-      <VIcon start>
+      <div start>
         {{ icon }}
-      </VIcon>
+      </div>
       {{ title }}
     </VChip>
     <template #fallback>
@@ -29,9 +29,9 @@ defineProps<{
         color="accent"
         label
       >
-        <VIcon start>
+        <div start>
           {{ icon }}
-        </VIcon>
+        </div>
         {{ title }}
       </VChip>
     </template>

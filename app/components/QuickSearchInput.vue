@@ -45,9 +45,9 @@ function handleClick() {
 
       :aria-label="$t('common.search')"
     >
-      <VIcon>
+      <div>
         {{ mdiMagnify }}
-      </VIcon>
+      </div>
     </button>
   </div>
 </template>

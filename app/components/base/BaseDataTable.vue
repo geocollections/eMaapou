@@ -197,9 +197,9 @@ onMounted(() => {
           :href="itemTo(item)"
           @click="emit('click:row', { index, id: item.id })"
         >
-          <VIcon size="x-large">
+          <div size="x-large">
             {{ mdiEyeArrowRight }}
-          </VIcon>
+          </div>
         </button>
         <button
           v-else
@@ -210,9 +210,9 @@ onMounted(() => {
           :to="itemTo(item)"
           @click="emit('click:row', { index, id: item.id })"
         >
-          <VIcon size="x-large">
+          <div size="x-large">
             {{ mdiEye }}
-          </VIcon>
+          </div>
         </button>
       </template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -275,10 +275,10 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <VDivider />
+        <div id="divider" />
       </template>
       <template v-if="!onlyTable" #bottom="{ pageCount }">
-        <VDivider />
+        <div id="divider" />
         <div no-gutters>
           <div class="d-flex justify-end" align-self="center">
             <BaseDataTablePagination

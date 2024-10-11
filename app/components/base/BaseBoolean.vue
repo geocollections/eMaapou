@@ -5,7 +5,7 @@ defineProps<{ modelValue: boolean }>();
 </script>
 
 <template>
-  <VIcon :color="modelValue ? 'green' : 'red'" size="small">
+  <div :color="modelValue ? 'green' : 'red'" size="small">
     {{ modelValue ? mdiCheckBold : mdiCloseThick }}
-  </VIcon>
+  </div>
 </template>

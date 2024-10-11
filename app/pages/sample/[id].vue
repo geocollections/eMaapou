@@ -404,9 +404,9 @@ useHead({
         </template>
         <template #itemSubtitle="{ item: sample }">
           <div v-if="sample.depth" class="d-flex align-center">
-            <VIcon start size="small">
+            <div start size="small">
               {{ mdiRuler }}
-            </VIcon>
+            </div>
             <span class="text--secondary">
               {{ getDepthRange(sample) }}
             </span>

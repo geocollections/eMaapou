@@ -43,9 +43,9 @@ const display = useDisplay();
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
-        <VIcon color="accent" end>
+        <div color="accent" end>
           {{ mdiChevronDown }}
-        </VIcon>
+        </div>
       </button>
       <VMenu
         v-if="display.mdAndUp.value"
@@ -67,7 +67,8 @@ const display = useDisplay();
                 :to="localePath({ name: item.routeName })"
               />
             </VList>
-            <VDivider
+            <div
+              id="divider"
               class="mx-3 my-2"
               vertical
               style="height: inherit"
@@ -83,7 +84,8 @@ const display = useDisplay();
               />
             </VList>
 
-            <VDivider
+            <div
+              id="divider"
               class="mx-3 my-2"
               vertical
               style="height: inherit"
@@ -134,7 +136,7 @@ const display = useDisplay();
         style="text-transform: capitalize"
       >
         {{ $t("common.services") }}
-        <VIcon
+        <div
           :icon="mdiChevronDown"
           color="accent"
           end
@@ -181,9 +183,9 @@ const display = useDisplay();
         style="text-transform: capitalize"
         @click.stop="emit('toggle:navigationDrawer')"
       >
-        <VIcon color="accent">
+        <div color="accent">
           {{ mdiMenu }}
-        </VIcon>
+        </div>
       </button>
     </VToolbarItems>
   </div>

@@ -38,13 +38,13 @@ const linkWidth = computed(() => {
             <span>{{ entry.title }}</span>
           </VTooltip>
         </NuxtLink>
-        <VIcon
+        <div
           v-if="index !== historyEntries.length - 1"
           class="mx-1 divider"
           size="x-small"
         >
           {{ mdiArrowLeft }}
-        </VIcon>
+        </div>
       </span>
     </span>
   </div>

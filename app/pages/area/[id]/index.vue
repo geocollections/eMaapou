@@ -214,9 +214,9 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
                   :href="`https://turba.geoloogia.info/plaanid/${item.trim()}`"
                 >
                   {{ item }}
-                  <VIcon size="small" color="primary-darken-2">
+                  <div size="small" color="primary-darken-2">
                     {{ mdiFileDownloadOutline }}
-                  </VIcon>
+                  </div>
                 </a>
                 <span v-if="index !== planArray.length - 1" class="mr-1">|</span>
               </span>

@@ -12,13 +12,13 @@ defineProps<{
       style="word-break: normal"
       class="d-flex align-center text-md-h3 text-h4"
     >
-      <VIcon
+      <div
         v-if="icon"
         start
         color="accent"
       >
         {{ icon }}
-      </VIcon>
+      </div>
       <span
         class="montserrat font-weight-medium"
       >

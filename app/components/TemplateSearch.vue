@@ -49,7 +49,7 @@ function closeMobileSearch() {
             @click="mini = !mini"
           >
             <template #prepend>
-              <VIcon
+              <div
                 :icon="mdiChevronDoubleLeft"
                 :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
               />
@@ -105,7 +105,7 @@ function closeMobileSearch() {
             color="warning"
             @click="showSearch = !showSearch"
           >
-            <VIcon :icon="mdiMagnify" start />
+            <div :icon="mdiMagnify" start />
             {{ $t("common.searchCommand") }}
           </button>
         </VFabTransition>

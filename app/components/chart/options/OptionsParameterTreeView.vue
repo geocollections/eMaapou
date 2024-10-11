@@ -59,9 +59,9 @@ function isParameterSelected(parameter: any) {
         variant="outlined"
         v-bind="menu"
       >
-        <VIcon start>
+        <div start>
           {{ mdiChartLineVariant }}
-        </VIcon>
+        </div>
         {{ $t("common.parameters") }}
       </button>
     </template>

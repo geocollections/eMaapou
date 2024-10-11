@@ -21,7 +21,7 @@ const localePath = useLocalePath();
       :elevation="0"
     >
       <div class="py-2 d-flex d-sm-block align-center">
-        <VIcon
+        <div
           :icon="route.icon"
           color="accent-lighten-3"
           end
@@ -48,7 +48,7 @@ const localePath = useLocalePath();
           </div>
         </div>
       </div>
-      <VIcon
+      <div
         :icon="mdiArrowRight"
         color="accent-lighten-3"
         class="ml-auto my-auto"
