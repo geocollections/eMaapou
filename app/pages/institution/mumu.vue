@@ -12,10 +12,10 @@ useHead({
 </script>
 
 <template>
-  <VMain>
-    <VContainer style="max-width: 800px" class="mx-auto">
-      <VRow no-gutters>
-        <VCol class="pl-4" cols="12">
+  <main>
+    <div style="max-width: 800px" class="mx-auto">
+      <div no-gutters>
+        <div class="pl-4" cols="12">
           <BaseHeader
             class="mb-4"
             :title="$translate({ et: page.title_et, en: page.title_en })"
@@ -32,10 +32,10 @@ useHead({
               v-html="$translate({ et: page.content_et, en: page.content_en })"
             />
           </VCard>
-        </VCol>
-      </VRow>
-    </VContainer>
-  </VMain>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped>

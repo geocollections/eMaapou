@@ -22,8 +22,8 @@ const emit = defineEmits<{
   >
     <VCard elevation="0">
       <VCardText class="pa-3">
-        <VRow no-gutters>
-          <VCol cols="12" sm="6">
+        <div no-gutters>
+          <div cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
               <code class="text-black font-weight-bold">"Viki puurauk"</code>
               <div class="ml-2">
@@ -36,8 +36,8 @@ const emit = defineEmits<{
                 {{ $t("hints.require") }}
               </div>
             </div>
-          </VCol>
-          <VCol cols="12" sm="6">
+          </div>
+          <div cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
               <code class="text-black font-weight-bold">Viki*</code>
               <div class="ml-2">
@@ -60,16 +60,16 @@ const emit = defineEmits<{
               >
               <div class="ml-2">{{ $t('hints.combineOperators') }}</div>
             </div> -->
-          </VCol>
-          <VCol cols="12">
+          </div>
+          <div cols="12">
             <div class="d-flex">
               <code class="text-black font-weight-bold">+"Keila lade" -Bryozoa</code>
               <div class="ml-2">
                 {{ $t("hints.combineOperators") }}
               </div>
             </div>
-          </VCol>
-        </VRow>
+          </div>
+        </div>
       </VCardText>
     </VCard>
   </VMenu>

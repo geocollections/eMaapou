@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { Area } from "../[id].vue";
 import { mdiFileDownloadOutline } from "@mdi/js";
 import isEmpty from "lodash/isEmpty";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
-import type { Area } from "../[id].vue";
 
 const props = defineProps<{ area: Area }>();
 
@@ -78,9 +78,9 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol
+  <div style="margin: initial">
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -424,15 +424,15 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             />
           </BaseTable>
         </template>
-      </VCol>
-      <VCol v-if="siteMarkers !== undefined && siteMarkers.length > 0 || geojson" :xl="4">
+      </div>
+      <div v-if="siteMarkers !== undefined && siteMarkers.length > 0 || geojson" :xl="4">
         <MapDetail
           base-layer="Estonian map"
           :overlays="['Estonian bedrock']"
           :markers="siteMarkers"
           :geojson="geojson"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

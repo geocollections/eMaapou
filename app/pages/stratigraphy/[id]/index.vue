@@ -74,9 +74,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol
+  <div style="margin: initial">
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -246,8 +246,8 @@ const mapOverlays = computed(() => {
             :value="$formatDate(stratigraphy.date_changed)"
           />
         </BaseTable>
-      </VCol>
-      <VCol
+      </div>
+      <div
         v-if="data.stratotypeCount > 0 || stratigraphyMarkers.length > 0"
         :md="6"
         :lg="5"
@@ -271,7 +271,7 @@ const mapOverlays = computed(() => {
           height="300px"
           :markers="stratigraphyMarkers"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

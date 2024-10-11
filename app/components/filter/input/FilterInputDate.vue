@@ -132,12 +132,12 @@ const maxDate = computed(() => {
         :locale="$i18n.locale === 'et' ? 'et-EE' : 'en-US'"
         @update:model-value="handleDatePickerInput"
       />
-      <VRow
+      <div
         style="border-top: 1px solid lightgray !important"
         no-gutters
         class="py-2 px-4"
       >
-        <VCol cols="6">
+        <div cols="6">
           <VBtn
             size="small"
             variant="text"
@@ -149,9 +149,9 @@ const maxDate = computed(() => {
           >
             {{ $t("filter.clear") }}
           </VBtn>
-        </VCol>
+        </div>
 
-        <VCol cols="6">
+        <div cols="6">
           <VBtn
             size="small"
             variant="text"
@@ -163,8 +163,8 @@ const maxDate = computed(() => {
           >
             {{ $t("filter.add") }}
           </VBtn>
-        </VCol>
-      </VRow>
+        </div>
+      </div>
     </VExpansionPanelText>
   </VExpansionPanel>
 </template>

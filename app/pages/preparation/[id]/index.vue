@@ -26,9 +26,9 @@ await getMoreImages();
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow v-if="images.length > 0">
-      <VCol>
+  <div style="margin: initial">
+    <div v-if="images.length > 0">
+      <div>
         <ImageBar
           :images="images"
           :total="total"
@@ -61,10 +61,10 @@ await getMoreImages();
             </div>
           </template>
         </ImageBar>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol
+      </div>
+    </div>
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -165,8 +165,8 @@ await getMoreImages();
             :value="preparation.remarks"
           />
         </BaseTable>
-      </VCol>
-      <VCol :xl="4">
+      </div>
+      <div :xl="4">
         <BaseTable class="border rounded">
           <TableRow
             v-if="sample"
@@ -204,7 +204,7 @@ await getMoreImages();
             :value="sample?.date_collected || sample?.date_collected_text"
           />
         </BaseTable>
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

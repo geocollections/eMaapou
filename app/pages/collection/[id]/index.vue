@@ -11,9 +11,9 @@ const classification = computed(() => props.collection.classification);
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol
+  <div style="margin: initial">
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -102,7 +102,7 @@ const classification = computed(() => props.collection.classification);
           </div>
           <div>{{ collection.remarks }}</div>
         </div>
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

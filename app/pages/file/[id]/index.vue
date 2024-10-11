@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { File } from "../[id].vue";
 import {
   mdiFileDownloadOutline,
   mdiFileMusicOutline,
@@ -6,7 +7,6 @@ import {
 } from "@mdi/js";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
-import type { File } from "../[id].vue";
 
 const props = defineProps<{
   file: File;
@@ -166,9 +166,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol>
+  <div style="margin: initial">
+    <div>
+      <div>
         <div
           v-if="isImage"
           style="width: 100%; max-height: 700px; margin-left: auto; margin-right: auto;"
@@ -262,8 +262,8 @@ const mapOverlays = computed(() => {
             </span>
           </div>
         </div>
-      </VCol>
-      <VCol
+      </div>
+      <div
         :cols="12"
         :sm="12"
         :md="6"
@@ -556,7 +556,7 @@ const mapOverlays = computed(() => {
             },
           ]"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

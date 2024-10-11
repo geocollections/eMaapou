@@ -235,19 +235,19 @@ useHead({
 </script>
 
 <template>
-  <VMain>
-    <VContainer
+  <main>
+    <div
       class="pt-1 pb-10 px-0"
       style="height: 100%"
       :fluid="true"
     >
       <div>
-        <VRow
+        <div
           no-gutters
           justify="center"
           align="center"
         >
-          <VCol class="my-4 mx-2">
+          <div class="my-4 mx-2">
             <BaseHeader :icon="mdiMagnify">
               <template #title>
                 <I18nT keypath="quickSearch.title" tag="div">
@@ -257,13 +257,13 @@ useHead({
                 </I18nT>
               </template>
             </BaseHeader>
-          </VCol>
-        </VRow>
-        <VRow no-gutters>
-          <VCol class="mx-4">
+          </div>
+        </div>
+        <div no-gutters>
+          <div class="mx-4">
             <ButtonTabs :tabs="data.tabs" />
-          </VCol>
-        </VRow>
+          </div>
+        </div>
         <div v-if="noResults">
           <div class="mt-4 text-h4 text-center">
             {{ $t("quickSearch.noResults") }}
@@ -275,6 +275,6 @@ useHead({
           keep-alive
         />
       </div>
-    </VContainer>
-  </VMain>
+    </div>
+  </main>
 </template>

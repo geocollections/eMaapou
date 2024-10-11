@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import type { Drillcore } from "../[id].vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
   drillcore: Drillcore;
@@ -32,9 +32,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol
+  <div style="margin: initial">
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -119,8 +119,8 @@ const mapOverlays = computed(() => {
           </div>
           <div>{{ drillcore.remarks }}</div>
         </div>
-      </VCol>
-      <VCol :xl="4">
+      </div>
+      <div :xl="4">
         <BaseTable class="border rounded mb-4">
           <TableRow
             v-if="locality"
@@ -191,7 +191,7 @@ const mapOverlays = computed(() => {
             },
           ]"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

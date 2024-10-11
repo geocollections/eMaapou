@@ -266,11 +266,11 @@ function handleSearch() {
         'height': topHeight,
       }"
     >
-      <VContainer
+      <div
         style="max-width: 1185px !important"
       >
-        <VRow class="mb-lg-5">
-          <VCol>
+        <div class="mb-lg-5">
+          <div>
             <div class="pt-sm-4 pt-md-8" :style="{ 'max-width': '1000px' }">
               <I18nT
                 keypath="title"
@@ -284,10 +284,10 @@ function handleSearch() {
                 {{ $t("subtitle") }}
               </span>
             </div>
-          </VCol>
-        </VRow>
-        <VRow>
-          <VCol cols="12" md="5">
+          </div>
+        </div>
+        <div>
+          <div cols="12" md="5">
             <VCard
               class=""
               rounded="0"
@@ -326,16 +326,16 @@ function handleSearch() {
                 {{ $t("landing.description") }}
               </VCardText>
             </VCard>
-          </VCol>
-          <VCol
+          </div>
+          <div
             cols="12"
             md="7"
             class="pl-lg-10"
           >
             <VCard color="transparent" flat>
-              <VRow no-gutters justify="center">
+              <div no-gutters justify="center">
                 <div class="col-12 col-xl-auto d-flex flex-wrap">
-                  <VCol
+                  <div
                     v-for="(route, index) in searchRoutes"
                     :key="`${route.routeName}-${index}`"
                     cols="12"
@@ -345,19 +345,19 @@ function handleSearch() {
                     lg="6"
                   >
                     <CardRouteLink :route="route" />
-                  </VCol>
+                  </div>
                 </div>
-              </VRow>
+              </div>
             </VCard>
-          </VCol>
-        </VRow>
-      </VContainer>
+          </div>
+        </div>
+      </div>
     </div>
-    <VContainer
+    <div
       style="max-width: 1185px !important"
     >
-      <VRow justify="center" class="mt-4">
-        <VCol
+      <div justify="center" class="mt-4">
+        <div
           cols="12"
           md="8"
           class="pr-5"
@@ -365,8 +365,8 @@ function handleSearch() {
           order-md="0"
         >
           <TheNewsCard />
-        </VCol>
-        <VCol
+        </div>
+        <div
           cols="12"
           md="4"
           class="pl-lg-5"
@@ -375,8 +375,8 @@ function handleSearch() {
         >
           <BaseHeader class="pb-2" :title="$t('landing.otherServices')" />
 
-          <VRow no-gutters>
-            <VCol
+          <div no-gutters>
+            <div
               v-for="(route, index) in otherServices.ids.map(
                 (id) => otherServices[id],
               )"
@@ -386,11 +386,11 @@ function handleSearch() {
               class="pb-2 px-1"
             >
               <CardExternalService :route="route" />
-            </VCol>
-          </VRow>
-        </VCol>
-      </VRow>
-    </VContainer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Sample } from "../[id].vue";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
-import type { Sample } from "../[id].vue";
 
 const props = defineProps<{
   sample: Sample;
@@ -107,9 +107,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow v-if="images.length > 0">
-      <VCol>
+  <div style="margin: initial">
+    <div v-if="images.length > 0">
+      <div>
         <ImageBar
           :images="images"
           :total="total"
@@ -142,10 +142,10 @@ const mapOverlays = computed(() => {
             </div>
           </template>
         </ImageBar>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol
+      </div>
+    </div>
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -459,8 +459,8 @@ const mapOverlays = computed(() => {
             :value="$formatDate(sample.date_changed)"
           />
         </BaseTable>
-      </VCol>
-      <VCol v-if="showMap" :xl="4">
+      </div>
+      <div v-if="showMap" :xl="4">
         <MapDetail
           v-if="showMap"
           class="mb-4"
@@ -469,7 +469,7 @@ const mapOverlays = computed(() => {
           :center="mapCenter"
           :markers="mapMarkers"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

@@ -125,8 +125,8 @@ function handleOpen(value: { value: boolean }) {
       class="pt-1"
       color="white"
     >
-      <VRow no-gutters>
-        <VCol cols="6" class="">
+      <div no-gutters>
+        <div cols="6" class="">
           <VTextField
             ref="input"
             :model-value="modelValue[0]"
@@ -143,8 +143,8 @@ function handleOpen(value: { value: boolean }) {
             @keydown.enter.prevent.stop="handleEnter"
             @blur="handleEnter"
           />
-        </VCol>
-        <VCol cols="6" class="pl-1">
+        </div>
+        <div cols="6" class="pl-1">
           <VTextField
             :model-value="modelValue[1]"
             color="primary-darken-3"
@@ -160,8 +160,8 @@ function handleOpen(value: { value: boolean }) {
             @keydown.enter.prevent.stop="handleEnter"
             @blur="handleEnter"
           />
-        </VCol>
-      </VRow>
+        </div>
+      </div>
     </VExpansionPanelText>
   </VExpansionPanel>
 </template>

@@ -47,13 +47,13 @@ function handleEnd() {
               "
             >
               <template #placeholder>
-                <VRow
+                <div
                   class="fill-height ma-0"
                   align="center"
                   justify="center"
                 >
                   <VProgressCircular indeterminate color="grey-lighten-5" />
-                </VRow>
+                </div>
               </template>
             </NuxtImg>
           </slot>

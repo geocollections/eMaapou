@@ -11,8 +11,8 @@ const localePath = useLocalePath();
     <template #expanded-row="{ columns, item }">
       <tr>
         <td class="py-2" :colspan="columns.length">
-          <VRow no-gutters>
-            <VCol class="pt-2 pb-4 pr-2">
+          <div no-gutters>
+            <div class="pt-2 pb-4 pr-2">
               <template v-if="item.description">
                 <div class="font-weight-bold">
                   {{ $t("drillcore.description") }}
@@ -21,8 +21,8 @@ const localePath = useLocalePath();
                   {{ item.description }}
                 </div>
               </template>
-            </VCol>
-            <VCol cols="12" md="6">
+            </div>
+            <div cols="12" md="6">
               <BaseTable>
                 <TableRow
                   :title="$t('localityDescription.zeroLevel')"
@@ -70,8 +70,8 @@ const localePath = useLocalePath();
                   :value="item.remarks"
                 />
               </BaseTable>
-            </VCol>
-          </VRow>
+            </div>
+          </div>
         </td>
       </tr>
     </template>

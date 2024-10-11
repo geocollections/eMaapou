@@ -45,8 +45,8 @@ useHead({
 </script>
 
 <template>
-  <VMain>
-    <VContainer
+  <main>
+    <div
       class="pt-1 pb-10 mx-auto"
       style="min-height: 100vh; max-width: 800px;"
     >
@@ -64,6 +64,6 @@ useHead({
         </div>
         <div v-intersect="infiniteHandler" />
       </div>
-    </VContainer>
-  </VMain>
+    </div>
+  </main>
 </template>

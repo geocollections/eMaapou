@@ -15,28 +15,28 @@ useHead({
 </script>
 
 <template>
-  <VMain>
-    <VContainer style="max-width: 800px">
-      <VRow no-gutters>
-        <VCol class="my-4">
+  <main>
+    <div style="max-width: 800px">
+      <div no-gutters>
+        <div class="my-4">
           <div class="text-right montserrat pr-4 text--secondary">
             {{ $formatDate(news.date_added) }}
           </div>
           <div class="text-h4">
             {{ $translate({ et: news.title_et, en: news.title_en }) }}
           </div>
-        </VCol>
-      </VRow>
-      <VRow no-gutters justify="center">
-        <VCol>
+        </div>
+      </div>
+      <div no-gutters justify="center">
+        <div>
           <div
             class="text-body-1"
             v-html="$translate({ et: news.text_et, en: news.text_en })"
           />
-        </VCol>
-      </VRow>
-    </VContainer>
-  </VMain>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped>

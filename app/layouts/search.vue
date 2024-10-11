@@ -159,20 +159,20 @@ function closeMobileSearch() {
         </div>
       </div>
     </VNavigationDrawer>
-    <VMain>
-      <VContainer
+    <main>
+      <div
         class="py-0 pb-10 px-0"
         style="min-height: 100vh"
         :fluid="true"
       >
-        <VRow no-gutters>
-          <VCol class="bg-white">
+        <div no-gutters>
+          <div class="bg-white">
             <slot name="title" />
-          </VCol>
-          <VCol cols="12">
+          </div>
+          <div cols="12">
             <slot />
-          </VCol>
-        </VRow>
+          </div>
+        </div>
         <VFabTransition v-if="display.smAndDown.value">
           <VBtn
             position="fixed"
@@ -188,9 +188,9 @@ function closeMobileSearch() {
           </VBtn>
         </VFabTransition>
         <!-- <FabScrollTop /> -->
-      </VContainer>
+      </div>
       <AppFooter />
-    </VMain>
+    </main>
   </VApp>
 </template>
 

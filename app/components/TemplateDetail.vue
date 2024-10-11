@@ -86,7 +86,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         </div>
       </VNavigationDrawer>
     </ClientOnly>
-    <VMain :style="{ 'padding-top': topPadding }">
+    <main :style="{ 'padding-top': topPadding }">
       <div class="fill-height pb-10" style="min-height: 100vh">
         <slot name="title" />
         <slot />
@@ -111,6 +111,6 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         <!-- <FabScrollTop /> -->
       </div>
       <AppFooter />
-    </VMain>
+    </main>
   </div>
 </template>

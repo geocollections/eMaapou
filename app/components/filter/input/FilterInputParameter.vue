@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
 import { mdiClose } from "@mdi/js";
 import cloneDeep from "lodash/cloneDeep";
 import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
 import isNull from "lodash/isNull";
 import type { ParameterValue } from "~/composables/useFilter";
-import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 const props = withDefaults(defineProps<{
   modelValue: ParameterValue[];
@@ -226,8 +226,8 @@ function valueString(value: ParameterValue["value"]) {
         :key="i"
         class="py-2 border-b"
       >
-        <VRow no-gutters class="px-2 ">
-          <VCol cols="8">
+        <div no-gutters class="px-2 ">
+          <div cols="8">
             <VAutocomplete
               :model-value="v.parameter"
               hide-details
@@ -242,8 +242,8 @@ function valueString(value: ParameterValue["value"]) {
               @update:model-value="handleParameter($event, i)"
               @update:search="handleSearch"
             />
-          </VCol>
-          <VCol class="d-flex justify-end">
+          </div>
+          <div class="d-flex justify-end">
             <VBtn
               class="mt-1"
               :icon="mdiClose"
@@ -251,10 +251,10 @@ function valueString(value: ParameterValue["value"]) {
               variant="text"
               @click="handleRemove(i)"
             />
-          </VCol>
-        </VRow>
-        <VRow no-gutters>
-          <VCol cols="6" class="pl-2 pr-1">
+          </div>
+        </div>
+        <div no-gutters>
+          <div cols="6" class="pl-2 pr-1">
             <VTextField
               class="pt-4"
               hide-details
@@ -270,9 +270,9 @@ function valueString(value: ParameterValue["value"]) {
               @keydown.enter="handleEnter"
               @update:focused="handleFocus"
             />
-          </VCol>
+          </div>
 
-          <VCol cols="6" class="pl-1 pr-2">
+          <div cols="6" class="pl-1 pr-2">
             <VTextField
               class="pt-4"
               hide-details
@@ -288,11 +288,11 @@ function valueString(value: ParameterValue["value"]) {
               @keydown.enter="handleEnter"
               @update:focused="handleFocus"
             />
-          </VCol>
-        </VRow>
+          </div>
+        </div>
       </div>
-      <VRow no-gutters class="pt-2 px-4">
-        <VCol cols="6">
+      <div no-gutters class="pt-2 px-4">
+        <div cols="6">
           <VBtn
             size="small"
             variant="text"
@@ -304,9 +304,9 @@ function valueString(value: ParameterValue["value"]) {
           >
             {{ $t('filter.clear') }}
           </VBtn>
-        </VCol>
+        </div>
 
-        <VCol cols="6">
+        <div cols="6">
           <VBtn
             size="small"
             variant="text"
@@ -318,8 +318,8 @@ function valueString(value: ParameterValue["value"]) {
           >
             {{ $t('filter.add') }}
           </VBtn>
-        </VCol>
-      </VRow>
+        </div>
+      </div>
     </VExpansionPanelText>
   </VExpansionPanel>
 </template>

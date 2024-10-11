@@ -24,10 +24,10 @@ function handleSearch() {
 
 <template>
   <NuxtLayout>
-    <VMain>
-      <VContainer :fluid="true">
-        <VRow justify="center">
-          <VCol
+    <main>
+      <div :fluid="true">
+        <div justify="center">
+          <div
             sm="8"
             md="6"
             class="text-center"
@@ -82,9 +82,9 @@ function handleSearch() {
                 </VBtn>
               </VForm>
             </div>
-          </VCol>
-        </VRow>
-      </VContainer>
-    </VMain>
+          </div>
+        </div>
+      </div>
+    </main>
   </NuxtLayout>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Dataset } from "../[id].vue";
 import isEmpty from "lodash/isEmpty";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
-import type { Dataset } from "../[id].vue";
 
 defineProps<{ dataset: Dataset; parameters: any }>();
 
@@ -88,9 +88,9 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol
+  <div style="margin: initial">
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -250,10 +250,10 @@ const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
             </template>
           </TableRow>
         </BaseTable>
-      </VCol>
-      <VCol v-if="locationMarkers.length > 0">
+      </div>
+      <div v-if="locationMarkers.length > 0">
         <MapDetail :markers="locationMarkers" />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

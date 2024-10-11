@@ -45,9 +45,9 @@ function isActiveImage(image: { uuid_filename: string }) {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol v-if="activeImage" :xl="8">
+  <div style="margin: initial">
+    <div>
+      <div v-if="activeImage" :xl="8">
         <NuxtImg
           :src="activeImage.uuid_filename"
           provider="geocollections"
@@ -87,18 +87,18 @@ function isActiveImage(image: { uuid_filename: string }) {
             "
           >
             <template #placeholder>
-              <VRow
+              <div
                 class="fill-height ma-0"
                 align="center"
                 justify="center"
               >
                 <VProgressCircular indeterminate color="grey-lighten-5" />
-              </VRow>
+              </div>
             </template>
           </NuxtImg>
         </div>
-      </VCol>
-      <VCol :cols="12" :xl="4">
+      </div>
+      <div :cols="12" :xl="4">
         <BaseTable class="border rounded">
           <TableRow
             v-if="drillcore"
@@ -209,9 +209,9 @@ function isActiveImage(image: { uuid_filename: string }) {
             :value="drillcoreBox.remarks"
           />
         </BaseTable>
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>

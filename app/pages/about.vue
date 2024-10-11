@@ -10,7 +10,7 @@ useHead({
 </script>
 
 <template>
-  <VMain>
+  <main>
     <div class="pt-5 mx-auto" style="max-width: 800px">
       <BaseHeader
         :title="$t('about.title')"
@@ -32,7 +32,7 @@ useHead({
         />
       </VCard>
     </div>
-  </VMain>
+  </main>
 </template>
 
 <style scoped>

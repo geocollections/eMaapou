@@ -169,9 +169,9 @@ const routes = [
 
 <template>
   <div class="bg-grey-lighten-5 border-t">
-    <VContainer>
-      <VRow no-gutters>
-        <VCol cols="12" lg="auto">
+    <div>
+      <div no-gutters>
+        <div cols="12" lg="auto">
           <div class="d-md-flex justify-center">
             <div class="ml-4 ml-md-0 mr-4 mb-6">
               <NuxtImg
@@ -258,8 +258,8 @@ const routes = [
               </div>
             </div>
           </div>
-        </VCol>
-        <VCol>
+        </div>
+        <div>
           <div class="ml-3 mb-6">
             <div
               class="section-title font-weight-medium montserrat mb-4"
@@ -291,12 +291,12 @@ const routes = [
               </a>
             </div>
           </div>
-        </VCol>
-      </VRow>
-    </VContainer>
-    <VContainer fluid class="border-t">
-      <VRow class="pb-2">
-        <VCol class="text-body-2 text-center">
+        </div>
+      </div>
+    </div>
+    <div fluid class="border-t">
+      <div class="pb-2">
+        <div class="text-body-2 text-center">
           <div class="text-center d-flex justify-center align-center">
             <div style="max-width: 700px">
               <I18nT
@@ -312,10 +312,10 @@ const routes = [
               </I18nT>
             </div>
           </div>
-        </VCol>
-      </VRow>
-      <VRow no-gutters>
-        <VCol cols="12" align-self="center">
+        </div>
+      </div>
+      <div no-gutters>
+        <div cols="12" align-self="center">
           <div class="text-center d-flex justify-center align-center">
             <div style="max-width: 700px">
               <I18nT
@@ -335,8 +335,8 @@ const routes = [
               </I18nT>
             </div>
           </div>
-        </VCol>
-        <VCol
+        </div>
+        <div
           cols="12"
           align-self="center"
           class="text-center mt-3"
@@ -351,9 +351,9 @@ const routes = [
               height="32"
             />
           </a>
-        </VCol>
-      </VRow>
-    </VContainer>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

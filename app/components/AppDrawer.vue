@@ -49,7 +49,7 @@ const routes = [
     class="elevation-2"
     @update:model-value="emit('update:navigationDrawer', $event)"
   >
-    <VContainer class="more-menu py-4 mb-6">
+    <div class="more-menu py-4 mb-6">
       <VList class="py-1" :aria-label="$t('title')">
         <VListItem
           v-for="route in routes"
@@ -143,7 +143,7 @@ const routes = [
       <VDivider class="bg-primary" />
 
       <LanguageList class="py-0" />
-    </VContainer>
+    </div>
   </VNavigationDrawer>
 </template>
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Site } from "../[id].vue";
 import { mdiFileDownloadOutline } from "@mdi/js";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import type { ImageAttachment } from "~/composables/useImages";
-import type { Site } from "../[id].vue";
 
 const props = defineProps<{ site: Site }>();
 
@@ -79,9 +79,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow v-if="images.length > 0">
-      <VCol>
+  <div style="margin: initial">
+    <div v-if="images.length > 0">
+      <div>
         <ImageBar
           :images="images"
           :total="total"
@@ -114,10 +114,10 @@ const mapOverlays = computed(() => {
             </div>
           </template>
         </ImageBar>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol
+      </div>
+    </div>
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -297,8 +297,8 @@ const mapOverlays = computed(() => {
             :value="$formatDate(site.date_changed)"
           />
         </BaseTable>
-      </VCol>
-      <VCol v-if="(site.latitude && site.longitude) || site.locality" :xl="4">
+      </div>
+      <div v-if="(site.latitude && site.longitude) || site.locality" :xl="4">
         <MapDetail
           v-if="site.latitude && site.longitude"
           :base-layer="mapBaseLayer"
@@ -322,7 +322,7 @@ const mapOverlays = computed(() => {
             },
           ]"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

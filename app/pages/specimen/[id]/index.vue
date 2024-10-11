@@ -47,9 +47,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow v-if="images.length > 0">
-      <VCol>
+  <div style="margin: initial">
+    <div v-if="images.length > 0">
+      <div>
         <ImageBar
           :images="images"
           :total="total"
@@ -80,10 +80,10 @@ const mapOverlays = computed(() => {
             </div>
           </template>
         </ImageBar>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol
+      </div>
+    </div>
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -304,8 +304,8 @@ const mapOverlays = computed(() => {
             </template>
           </TableRow>
         </BaseTable>
-      </VCol>
-      <VCol
+      </div>
+      <div
         v-if="locality && locality.latitude && locality.longitude"
       >
         <MapDetail
@@ -330,7 +330,7 @@ const mapOverlays = computed(() => {
             },
           ]"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

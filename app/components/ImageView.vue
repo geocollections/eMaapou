@@ -34,8 +34,8 @@ function updateOptions(event: DataTableOptions) {
 
 <template>
   <div class="bg-white">
-    <VRow no-gutters>
-      <VCol
+    <div no-gutters>
+      <div
         cols="12"
         sm="auto"
         class="px-3 my-1 my-sm-4"
@@ -49,8 +49,8 @@ function updateOptions(event: DataTableOptions) {
           color="header"
           :label="$t('common.containImages')"
         />
-      </VCol>
-      <VCol class="d-flex justify-end">
+      </div>
+      <div class="d-flex justify-end">
         <BaseDataTablePagination
           :options="options"
           :pagination="pagination"
@@ -67,15 +67,15 @@ function updateOptions(event: DataTableOptions) {
           select-page-id="header-select-btn"
           @update:options="updateOptions"
         />
-      </VCol>
-    </VRow>
+      </div>
+    </div>
     <VCard flat>
-      <VRow
+      <div
         v-if="count > 0"
         no-gutters
         class="px-2"
       >
-        <VCol
+        <div
           v-for="(image, index) in items"
           :key="index"
           class=" pt-0 px-2 pb-4"
@@ -123,7 +123,7 @@ function updateOptions(event: DataTableOptions) {
                   "
                 >
                   <template #placeholder>
-                    <VRow
+                    <div
                       class="fill-height ma-0"
                       align="center"
                       justify="center"
@@ -132,19 +132,19 @@ function updateOptions(event: DataTableOptions) {
                         indeterminate
                         color="grey-lighten-5"
                       />
-                    </VRow>
+                    </div>
                   </template>
                 </VImg>
 
-                <VRow v-else align="center">
-                  <VCol class="text-center">
+                <div v-else align="center">
+                  <div class="text-center">
                     <div class="py-3">
                       <VIcon style="font-size: 6rem" class="text-grey">
                         {{ mdiFileImageOutline }}
                       </VIcon>
                     </div>
-                  </VCol>
-                </VRow>
+                  </div>
+                </div>
               </VCard>
             </template>
 
@@ -169,8 +169,8 @@ function updateOptions(event: DataTableOptions) {
               </span>
             </span>
           </VTooltip>
-        </VCol>
-      </VRow>
+        </div>
+      </div>
     </VCard>
   </div>
 </template>

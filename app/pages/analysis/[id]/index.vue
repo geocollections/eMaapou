@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Analysis } from "../[id].vue";
 import sortBy from "lodash/sortBy";
 import sumBy from "lodash/sumBy";
-import type { Analysis } from "../[id].vue";
 
 const props = defineProps<{
   analysis: Analysis;
@@ -57,9 +57,9 @@ const resultChartData = computed(() => data.value?.resultChartData);
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol
+  <div style="margin: initial">
+    <div>
+      <div
         :sm="12"
         :md="6"
         :lg="7"
@@ -240,8 +240,8 @@ const resultChartData = computed(() => data.value?.resultChartData);
             :value="$formatDate(analysis.date_changed)"
           />
         </BaseTable>
-      </VCol>
-      <VCol
+      </div>
+      <div
         v-if="resultChartData"
         :md="6"
         :lg="5"
@@ -250,7 +250,7 @@ const resultChartData = computed(() => data.value?.resultChartData);
         <div class="d-block">
           <ChartAnalysisResults :data="resultChartData" />
         </div>
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

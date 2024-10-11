@@ -171,7 +171,7 @@ const { mdAndUp } = useDisplay();
         </div>
       </VNavigationDrawer>
     </ClientOnly>
-    <VMain style="min-height: 100vh " :style="{ 'padding-top': topPadding }">
+    <main style="min-height: 100vh " :style="{ 'padding-top': topPadding }">
       <div class="fill-height pb-10">
         <slot name="title" />
         <slot />
@@ -194,7 +194,7 @@ const { mdAndUp } = useDisplay();
         <!-- <FabScrollTop /> -->
       </div>
       <AppFooter />
-    </VMain>
+    </main>
   </VApp>
 </template>
 

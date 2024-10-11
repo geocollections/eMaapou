@@ -218,8 +218,8 @@ onMounted(() => {
       <!-- eslint-disable-next-line vue/no-template-shadow -->
       <template v-if="!onlyTable" #top="{ pageCount }">
         <div id="top">
-          <VRow class="pl-3" no-gutters>
-            <VCol
+          <div class="pl-3" no-gutters>
+            <div
               cols="12"
               sm="5"
               md="4"
@@ -255,8 +255,8 @@ onMounted(() => {
                 @change="handleHeadersChange"
                 @reset="emit('reset:headers')"
               />
-            </VCol>
-            <VCol class="d-flex justify-end" align-self="center">
+            </div>
+            <div class="d-flex justify-end" align-self="center">
               <BaseDataTablePagination
                 :options="options"
                 :page-count="pageCount"
@@ -272,15 +272,15 @@ onMounted(() => {
                 select-page-id="footer-select-btn"
                 @update:options="handleChange"
               />
-            </VCol>
-          </VRow>
+            </div>
+          </div>
         </div>
         <VDivider />
       </template>
       <template v-if="!onlyTable" #bottom="{ pageCount }">
         <VDivider />
-        <VRow no-gutters>
-          <VCol class="d-flex justify-end" align-self="center">
+        <div no-gutters>
+          <div class="d-flex justify-end" align-self="center">
             <BaseDataTablePagination
               :options="options"
               :page-count="pageCount"
@@ -296,8 +296,8 @@ onMounted(() => {
               select-page-id="footer-select-btn"
               @update:options="handleChange($event)"
             />
-          </VCol>
-        </VRow>
+          </div>
+        </div>
       </template>
       <template
         v-if="expandable"
