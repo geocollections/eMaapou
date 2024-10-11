@@ -6,6 +6,9 @@ const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
+const drillcoresStore = useDrillcores();
+const { getQueryParams } = drillcoresStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(drillcoresStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -287,10 +290,6 @@ const { data } = await useAsyncData("drillcore", async () => {
     tabs: [],
   }),
 });
-
-const drillcoresStore = useDrillcores();
-const { getQueryParams } = drillcoresStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(drillcoresStore);
 
 const {
   data: drillcoresRes,

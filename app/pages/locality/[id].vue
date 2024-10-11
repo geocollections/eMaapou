@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Nullable } from "vitest";
 import {
   mdiBookOpenPageVariantOutline,
   mdiChartScatterPlot,
@@ -7,7 +8,6 @@ import {
   mdiOpenInNew,
   mdiScrewMachineFlatTop,
 } from "@mdi/js";
-import type { Nullable } from "vitest";
 import type { Tab } from "~/composables/useTabs";
 
 const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
@@ -15,6 +15,9 @@ const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
 const localePath = useLocalePath();
 const { t } = useI18n();
 const route = useRoute();
+const localitiesStore = useLocalities();
+const { getQueryParams } = localitiesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
@@ -373,10 +376,6 @@ const { data } = await useAsyncData("locality", async () => {
     images: [],
   }),
 });
-
-const localitiesStore = useLocalities();
-const { getQueryParams } = localitiesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
 
 const {
   data: localitiesRes,

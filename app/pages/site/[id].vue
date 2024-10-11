@@ -5,6 +5,9 @@ const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
+const sitesStore = useSites();
+const { getQueryParams } = sitesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(sitesStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
@@ -213,9 +216,6 @@ const { data } = await useAsyncData("site", async () => {
   }),
 });
 
-const sitesStore = useSites();
-const { getQueryParams } = sitesStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(sitesStore);
 const {
   data: sitesRes,
   page,

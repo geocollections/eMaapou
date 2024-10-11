@@ -6,6 +6,8 @@ const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
+const drillcoreBoxPositionStore = useDrillcoreBoxPosition();
+const { page } = storeToRefs(drillcoreBoxPositionStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
@@ -204,9 +206,6 @@ const { data } = await useAsyncData(
     }),
   },
 );
-
-const drillcoreBoxPositionStore = useDrillcoreBoxPosition();
-const { page } = storeToRefs(drillcoreBoxPositionStore);
 
 const { data: otherDrillcoreBoxesRes } = await useNewApiFetch<GeoloogiaListResponse>(`/drillcores/${data.value?.drillcoreBox?.drillcore.id}/drillcore-boxes/`, {
   query: computed(() => ({
