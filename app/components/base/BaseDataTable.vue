@@ -164,172 +164,172 @@ onMounted(() => {
 
 <template>
   <div ref="table">
-    <VDataTableServer
-      id="table"
-      v-model:expanded="expanded"
-      item-key="id"
-      :mobile="false"
-      density="compact"
-      multi-sort
-      style="position: relative"
-      :style="cssVars"
-      :loading="isLoading"
-      :headers="visibleHeaders"
-      :items="items"
-      :sort-by="options.sortBy"
-      :items-per-page="options.itemsPerPage"
-      :items-length="count"
-      :footer-props="footerProps"
-      :can-scroll-right="canScrollRight"
-      :can-scroll-left="canScrollLeft"
-      @update:sort-by="handleSortByChange"
-    >
-      <template #no-data>
-        {{ $t("table.noData") }}
-      </template>
-      <template v-if="itemTo" #item.to="{ item, index }">
-        <button
-          v-if="externalTo"
-          icon
-          variant="text"
-          class="text-link-visit"
-          size="small"
-          :href="itemTo(item)"
-          @click="emit('click:row', { index, id: item.id })"
-        >
-          <div size="x-large">
-            {{ mdiEyeArrowRight }}
-          </div>
-        </button>
-        <button
-          v-else
-          icon
-          variant="text"
-          class="text-link-visit"
-          size="small"
-          :to="itemTo(item)"
-          @click="emit('click:row', { index, id: item.id })"
-        >
-          <div size="x-large">
-            {{ mdiEye }}
-          </div>
-        </button>
-      </template>
-      <!-- eslint-disable-next-line vue/no-template-shadow -->
-      <template v-if="!onlyTable" #top="{ pageCount }">
-        <div id="top">
-          <div class="pl-3" no-gutters>
-            <div
-              cols="12"
-              sm="5"
-              md="4"
-              lg="3"
-              align-self="center"
-              class="pr-3 d-flex align-center"
-            >
-              <input
-                v-if="showSearch"
-                v-model="search"
-                style="max-width: 400px"
-                class="d-block mt-0 pt-0 pr-2 pr-sm-3"
-                color="primary-darken-2"
-                :prepend-inner-icon="mdiMagnify"
-                :label="$t('common.search')"
-                hide-details
-                variant="outlined"
-                density="compact"
-                single-line
-                clearable
-                @update:model-value="handleSearch"
-              >
-              <BaseDataTableExportMenu
-                v-if="exportFunc"
-                :table-element="tableElement"
-                :export-func="exportFunc"
-              />
-              <BaseDataTableHeaderMenu
-                v-if="dynamicHeaders"
-                :headers="headers"
-                :visible-headers="visibleHeaders"
-                :sort-by="options.sortBy"
-                @change="handleHeadersChange"
-                @reset="emit('reset:headers')"
-              />
-            </div>
-            <div class="d-flex justify-end" align-self="center">
-              <BaseDataTablePagination
-                :options="options"
-                :page-count="pageCount"
-                :items-per-page-options="footerProps['items-per-page-options']"
-                :items-per-page-text="footerProps['items-per-page-text']"
-                :page-select-text="$t('common.pageSelect', {
-                  current: options.page,
-                  count: pageCount,
-                })
-                "
-                :go-to-text="$t('common.goTo')"
-                :go-to-button-text="$t('common.goToBtn')"
-                select-page-id="footer-select-btn"
-                @update:options="handleChange"
-              />
-            </div>
-          </div>
-        </div>
-        <div id="divider" />
-      </template>
-      <template v-if="!onlyTable" #bottom="{ pageCount }">
-        <div id="divider" />
-        <div no-gutters>
-          <div class="d-flex justify-end" align-self="center">
-            <BaseDataTablePagination
-              :options="options"
-              :page-count="pageCount"
-              :items-per-page-options="footerProps['items-per-page-options']"
-              :items-per-page-text="footerProps['items-per-page-text']"
-              :page-select-text="$t('common.pageSelect', {
-                current: options.page,
-                count: pageCount,
-              })
-              "
-              :go-to-text="$t('common.goTo')"
-              :go-to-button-text="$t('common.goToBtn')"
-              select-page-id="footer-select-btn"
-              @update:options="handleChange($event)"
-            />
-          </div>
-        </div>
-      </template>
-      <template
-        v-if="expandable"
-        #item.data-table-expand="{
-          toggleExpand,
-          item,
-          isExpanded,
-          internalItem,
-        }"
-      >
-        <button
-          v-if="item.canExpand"
-          :icon="!isExpanded(internalItem) ? mdiChevronDown : mdiChevronUp"
-          variant="text"
-          size="small"
-          :class="{ active: isExpanded }"
-          @click="toggleExpand(internalItem)"
-        />
-      </template>
-      <!-- @vue-ignore -->
-      <template v-for="(_, slotName) in $slots" #[slotName]="context">
-        <slot :name="slotName" v-bind="context" />
-      </template>
-
-      <template #item.date_added="{ item }">
-        {{ $formatDate(item.date_added) }}
-      </template>
-
-      <template #item.date_changed="{ item }">
-        {{ $formatDate(item.date_changed) }}
-      </template>
-    </VDataTableServer>
+    <!-- <VDataTableServer -->
+    <!--   id="table" -->
+    <!--   v-model:expanded="expanded" -->
+    <!--   item-key="id" -->
+    <!--   :mobile="false" -->
+    <!--   density="compact" -->
+    <!--   multi-sort -->
+    <!--   style="position: relative" -->
+    <!--   :style="cssVars" -->
+    <!--   :loading="isLoading" -->
+    <!--   :headers="visibleHeaders" -->
+    <!--   :items="items" -->
+    <!--   :sort-by="options.sortBy" -->
+    <!--   :items-per-page="options.itemsPerPage" -->
+    <!--   :items-length="count" -->
+    <!--   :footer-props="footerProps" -->
+    <!--   :can-scroll-right="canScrollRight" -->
+    <!--   :can-scroll-left="canScrollLeft" -->
+    <!--   @update:sort-by="handleSortByChange" -->
+    <!-- > -->
+    <!--   <template #no-data> -->
+    <!--     {{ $t("table.noData") }} -->
+    <!--   </template> -->
+    <!--   <template v-if="itemTo" #item.to="{ item, index }"> -->
+    <!--     <button -->
+    <!--       v-if="externalTo" -->
+    <!--       icon -->
+    <!--       variant="text" -->
+    <!--       class="text-link-visit" -->
+    <!--       size="small" -->
+    <!--       :href="itemTo(item)" -->
+    <!--       @click="emit('click:row', { index, id: item.id })" -->
+    <!--     > -->
+    <!--       <div size="x-large"> -->
+    <!--         {{ mdiEyeArrowRight }} -->
+    <!--       </div> -->
+    <!--     </button> -->
+    <!--     <button -->
+    <!--       v-else -->
+    <!--       icon -->
+    <!--       variant="text" -->
+    <!--       class="text-link-visit" -->
+    <!--       size="small" -->
+    <!--       :to="itemTo(item)" -->
+    <!--       @click="emit('click:row', { index, id: item.id })" -->
+    <!--     > -->
+    <!--       <div size="x-large"> -->
+    <!--         {{ mdiEye }} -->
+    <!--       </div> -->
+    <!--     </button> -->
+    <!--   </template> -->
+    <!-- eslint-disable-next-line vue/no-template-shadow -->
+    <!--   <template v-if="!onlyTable" #top="{ pageCount }"> -->
+    <!--     <div id="top"> -->
+    <!--       <div class="pl-3" no-gutters> -->
+    <!--         <div -->
+    <!--           cols="12" -->
+    <!--           sm="5" -->
+    <!--           md="4" -->
+    <!--           lg="3" -->
+    <!--           align-self="center" -->
+    <!--           class="pr-3 d-flex align-center" -->
+    <!--         > -->
+    <!--           <input -->
+    <!--             v-if="showSearch" -->
+    <!--             v-model="search" -->
+    <!--             style="max-width: 400px" -->
+    <!--             class="d-block mt-0 pt-0 pr-2 pr-sm-3" -->
+    <!--             color="primary-darken-2" -->
+    <!--             :prepend-inner-icon="mdiMagnify" -->
+    <!--             :label="$t('common.search')" -->
+    <!--             hide-details -->
+    <!--             variant="outlined" -->
+    <!--             density="compact" -->
+    <!--             single-line -->
+    <!--             clearable -->
+    <!--             @update:model-value="handleSearch" -->
+    <!--           > -->
+    <!--           <BaseDataTableExportMenu -->
+    <!--             v-if="exportFunc" -->
+    <!--             :table-element="tableElement" -->
+    <!--             :export-func="exportFunc" -->
+    <!--           /> -->
+    <!--           <BaseDataTableHeaderMenu -->
+    <!--             v-if="dynamicHeaders" -->
+    <!--             :headers="headers" -->
+    <!--             :visible-headers="visibleHeaders" -->
+    <!--             :sort-by="options.sortBy" -->
+    <!--             @change="handleHeadersChange" -->
+    <!--             @reset="emit('reset:headers')" -->
+    <!--           /> -->
+    <!--         </div> -->
+    <!--         <div class="d-flex justify-end" align-self="center"> -->
+    <!--           <BaseDataTablePagination -->
+    <!--             :options="options" -->
+    <!--             :page-count="pageCount" -->
+    <!--             :items-per-page-options="footerProps['items-per-page-options']" -->
+    <!--             :items-per-page-text="footerProps['items-per-page-text']" -->
+    <!--             :page-select-text="$t('common.pageSelect', { -->
+    <!--               current: options.page, -->
+    <!--               count: pageCount, -->
+    <!--             }) -->
+    <!--             " -->
+    <!--             :go-to-text="$t('common.goTo')" -->
+    <!--             :go-to-button-text="$t('common.goToBtn')" -->
+    <!--             select-page-id="footer-select-btn" -->
+    <!--             @update:options="handleChange" -->
+    <!--           /> -->
+    <!--         </div> -->
+    <!--       </div> -->
+    <!--     </div> -->
+    <!--     <div id="divider" /> -->
+    <!--   </template> -->
+    <!--   <template v-if="!onlyTable" #bottom="{ pageCount }"> -->
+    <!--     <div id="divider" /> -->
+    <!--     <div no-gutters> -->
+    <!--       <div class="d-flex justify-end" align-self="center"> -->
+    <!--         <BaseDataTablePagination -->
+    <!--           :options="options" -->
+    <!--           :page-count="pageCount" -->
+    <!--           :items-per-page-options="footerProps['items-per-page-options']" -->
+    <!--           :items-per-page-text="footerProps['items-per-page-text']" -->
+    <!--           :page-select-text="$t('common.pageSelect', { -->
+    <!--             current: options.page, -->
+    <!--             count: pageCount, -->
+    <!--           }) -->
+    <!--           " -->
+    <!--           :go-to-text="$t('common.goTo')" -->
+    <!--           :go-to-button-text="$t('common.goToBtn')" -->
+    <!--           select-page-id="footer-select-btn" -->
+    <!--           @update:options="handleChange($event)" -->
+    <!--         /> -->
+    <!--       </div> -->
+    <!--     </div> -->
+    <!--   </template> -->
+    <!--   <template -->
+    <!--     v-if="expandable" -->
+    <!--     #item.data-table-expand="{ -->
+    <!--       toggleExpand, -->
+    <!--       item, -->
+    <!--       isExpanded, -->
+    <!--       internalItem, -->
+    <!--     }" -->
+    <!--   > -->
+    <!--     <button -->
+    <!--       v-if="item.canExpand" -->
+    <!--       :icon="!isExpanded(internalItem) ? mdiChevronDown : mdiChevronUp" -->
+    <!--       variant="text" -->
+    <!--       size="small" -->
+    <!--       :class="{ active: isExpanded }" -->
+    <!--       @click="toggleExpand(internalItem)" -->
+    <!--     /> -->
+    <!--   </template> -->
+    <!-- @vue-ignore -->
+    <!--   <template v-for="(_, slotName) in $slots" #[slotName]="context"> -->
+    <!--     <slot :name="slotName" v-bind="context" /> -->
+    <!--   </template> -->
+    <!---->
+    <!--   <template #item.date_added="{ item }"> -->
+    <!--     {{ $formatDate(item.date_added) }} -->
+    <!--   </template> -->
+    <!---->
+    <!--   <template #item.date_changed="{ item }"> -->
+    <!--     {{ $formatDate(item.date_changed) }} -->
+    <!--   </template> -->
+    <!-- </VDataTableServer> -->
   </div>
 </template>
 

@@ -62,7 +62,7 @@ useHead({
           />
           <div />
         </div>
-        <div v-intersect="infiniteHandler" />
+        <!-- <div v-intersect="infiniteHandler" /> -->
       </div>
     </div>
   </main>

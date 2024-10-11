@@ -66,7 +66,7 @@ function handleEnd(isIntersecting: boolean) {
         >
           <div>{{ $translate(item.name) }}</div>
         </li>
-        <div v-intersect="handleEnd" />
+        <!-- <div v-intersect="handleEnd" /> -->
       </ul>
     </div>
   </div>

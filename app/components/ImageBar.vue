@@ -60,7 +60,7 @@ function handleEnd() {
         </div>
       </slot>
     </div>
-    <div v-intersect="loadMore" />
+    <!-- <div v-intersect="loadMore" /> -->
     <ImageOverlay
       v-model="showOverlay"
       :initial-slide="initIndex"
