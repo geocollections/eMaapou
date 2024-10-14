@@ -16,7 +16,7 @@
     "@nuxt/image": "^1.8.0",
     "@pinia/nuxt": "^0.5.1",
     "@terraformer/wkt": "^2.2.0",
-    "earcut": "^2.2.4",
+    "earcut": "^3.0.0",
     "echarts": "^5.5.1",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
