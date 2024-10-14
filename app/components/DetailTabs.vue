@@ -63,22 +63,25 @@ function translateTitle(tab: HydratedTab) {
     :append-icon="mdiChevronDown"
   >
     {{ translateTitle(currentTab) }}
-    <VMenu activator="parent">
-      <VList>
-        <VListItem
-          v-for="(item, index) in tabs"
-          :key="index"
-          :to="
-            localePath({
-              name: item.routeName,
-              params: route.params,
-            })
-          "
-        >
-          <VListItemTitle>{{ translateTitle(item) }}</VListItemTitle>
-        </VListItem>
-      </VList>
-    </VMenu>
+    <ClientOnly>
+      <VMenu activator="parent">
+        <VList>
+          <VListItem
+            v-for="(item, index) in tabs"
+            :key="index"
+            :to="
+              localePath({
+                name: item.routeName,
+                params: route.params,
+              })
+            "
+          >
+            <VListItemTitle>{{ translateTitle(item) }}</VListItemTitle>
+          </VListItem>
+        </VList>
+      </VMenu>
+      <ClientOnly />
+    </clientonly>
   </VBtn>
 </template>
 
