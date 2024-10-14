@@ -20,6 +20,8 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(samplesStore);
 
+const { setSearchPosition } = useSearchPosition();
+
 setStateFromQueryParams(route);
 
 const {
@@ -72,7 +74,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "sample-id", params: { id } },

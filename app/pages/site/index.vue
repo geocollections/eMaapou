@@ -20,6 +20,8 @@ const {
   resultsCount,
 } = storeToRefs(sitesStore);
 
+const { setSearchPosition } = useSearchPosition();
+
 const route = useRoute();
 
 setStateFromQueryParams(route);
@@ -74,7 +76,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "site-id", params: { id } },

@@ -35,99 +35,103 @@ const filteredHeaders = computed(() => {
     Right now the button does not appear immediately when page is loading.
     This is something to do with transitions. https://github.com/vuetifyjs/vuetify/issues/10578
   -->
-  <VMenu
-    transition="slide-y-transition"
-    :offset="10"
-    position="bottom"
-    z-index="4"
-    :close-on-content-click="false"
+  <VBtn
+    variant="text"
+    :icon="true"
   >
-    <template #activator="menu">
-      <VTooltip location="bottom" open-delay="500">
-        <template #activator="tooltip">
-          <VBtn
-            variant="text"
-            :icon="mdiTableCog"
-            v-bind="{ ...menu.props, ...tooltip.props }"
-          />
-        </template>
-        <span>{{ $t("table.tooltipConfig") }}</span>
-      </VTooltip>
-    </template>
-    <VCard>
-      <VList flat>
-        <VListItemTitle class="px-2 montserrat align-center">
-          {{ $t("common.headers") }}
-          <VTooltip location="bottom" open-delay="500">
-            <template #activator="{ props: tooltip }">
-              <VBtn
-                v-bind="tooltip"
-                :icon="mdiRefresh"
-                variant="text"
-                @click="emit('reset')"
-              />
-            </template>
-            {{ $t("table.tooltipResetHeaders") }}
-          </VTooltip>
+    <VIcon>{{ mdiTableCog }}</VIcon>
+    <VTooltip
+      activator="parent"
+      location="bottom"
+      open-delay="500"
+    >
+      <span>{{ $t("table.tooltipConfig") }}</span>
+    </VTooltip>
+    <ClientOnly>
+      <VMenu
+        activator="parent"
+        transition="slide-y-transition"
+        :offset="10"
+        position="bottom"
+        z-index="4"
+        :close-on-content-click="false"
+      >
+        <VCard>
+          <VList flat>
+            <VListItemTitle class="px-2 montserrat align-center">
+              {{ $t("common.headers") }}
+              <VTooltip location="bottom" open-delay="500">
+                <template #activator="{ props: tooltip }">
+                  <VBtn
+                    v-bind="tooltip"
+                    :icon="mdiRefresh"
+                    variant="text"
+                    @click="emit('reset')"
+                  />
+                </template>
+                {{ $t("table.tooltipResetHeaders") }}
+              </VTooltip>
 
-          <VTooltip open-delay="500" location="bottom">
-            <template #activator="{ props: tooltip }">
-              <VBtn
-                v-bind="tooltip"
-                variant="text"
-                :icon="!onlyVisible ? mdiEye : mdiEyeOff"
-                @click="onlyVisible = !onlyVisible"
+              <VTooltip open-delay="500" location="bottom">
+                <template #activator="{ props: tooltip }">
+                  <VBtn
+                    v-bind="tooltip"
+                    variant="text"
+                    :icon="!onlyVisible ? mdiEye : mdiEyeOff"
+                    @click="onlyVisible = !onlyVisible"
+                  />
+                </template>
+                <span v-if="!onlyVisible">
+                  {{ $t("table.tooltipShowActiveHeaders") }}
+                </span>
+                <span v-else>{{ $t("table.tooltipShowAllHeaders") }}</span>
+              </VTooltip>
+              <VTextField
+                v-model="filter"
+                class="py-2"
+                density="compact"
+                variant="underlined"
+                hide-details
+                :label="$t('common.filter')"
               />
-            </template>
-            <span v-if="!onlyVisible">
-              {{ $t("table.tooltipShowActiveHeaders") }}
-            </span>
-            <span v-else>{{ $t("table.tooltipShowAllHeaders") }}</span>
-          </VTooltip>
-          <VTextField
-            v-model="filter"
-            class="py-2"
-            density="compact"
-            variant="underlined"
-            hide-details
-            :label="$t('common.filter')"
-          />
-        </VListItemTitle>
-        <VVirtualScroll
-          :items="filteredHeaders"
-          :height="500"
-          :item-height="35"
-          :width="300"
-        >
-          <template #default="{ item }">
-            <VTooltip location="left" :disabled="!sortBy.some((sortItem) => sortItem.key === item.value)">
-              <template #activator="{ props: tooltip }">
-                <VListItem
-                  v-bind="tooltip"
-                  density="compact"
-                  variant="text"
-                  slim
-                  :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
-                  @click.prevent="emit('change', item)"
-                >
-                  <template #prepend>
-                    <VListItemAction start class="mr-2">
-                      <VCheckboxBtn
-                        density="compact"
-                        :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
-                        :model-value="item.show"
-                        color="accent"
-                      />
-                    </VListItemAction>
+            </VListItemTitle>
+            <VVirtualScroll
+              :items="filteredHeaders"
+              :height="500"
+              :item-height="35"
+              :width="300"
+            >
+              <template #default="{ item }">
+                <VTooltip location="left" :disabled="!sortBy.some((sortItem) => sortItem.key === item.value)">
+                  <template #activator="{ props: tooltip }">
+                    <VListItem
+                      v-bind="tooltip"
+                      density="compact"
+                      variant="text"
+                      slim
+                      :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
+                      @click.prevent="emit('change', item)"
+                    >
+                      <template #prepend>
+                        <VListItemAction start class="mr-2">
+                          <VCheckboxBtn
+                            density="compact"
+                            :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
+                            :model-value="item.show"
+                            color="accent"
+                          />
+                        </VListItemAction>
+                      </template>
+                      <VListItemTitle>{{ item.title }}</VListItemTitle>
+                    </VListItem>
                   </template>
-                  <VListItemTitle>{{ item.title }}</VListItemTitle>
-                </VListItem>
+                  {{ $t("common.headerSelectDisabled") }}
+                </VTooltip>
               </template>
-              {{ $t("common.headerSelectDisabled") }}
-            </VTooltip>
-          </template>
-        </VVirtualScroll>
-      </VList>
-    </VCard>
-  </VMenu>
+            </VVirtualScroll>
+          </VList>
+        </VCard>
+      </VMenu>
+    </ClientOnly>
+  </VBtn>
 </template>

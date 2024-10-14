@@ -13,6 +13,8 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(datasetsStore);
 
+const { setSearchPosition } = useSearchPosition();
+
 const route = useRoute();
 
 setStateFromQueryParams(route);
@@ -67,7 +69,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "dataset-id", params: { id } },

@@ -17,6 +17,10 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filters }
   = storeToRefs(analyticalDataStore);
 
+const searchPosition = useSearchPosition();
+const { setSearchPosition } = searchPosition;
+const { searchModule } = storeToRefs(searchPosition);
+
 setStateFromQueryParams(route);
 
 const { $solrFetch } = useNuxtApp();
@@ -116,9 +120,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-const searchPosition = useSearchPosition();
-const { setSearchPosition } = searchPosition;
-const { searchModule } = storeToRefs(searchPosition);
 function handleClickRow({ index, id }: { index: number; id: number }) {
   searchModule.value = "analyticalData";
   setSearchPosition(

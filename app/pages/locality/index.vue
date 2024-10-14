@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiMapMarker } from "@mdi/js";
 import type { LocationQueryRaw } from "vue-router";
+import { mdiMapMarker } from "@mdi/js";
 
 const { $translate } = useNuxtApp();
 
@@ -14,6 +14,8 @@ const {
 } = localitiesStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(localitiesStore);
+
+const { setSearchPosition } = useSearchPosition();
 
 const route = useRoute();
 
@@ -76,7 +78,6 @@ async function handleDataTableUpdate({
   setQueryParamsFromState();
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "locality-id", params: { id } },

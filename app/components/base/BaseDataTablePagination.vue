@@ -93,16 +93,18 @@ function pageLimitRule(value: number) {
 <template>
   <div class="d-inline-flex align-center mr-2 mr-sm-3">
     <div class="">
-      <VSelect
-        density="compact"
-        hide-details
-        variant="outlined"
-        style="min-width: 50px"
-        :items="itemsPerPageOptions"
-        :model-value="options.itemsPerPage"
-        :menu-props="{ location: 'bottom', zIndex: 4 }"
-        @update:model-value="changeRowsPerPage"
-      />
+      <ClientOnly>
+        <VSelect
+          density="compact"
+          hide-details
+          variant="outlined"
+          style="min-width: 50px"
+          :items="itemsPerPageOptions"
+          :model-value="options.itemsPerPage"
+          :menu-props="{ location: 'bottom', zIndex: 4 }"
+          @update:model-value="changeRowsPerPage"
+        />
+      </ClientOnly>
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
       <VBtn
@@ -118,51 +120,51 @@ function pageLimitRule(value: number) {
         @click="previous"
       />
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
-      <VMenu
-        location="bottom"
-        :offset="10"
-        :close-on-content-click="false"
-        z-index="4"
+      <VBtn
+        variant="text"
+        class="text-no-wrap text-caption"
       >
-        <template #activator="{ props: activator }">
-          <VBtn
-            v-bind="activator"
-            variant="text"
-            class="text-no-wrap text-caption"
+        {{ pageSelectText }}
+        <ClientOnly>
+          <VMenu
+            activator="parent"
+            location="bottom"
+            :offset="10"
+            :close-on-content-click="false"
+            z-index="4"
           >
-            {{ pageSelectText }}
-          </VBtn>
-        </template>
-        <VCard class="px-2 py-2 d-flex align-center">
-          <div class="mr-2 text-no-wrap text-caption">
-            {{ goToText }}
-          </div>
-          <VTextField
-            ref="goToField"
-            v-model.number="goToValue"
-            class="mt-0 text-caption"
-            style="width: 64px"
-            density="compact"
-            variant="underlined"
-            hide-details
-            type="number"
-            :rules="[pageLimitRule]"
-            @keyup.enter="selectPage"
-          />
-          <VBtn
-            :disabled="!pageLimitRule(goToValue)"
-            class="px-2 ml-2"
-            size="small"
-            variant="text"
-            @click="selectPage"
-          >
-            {{ goToButtonText }}
-            <VIcon size="small">
-              {{ mdiChevronRight }}
-            </VIcon>
-          </VBtn>
-        </VCard>
-      </VMenu>
+            <VCard class="px-2 py-2 d-flex align-center">
+              <div class="mr-2 text-no-wrap text-caption">
+                {{ goToText }}
+              </div>
+              <VTextField
+                ref="goToField"
+                v-model.number="goToValue"
+                class="mt-0 text-caption"
+                style="width: 64px"
+                density="compact"
+                variant="underlined"
+                hide-details
+                type="number"
+                :rules="[pageLimitRule]"
+                @keyup.enter="selectPage"
+              />
+              <VBtn
+                :disabled="!pageLimitRule(goToValue)"
+                class="px-2 ml-2"
+                size="small"
+                variant="text"
+                @click="selectPage"
+              >
+                {{ goToButtonText }}
+                <VIcon size="small">
+                  {{ mdiChevronRight }}
+                </VIcon>
+              </VBtn>
+            </VCard>
+          </VMenu>
+        </ClientOnly>
+      </VBtn>
       <VBtn
         :disabled="options.page === pageCount"
         :icon="mdiChevronRight"

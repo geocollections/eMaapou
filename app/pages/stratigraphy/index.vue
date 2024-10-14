@@ -15,6 +15,8 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(stratigraphiesStore);
 
+const { setSearchPosition } = useSearchPosition();
+
 setStateFromQueryParams(route);
 
 const {
@@ -71,7 +73,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "stratigraphy-id", params: { id } },
