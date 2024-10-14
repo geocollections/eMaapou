@@ -15,6 +15,8 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOptions }
   = storeToRefs(specimensStore);
 
+const { setSearchPosition } = useSearchPosition();
+
 setStateFromQueryParams(route);
 
 const {
@@ -93,7 +95,6 @@ async function handleImageUpdate({ options: newOptions }: { options: DataTableOp
   setQueryParamsFromState();
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   if (currentView.value === "image") {
     setSearchPosition(

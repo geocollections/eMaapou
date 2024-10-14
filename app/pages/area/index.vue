@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import type { LocationQueryRaw } from "vue-router";
+import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import { FIELDS_SOLR_AREA } from "~/constants";
 
 const areasStore = useAreas();
@@ -14,6 +14,8 @@ const {
 } = areasStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(areasStore);
+
+const { setSearchPosition } = useSearchPosition();
 
 const route = useRoute();
 
@@ -66,7 +68,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "area-id", params: { id } },

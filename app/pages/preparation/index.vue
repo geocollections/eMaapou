@@ -19,6 +19,8 @@ const {
   resultsCount,
 } = storeToRefs(preparationsStore);
 
+const { setSearchPosition } = useSearchPosition();
+
 const route = useRoute();
 
 setStateFromQueryParams(route);
@@ -73,7 +75,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "preparation-id", params: { id } },
