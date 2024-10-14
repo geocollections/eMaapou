@@ -930,87 +930,87 @@ state.option = createOption();
         :initial-selection="state.selectedParameters"
         @input="handleParametersUpdate"
       />
-      <VMenu
-        transition="slide-y-transition"
-        offset="10"
-        content-class="white"
-        :close-on-content-click="false"
+      <VBtn
+        class="ml-3"
+        icon
+        size="small"
       >
-        <template #activator="{ props: menu }">
-          <VBtn
-            class="ml-3"
-            icon
-            size="small"
-            v-bind="menu"
-          >
-            <VIcon> {{ icons.mdiCog }} </VIcon>
-          </VBtn>
-        </template>
-        <VCard>
-          <VCardTitle class="montserrat pb-2">
-            {{ $t("flogChart.settings") }}
-          </VCardTitle>
-          <VCardText>
-            <RendererSwitch
-              :renderer="renderer"
-              @update="handleRenderSwitch"
-            />
-            <VDivider class="my-2" />
-            <VTextField
-              v-model="state.scale"
-              type="number"
-              :label="$t('flogChart.heightScale')"
-              prefix="1:"
-              variant="underlined"
-              hide-details
-              @change="handleScaleChange"
-            >
-              <template #append-inner>
-                <VIcon @click="handleScaleReset">
-                  {{ icons.mdiRefresh }}
-                </VIcon>
-              </template>
-              <template #append>
-                <VBtnToggle
-                  density="compact"
-                  color="accent"
-                  :model-value="ppi"
-                  @update:model-value="handlePpiChange"
-                >
-                  <VBtn
-                    width="65"
-                    size="small"
-                    class="text-none montserrat"
-                    :variant="ppi !== 96 ? 'outlined' : undefined"
-                    :value="96"
+        <VIcon> {{ icons.mdiCog }} </VIcon>
+        <ClientOnly>
+        <VMenu
+          activator="parent"
+          transition="slide-y-transition"
+          offset="10"
+          content-class="white"
+          :close-on-content-click="false"
+        >
+          <VCard>
+            <VCardTitle class="montserrat pb-2">
+              {{ $t("flogChart.settings") }}
+            </VCardTitle>
+            <VCardText>
+              <RendererSwitch
+                :renderer="renderer"
+                @update="handleRenderSwitch"
+              />
+              <VDivider class="my-2" />
+              <VTextField
+                v-model="state.scale"
+                type="number"
+                :label="$t('flogChart.heightScale')"
+                prefix="1:"
+                variant="underlined"
+                hide-details
+                @change="handleScaleChange"
+              >
+                <template #append-inner>
+                  <VIcon @click="handleScaleReset">
+                    {{ icons.mdiRefresh }}
+                  </VIcon>
+                </template>
+                <template #append>
+                  <VBtnToggle
+                    density="compact"
+                    color="accent"
+                    :model-value="ppi"
+                    @update:model-value="handlePpiChange"
                   >
-                    96 PPI
-                  </VBtn>
-                  <VBtn
-                    width="65"
-                    size="small"
-                    class="text-none montserrat"
-                    :variant="ppi !== 72 ? 'outlined' : undefined"
-                    :value="72"
-                  >
-                    72 PPI
-                  </VBtn>
-                </VBtnToggle>
-              </template>
-            </VTextField>
-            <VTextField
-              :model-value="state.parameterChartWidth"
-              type="number"
-              class="d-inline-flex"
-              variant="underlined"
-              hide-details
-              suffix="px"
-              :label="$t('flogChart.parameterChartWidth')"
-              @change="handleParameterChartWidthChange"
-            />
-          </VCardText>
-        </VCard>
-      </VMenu>
+                    <VBtn
+                      width="65"
+                      size="small"
+                      class="text-none montserrat"
+                      :variant="ppi !== 96 ? 'outlined' : undefined"
+                      :value="96"
+                    >
+                      96 PPI
+                    </VBtn>
+                    <VBtn
+                      width="65"
+                      size="small"
+                      class="text-none montserrat"
+                      :variant="ppi !== 72 ? 'outlined' : undefined"
+                      :value="72"
+                    >
+                      72 PPI
+                    </VBtn>
+                  </VBtnToggle>
+                </template>
+              </VTextField>
+              <VTextField
+                :model-value="state.parameterChartWidth"
+                type="number"
+                class="d-inline-flex"
+                variant="underlined"
+                hide-details
+                suffix="px"
+                :label="$t('flogChart.parameterChartWidth')"
+                @change="handleParameterChartWidthChange"
+              />
+            </VCardText>
+          </VCard>
+        </VMenu>
+        </ClientOnly>
+      </VBtn>
     </VToolbar>
     <VDivider />
     <div ref="containerFlogChart" class="overflow-x-auto">

@@ -51,25 +51,27 @@ function handleEnd(isIntersecting: boolean) {
       :append-inner-icon="mdiMenuDown"
       @update:model-value="emit('update:search', $event)"
     >
-      <VMenu
-        ref="menuRef"
-        v-model="menuOpen"
-        activator="parent"
-        location="bottom"
-        max-height="400px"
-        :close-on-content-click="false"
-      >
-        <VList elevation="0" class="border">
-          <VListItem
-            v-for="(item, index) in items"
-            :key="index"
-            @click="emit('select', item)"
-          >
-            <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
-          </VListItem>
-          <div v-intersect="handleEnd" />
-        </VList>
-      </VMenu>
+      <ClientOnly>
+        <VMenu
+          ref="menuRef"
+          v-model="menuOpen"
+          activator="parent"
+          location="bottom"
+          max-height="400px"
+          :close-on-content-click="false"
+        >
+          <VList elevation="0" class="border">
+            <VListItem
+              v-for="(item, index) in items"
+              :key="index"
+              @click="emit('select', item)"
+            >
+              <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
+            </VListItem>
+            <div v-intersect="handleEnd" />
+          </VList>
+        </VMenu>
+      </ClientOnly>
     </VTextField>
   </div>
 </template>
