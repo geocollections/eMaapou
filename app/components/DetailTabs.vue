@@ -80,8 +80,7 @@ function translateTitle(tab: HydratedTab) {
           </VListItem>
         </VList>
       </VMenu>
-      <ClientOnly />
-    </clientonly>
+    </ClientOnly>
   </VBtn>
 </template>
 
