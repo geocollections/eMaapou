@@ -44,7 +44,7 @@
     "@vueuse/core": "^11.0.3",
     "@vueuse/nuxt": "^11.0.3",
     "eslint": "^9.5.0",
-    "happy-dom": "^14.10.1",
+    "happy-dom": "^15.7.4",
     "leaflet": "^1.9.4",
     "leaflet-gesture-handling": "^1.2.2",
     "leaflet.fullscreen": "^3.0.0",
