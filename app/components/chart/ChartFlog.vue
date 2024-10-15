@@ -1,4 +1,18 @@
 <script setup lang="ts">
+import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
+import type {
+  AxisPointerComponentOption,
+  DataZoomComponentOption,
+  GridComponentOption,
+  TitleComponentOption,
+  TooltipComponentOption,
+} from "echarts/components";
+import type { ComposeOption } from "echarts/core";
+import type {
+  XAXisComponentOption,
+  YAXisComponentOption,
+} from "echarts/types/dist/echarts.js";
+import type { TitleOption } from "echarts/types/dist/shared.js";
 import { mdiCog, mdiRefresh } from "@mdi/js";
 import { CustomChart, LineChart } from "echarts/charts";
 import {
@@ -16,20 +30,6 @@ import differenceBy from "lodash/differenceBy";
 import groupBy from "lodash/groupBy";
 import orderBy from "lodash/orderBy";
 import VChart from "vue-echarts";
-import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
-import type {
-  AxisPointerComponentOption,
-  DataZoomComponentOption,
-  GridComponentOption,
-  TitleComponentOption,
-  TooltipComponentOption,
-} from "echarts/components";
-import type { ComposeOption } from "echarts/core";
-import type {
-  XAXisComponentOption,
-  YAXisComponentOption,
-} from "echarts/types/dist/echarts.js";
-import type { TitleOption } from "echarts/types/dist/shared.js";
 import type { Renderer } from "~/types/enums";
 import clipRectByRect from "~/utils/clipRectByRect";
 import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
@@ -937,78 +937,78 @@ state.option = createOption();
       >
         <VIcon> {{ icons.mdiCog }} </VIcon>
         <ClientOnly>
-        <VMenu
-          activator="parent"
-          transition="slide-y-transition"
-          offset="10"
-          content-class="white"
-          :close-on-content-click="false"
-        >
-          <VCard>
-            <VCardTitle class="montserrat pb-2">
-              {{ $t("flogChart.settings") }}
-            </VCardTitle>
-            <VCardText>
-              <RendererSwitch
-                :renderer="renderer"
-                @update="handleRenderSwitch"
-              />
-              <VDivider class="my-2" />
-              <VTextField
-                v-model="state.scale"
-                type="number"
-                :label="$t('flogChart.heightScale')"
-                prefix="1:"
-                variant="underlined"
-                hide-details
-                @change="handleScaleChange"
-              >
-                <template #append-inner>
-                  <VIcon @click="handleScaleReset">
-                    {{ icons.mdiRefresh }}
-                  </VIcon>
-                </template>
-                <template #append>
-                  <VBtnToggle
-                    density="compact"
-                    color="accent"
-                    :model-value="ppi"
-                    @update:model-value="handlePpiChange"
-                  >
-                    <VBtn
-                      width="65"
-                      size="small"
-                      class="text-none montserrat"
-                      :variant="ppi !== 96 ? 'outlined' : undefined"
-                      :value="96"
+          <VMenu
+            activator="parent"
+            transition="slide-y-transition"
+            offset="10"
+            content-class="white"
+            :close-on-content-click="false"
+          >
+            <VCard>
+              <VCardTitle class="montserrat pb-2">
+                {{ $t("flogChart.settings") }}
+              </VCardTitle>
+              <VCardText>
+                <RendererSwitch
+                  :renderer="renderer"
+                  @update="handleRenderSwitch"
+                />
+                <VDivider class="my-2" />
+                <VTextField
+                  v-model="state.scale"
+                  type="number"
+                  :label="$t('flogChart.heightScale')"
+                  prefix="1:"
+                  variant="underlined"
+                  hide-details
+                  @change="handleScaleChange"
+                >
+                  <template #append-inner>
+                    <VIcon @click="handleScaleReset">
+                      {{ icons.mdiRefresh }}
+                    </VIcon>
+                  </template>
+                  <template #append>
+                    <VBtnToggle
+                      density="compact"
+                      color="accent"
+                      :model-value="ppi"
+                      @update:model-value="handlePpiChange"
                     >
-                      96 PPI
-                    </VBtn>
-                    <VBtn
-                      width="65"
-                      size="small"
-                      class="text-none montserrat"
-                      :variant="ppi !== 72 ? 'outlined' : undefined"
-                      :value="72"
-                    >
-                      72 PPI
-                    </VBtn>
-                  </VBtnToggle>
-                </template>
-              </VTextField>
-              <VTextField
-                :model-value="state.parameterChartWidth"
-                type="number"
-                class="d-inline-flex"
-                variant="underlined"
-                hide-details
-                suffix="px"
-                :label="$t('flogChart.parameterChartWidth')"
-                @change="handleParameterChartWidthChange"
-              />
-            </VCardText>
-          </VCard>
-        </VMenu>
+                      <VBtn
+                        width="65"
+                        size="small"
+                        class="text-none montserrat"
+                        :variant="ppi !== 96 ? 'outlined' : undefined"
+                        :value="96"
+                      >
+                        96 PPI
+                      </VBtn>
+                      <VBtn
+                        width="65"
+                        size="small"
+                        class="text-none montserrat"
+                        :variant="ppi !== 72 ? 'outlined' : undefined"
+                        :value="72"
+                      >
+                        72 PPI
+                      </VBtn>
+                    </VBtnToggle>
+                  </template>
+                </VTextField>
+                <VTextField
+                  :model-value="state.parameterChartWidth"
+                  type="number"
+                  class="d-inline-flex"
+                  variant="underlined"
+                  hide-details
+                  suffix="px"
+                  :label="$t('flogChart.parameterChartWidth')"
+                  @change="handleParameterChartWidthChange"
+                />
+              </VCardText>
+            </VCard>
+          </VMenu>
         </ClientOnly>
       </VBtn>
     </VToolbar>

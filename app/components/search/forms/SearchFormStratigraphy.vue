@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits<{
   update: [];
