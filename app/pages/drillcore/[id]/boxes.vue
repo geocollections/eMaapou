@@ -3,6 +3,8 @@ const { options, searchParams, handleUpdate, setStateFromQueryParams } = useData
   initOptions: ATTACHMENT_LINK.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
+const { page: otherDrillcoreBoxPage } = storeToRefs(useDrillcoreBoxPosition());
+
 const route = useRoute();
 setStateFromQueryParams(route);
 
@@ -61,8 +63,6 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   setStateFromQueryParams(route);
   await refresh();
 });
-
-const { page: otherDrillcoreBoxPage } = storeToRefs(useDrillcoreBoxPosition());
 
 function handleClick(_box: DrillcoreBox, position: number) {
   otherDrillcoreBoxPage.value = Math.floor(position / 10) + 1;
