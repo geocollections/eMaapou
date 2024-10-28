@@ -27,19 +27,22 @@ function handleClick() {
 
 <template>
   <VBtn
-    id="edit-btn"
     size="small"
     variant="text"
     color="deep-orange-darken-2"
-    :icon="mdiSquareEditOutline"
+    icon
     :aria-label="$t('common.linkToEdit')"
     @click="handleClick"
-  />
-  <VTooltip
-    location="bottom"
-    activator="#edit-btn"
-    :aria-label="$t('common.linkToEdit')"
   >
-    <span>{{ $t("common.linkToEdit") }}</span>
-  </VTooltip>
+    <VIcon>{{ mdiSquareEditOutline }}</VIcon>
+    <ClientOnly>
+      <VTooltip
+        location="bottom"
+        activator="parent"
+        :aria-label="$t('common.linkToEdit')"
+      >
+        <span>{{ $t("common.linkToEdit") }}</span>
+      </VTooltip>
+    </ClientOnly>
+  </VBtn>
 </template>

@@ -38,11 +38,6 @@ const cssProps = computed(() => {
     color="transparent"
     :style="cssProps"
   >
-    <!--
-          NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
-          Using v-slot:activator added a transition that made the title disappear when clicked.
-          https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
-         -->
     <AppBarLogo />
     <VToolbarItems class="w-100 mr-md-2">
       <VBtn

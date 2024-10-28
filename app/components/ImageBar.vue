@@ -32,38 +32,41 @@ function handleEnd() {
       :key="index"
       class="mr-3 "
     >
-      <VTooltip location="bottom" color="accent">
-        <template #activator="{ props: tooltipProps }">
-          <slot name="image" :item="item">
-            <NuxtImg
-              v-bind="tooltipProps"
-              :src="item.filename"
-              provider="geocollections"
-              :modifiers="{ size: 'medium' }"
-              height="175"
-              class="rounded cursor-pointer thumbnail-image"
-              @click="
-                openOverlay(index)
-              "
+      <slot name="image" :item="item">
+        <NuxtImg
+          :src="item.filename"
+          provider="geocollections"
+          :modifiers="{ size: 'medium' }"
+          height="175"
+          class="rounded cursor-pointer thumbnail-image"
+          @click="
+            openOverlay(index)
+          "
+        >
+          <template #placeholder>
+            <VRow
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
             >
-              <template #placeholder>
-                <VRow
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center"
-                >
-                  <VProgressCircular indeterminate color="grey-lighten-5" />
-                </VRow>
-              </template>
-            </NuxtImg>
+              <VProgressCircular indeterminate color="grey-lighten-5" />
+            </VRow>
+          </template>
+        </NuxtImg>
+      </slot>
+      <ClientOnly>
+        <VTooltip
+          activator="parent"
+          location="bottom"
+          color="accent"
+        >
+          <slot name="tooltipInfo" :item="item">
+            <div>
+              {{ $t("common.clickToOpen") }}
+            </div>
           </slot>
-        </template>
-        <slot name="tooltipInfo" :item="item">
-          <div>
-            {{ $t("common.clickToOpen") }}
-          </div>
-        </slot>
-      </VTooltip>
+        </VTooltip>
+      </ClientOnly>
     </div>
     <div v-intersect="loadMore" />
     <ImageOverlay

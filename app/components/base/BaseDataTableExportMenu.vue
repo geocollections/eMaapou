@@ -25,13 +25,15 @@ function handleExport() {
     :icon="true"
   >
     <VIcon>{{ mdiFileExportOutline }}</VIcon>
-    <VTooltip
-      activator="parent"
-      location="bottom"
-      open-delay="500"
-    >
-      <span>{{ $t("table.tooltipExport") }}</span>
-    </VTooltip>
+    <ClientOnly>
+      <VTooltip
+        activator="parent"
+        location="bottom"
+        open-delay="500"
+      >
+        {{ $t("table.tooltipExport") }}
+      </VTooltip>
+    </ClientOnly>
     <ClientOnly>
       <VMenu
         activator="parent"

@@ -24,7 +24,6 @@ const linkWidth = computed(() => {
         class="d-flex align-center"
       >
         <NuxtLink
-          :id="`history-${index}`"
           class="text-link-grey history-link d-inline-block text-truncate"
           :style="`max-width: ${linkWidth}px`"
           :to="localePath({ path: entry.to })"
@@ -33,7 +32,7 @@ const linkWidth = computed(() => {
           <VTooltip
             open-delay="500"
             location="bottom"
-            :activator="`#history-${index}`"
+            activator="parent"
           >
             <span>{{ entry.title }}</span>
           </VTooltip>

@@ -79,88 +79,87 @@ function updateOptions(event: DataTableOptions) {
           >
             {{ image.specimen_full_name }}
           </NuxtLink>
-          <VTooltip
-            location="bottom"
-            color="header"
-            z-index="51000"
-            max-width="250"
+          <VCard
+            flat
+            class="d-flex image-hover"
+            color="transparent"
+            hover
+            :to="localePath({ name: 'file-id', params: { id: image.id } })"
+            :class="{ 'image-hover-elevation': !!cropImages }"
           >
-            <template #activator="{ props: tooltipProps }">
-              <VCard
-                flat
-                class="d-flex image-hover"
-                color="transparent"
-                hover
-                :to="localePath({ name: 'file-id', params: { id: image.id } })"
-                :class="{ 'image-hover-elevation': !!cropImages }"
-                v-bind="tooltipProps"
-              >
-                <VImg
-                  v-if="image.image"
-                  position="top"
-                  :contain="!cropImages"
-                  :lazy-src="
-                    img(
-                      `${image.image}`,
-                      { size: 'small' },
-                      { provider: 'geocollections' },
-                    )
-                  "
-                  :src="
-                    img(
-                      `${image.image}`,
-                      { size: 'small' },
-                      { provider: 'geocollections' },
-                    )
-                  "
+            <VImg
+              v-if="image.image"
+              position="top"
+              :contain="!cropImages"
+              :lazy-src="
+                img(
+                  `${image.image}`,
+                  { size: 'small' },
+                  { provider: 'geocollections' },
+                )
+              "
+              :src="
+                img(
+                  `${image.image}`,
+                  { size: 'medium' },
+                  { provider: 'geocollections' },
+                )
+              "
+            >
+              <template #placeholder>
+                <VRow
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
                 >
-                  <template #placeholder>
-                    <VRow
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <VProgressCircular
-                        indeterminate
-                        color="grey-lighten-5"
-                      />
-                    </VRow>
-                  </template>
-                </VImg>
-
-                <VRow v-else align="center">
-                  <VCol class="text-center">
-                    <div class="py-3">
-                      <VIcon style="font-size: 6rem" class="text-grey">
-                        {{ mdiFileImageOutline }}
-                      </VIcon>
-                    </div>
-                  </VCol>
+                  <VProgressCircular
+                    indeterminate
+                    color="grey-lighten-5"
+                  />
                 </VRow>
-              </VCard>
-            </template>
+              </template>
+            </VImg>
 
-            <span>
-              <b>{{ $t('photo.id') }}: </b> {{ image.id }}<br>
-              <span v-if="image.date_created || image.date_created_free">
-                <b>{{ $t('photo.date') }}: </b>
-                <span v-if="image.date_created">{{
-                  image.date_created.split('T')[0]
-                }}</span>
-                <span v-else>{{ image.date_created_free }}</span>
-                <br>
-              </span>
-              <span v-if="image.agent || image.author_free">
-                <b>{{ $t('photo.author') }}: </b>{{ image.agent || image.author_free }}
-                <br>
-              </span>
-              <span v-if="image.image_number">
-                <b>{{ $t('photo.number') }}: </b>
-                {{ image.image_number }}
-                <br>
-              </span>
-            </span>
-          </VTooltip>
+            <VRow v-else align="center">
+              <VCol class="text-center">
+                <div class="py-3">
+                  <VIcon style="font-size: 6rem" class="text-grey">
+                    {{ mdiFileImageOutline }}
+                  </VIcon>
+                </div>
+              </VCol>
+            </VRow>
+            <ClientOnly>
+              <VTooltip
+                activator="parent"
+                location="bottom"
+                color="header"
+                z-index="51000"
+                max-width="250"
+              >
+                <span>
+                  <b>{{ $t('photo.id') }}: </b> {{ image.id }}<br>
+                  <span v-if="image.date_created || image.date_created_free">
+                    <b>{{ $t('photo.date') }}: </b>
+                    <span v-if="image.date_created">{{
+                      image.date_created.split('T')[0]
+                    }}</span>
+                    <span v-else>{{ image.date_created_free }}</span>
+                    <br>
+                  </span>
+                  <span v-if="image.agent || image.author_free">
+                    <b>{{ $t('photo.author') }}: </b>{{ image.agent || image.author_free }}
+                    <br>
+                  </span>
+                  <span v-if="image.image_number">
+                    <b>{{ $t('photo.number') }}: </b>
+                    {{ image.image_number }}
+                    <br>
+                  </span>
+                </span>
+              </VTooltip>
+            </ClientOnly>
+          </VCard>
         </VCol>
       </VRow>
     </div>

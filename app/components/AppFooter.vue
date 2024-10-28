@@ -274,20 +274,22 @@ const routes = [
                 target="FooterLink"
                 rel="noopener noreferrer"
               >
-                <VTooltip location="top" :aria-label="item.title">
-                  <template #activator="{ props }">
-                    <NuxtImg
-                      v-bind="props"
-                      :src="item.src"
-                      :alt="$t(item.alt)"
-                      :height="item.height"
-                      :width="item.width"
-                      class="footer-logo py-1 py-sm-0 px-3"
-                    />
-                  </template>
-
-                  <span>{{ $t(item.title) }}</span>
-                </VTooltip>
+                <NuxtImg
+                  :src="item.src"
+                  :alt="$t(item.alt)"
+                  :height="item.height"
+                  :width="item.width"
+                  class="footer-logo py-1 py-sm-0 px-3"
+                />
+                <ClientOnly>
+                  <VTooltip
+                    activator="parent"
+                    location="bottom"
+                    :aria-label="item.title"
+                  >
+                    {{ $t(item.title) }}
+                  </VTooltip>
+                </ClientOnly>
               </a>
             </div>
           </div>
