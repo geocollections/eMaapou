@@ -110,11 +110,9 @@ watch(() => display.smAndDown.value, (value) => {
         </VList>
       </VNavigationDrawer>
 
-      <VMain>
-        <div>
-          <slot />
-        </div>
-      </VMain>
+      <div>
+        <slot />
+      </div>
     </VApp>
   </div>
 </template>
