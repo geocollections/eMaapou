@@ -65,6 +65,7 @@ watch(() => display.smAndDown.value, (value) => {
             </template>
           </VListItem>
           <VDivider class="mb-1" />
+          <!-- NOTE: list items need to be client only because they are links and vuetify does not handle nuxt links well i.e they break in unusual ways -->
           <ClientOnly>
             <VListItem
               v-for="(item, index) in BROWSE_TAXON_LIST"
