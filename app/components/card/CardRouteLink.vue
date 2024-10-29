@@ -16,12 +16,12 @@ const localePath = useLocalePath();
 <template>
   <div>
     <VHover v-slot="{ isHovering, props: hoverProps }">
-      <VCard
+      <NuxtLink
         v-bind="hoverProps"
         :to="localePath(route.routeName)"
-        class="mx-sm-1 mb-1 mb-sm-2 d-flex border"
+        class="mx-sm-1 mb-1 mb-sm-2 d-flex border rounded text-decoration-none"
         :elevation="0"
-        :color="isHovering ? 'accent-lighten-1' : 'accent'"
+        :class="isHovering ? 'bg-accent-lighten-1' : 'bg-accent'"
       >
         <div class="py-2 d-flex d-sm-block align-center">
           <VIcon
@@ -59,7 +59,7 @@ const localePath = useLocalePath();
           class="ml-auto my-auto"
           start
         />
-      </VCard>
+      </NuxtLink>
     </VHover>
   </div>
 </template>

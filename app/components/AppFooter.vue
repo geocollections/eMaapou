@@ -269,7 +269,7 @@ const routes = [
             <div>
               <a
                 v-for="(item, index) in imageLinks"
-                :key="index"
+                :key="`footer-image-${index}`"
                 :href="item.href"
                 target="FooterLink"
                 rel="noopener noreferrer"
@@ -329,7 +329,7 @@ const routes = [
                 >
                   <a
                     v-for="(item, index) in textLinks"
-                    :key="index"
+                    :key="`text-link-${index}`"
                     :href="item.href"
                     class="font-weight-bold text-blue-darken-3 text-decoration-none"
                   >

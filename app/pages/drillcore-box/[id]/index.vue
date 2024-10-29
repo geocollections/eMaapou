@@ -58,7 +58,7 @@ function isActiveImage(image: { uuid_filename: string }) {
         />
 
         <div class="text-end">
-          <span v-for="(size, index) in imageSizes" :key="index">
+          <span v-for="(size, index) in imageSizes" :key="`image-size-${index}`">
             <a
               class="text-link"
               @click="$openImage(activeImage.uuid_filename, size)"
@@ -75,7 +75,7 @@ function isActiveImage(image: { uuid_filename: string }) {
         >
           <NuxtImg
             v-for="(item, index) in drillcoreBoxImages"
-            :key="index"
+            :key="`image-${index}`"
             :src="item.uuid_filename"
             provider="geocollections"
             :modifiers="{ size: 'small' }"
