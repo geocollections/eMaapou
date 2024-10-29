@@ -38,7 +38,7 @@ function translateTitle(tab: HydratedTab) {
   >
     <VTab
       v-for="(item, index) in tabs"
-      :key="index"
+      :key="`tab-${index}`"
       class="montserrat tab text-none text-grey-darken-3 text-body-2"
       selected-class="v-tab--selected bg-grey-lighten-5 active-tab font-weight-medium border-s border-e border-t"
       exact
@@ -68,7 +68,7 @@ function translateTitle(tab: HydratedTab) {
         <VList>
           <VListItem
             v-for="(item, index) in tabs"
-            :key="index"
+            :key="`menu-tab-${index}`"
             :to="
               localePath({
                 name: item.routeName,

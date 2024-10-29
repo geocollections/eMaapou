@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { Area } from "../[id].vue";
 import { mdiFileDownloadOutline } from "@mdi/js";
 import isEmpty from "lodash/isEmpty";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
-import type { Area } from "../[id].vue";
 
 const props = defineProps<{ area: Area }>();
 
@@ -163,7 +163,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             :value="egfArray"
           >
             <template #value>
-              <span v-for="(id, index) in egfArray" :key="index">
+              <span v-for="(id, index) in egfArray" :key="`egf-${index}`">
                 <BaseLinkExternal
                   :to="`https://fond.egt.ee/fond/egf/${id}`"
                 >
@@ -192,7 +192,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             :value="eelisArray"
           >
             <template #value>
-              <span v-for="(id, index) in eelisArray" :key="index">
+              <span v-for="(id, index) in eelisArray" :key="`eelis-${index}`">
                 <BaseLinkExternal :to="`http://register.keskkonnainfo.ee/envreg/main?reg_kood=${id}`">
                   {{ id }}
                 </BaseLinkExternal>
@@ -207,7 +207,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             :value="planArray"
           >
             <template #value>
-              <span v-for="(item, index) in planArray" :key="index">
+              <span v-for="(item, index) in planArray" :key="`plan-${index}`">
                 <a
                   class="text-link"
                   :download="item.trim()"

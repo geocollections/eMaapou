@@ -105,7 +105,7 @@ function updateOptions(event: DataTableOptions) {
           <div class="d-flex align-center" style="overflow-x: auto">
             <div
               v-for="(item, index) in items"
-              :key="index"
+              :key="`preview-gallery-${index}`"
               class="my-2 mx-2"
             >
               <VHover v-slot="{ isHovering, props: hoverProps }">
@@ -162,7 +162,7 @@ function updateOptions(event: DataTableOptions) {
           >
             <VCarouselItem
               v-for="(item, index) in items"
-              :key="index"
+              :key="`carousel-item-${index}`"
               nuxt
               :to="localePath({ name: 'file-id', params: { id: item.id } })"
               :src="
@@ -204,7 +204,7 @@ function updateOptions(event: DataTableOptions) {
             </div>
 
             <div class="text-center">
-              <span v-for="(size, index) in imageSizes" :key="index">
+              <span v-for="(size, index) in imageSizes" :key="`image-size-${index}`">
                 <a
                   class="text-link"
                   @click="$openImage(items[activeIndex].uuid_filename, size)"

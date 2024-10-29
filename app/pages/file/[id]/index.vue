@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { File } from "../[id].vue";
 import {
   mdiFileDownloadOutline,
   mdiFileMusicOutline,
@@ -6,7 +7,6 @@ import {
 } from "@mdi/js";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
-import type { File } from "../[id].vue";
 
 const props = defineProps<{
   file: File;
@@ -244,7 +244,7 @@ const mapOverlays = computed(() => {
           </div>
 
           <div class="text-center">
-            <span v-for="(size, index) in imageSizes" :key="index">
+            <span v-for="(size, index) in imageSizes" :key="`image-size-${index}`">
               <a
                 class="text-link"
                 @click="$openImage(file.filename, size)"
@@ -314,7 +314,7 @@ const mapOverlays = computed(() => {
           <template v-for="(item, index) in specimenIdentification">
             <TableRow
               v-if="item.taxon"
-              :key="index"
+              :key="`identification-${index}`"
               :title="$t('file.name')"
               :value="item.taxon"
             >
@@ -333,7 +333,7 @@ const mapOverlays = computed(() => {
           <template v-for="(item, index) in specimenIdentificationGeology">
             <TableRow
               v-if="item.taxon"
-              :key="index"
+              :key="`identification-geology-${index}`"
               :title="$t('file.name')"
               :value="item.taxon"
             >
@@ -473,7 +473,7 @@ const mapOverlays = computed(() => {
             <template #value="{ value }">
               <ul style="list-style-position: inside">
                 <template v-for="(item, index) in value">
-                  <li v-if="item.keyword" :key="index">
+                  <li v-if="item.keyword" :key="`keyword-${index}`">
                     {{ item.keyword.keyword }}
                   </li>
                 </template>

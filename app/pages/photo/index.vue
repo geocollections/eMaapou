@@ -138,14 +138,6 @@ useHead({
         color="accent"
         density="compact"
       >
-        <!-- <VTab -->
-        <!--   v-for="view in views" -->
-        <!--   :key="view" -->
-        <!--   selected-class="active-tab" -->
-        <!--   class="montserrat text-capitalize" -->
-        <!-- > -->
-        <!--   {{ $t(`common.${view}`) }} -->
-        <!-- </VTab> -->
         <VTab
           :value="0"
           active-class="active-tab"
