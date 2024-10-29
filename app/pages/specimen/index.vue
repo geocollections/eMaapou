@@ -162,6 +162,7 @@ useHead({
         bg-color="white"
         color="accent"
         density="compact"
+        @update:model-value="setQueryParamsFromState"
       >
         <VTab
           value="table"
@@ -181,7 +182,10 @@ useHead({
           </VChip>
         </VTab>
       </VTabs>
-      <VWindow v-model="currentView" :touch="false">
+      <VWindow
+        v-model="currentView"
+        :touch="false"
+      >
         <VWindowItem value="table">
           <DataTableSpecimen
             class="border-t border-b"

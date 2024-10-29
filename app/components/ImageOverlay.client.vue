@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="T">
-import { mdiClose } from "@mdi/js";
 import type { Image } from "./ImageBar.vue";
+import { mdiClose } from "@mdi/js";
 
 withDefaults(defineProps<
   {
