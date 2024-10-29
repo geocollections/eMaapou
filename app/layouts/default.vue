@@ -65,48 +65,49 @@ watch(() => display.smAndDown.value, (value) => {
             </template>
           </VListItem>
           <VDivider class="mb-1" />
-          <VListItem
-            v-for="(item, index) in BROWSE_TAXON_LIST"
-            :key="`taxon-list-${index}`"
-            color="accent-lighten-2"
-            exact
-            :value="item.routeName"
-            :to="localePath({ name: item.routeName })"
-          >
-            <template #prepend>
-              <VIcon>{{ item.icon }}</VIcon>
-            </template>
-            <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-          </VListItem>
-
-          <VDivider class="mb-1" />
-          <VListItem
-            v-for="(item, index) in BROWSE_LAB_LIST"
-            :key="`lab-list-${index}`"
-            link
-            :value="item.routeName"
-            color="accent-lighten-2"
-            :to="localePath({ name: item.routeName })"
-          >
-            <template #prepend>
-              <VIcon>{{ item.icon }}</VIcon>
-            </template>
-            <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-          </VListItem>
-          <VDivider class="mb-1" />
-          <VListItem
-            v-for="(item, index) in BROWSE_GEOLOGY_LIST"
-            :key="`geology-list-${index}`"
-            link
-            :value="item.routeName"
-            color="accent-lighten-2"
-            :to="localePath({ name: item.routeName })"
-          >
-            <template #prepend>
-              <VIcon>{{ item.icon }}</VIcon>
-            </template>
-            <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
-          </VListItem>
+          <ClientOnly>
+            <VListItem
+              v-for="(item, index) in BROWSE_TAXON_LIST"
+              :key="`taxon-list-${index}`"
+              color="accent-lighten-2"
+              exact
+              :value="item.routeName"
+              :to="localePath({ name: item.routeName })"
+            >
+              <template #prepend>
+                <VIcon>{{ item.icon }}</VIcon>
+              </template>
+              <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
+            </VListItem>
+            <VDivider class="mb-1" />
+            <VListItem
+              v-for="(item, index) in BROWSE_LAB_LIST"
+              :key="`lab-list-${index}`"
+              link
+              :value="item.routeName"
+              color="accent-lighten-2"
+              :to="localePath({ name: item.routeName })"
+            >
+              <template #prepend>
+                <VIcon>{{ item.icon }}</VIcon>
+              </template>
+              <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
+            </VListItem>
+            <VDivider class="mb-1" />
+            <VListItem
+              v-for="(item, index) in BROWSE_GEOLOGY_LIST"
+              :key="`geology-list-${index}`"
+              link
+              :value="item.routeName"
+              color="accent-lighten-2"
+              :to="localePath({ name: item.routeName })"
+            >
+              <template #prepend>
+                <VIcon>{{ item.icon }}</VIcon>
+              </template>
+              <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
+            </VListItem>
+          </ClientOnly>
         </VList>
       </VNavigationDrawer>
 
