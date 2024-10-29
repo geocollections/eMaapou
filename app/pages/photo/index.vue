@@ -2,7 +2,7 @@
 import { mdiFileImageOutline } from "@mdi/js";
 import { FIELDS_SOLR_PHOTO } from "~/constants";
 
-const views = computed(() => ["table", "image", "gallery"]);
+const views = computed(() => ["table", "image"]);
 
 const photosStore = usePhotos();
 const {
@@ -59,7 +59,7 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
+  router.push({ query: { ...getQueryParams() } });
 }
 
 watch(currentView, () => {
@@ -137,31 +137,25 @@ useHead({
         bg-color="white"
         color="accent"
         density="compact"
+        @update:model-value="setQueryParamsFromState"
       >
         <VTab
-          :value="0"
+          value="table"
           active-class="active-tab"
           class="montserrat text-capitalize"
         >
           {{ $t(`common.table`) }}
         </VTab>
         <VTab
-          :value="1"
+          value="image"
           active-class="active-tab"
           class="montserrat text-capitalize"
         >
           {{ $t(`common.image`) }}
         </VTab>
-        <VTab
-          :value="2"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.gallery`) }}
-        </VTab>
       </VTabs>
       <VWindow v-model="currentView" :touch="false">
-        <VWindowItem :value="0">
+        <VWindowItem value="table">
           <DataTablePhoto
             class="border-t border-b"
             flat
@@ -178,17 +172,8 @@ useHead({
             @click:row="handleClickRow"
           />
         </VWindowItem>
-        <VWindowItem :value="1">
+        <VWindowItem value="image">
           <ImageView
-            class="border-t border-b"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :options="options"
-            @update="handleDataTableUpdate"
-          />
-        </VWindowItem>
-        <VWindowItem :value="2">
-          <GalleryView
             class="border-t border-b"
             :items="data?.response.docs ?? []"
             :count="data?.response.numFound ?? 0"

@@ -1,5 +1,5 @@
-import { z } from "zod";
 import type { RouteLocation } from "vue-router";
+import { z } from "zod";
 import type {
   DateListFilter,
   GeomFilter,
@@ -31,7 +31,8 @@ export const usePhotos = defineStore(
       initHeaders: HEADERS_PHOTO,
     });
 
-    const view = ref(0);
+    const views = computed(() => ["table", "image"] as const);
+    const view = ref("table" as "table" | "image");
 
     const { filters, solrFilters, reset: resetFilters } = useFilters({
       locality: {
@@ -109,10 +110,14 @@ export const usePhotos = defineStore(
 
     const routeQuerySchema = routeQueryOptionsSchema.merge(
       routeQueryFiltersSchema,
-    );
+    ).merge(z.object({
+      view: z.enum(views.value).catch("table" as const),
+    }));
 
     function setStateFromQueryParams(route: RouteLocation) {
       const params = routeQuerySchema.parse(route.query);
+
+      view.value = params.view;
 
       options.value.page = params.page;
       options.value.itemsPerPage = params.itemsPerPage;
@@ -141,7 +146,9 @@ export const usePhotos = defineStore(
 
     const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
       filtersStateToQueryParamsSchema,
-    );
+    ).merge(z.object({
+      view: z.enum(views.value),
+    }));
 
     function getQueryParams() {
       return stateToQueryParamsSchema.parse({
@@ -159,6 +166,7 @@ export const usePhotos = defineStore(
         page: options.value.page,
         itemsPerPage: options.value.itemsPerPage,
         sortBy: options.value.sortBy,
+        view: view.value,
       });
     }
 

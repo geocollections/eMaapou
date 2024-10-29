@@ -22,6 +22,13 @@ const footerProps = ref({
 
 const cropImages = ref(true);
 
+const showOverlay = ref(false);
+const initIndex = ref(0);
+function openOverlay(index: number) {
+  initIndex.value = index;
+  showOverlay.value = true;
+}
+
 const pagination = computed(() => {
   return { pageCount: Math.ceil(props.count / props.options.itemsPerPage) };
 });
@@ -84,8 +91,8 @@ function updateOptions(event: DataTableOptions) {
             class="d-flex image-hover"
             color="transparent"
             hover
-            :to="localePath({ name: 'file-id', params: { id: image.id } })"
             :class="{ 'image-hover-elevation': !!cropImages }"
+            @click="openOverlay(index)"
           >
             <VImg
               v-if="image.image"
@@ -162,6 +169,12 @@ function updateOptions(event: DataTableOptions) {
           </VCard>
         </VCol>
       </VRow>
+      <ImageOverlay
+        v-model="showOverlay"
+        :initial-slide="initIndex"
+        :images="items"
+        :total="options.itemsPerPage"
+      />
     </div>
   </div>
 </template>
