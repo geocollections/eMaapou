@@ -289,13 +289,8 @@ function handleSearch() {
         </VRow>
         <VRow>
           <VCol cols="12" md="5">
-            <VCard
-              class=""
-              rounded="0"
-              flat
-              color="transparent"
-            >
-              <VCardActions class="px-0 pt-md-6">
+            <div>
+              <div class="px-0 pt-md-6">
                 <VForm
                   class="d-flex text-right"
                   style="width: 100%"
@@ -317,41 +312,37 @@ function handleSearch() {
                     <VIcon :icon="mdiMagnify" size="large" />
                   </VBtn>
                 </VForm>
-              </VCardActions>
-              <VCardText
+              </div>
+              <div
                 v-show="$vuetify.display.mdAndUp"
                 style="word-break: break-word"
                 :class="{
                   'font-small montserrat': $vuetify.display.smAndDown,
                 }"
-                class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
+                class="text-sm-h6 font-weight-regular text-white pr-0 pl-1 pt-6"
               >
                 {{ $t("landing.description") }}
-              </VCardText>
-            </VCard>
+              </div>
+            </div>
           </VCol>
           <VCol
             cols="12"
             md="7"
             class="pl-lg-10"
           >
-            <VCard color="transparent" flat>
-              <VRow no-gutters justify="center">
-                <div class="col-12 col-xl-auto d-flex flex-wrap">
-                  <VCol
-                    v-for="(route, index) in searchRoutes"
-                    :key="`${route.routeName}-${index}`"
-                    cols="12"
-                    class="pa-0"
-                    sm="6"
-                    md="6"
-                    lg="6"
-                  >
-                    <CardRouteLink :route="route" />
-                  </VCol>
-                </div>
-              </VRow>
-            </VCard>
+            <VRow no-gutters justify="center">
+              <VCol
+                v-for="(route, index) in searchRoutes"
+                :key="`${route.routeName}-${index}`"
+                cols="12"
+                class="pa-0"
+                sm="6"
+                md="6"
+                lg="6"
+              >
+                <CardRouteLink :route="route" />
+              </VCol>
+            </VRow>
           </VCol>
         </VRow>
       </VContainer>

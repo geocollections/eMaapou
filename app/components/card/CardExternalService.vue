@@ -13,30 +13,29 @@ defineProps<{ route: RouteExternalService }>();
 <template>
   <div>
     <VHover v-slot="{ isHovering, props: hoverProps }">
-      <VCard
+      <NuxtLink
         v-bind="hoverProps"
-        :href="route.href"
-        class="d-flex py-2 border"
-        :elevation="0"
-        :color="isHovering ? 'grey-lighten-2' : 'grey-lighten-3'"
+        :to="route.href"
+        class="d-flex py-2 pl-4 border rounded text-decoration-none"
+        :class="isHovering ? 'bg-grey-lighten-2' : 'bg-grey-lighten-3'"
       >
         <div>
-          <VCardTitle
+          <div
             style="width: 100%"
             class="text-h6 py-0"
           >
             {{ $t(route.title) }}
-          </VCardTitle>
-          <VCardText class="py-0  text-grey">
+          </div>
+          <div class="py-0 text-grey-darken-2 text-body-2">
             {{ $t(route.description) }}
-          </VCardText>
+          </div>
         </div>
         <VIcon
           :icon="mdiOpenInNew"
           size="x-small"
           class="ml-auto mr-2 align-self-baseline"
         />
-      </VCard>
+      </NuxtLink>
     </VHover>
   </div>
 </template>
