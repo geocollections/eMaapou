@@ -51,20 +51,19 @@ useHead({
       style="min-height: 100vh; max-width: 800px;"
       :fluid="$vuetify.display.lgAndDown"
     >
-      <div>
-        <BaseHeader class="py-4" :title="$t('common.news')" />
-        <div v-for="(news, i) in newsList" :key="i">
-          <NewsPreviewCard
-            :preview-lenght="500"
-            :date="news.date_added"
-            :title="$translate({ et: news.title_et, en: news.title_en })"
-            :content="$translate({ et: news.text_et, en: news.text_en })"
-            :to="localePath({ name: 'news-id', params: { id: news.id } })"
-          />
-          <div />
-        </div>
-        <div v-intersect="infiniteHandler" />
+      <BaseHeader class="py-4" :title="$t('common.news')" />
+      <div class="d-flex flex-column pa-0">
+        <NewsPreviewCard
+          v-for="(news, i) in newsList"
+          :key="i"
+          :preview-lenght="500"
+          :date="news.date_added"
+          :title="$translate({ et: news.title_et, en: news.title_en })"
+          :content="$translate({ et: news.text_et, en: news.text_en })"
+          :to="localePath({ name: 'news-id', params: { id: news.id } })"
+        />
       </div>
+      <div v-intersect="infiniteHandler" />
     </VContainer>
   </VMain>
 </template>

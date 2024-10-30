@@ -37,35 +37,32 @@ function extractContent(html: string) {
 
 <template>
   <VHover v-slot="{ isHovering, props: hoverProps }">
-    <VCard
+    <NuxtLink
       v-bind="{ ...$attrs, ...hoverProps }"
-      class="py-2"
-      flat
-      :color="isHovering ? 'grey-lighten-4' : 'transparent'"
+      class="px-4 py-2 rounded text-decoration-none"
+      :class="isHovering ? 'bg-grey-lighten-4' : 'bg-transparent'"
       :to="to"
     >
       <div
         v-if="date"
-        class="text-right pr-4 montserrat text--secondary"
-        :class="{ 'white--text': dark }"
+        class="text-right montserrat text-grey-darken-1"
+        :class="{ 'text-white': dark }"
       >
         {{ $formatDate(date) }}
       </div>
-      <VCardTitle
-        class="pt-0 text-h6"
-        :class="{ 'white--text': dark }"
+      <div
+        class="text-h6 text-grey-darken-3 pb-2"
         style="word-break: normal"
       >
         {{ title }}
-      </VCardTitle>
+      </div>
 
-      <VCardText
-        class="pb-0 text-body-1"
-        style="color: rgba(0, 0, 0, 0.7)"
-        :class="{ 'white--text': dark }"
+      <div
+        class="pb-0 text-body-1 text-grey-darken-2"
+        :class="{ 'text-white': dark }"
       >
         {{ truncatedText }}
-      </VCardText>
-    </VCard>
+      </div>
+    </NuxtLink>
   </VHover>
 </template>
