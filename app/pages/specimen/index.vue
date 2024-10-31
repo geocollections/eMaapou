@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiBug } from "@mdi/js";
+import cloneDeep from "lodash/cloneDeep";
 import { FIELDS_SOLR_SPECIMEN } from "~/constants";
 
 const route = useRoute();
@@ -39,6 +40,20 @@ const {
   watch: false,
 });
 
+const specimenImageJoinOption = "{!join from=id_l fromIndex=specimen to=specimen_id}";
+const specimenImageSolrFilters = computed(() => {
+  const res = cloneDeep(solrFilters.value).map((filter) => {
+    if (typeof filter === "string") {
+      return `${specimenImageJoinOption}${filter}`;
+    }
+    const joinEntries = Object.entries(filter).map(([key, value]) => [key, `${specimenImageJoinOption}${value}`]);
+
+    return Object.fromEntries(joinEntries);
+  });
+
+  return res;
+});
+
 const {
   data: imageData,
   refresh: refreshSpecimenImages,
@@ -47,10 +62,10 @@ const {
 }>("/specimen_image", {
   query: computed(() => ({
     json: {
-      query: solrQuery.value,
+      query: `${specimenImageJoinOption}${solrQuery.value}`,
       limit: imageOptions.value.itemsPerPage,
       offset: getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
-      filter: solrFilters.value,
+      filter: specimenImageSolrFilters.value,
     },
   })),
   watch: false,
