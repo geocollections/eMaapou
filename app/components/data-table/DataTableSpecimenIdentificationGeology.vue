@@ -16,7 +16,7 @@
     </template>
     <template #item.agent="{ item }">
       <div v-if="item.agent">
-        {{ item.agent.agent }}
+        {{ item.agent.name }}
       </div>
     </template>
     <template #item.dateIdentified="{ item }">
@@ -41,7 +41,7 @@
       </div>
     </template>
     <template #item.current="{ item }">
-      <BaseBoolean :model-value="item.current" />
+      <BaseBoolean :model-value="item.is_current" />
     </template>
   </BaseDataTable>
 </template>
