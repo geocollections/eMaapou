@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const { $translate, $formatDate } = useNuxtApp();
-const { data: news } = await useGeoloogiaApiFetch<any>(`/web_news/${route.params.id}`);
+const { data: news } = await useNewApiFetch<any>(`/web-news/${route.params.id}`);
 
 const title = computed(() => {
   return $translate({ et: news.value?.title_et, en: news.value?.title_en });
