@@ -14,12 +14,12 @@ const {
   initHeaders: HEADERS_ATTACHMENT,
 });
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/attachments/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    sample: route.params.id,
-    nest: 2,
+    expand: "mime_type,author",
+    fields: ["id", "uuid_filename", "mime_type.content_type", "description", "description_en", "author.name"].join(","),
     ordering: sortBy.value,
     ...searchParams.value,
   })),
