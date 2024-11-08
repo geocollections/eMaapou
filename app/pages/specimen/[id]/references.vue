@@ -16,12 +16,11 @@ const {
 
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_reference/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/specimens/${route.params.id}/specimen-references/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    specimen: route.params.id,
-    nest: 1,
+    expand: "reference",
     ordering: sortBy.value ?? "-reference__year",
     ...searchParams.value,
   })),
