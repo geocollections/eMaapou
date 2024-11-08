@@ -10,7 +10,7 @@ import { mdiMinus, mdiPlus } from "@mdi/js";
         v-if="item.taxon"
         @click="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
-        {{ item.taxon.taxon }}
+        {{ item.taxon.name }}
       </BaseLinkExternal>
     </template>
 
@@ -21,12 +21,7 @@ import { mdiMinus, mdiPlus } from "@mdi/js";
     </template>
 
     <template #item.extra="{ item }">
-      <VIcon v-if="item.extra">
-        {{ mdiPlus }}
-      </VIcon>
-      <VIcon v-else>
-        {{ mdiMinus }}
-      </VIcon>
+      <BaseBoolean :model-value="item.extra" />
     </template>
   </BaseDataTable>
 </template>

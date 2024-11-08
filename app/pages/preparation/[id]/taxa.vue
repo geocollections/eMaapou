@@ -16,12 +16,11 @@ const {
 
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/taxon_list/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`preparations/${route.params.id}/preparation-taxa/`, {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    nest: 1,
-    preparation: route.params.id,
+    expand: "taxon",
     ordering: sortBy.value,
     ...searchParams.value,
   },
