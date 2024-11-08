@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: page } = await useGeoloogiaApiFetch<any>("/web_pages/78/");
+const { data: page } = await useNewApiFetch<any>("/web-pages/78/");
 
 const { t } = useI18n();
 const { $translate } = useNuxtApp();
@@ -38,8 +38,6 @@ useHead({
 <style scoped>
 .aboutpage {
   padding: 20px;
-  /* border-top: solid 1px #6a76ab;
-  border-bottom: solid 1px #6a76ab; */
 }
 
 .aboutpage > div {
