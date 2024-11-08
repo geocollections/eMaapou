@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: page } = await useGeoloogiaApiFetch<any>("/web_pages/89/");
+const { data: page } = await useNewApiFetch<any>("/web-pages/89/");
 
 const { $translate } = useNuxtApp();
 
