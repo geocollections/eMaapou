@@ -100,8 +100,8 @@ const localePath = useLocalePath();
       >
         {{
           $translate({
-            et: item.stratigraphy.stratigraphy,
-            en: item.stratigraphy.stratigraphy_en,
+            et: item.stratigraphy.name,
+            en: item.stratigraphy.name_en,
           })
         }}
       </NuxtLink>
@@ -116,10 +116,10 @@ const localePath = useLocalePath();
         {{ item.reference.reference }}
       </a>
       <div
-        v-else-if="item.agent"
+        v-else-if="item.author"
         :class="{ 'is-preferred': !item.is_preferred }"
       >
-        {{ item.agent.agent }}
+        {{ item.author.name }}
       </div>
       <div v-else :class="{ 'is-preferred': !item.is_preferred }">
         {{ item.author_free }}

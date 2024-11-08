@@ -20,12 +20,11 @@ const {
 const route = useRoute();
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_description/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/localities/${props.locality}/locality-descriptions/`, {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    locality: props.locality,
-    nest: 1,
+    expand: "rock,stratigraphy,author,reference",
     ordering: sortBy.value,
     ...searchParams.value,
   },

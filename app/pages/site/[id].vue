@@ -52,12 +52,12 @@ const tabs = {
     routeName: "site-id-descriptions",
     title: "site.localityDescriptions",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/site-descriptions/`, {
         query: {
-          site: route.params.id,
           limit: 0,
         },
       });
+      console.log(res.count);
       return res.count;
     },
     props: {},
