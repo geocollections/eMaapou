@@ -529,7 +529,7 @@ export default {
     fossils: "Fauna",
     remarks: "Lisainfo",
     localityFree: "Lokaliteet vaba",
-    attachments: "Attachments ({number})",
+    attachments: "Failid ({number})",
     analyses: "Analüüsid ({number})",
     preparations: "Preparaadid ({number})",
     taxa: "Taksonid ({number})",
