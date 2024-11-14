@@ -3,20 +3,6 @@ import { defu } from "defu";
 
 type Request = Parameters<typeof useFetch>[0];
 
-export function useGeoloogiaApiFetch<T>(
-  request: Request,
-  options: UseFetchOptions<T> = {},
-) {
-  const { $geoloogiaFetch } = useNuxtApp();
-
-  const defaults: UseFetchOptions<T> = {
-    $fetch: $geoloogiaFetch,
-  };
-  const params = defu(options, defaults);
-
-  return useFetch(request, params);
-}
-
 export function useNewApiFetch<T>(
   request: Request,
   options: UseFetchOptions<T> = {},
