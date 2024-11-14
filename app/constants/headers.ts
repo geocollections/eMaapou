@@ -2578,9 +2578,9 @@ export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
   byIds: {
     synonym: {
       title: "stratigraphySynonym.synonym",
-      value: "synonym",
+      value: "name",
       show: true,
-      apiFieldValue: "synonym",
+      apiFieldValue: "name",
       sortField: ["synonym"],
       ...wideColumn,
     },
