@@ -207,7 +207,7 @@ const { data } = await useAsyncData(
   },
 );
 
-const { data: otherDrillcoreBoxesRes } = await useNewApiFetch<GeoloogiaListResponse>(`/drillcores/${data.value?.drillcoreBox?.drillcore.id}/drillcore-boxes/`, {
+const { data: otherDrillcoreBoxesRes } = await useApiFetch<GeoloogiaListResponse>(`/drillcores/${data.value?.drillcoreBox?.drillcore.id}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: 10,
     offset: getOffset(page.value, 10),

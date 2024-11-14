@@ -14,7 +14,7 @@ const {
   initHeaders: HEADERS_ATTACHMENT,
 });
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/datasets/${route.params.id}/attachments/`, {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>(`/datasets/${route.params.id}/attachments/`, {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

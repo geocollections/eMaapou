@@ -15,7 +15,7 @@ const {
 const route = useRoute();
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>(
   `/localities/${route.params.id}/locality-stratotypes/`,
   {
     query: computed(() => ({

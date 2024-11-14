@@ -16,7 +16,7 @@ const { page: otherDrillcoreBoxPage } = storeToRefs(useDrillcoreBoxPosition());
 const route = useRoute();
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${props.drillcore}/drillcore-boxes/`, {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${props.drillcore}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

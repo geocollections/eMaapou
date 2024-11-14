@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: page } = await useNewApiFetch<any>("/web-pages/78/");
+const { data: page } = await useApiFetch<any>("/web-pages/78/");
 
 const { t } = useI18n();
 const { $translate } = useNuxtApp();

@@ -28,7 +28,7 @@ const orSearch = computed(() => {
   return orSearch.join(" OR ");
 });
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>("/attachments/", {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>("/attachments/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

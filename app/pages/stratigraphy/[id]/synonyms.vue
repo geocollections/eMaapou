@@ -15,7 +15,7 @@ const {
 const route = useRoute();
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/stratigraphies/${route.params.id}/stratigraphy-synonyms/`, {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>(`/stratigraphies/${route.params.id}/stratigraphy-synonyms/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

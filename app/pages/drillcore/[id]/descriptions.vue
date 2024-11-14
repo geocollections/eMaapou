@@ -20,7 +20,7 @@ const {
 const route = useRoute();
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/localities/${props.locality}/locality-descriptions/`, {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>(`/localities/${props.locality}/locality-descriptions/`, {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

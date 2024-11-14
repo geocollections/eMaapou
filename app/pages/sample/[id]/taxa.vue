@@ -16,7 +16,7 @@ const {
 
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/sample-taxa/`, {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/sample-taxa/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

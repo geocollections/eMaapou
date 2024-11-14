@@ -2,7 +2,7 @@
 const { $translate } = useNuxtApp();
 const localePath = useLocalePath();
 
-const { data: newsList } = await useNewApiFetch<any>("/web-news/", {
+const { data: newsList } = await useApiFetch<any>("/web-news/", {
   query: {
     limit: 6,
     ordering: "-date_added",

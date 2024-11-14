@@ -3,7 +3,7 @@ import { defu } from "defu";
 
 type Request = Parameters<typeof useFetch>[0];
 
-export function useNewApiFetch<T>(
+export function useApiFetch<T>(
   request: Request,
   options: UseFetchOptions<T> = {},
 ) {
