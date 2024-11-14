@@ -17,7 +17,7 @@
 
     <template #item.journal="{ item }">
       <div v-if="item.reference && item.reference.journal">
-        {{ item.reference.journal.journal_name }}
+        {{ item.reference.journal.name }}
       </div>
       <div v-else-if="item.reference.book">
         {{ item.reference.book }}
