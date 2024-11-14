@@ -15,12 +15,11 @@ const {
 const route = useRoute();
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_reference/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/site-references/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    site: route.params.id,
-    nest: 1,
+    expand: "reference",
     ordering: sortBy.value ?? "-reference__year",
     ...searchParams.value,
   })),

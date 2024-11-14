@@ -57,7 +57,6 @@ const tabs = {
           limit: 0,
         },
       });
-      console.log(res.count);
       return res.count;
     },
     props: {},
@@ -67,9 +66,8 @@ const tabs = {
     routeName: "site-id-references",
     title: "site.localityReferences",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/site-references/`, {
         query: {
-          site: route.params.id,
           limit: 0,
         },
       });
