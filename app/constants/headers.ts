@@ -766,6 +766,7 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
       show: true,
       apiFieldValue: { et: "locality__locality", en: "locality__locality_en" },
       sortField: { et: ["locality__locality"], en: ["locality__locality_en"] },
+      ...ultraWideColumn,
     },
     coordinates: {
       title: "datasetGeolocation.coordinates",
