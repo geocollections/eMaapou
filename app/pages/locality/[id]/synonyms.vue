@@ -15,12 +15,11 @@ const {
 });
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_synonym/", {
+const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-synonyms/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    locality: route.params.id,
-    nest: 1,
+    expand: "reference",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
