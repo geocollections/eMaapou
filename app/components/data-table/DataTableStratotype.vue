@@ -18,18 +18,18 @@ const localePath = useLocalePath();
       >
         {{
           $translate({
-            et: item.stratigraphy.stratigraphy,
-            en: item.stratigraphy.stratigraphy_en,
+            et: item.stratigraphy.name,
+            en: item.stratigraphy.name_en,
           })
         }}
       </NuxtLink>
     </template>
     <template #item.type="{ item }">
-      <div v-if="item.stratotype_type">
+      <div v-if="item.type">
         {{
           $translate({
-            et: item.stratotype_type.value,
-            en: item.stratotype_type.value_en,
+            et: item.type.value,
+            en: item.type.value_en,
           })
         }}
       </div>
