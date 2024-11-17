@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Site } from "../[id].vue";
 import { mdiFileDownloadOutline } from "@mdi/js";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import type { ImageAttachment } from "~/composables/useImages";
-import type { Site } from "../[id].vue";
 
 const props = defineProps<{ site: Site }>();
 
