@@ -33,9 +33,8 @@ const tabs = {
     routeName: "locality-id-references",
     title: "locality.references",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-references/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -48,9 +47,8 @@ const tabs = {
     routeName: "locality-id-descriptions",
     title: "locality.descriptions",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-descriptions/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -63,9 +61,8 @@ const tabs = {
     routeName: "locality-id-attachments",
     title: "locality.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/attachments/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -134,9 +131,8 @@ const tabs = {
     routeName: "locality-id-synonyms",
     title: "locality.synonyms",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_synonym/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-synonyms/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -149,9 +145,8 @@ const tabs = {
     routeName: "locality-id-stratotypes",
     title: "locality.stratotypes",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_stratotype/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-stratotypes/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
