@@ -12,36 +12,29 @@ const props = defineProps<{
   file: File;
 }>();
 
-const { $translate, $geoloogiaFetch } = useNuxtApp();
+const { $translate, $apiFetch } = useNuxtApp();
 const localePath = useLocalePath();
 const route = useRoute();
 
 const { data } = await useAsyncData("general", async () => {
-  const attachmentKeywordsResponse = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_keyword/", {
-    query: {
-      attachment: route.params.id,
-      nest: 1,
-    },
-  });
+  const attachmentKeywordsResponse = await $apiFetch<GeoloogiaListResponse>(`/attachments/${route.params.id}/keywords/`);
 
   if (props.file.specimen) {
-    const specimenIdentificationPromise = $geoloogiaFetch<GeoloogiaListResponse>(
-      "/specimen_identification/",
+    const specimenIdentificationPromise = $apiFetch<GeoloogiaListResponse>(
+      `/specimens/${props.file.specimen.id}/specimen-taxa/`,
       {
         query: {
-          current: true,
-          specimen: props.file.specimen.id,
-          nest: 1,
+          is_current: true,
+          expand: "taxon",
         },
       },
     );
-    const specimenIdentificationGeologyPromise = $geoloogiaFetch<GeoloogiaListResponse>(
-      "/specimen_identification_geology/",
+    const specimenIdentificationGeologyPromise = $apiFetch<GeoloogiaListResponse>(
+      `/specimens/${props.file.specimen.id}/specimen-rocks/`,
       {
         query: {
-          current: true,
-          specimen: props.file.specimen.id,
-          nest: 1,
+          is_current: true,
+          expand: "rock",
         },
       },
     );
@@ -322,7 +315,7 @@ const mapOverlays = computed(() => {
                 <BaseLink
                   :to="`https://fossiilid.info/${value.id}`"
                 >
-                  {{ value.taxon }}
+                  {{ value.name }}
                 </BaseLink>
                 <template v-if="item.name">
                   | {{ item.name }}
@@ -332,19 +325,19 @@ const mapOverlays = computed(() => {
           </template>
           <template v-for="(item, index) in specimenIdentificationGeology">
             <TableRow
-              v-if="item.taxon"
+              v-if="item.rock"
               :key="`identification-geology-${index}`"
               :title="$t('file.name')"
-              :value="item.taxon"
+              :value="item.rock"
             >
               <template #value="{ value }">
                 <BaseLink
-                  :to="`https://fossiilid.info/${value.id}`"
+                  :to="`https://kivid.info/${value.id}`"
                 >
-                  {{ value.taxon }}
+                  {{ $translate({ et: value.name, en: value.name_en }) }}
                 </BaseLink>
-                <template v-if="item.name">
-                  | {{ item.name }}
+                <template v-if="$translate({ et: item.name, en: item.name_en })">
+                  | {{ $translate({ et: item.name, en: item.name_en }) }}
                 </template>
               </template>
             </TableRow>
@@ -472,11 +465,9 @@ const mapOverlays = computed(() => {
           >
             <template #value="{ value }">
               <ul style="list-style-position: inside">
-                <template v-for="(item, index) in value">
-                  <li v-if="item.keyword" :key="`keyword-${index}`">
-                    {{ item.keyword.keyword }}
-                  </li>
-                </template>
+                <li v-for="(item, index) in value" :key="`keyword-${index}`">
+                  {{ item.name }}
+                </li>
               </ul>
             </template>
           </TableRow>
