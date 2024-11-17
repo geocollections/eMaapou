@@ -186,11 +186,9 @@ const { data } = await useAsyncData("site", async () => {
     },
   });
 
-  const imagesRes = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+  const imagesRes = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/attachments/`, {
     query: {
-      site: route.params.id,
-      attachment__attachment_format__value__istartswith: "image",
-      nest: 1,
+      mime_type__content_type__istartswith: "image",
       limit: 1,
     },
   });
@@ -257,9 +255,9 @@ useHead({
 
 useSeoMeta({
   description: data.value?.site?.description,
-  ogImage: data.value?.images[0]?.attachment?.filename
+  ogImage: data.value?.images[0]?.filename
     ? img(
-      `${data.value?.images[0]?.attachment?.filename}`,
+      `${data.value?.images[0]?.filename}`,
       { size: "medium" },
       {
         provider: "geocollections",
