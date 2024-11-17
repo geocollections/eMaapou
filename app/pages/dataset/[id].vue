@@ -2,7 +2,7 @@
 import { mdiDatabaseOutline } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();

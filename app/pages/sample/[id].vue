@@ -3,7 +3,7 @@ import { mdiImageFilterHdr, mdiRuler } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
-const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $apiFetch } = useNuxtApp();
 const samplesStore = useSamples();
 const { getQueryParams } = samplesStore;
 const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
