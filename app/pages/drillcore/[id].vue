@@ -34,9 +34,8 @@ const tabs = {
     count: async (ctx) => {
       if (!ctx?.drillcore.locality)
         return 0;
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/localities/${ctx.drillcore.locality.id}/locality-descriptions/`, {
         query: {
-          locality: ctx.drillcore.locality.id,
           limit: 0,
         },
       });
@@ -51,9 +50,8 @@ const tabs = {
     count: async (ctx) => {
       if (!ctx?.drillcore.locality)
         return 0;
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/localities/${ctx.drillcore.locality.id}/locality-references/`, {
         query: {
-          locality: ctx.drillcore.locality.id,
           limit: 0,
         },
       });
@@ -66,11 +64,11 @@ const tabs = {
     routeName: "drillcore-id-attachments",
     title: "drillcore.attachments",
     count: async (ctx) => {
-      const orQueries = [`drillcore:${route.params.id}`];
+      const orQueries = [`attachment_link__drillcore:${route.params.id}`];
       if (ctx?.drillcore.locality)
-        orQueries.push(`locality:${ctx.drillcore.locality.id}`);
+        orQueries.push(`attachment_link__locality:${ctx.drillcore.locality.id}`);
 
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const response = await $apiFetch<GeoloogiaListResponse>("/attachments/", {
         query: {
           or_search: orQueries.join(" OR "),
           limit: 0,
