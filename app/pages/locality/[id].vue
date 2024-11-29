@@ -10,7 +10,7 @@ import {
 } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 
 const localePath = useLocalePath();
 const { t } = useI18n();
@@ -298,11 +298,10 @@ const { data } = await useAsyncData("locality", async () => {
     },
   });
   // Checking if locality has a related .las file to show in graph tab
-  const lasFilePromise = $geoloogiaFetch<any>("/attachment_link/", {
+  const lasFilePromise = $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/attachments/`, {
     query: {
       attachment__uuid_filename__iendswith: ".las",
-      locality: route.params.id,
-      fields: "attachment",
+      fields: "id",
     },
   });
 
@@ -331,11 +330,11 @@ const { data } = await useAsyncData("locality", async () => {
     + hydratedTabs.sample.count
     + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
-  const imagesRes = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_image/", {
+  const imagesRes = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-images/`, {
     query: {
-      locality: route.params.id,
-      nest: 1,
       limit: 1,
+      expand: "attachment",
+      fields: "attachment.filename",
       ordering: "sort",
     },
   });
