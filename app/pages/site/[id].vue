@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { mdiMapMarkerOutline, mdiTextureBox } from "@mdi/js";
 
-const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
