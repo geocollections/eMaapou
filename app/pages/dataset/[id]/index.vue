@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import type { Dataset } from "../[id].vue";
 import isEmpty from "lodash/isEmpty";
 import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
-import type { Dataset } from "../[id].vue";
 
 defineProps<{ dataset: Dataset; parameters: any }>();
 
-const { $solrFetch, $geoloogiaFetch, $translate } = useNuxtApp();
+const { $solrFetch, $apiFetch, $translate } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 
 const { data } = await useAsyncData("datasetGeneral", async () => {
-  const doiPromise = $geoloogiaFetch<any>("/doi/", {
+  const doiPromise = $apiFetch<GeoloogiaListResponse>("/dois/", {
     query: {
       dataset: route.params.id,
-      nest: 1,
+      expand: "reference",
+      fields: "identifier,reference.id,reference.reference",
     },
   });
   const localityGroupedPromise = $solrFetch<any>("/analysis", {
