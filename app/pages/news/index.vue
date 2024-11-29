@@ -5,7 +5,7 @@ const complete = ref(false);
 const loading = ref(false);
 
 const localePath = useLocalePath();
-const { $geoloogiaFetch } = useNuxtApp();
+const { $apiFetch } = useNuxtApp();
 
 async function infiniteHandler(isIntersecting: boolean) {
   if (!isIntersecting)
@@ -15,7 +15,7 @@ async function infiniteHandler(isIntersecting: boolean) {
 
   loading.value = true;
 
-  const res = await $geoloogiaFetch<GeoloogiaListResponse>("/web_news/", {
+  const res = await $apiFetch<GeoloogiaListResponse>("/web-news/", {
     query: {
       offset: (page.value - 1) * 5,
       limit: 5,
