@@ -2,7 +2,7 @@
 import { mdiScrewMachineFlatTop } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -238,11 +238,10 @@ const { data } = await useAsyncData("drillcore", async () => {
 
   let lasFileResponse;
   if (drillcore?.locality) {
-    lasFileResponse = await $geoloogiaFetch<any>("/attachment_link/", {
+    lasFileResponse = await $apiFetch<GeoloogiaListResponse>(`/localities/${drillcore.locality.id}/attachments/`, {
       query: {
         attachment__uuid_filename__iendswith: ".las",
-        locality: drillcore.locality.id,
-        fields: "attachment",
+        fields: "id",
       },
     });
   }
@@ -259,12 +258,12 @@ const { data } = await useAsyncData("drillcore", async () => {
       graphs: {
         drillcoreObject: drillcore,
         locality: drillcore?.locality?.id,
-        attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+        attachment: lasFileResponse?.results[0]?.attachment?.toString(),
       },
     },
     ctx: {
       drillcore,
-      lasFile: lasFileResponse?.items?.[0]?.attachment,
+      lasFile: lasFileResponse?.results[0]?.attachment,
     },
   });
 
