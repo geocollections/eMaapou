@@ -301,7 +301,7 @@ const { data } = await useAsyncData("locality", async () => {
   const lasFilePromise = $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/attachments/`, {
     query: {
       attachment__uuid_filename__iendswith: ".las",
-      fields: "id",
+      fields: "id,filename",
     },
   });
 
@@ -318,7 +318,7 @@ const { data } = await useAsyncData("locality", async () => {
       boxes: { drillcore: drillcore?.id },
       analysis_results: {
         localityObject: locality,
-        attachment: lasFileResponse?.results?.[0]?.attachment,
+        attachment: lasFileResponse?.results?.[0]?.filename,
       },
     },
     ctx: { drillcore },
