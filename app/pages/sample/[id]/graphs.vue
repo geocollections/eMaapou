@@ -5,7 +5,7 @@ const props = defineProps<{ sampleObject: Sample }>();
 
 const { t } = useI18n();
 const route = useRoute();
-const { $geoloogiaFetch } = useNuxtApp();
+const { $apiFetch } = useNuxtApp();
 
 const chartTitle = computed(() => {
   return `${t("sample.number")} ${
@@ -17,11 +17,9 @@ const chartTitle = computed(() => {
 });
 
 const { data: taxons } = await useAsyncData("taxons", async () => {
-  const resultsResponse = await $geoloogiaFetch<GeoloogiaListResponse>("/taxon_list/", {
+  const resultsResponse = await $apiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/sample-taxa/`, {
     query: {
-      sample: route.params.id,
-      fields: "id,name,taxon,frequency",
-      nest: 1,
+      fields: "id,name,taxon.name,frequency",
       offset: 0,
       limit: 1000,
     },
@@ -29,7 +27,7 @@ const { data: taxons } = await useAsyncData("taxons", async () => {
   return resultsResponse.results.map((item: any) => {
     return {
       value: item.frequency,
-      name: item.taxon?.taxon ?? item.name,
+      name: item.taxon?.name ?? item.name,
     };
   });
 }, {
