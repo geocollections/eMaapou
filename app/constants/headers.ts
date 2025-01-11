@@ -774,7 +774,7 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
       show: true,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     is_polygon: {
@@ -1120,7 +1120,7 @@ export const HEADERS_LOCALITY: Headers = {
       show: true,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     references: {
@@ -1929,7 +1929,7 @@ export const HEADERS_SAMPLE_DATA: Headers = {
       show: false,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     locality: {
@@ -2049,7 +2049,7 @@ export const HEADERS_SITE: Headers = {
       show: true,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     elevation: {
