@@ -21,18 +21,19 @@ const route = useRoute();
 setStateFromQueryParams(route);
 
 const orSearch = computed(() => {
-  const orSearch = [`drillcore:${route.params.id}`];
+  const orSearch = [`attachment_link__drillcore:${route.params.id}`];
   if (props.locality)
-    orSearch.push(`locality:${props.locality}`);
+    orSearch.push(`attachment_link__locality:${props.locality}`);
 
   return orSearch.join(" OR ");
 });
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>("/attachments/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    nest: 2,
+    expand: "mime_type,author",
+    fields: ["id", "uuid_filename", "mime_type.content_type", "description", "description_en", "author.name"].join(","),
     or_search: orSearch.value,
     ordering: sortBy.value,
     ...searchParams.value,

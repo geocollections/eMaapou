@@ -16,12 +16,11 @@ const {
 
 setStateFromQueryParams(route);
 
-const { data, status, refresh } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification_geology/", {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse>(`/specimens/${route.params.id}/specimen-rocks/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    specimen: route.params.id,
-    nest: 1,
+    expand: "rock,agent,reference,type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
@@ -36,7 +35,7 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/dataset_reference/", {
+const { exportData } = useExportGeoloogiaApi("/specimen_identification_geology/", {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,

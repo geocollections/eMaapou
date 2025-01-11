@@ -28,7 +28,7 @@ export interface DrillcoreBox {
   }>;
 };
 
-const { data, status, refresh } = await useNewApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${route.params.id}/drillcore-boxes/`, {
+const { data, status, refresh } = await useApiFetch<GeoloogiaListResponse<DrillcoreBox>>(`/drillcores/${route.params.id}/drillcore-boxes/`, {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Locality } from "../[id].vue";
+// @ts-expect-error add types
+import { las2json } from "wellio";
 
 const props = withDefaults(defineProps<{
   localityObject: Locality;
@@ -8,7 +10,7 @@ const props = withDefaults(defineProps<{
   attachment: "",
 });
 
-const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
+const { $translate, $solrFetch } = useNuxtApp();
 
 const route = useRoute();
 
@@ -16,16 +18,12 @@ const { data } = await useLazyAsyncData("data", async () => {
   let rawLasFileContent;
   let lasContent: { [K: string]: any } | null = null;
   if (props.attachment) {
-    const rawLasfileContentResponse = await $geoloogiaFetch<any>(
-      `/file/${props.attachment}/`,
-      {
-        query: {
-          raw_content: "true",
-        },
-      },
+    const rawLasfileContentResponse = await $fetch<any>(
+      `https://files.geocollections.info/${props.attachment}`,
     );
 
-    rawLasFileContent = rawLasfileContentResponse;
+    rawLasFileContent = await rawLasfileContentResponse.text();
+    rawLasFileContent = las2json(rawLasFileContent);
     if (
       typeof rawLasfileContentResponse === "string"
       && rawLasFileContent.startsWith("Error: ")

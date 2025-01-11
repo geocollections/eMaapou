@@ -17,26 +17,25 @@ const img = useImage();
   <BaseDataTable v-bind="$attrs">
     <template #item.file="{ item }">
       <ThumbnailAttachment
-        v-if="item.attachment"
         :src="
           img(
-            `${item.attachment.filename}`,
+            `${item.uuid_filename}`,
             { size: 'large' },
             { provider: 'geocollections' },
           )
         "
         :preview-src="
           img(
-            `${item.attachment.filename}`,
+            `${item.uuid_filename}`,
             { size: 'small' },
             { provider: 'geocollections' },
           )
         "
-        :type="item.attachment.attachment_format.value"
+        :type="item.mime_type.content_type"
         @click:image="
           openOverlay({
-            filename: item.attachment.uuid_filename,
-            id: item.attachment.id,
+            filename: item.uuid_filename,
+            id: item.id,
             info: undefined,
           })
         "
@@ -44,23 +43,22 @@ const img = useImage();
     </template>
     <template #item.description="{ item }">
       <NuxtLink
-        v-if="item.attachment"
         class="text-link"
         :to="
-          localePath({ name: 'file-id', params: { id: item.attachment.id } })
+          localePath({ name: 'file-id', params: { id: item.id } })
         "
       >
         {{
           $translate({
-            et: item.attachment.description,
-            en: item.attachment.description_en,
+            et: item.description,
+            en: item.description_en,
           })
         }}
       </NuxtLink>
     </template>
     <template #item.agent="{ item }">
-      <div v-if="item.attachment && item.attachment.author">
-        {{ item.attachment.author.agent }}
+      <div v-if="item.author">
+        {{ item.author.name }}
       </div>
     </template>
   </BaseDataTable>

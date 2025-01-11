@@ -10,7 +10,7 @@ import {
 } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 
 const localePath = useLocalePath();
 const { t } = useI18n();
@@ -33,9 +33,8 @@ const tabs = {
     routeName: "locality-id-references",
     title: "locality.references",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-references/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -48,9 +47,8 @@ const tabs = {
     routeName: "locality-id-descriptions",
     title: "locality.descriptions",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-descriptions/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -63,9 +61,8 @@ const tabs = {
     routeName: "locality-id-attachments",
     title: "locality.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/attachments/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -134,9 +131,8 @@ const tabs = {
     routeName: "locality-id-synonyms",
     title: "locality.synonyms",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_synonym/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-synonyms/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -149,9 +145,8 @@ const tabs = {
     routeName: "locality-id-stratotypes",
     title: "locality.stratotypes",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_stratotype/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-stratotypes/`, {
         query: {
-          locality: route.params.id,
           limit: 0,
         },
       });
@@ -303,11 +298,10 @@ const { data } = await useAsyncData("locality", async () => {
     },
   });
   // Checking if locality has a related .las file to show in graph tab
-  const lasFilePromise = $geoloogiaFetch<any>("/attachment_link/", {
+  const lasFilePromise = $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/attachments/`, {
     query: {
       attachment__uuid_filename__iendswith: ".las",
-      locality: route.params.id,
-      fields: "attachment",
+      fields: "id,filename",
     },
   });
 
@@ -324,7 +318,7 @@ const { data } = await useAsyncData("locality", async () => {
       boxes: { drillcore: drillcore?.id },
       analysis_results: {
         localityObject: locality,
-        attachment: lasFileResponse?.results?.[0]?.attachment,
+        attachment: lasFileResponse?.results?.[0]?.filename,
       },
     },
     ctx: { drillcore },
@@ -336,11 +330,11 @@ const { data } = await useAsyncData("locality", async () => {
     + hydratedTabs.sample.count
     + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
-  const imagesRes = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_image/", {
+  const imagesRes = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-images/`, {
     query: {
-      locality: route.params.id,
-      nest: 1,
       limit: 1,
+      expand: "attachment",
+      fields: "attachment.filename",
       ordering: "sort",
     },
   });

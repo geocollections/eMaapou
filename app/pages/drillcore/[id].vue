@@ -2,7 +2,7 @@
 import { mdiScrewMachineFlatTop } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -34,9 +34,8 @@ const tabs = {
     count: async (ctx) => {
       if (!ctx?.drillcore.locality)
         return 0;
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/localities/${ctx.drillcore.locality.id}/locality-descriptions/`, {
         query: {
-          locality: ctx.drillcore.locality.id,
           limit: 0,
         },
       });
@@ -51,9 +50,8 @@ const tabs = {
     count: async (ctx) => {
       if (!ctx?.drillcore.locality)
         return 0;
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/localities/${ctx.drillcore.locality.id}/locality-references/`, {
         query: {
-          locality: ctx.drillcore.locality.id,
           limit: 0,
         },
       });
@@ -66,11 +64,11 @@ const tabs = {
     routeName: "drillcore-id-attachments",
     title: "drillcore.attachments",
     count: async (ctx) => {
-      const orQueries = [`drillcore:${route.params.id}`];
+      const orQueries = [`attachment_link__drillcore:${route.params.id}`];
       if (ctx?.drillcore.locality)
-        orQueries.push(`locality:${ctx.drillcore.locality.id}`);
+        orQueries.push(`attachment_link__locality:${ctx.drillcore.locality.id}`);
 
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const response = await $apiFetch<GeoloogiaListResponse>("/attachments/", {
         query: {
           or_search: orQueries.join(" OR "),
           limit: 0,
@@ -240,11 +238,10 @@ const { data } = await useAsyncData("drillcore", async () => {
 
   let lasFileResponse;
   if (drillcore?.locality) {
-    lasFileResponse = await $geoloogiaFetch<any>("/attachment_link/", {
+    lasFileResponse = await $apiFetch<GeoloogiaListResponse>(`/localities/${drillcore.locality.id}/attachments/`, {
       query: {
         attachment__uuid_filename__iendswith: ".las",
-        locality: drillcore.locality.id,
-        fields: "attachment",
+        fields: "id,filename",
       },
     });
   }
@@ -261,12 +258,12 @@ const { data } = await useAsyncData("drillcore", async () => {
       graphs: {
         drillcoreObject: drillcore,
         locality: drillcore?.locality?.id,
-        attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+        attachment: lasFileResponse?.results[0]?.filename,
       },
     },
     ctx: {
       drillcore,
-      lasFile: lasFileResponse?.items?.[0]?.attachment,
+      lasFile: lasFileResponse?.results[0]?.id,
     },
   });
 

@@ -5,7 +5,7 @@ import type { Tab } from "~/composables/useTabs";
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
-const { $geoloogiaFetch, $solrFetch, $translate, $apiFetch } = useNuxtApp();
+const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 const specimensStore = useSpecimens();
 const { getQueryParams } = specimensStore;
 const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
@@ -23,11 +23,10 @@ const tabs = {
     routeName: "specimen-id-identifications",
     title: "specimen.identifications",
     count: async (_ctx) => {
-      return await $geoloogiaFetch<GeoloogiaListResponse>(
-        "/specimen_identification/",
+      return await $apiFetch<GeoloogiaListResponse>(
+        `/specimens/${route.params.id}/specimen-taxa/`,
         {
           query: {
-            specimen: route.params.id,
             limit: 0,
           },
         },
@@ -40,11 +39,10 @@ const tabs = {
     routeName: "specimen-id-rock-identifications",
     title: "specimen.rockIdentifications",
     count: async (_ctx) => {
-      return await $geoloogiaFetch<GeoloogiaListResponse>(
-        "/specimen_identification_geology/",
+      return await $apiFetch<GeoloogiaListResponse>(
+        `/specimens/${route.params.id}/specimen-rocks/`,
         {
           query: {
-            specimen: route.params.id,
             limit: 0,
           },
         },
@@ -57,11 +55,10 @@ const tabs = {
     routeName: "specimen-id-references",
     title: "specimen.references",
     count: async (_ctx) => {
-      return await $geoloogiaFetch<GeoloogiaListResponse>(
-        "/specimen_reference/",
+      return await $apiFetch<GeoloogiaListResponse>(
+        `/specimens/${route.params.id}/specimen-references/`,
         {
           query: {
-            specimen: route.params.id,
             limit: 0,
           },
         },

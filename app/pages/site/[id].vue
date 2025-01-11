@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { mdiMapMarkerOutline, mdiTextureBox } from "@mdi/js";
 
-const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
@@ -52,9 +52,8 @@ const tabs = {
     routeName: "site-id-descriptions",
     title: "site.localityDescriptions",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/site-descriptions/`, {
         query: {
-          site: route.params.id,
           limit: 0,
         },
       });
@@ -67,9 +66,8 @@ const tabs = {
     routeName: "site-id-references",
     title: "site.localityReferences",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/site-references/`, {
         query: {
-          site: route.params.id,
           limit: 0,
         },
       });
@@ -188,11 +186,9 @@ const { data } = await useAsyncData("site", async () => {
     },
   });
 
-  const imagesRes = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+  const imagesRes = await $apiFetch<GeoloogiaListResponse>(`/sites/${route.params.id}/attachments/`, {
     query: {
-      site: route.params.id,
-      attachment__attachment_format__value__istartswith: "image",
-      nest: 1,
+      mime_type__content_type__istartswith: "image",
       limit: 1,
     },
   });
@@ -259,9 +255,9 @@ useHead({
 
 useSeoMeta({
   description: data.value?.site?.description,
-  ogImage: data.value?.images[0]?.attachment?.filename
+  ogImage: data.value?.images[0]?.filename
     ? img(
-      `${data.value?.images[0]?.attachment?.filename}`,
+      `${data.value?.images[0]?.filename}`,
       { size: "medium" },
       {
         provider: "geocollections",

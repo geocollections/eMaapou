@@ -5,7 +5,7 @@ import type { Tab } from "~/composables/useTabs";
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
-const { $translate, $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const stratigraphiesStore = useStratigraphies();
 const { getQueryParams } = stratigraphiesStore;
 const { solrFilters, solrQuery, solrSort } = storeToRefs(stratigraphiesStore);
@@ -24,9 +24,8 @@ const tabs = {
     routeName: "stratigraphy-id-references",
     title: "stratigraphy.references",
     count: async () => {
-      return $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_reference/", {
+      return $apiFetch<GeoloogiaListResponse>(`/stratigraphies/${route.params.id}/stratigraphy-references/`, {
         query: {
-          stratigraphy: route.params.id,
           limit: 0,
         },
       }).then(res => res.count);
@@ -38,9 +37,8 @@ const tabs = {
     routeName: "stratigraphy-id-synonyms",
     title: "stratigraphy.synonyms",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/stratigraphies/${route.params.id}/stratigraphy-synonyms/`, {
         query: {
-          stratigraphy: route.params.id,
           limit: 0,
         },
       });

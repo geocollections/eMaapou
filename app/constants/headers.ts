@@ -766,6 +766,7 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
       show: true,
       apiFieldValue: { et: "locality__locality", en: "locality__locality_en" },
       sortField: { et: ["locality__locality"], en: ["locality__locality_en"] },
+      ...ultraWideColumn,
     },
     coordinates: {
       title: "datasetGeolocation.coordinates",
@@ -773,7 +774,7 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
       show: true,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     is_polygon: {
@@ -1119,7 +1120,7 @@ export const HEADERS_LOCALITY: Headers = {
       show: true,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     references: {
@@ -1928,7 +1929,7 @@ export const HEADERS_SAMPLE_DATA: Headers = {
       show: false,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     locality: {
@@ -2048,7 +2049,7 @@ export const HEADERS_SITE: Headers = {
       show: true,
       sortable: false,
       ...numberFieldProps,
-      ...normalColumn,
+      ...wideColumn,
       align: "start",
     },
     elevation: {
@@ -2578,9 +2579,9 @@ export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
   byIds: {
     synonym: {
       title: "stratigraphySynonym.synonym",
-      value: "synonym",
+      value: "name",
       show: true,
-      apiFieldValue: "synonym",
+      apiFieldValue: "name",
       sortField: ["synonym"],
       ...wideColumn,
     },

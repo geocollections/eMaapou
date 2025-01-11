@@ -3,7 +3,7 @@ import { mdiImageFilterHdr, mdiRuler } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
-const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $apiFetch } = useNuxtApp();
 const samplesStore = useSamples();
 const { getQueryParams } = samplesStore;
 const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
@@ -49,9 +49,8 @@ const tabs = {
     routeName: "sample-id-taxa",
     title: "sample.taxa",
     count: async () => {
-      return $geoloogiaFetch<GeoloogiaListResponse>("/taxon_list/", {
+      return $apiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/sample-taxa/`, {
         query: {
-          sample: route.params.id,
           limit: 0,
         },
       }).then(res => res.count);
@@ -63,9 +62,8 @@ const tabs = {
     routeName: "sample-id-attachments",
     title: "sample.attachments",
     count: async () => {
-      return $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      return $apiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/attachments/`, {
         query: {
-          sample: route.params.id,
           limit: 0,
         },
       }).then(res => res.count);
@@ -77,9 +75,8 @@ const tabs = {
     routeName: "sample-id-references",
     title: "sample.sampleReferences",
     count: async () => {
-      return $geoloogiaFetch<GeoloogiaListResponse>("/sample_reference/", {
+      return $apiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/sample-references/`, {
         query: {
-          sample: route.params.id,
           limit: 0,
         },
       }).then(res => res.count);
@@ -105,9 +102,8 @@ const tabs = {
     routeName: "sample-id-graphs",
     title: "locality.graphs",
     count: async () => {
-      return $geoloogiaFetch<GeoloogiaListResponse>("/taxon_list/", {
+      return $apiFetch<GeoloogiaListResponse>(`/samples/${route.params.id}/sample-taxa/`, {
         query: {
-          sample: route.params.id,
           limit: 0,
         },
       }).then(res => res.count);

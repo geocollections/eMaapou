@@ -16,12 +16,12 @@ const {
   initOptions: STRATOTYPE.options,
   initHeaders: HEADERS_STRATIGRAPHY_STRATOTYPE,
 });
-const { $translate, $geoloogiaFetch } = useNuxtApp();
+const { $translate, $apiFetch } = useNuxtApp();
 const { data } = await useAsyncData("detail", async () => {
-  const stratotypesRes = await $geoloogiaFetch<any>(`/stratigraphy_stratotype/`, {
+  const stratotypesRes = await $apiFetch<GeoloogiaListResponse>(`/stratigraphies/${route.params.id}/stratigraphy-stratotypes/`, {
     query: {
-      stratigraphy: route.params.id,
-      nest: 2,
+      expand: "locality,reference,type",
+      fields: "depth_base,depth_top,locality.id,locality.name,locality.name_en,type.value,type.value_en,reference.id,reference.reference,remarks",
       ordering: sortBy.value,
     },
   });

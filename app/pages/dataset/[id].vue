@@ -2,7 +2,7 @@
 import { mdiDatabaseOutline } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
@@ -68,9 +68,8 @@ const tabs = {
     routeName: "dataset-id-references",
     title: "dataset.references",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/dataset_reference/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/datasets/${route.params.id}/dataset-references/`, {
         query: {
-          dataset: route.params.id,
           limit: 0,
         },
       });
@@ -83,9 +82,8 @@ const tabs = {
     routeName: "dataset-id-attachments",
     title: "dataset.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/datasets/${route.params.id}/attachments/`, {
         query: {
-          dataset: route.params.id,
           limit: 0,
         },
       });
@@ -98,9 +96,8 @@ const tabs = {
     routeName: "dataset-id-authors",
     title: "dataset.authors",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/dataset_author/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/datasets/${route.params.id}/dataset-authors/`, {
         query: {
-          dataset: route.params.id,
           limit: 0,
         },
       });
@@ -113,9 +110,8 @@ const tabs = {
     routeName: "dataset-id-geolocations",
     title: "dataset.geolocations",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/dataset_geolocation/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/datasets/${route.params.id}/dataset-geolocations/`, {
         query: {
-          dataset: route.params.id,
           limit: 0,
         },
       });

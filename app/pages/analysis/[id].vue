@@ -2,7 +2,7 @@
 import { mdiImageFilterHdr, mdiTestTube } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $translate, $apiFetch } = useNuxtApp();
+const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -49,9 +49,8 @@ const tabs = {
     routeName: "analysis-id-attachments",
     title: "analysis.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const res = await $apiFetch<GeoloogiaListResponse>(`/analyses/${route.params.id}/attachments/`, {
         query: {
-          analysis: route.params.id,
           limit: 0,
         },
       });

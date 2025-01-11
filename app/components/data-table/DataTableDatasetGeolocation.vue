@@ -18,8 +18,8 @@ const localePath = useLocalePath();
       >
         {{
           $translate({
-            et: item.locality.locality,
-            en: item.locality.locality_en,
+            et: item.locality.name,
+            en: item.locality.name_en,
           })
         }}
       </NuxtLink>

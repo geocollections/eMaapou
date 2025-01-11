@@ -2,7 +2,7 @@
 import { mdiEyedropper } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $apiFetch } = useNuxtApp();
+const { $apiFetch } = useNuxtApp();
 const route = useRoute();
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -23,9 +23,8 @@ const tabs = {
     routeName: "preparation-id-attachments",
     title: "preparation.attachments",
     count: async () => {
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/preparations/${route.params.id}/attachments/`, {
         query: {
-          preparation: route.params.id,
           limit: 0,
         },
       });
@@ -39,9 +38,8 @@ const tabs = {
     routeName: "preparation-id-taxa",
     title: "preparation.taxa",
     count: async () => {
-      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/taxon_list/", {
+      const response = await $apiFetch<GeoloogiaListResponse>(`/preparations/${route.params.id}/preparation-taxa/`, {
         query: {
-          preparation: route.params.id,
           limit: 0,
         },
       });

@@ -127,12 +127,12 @@ const initOptions = computed(() => {
 });
 function buildChartLegend() {
   return {
-    data: Object.keys(props.fileData?.metadata?.Curves).slice(1),
+    data: Object.keys(props.fileData["CURVE INFORMATION BLOCK"]).slice(1),
   };
 }
 function buildXAxis() {
   // First item in data is always DEPTH
-  return Object.entries(props.fileData?.data).reduce((prev, curr, currIdx) => {
+  return Object.entries(props.fileData?.CURVES).reduce((prev, curr, currIdx) => {
     if (curr[0] !== "DEPTH") {
       const xAxis = {
         // Todo: Could we make it toggleable using legend?
@@ -193,13 +193,13 @@ function buildYAxis() {
     // max(value) {
     //   return (value.max + 0.1).toFixed(2) * 1
     // },
-    data: props.fileData?.data?.DEPTH,
+    data: props.fileData?.CURVES?.DEPTH,
   };
 }
 
 function buildChartSeries() {
   // First item in data is always DEPTH
-  return Object.entries(props.fileData?.data).reduce((prev, curr, currIdx) => {
+  return Object.entries(props.fileData?.CURVES).reduce((prev, curr, currIdx) => {
     if (curr[0] !== "DEPTH") {
       const series = {
         name: curr[0],
@@ -252,6 +252,7 @@ function updateChartDimensions(isSmallChart: boolean) {
       ...state.defaultOptions.grid,
       left: isSmallChart ? GRID_LEFT_SMALL : GRID_LEFT,
       width: isSmallChart ? GRID_WIDTH_SMALL : GRID_WIDTH,
+      // width: "300px",
     },
     dataZoom: [
       {
