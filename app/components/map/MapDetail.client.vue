@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import L from "leaflet";
 import type { GeoJsonObject } from "geojson";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
 
-export type MapBaseLayer = keyof typeof baseLayers.value;
-export type MapOverlay = keyof typeof overlays.value;
+export type MapBaseLayer = keyof typeof baseLayers;
+export type MapOverlay = keyof typeof overlays;
 
 const props = withDefaults(defineProps<{
   height?: string;
@@ -38,126 +38,119 @@ const currentCenter = ref({
 
 const map = ref<L.Map>();
 
-// const settingsStore = useSettings();
-// const { mapBaseLayer, isBaseLayerEstonian } = storeToRefs(settingsStore);
-
-const baseLayers = computed(() => {
-  return {
-    "OpenStreetMap": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      attribution:
+const baseLayers = {
+  "OpenStreetMap": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    attribution:
           "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
-    }),
-    "OpenTopoMap": L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      attribution:
+  }),
+  "OpenTopoMap": L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    attribution:
           "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> | &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a>",
-    }),
-    "Estonian satellite": L.tileLayer("https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      attribution:
+  }),
+  "Estonian satellite": L.tileLayer("https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    attribution:
           "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
-      tms: true,
-      detectRetina: true,
-      zIndex: 1,
-    }),
-    "Estonian map": L.tileLayer("https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      attribution:
+    tms: true,
+    detectRetina: true,
+    zIndex: 1,
+  }),
+  "Estonian map": L.tileLayer("https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    attribution:
           "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
-      tms: true,
-      detectRetina: true,
-      zIndex: 1,
-    }),
-  };
-});
+    tms: true,
+    detectRetina: true,
+    zIndex: 1,
+  }),
+};
 
-const overlays = computed(() => {
-  return {
-    "Estonian hybrid": L.tileLayer.wms("https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
-      layers: "EESTI_ALUSKAART",
-      format: "image/png",
-      transparent: true,
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      tms: true,
-      detectRetina: true,
-      attribution:
+const overlays = {
+  "Estonian hybrid": L.tileLayer.wms("https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
+    layers: "EESTI_ALUSKAART",
+    format: "image/png",
+    transparent: true,
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    tms: true,
+    detectRetina: true,
+    attribution:
           "Estonian maps: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-      zIndex: 20,
-    }),
-    "Estonian bedrock": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
-      layers: "geocollections:bedrock400k",
-      format: "image/png",
-      transparent: true,
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      tms: true,
-      detectRetina: true,
-      attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-      zIndex: 20,
-    }),
-    "Estonian basement": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
-      layers: "sarv:basement",
-      format: "image/png",
-      transparent: true,
-      maxNativeZoom: 18,
-      maxZoom: 21,
-      tms: true,
-      detectRetina: true,
-      attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-      zIndex: 20,
-    }),
-    "Lokaliteedid / Localities": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
-      layers: "sarv:locality_summary",
-      format: "image/png",
-      transparent: true,
-      detectRetina: true,
-      updateWhenIdle: true,
-      attribution: "Localities: <a  href='https://geoloogia.info'>SARV</a>",
-      zIndex: 30,
-    }),
-    "Puursüdamikud / Drillcores": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
-      layers: "sarv:locality_drillcores",
-      format: "image/png",
-      transparent: true,
-      detectRetina: true,
-      updateWhenIdle: true,
-      attribution: "Drillcores: <a  href='https://geoloogia.info'>SARV</a>",
-      zIndex: 40,
-    }),
-    "Uuringupunktid / Sites": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
-      layers: "sarv:site_summary",
-      format: "image/png",
-      transparent: true,
-      detectRetina: true,
-      updateWhenIdle: true,
-      attribution: "Sites: <a  href='https://geoloogia.info'>SARV</a>",
-      zIndex: 50,
-    }),
-    "Proovid / Samples": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
-      layers: "sarv:sample_summary",
-      format: "image/png",
-      transparent: true,
-      detectRetina: true,
-      updateWhenIdle: true,
-      attribution: "Samples: <a  href='https://geoloogia.info'>SARV</a>",
-      zIndex: 60,
-    }),
-  };
-});
+    zIndex: 20,
+  }),
+  "Estonian bedrock": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+    layers: "geocollections:bedrock400k",
+    format: "image/png",
+    transparent: true,
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    tms: true,
+    detectRetina: true,
+    attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+    zIndex: 20,
+  }),
+  "Estonian basement": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+    layers: "sarv:basement",
+    format: "image/png",
+    transparent: true,
+    maxNativeZoom: 18,
+    maxZoom: 21,
+    tms: true,
+    detectRetina: true,
+    attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+    zIndex: 20,
+  }),
+  "Lokaliteedid / Localities": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+    layers: "sarv:locality_summary",
+    format: "image/png",
+    transparent: true,
+    detectRetina: true,
+    updateWhenIdle: true,
+    attribution: "Localities: <a  href='https://geoloogia.info'>SARV</a>",
+    zIndex: 30,
+  }),
+  "Puursüdamikud / Drillcores": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+    layers: "sarv:locality_drillcores",
+    format: "image/png",
+    transparent: true,
+    detectRetina: true,
+    updateWhenIdle: true,
+    attribution: "Drillcores: <a  href='https://geoloogia.info'>SARV</a>",
+    zIndex: 40,
+  }),
+  "Uuringupunktid / Sites": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+    layers: "sarv:site_summary",
+    format: "image/png",
+    transparent: true,
+    detectRetina: true,
+    updateWhenIdle: true,
+    attribution: "Sites: <a  href='https://geoloogia.info'>SARV</a>",
+    zIndex: 50,
+  }),
+  "Proovid / Samples": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+    layers: "sarv:sample_summary",
+    format: "image/png",
+    transparent: true,
+    detectRetina: true,
+    updateWhenIdle: true,
+    attribution: "Samples: <a  href='https://geoloogia.info'>SARV</a>",
+    zIndex: 60,
+  }),
+};
 
 const router = useRouter();
 const route = useRoute();
 
 const mapLayers = computed(() => {
   return [
-    baseLayers.value[props.baseLayer],
-    ...props.overlays.map(overlay => overlays.value[overlay]),
+    baseLayers[props.baseLayer],
+    ...props.overlays.map(overlay => overlays[overlay]),
   ];
 });
 
@@ -182,7 +175,7 @@ onMounted(() => {
       fullscreenControl: true,
     });
 
-    L.control.layers(baseLayers.value, overlays.value).addTo(map.value);
+    L.control.layers(baseLayers, overlays).addTo(map.value);
 
     const features = [];
 
