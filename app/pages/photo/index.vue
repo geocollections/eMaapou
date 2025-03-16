@@ -82,11 +82,6 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-function handleClickRow(index: number) {
-  searchPosition.value
-    = index + getOffset(options.value.page, options.value.itemsPerPage);
-}
-
 const { t } = useI18n();
 
 const { exportData } = useExportSolr("/attachment", {
@@ -169,7 +164,6 @@ useHead({
             @update="handleDataTableUpdate"
             @change:headers="handleHeadersChange"
             @reset:headers="handleHeadersReset(options)"
-            @click:row="handleClickRow"
           />
         </VWindowItem>
         <VWindowItem value="image">
@@ -188,7 +182,6 @@ useHead({
 
 <style scoped lang="scss">
 .active-tab {
-  // font-weight: bold;
   color: var(--v-theme-accent-darken-1) !important;
 
   &::before {
