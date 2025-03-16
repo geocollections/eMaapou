@@ -138,6 +138,7 @@ const { data } = await useAsyncData("data", async () => {
         "description_en",
         "date_digitised",
         "date_digitised_text",
+        "locality.id",
         "locality.name",
         "locality.name_en",
         "locality.latitude",
