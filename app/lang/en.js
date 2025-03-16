@@ -827,6 +827,7 @@ export default {
     dateDigitised: "Date digitised",
     licence: "Licence",
     keywords: "Keywords",
+    tags: "Tags",
     type: "Type",
     download: "Download file",
     remarks: "Remarks",

@@ -828,6 +828,7 @@ export default {
     dateDigitised: "Digit. aeg",
     licence: "Litsents",
     keywords: "Märksõnad",
+    tags: "Märksõnad (tekst)",
     type: "Tüüp",
     download: "Lae alla",
     remarks: "Lisainfo",

@@ -88,25 +88,18 @@ const showMap = computed(() => {
   );
 });
 
-const _mapIsEstonian = computed(() => {
-  return (
-    props.file.locality?.country?.iso_3166_1_alpha_2 === "EE"
-    || props.file.specimen?.locality?.country?.iso_3166_1_alpha_2 === "EE"
-  );
-});
-
 const mapLatitude = computed(() => {
   return (
-    props.file.locality?.latitude
+    props.file.image_latitude
+    || props.file.locality?.latitude
     || props.file.specimen?.locality?.latitude
-    || props.file.image_latitude
   );
 });
 const mapLongitude = computed(() => {
   return (
-    props.file.locality?.longitude
+    props.file.image_longitude
+    || props.file.locality?.longitude
     || props.file.specimen?.locality?.longitude
-    || props.file.image_longitude
   );
 });
 
@@ -265,6 +258,36 @@ const mapOverlays = computed(() => {
       >
         <BaseTable class="border rounded mb-2">
           <TableRow
+            :title="$t('file.title')"
+            :value="
+              $translate({
+                et: file.title,
+                en: file.title_en,
+              })
+            "
+          />
+          <TableRow
+            :title="$t('file.author')"
+            :value="file.author?.name"
+          />
+          <TableRow
+            :title="$t('file.author')"
+            :value="file.author_text"
+          />
+          <TableRow
+            :title="$t('file.date')"
+            :value="file.date_created || file.date_created_text"
+          />
+          <TableRow
+            :title="$t('file.description')"
+            :value="
+              $translate({
+                et: file.description,
+                en: file.description_en,
+              })
+            "
+          />
+          <TableRow
             v-if="specimen?.collection"
             :title="$t('file.collectionNr')"
             :value="specimen.collection"
@@ -394,15 +417,6 @@ const mapOverlays = computed(() => {
             :value="file.image_scalebar"
           />
           <TableRow
-            :title="$t('file.description')"
-            :value="
-              $translate({
-                et: file.description,
-                en: file.description_en,
-              })
-            "
-          />
-          <TableRow
             :title="$t('file.imageNumber')"
             :value="file.image_number"
           />
@@ -417,22 +431,6 @@ const mapOverlays = computed(() => {
             :value="imageset.description"
           />
           <TableRow
-            :title="$t('file.author')"
-            :value="file.author?.name"
-          />
-          <TableRow
-            :title="$t('file.author')"
-            :value="file.author_text"
-          />
-          <TableRow
-            :title="$t('file.imagePeople')"
-            :value="file.image_people"
-          />
-          <TableRow
-            :title="$t('file.date')"
-            :value="file.date_created || file.date_created_text"
-          />
-          <TableRow
             :title="$t('file.imagePlace')"
             :value="file.image_place"
           />
@@ -443,6 +441,27 @@ const mapOverlays = computed(() => {
           <TableRow
             :title="$t('file.imageLongitude')"
             :value="file.image_longitude"
+          />
+          <TableRow
+            :title="$t('file.imagePeople')"
+            :value="file.image_people"
+          />
+          <TableRow
+            v-if="attachmentKeywords.length > 0"
+            :title="$t('file.keywords')"
+            :value="attachmentKeywords"
+          >
+            <template #value="{ value }">
+              <ul style="list-style-position: inside">
+                <li v-for="(item, index) in value" :key="`keyword-${index}`">
+                  {{ item.name }}
+                </li>
+              </ul>
+            </template>
+          </TableRow>
+          <TableRow
+            :title="$t('file.tags')"
+            :value="file.tags"
           />
           <TableRow
             v-if="type"
@@ -458,19 +477,6 @@ const mapOverlays = computed(() => {
             :title="$t('file.format')"
             :value="file.mime_type?.content_type"
           />
-          <TableRow
-            v-if="attachmentKeywords.length > 0"
-            :title="$t('file.keywords')"
-            :value="attachmentKeywords"
-          >
-            <template #value="{ value }">
-              <ul style="list-style-position: inside">
-                <li v-for="(item, index) in value" :key="`keyword-${index}`">
-                  {{ item.name }}
-                </li>
-              </ul>
-            </template>
-          </TableRow>
           <TableRow
             v-if="agentDigitised"
             :title="$t('file.personDigitised')"

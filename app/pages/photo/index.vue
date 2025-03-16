@@ -40,7 +40,7 @@ const {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
-      filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+      filter: [...solrFilters.value, "imageset_id:[* TO *]"],
       sort: solrSort.value ?? "id_l desc",
       fields: FIELDS_SOLR_PHOTO,
     },
@@ -82,18 +82,13 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   setQueryParamsFromState();
 }
 
-function handleClickRow(index: number) {
-  searchPosition.value
-    = index + getOffset(options.value.page, options.value.itemsPerPage);
-}
-
 const { t } = useI18n();
 
 const { exportData } = useExportSolr("/attachment", {
   totalRows: computed(() => data.value?.response.numFound ?? 0),
   query: computed(() => ({
     query: solrQuery.value,
-    filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+    filter: [...solrFilters.value, "imageset_id:[* TO *]"],
     sort: solrSort.value,
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
@@ -169,7 +164,6 @@ useHead({
             @update="handleDataTableUpdate"
             @change:headers="handleHeadersChange"
             @reset:headers="handleHeadersReset(options)"
-            @click:row="handleClickRow"
           />
         </VWindowItem>
         <VWindowItem value="image">
@@ -188,7 +182,6 @@ useHead({
 
 <style scoped lang="scss">
 .active-tab {
-  // font-weight: bold;
   color: var(--v-theme-accent-darken-1) !important;
 
   &::before {
