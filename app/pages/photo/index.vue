@@ -40,7 +40,7 @@ const {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
-      filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+      filter: [...solrFilters.value, "imageset_id:[* TO *]"],
       sort: solrSort.value ?? "id_l desc",
       fields: FIELDS_SOLR_PHOTO,
     },
@@ -93,7 +93,7 @@ const { exportData } = useExportSolr("/attachment", {
   totalRows: computed(() => data.value?.response.numFound ?? 0),
   query: computed(() => ({
     query: solrQuery.value,
-    filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+    filter: [...solrFilters.value, "imageset_id:[* TO *]"],
     sort: solrSort.value,
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
