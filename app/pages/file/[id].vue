@@ -117,6 +117,7 @@ export interface File {
     reference: string;
   }>;
   specimen_image_attachment: number;
+  tags: Nullable<string>;
 }
 
 const { data } = await useAsyncData("data", async () => {
@@ -180,6 +181,7 @@ const { data } = await useAsyncData("data", async () => {
         "mime_type.content_type",
         "reference.reference",
         "specimen_image_attachment",
+        "tags",
       ].join(","),
     },
     onResponseError: (_error) => {
