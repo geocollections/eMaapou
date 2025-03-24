@@ -107,14 +107,14 @@ const localePath = useLocalePath();
       </NuxtLink>
     </template>
     <template #item.author="{ item }">
-      <a
+      <BaseLinkExternal
         v-if="item.reference"
         class="text-link"
         :class="{ 'is-preferred': !item.is_preferred }"
         @click="$openGeokirjandus('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </a>
+      </BaseLinkExternal>
       <div
         v-else-if="item.author"
         :class="{ 'is-preferred': !item.is_preferred }"
