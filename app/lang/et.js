@@ -804,6 +804,7 @@ export default {
     idTitle: "Fail ID",
     author: "Autor",
     date: "Kuupäev",
+    dateText: "Kuupäev (tekst)",
     collectionNr: "Kollektsiooni nr.",
     specimenNr: "Eksemplari nr.",
     name: "Nimi",
@@ -836,6 +837,7 @@ export default {
     lasGraph: "Graafik",
     lasText: "Fail teksti kujul",
     textTable: "Fail tabeli kujul",
+    title: "Pealkiri",
     relations: "Seotud kirjed ({number})",
   },
   cookiePolicy: {

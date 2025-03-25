@@ -796,13 +796,14 @@ export default {
   },
   file: {
     pageTitle: "Files",
-    specimenTitle: "Image of specimen",
+    specimenTitle: "Specimen",
     imageTitle: "Photo",
     fileTitle: "File",
     referenceTitle: "Reference",
     idTitle: "File ID",
     author: "Author",
     date: "Date",
+    dateText: "Date (text)",
     collectionNr: "Collection no.",
     specimenNr: "Specimen no.",
     name: "Name",
@@ -835,6 +836,7 @@ export default {
     lasGraph: "Graph",
     lasText: "File in text form",
     textTable: "File in table form",
+    title: "Title",
     relations: "Relations ({number})",
   },
   cookiePolicy: {
