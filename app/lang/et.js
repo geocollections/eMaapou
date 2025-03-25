@@ -84,7 +84,7 @@ export default {
     resetSearchLong: "Puhasta otsinguväljad",
     table: "Tabel",
     gallery: "Galerii",
-    containImages: "Kärbi pilte",
+    containImages: "Näita ruutudena",
     pagination: "Kuva {value} kaupa",
     goBack: "Detailotsingusse",
     extraOptions: "Lisavõimalused",
@@ -797,7 +797,7 @@ export default {
   },
   file: {
     pageTitle: "Failid",
-    specimenTitle: "Säiliku foto",
+    specimenTitle: "Säilik",
     imageTitle: "Foto",
     fileTitle: "Fail",
     referenceTitle: "Kirjandusallikas",
