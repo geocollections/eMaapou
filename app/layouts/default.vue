@@ -38,6 +38,7 @@ watch(() => display.smAndDown.value, (value) => {
         @update:navigation-drawer="drawer = $event"
       />
       <VNavigationDrawer
+        v-if="mdAndUp"
         app
         :rail="railDrawer"
         color="grey-darken-3"
