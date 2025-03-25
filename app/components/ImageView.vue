@@ -79,7 +79,7 @@ function updateOptions(event: DataTableOptions) {
     <VRow
       v-if="count > 0"
       no-gutters
-      class="px-2"
+      class="px-2 py-2"
     >
       <VCol
         v-for="(image, index) in items"
