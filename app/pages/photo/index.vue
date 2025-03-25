@@ -2,8 +2,6 @@
 import { mdiFileImageOutline } from "@mdi/js";
 import { FIELDS_SOLR_PHOTO } from "~/constants";
 
-const views = computed(() => ["table", "image"]);
-
 const photosStore = usePhotos();
 const {
   handleHeadersReset,
@@ -19,7 +17,6 @@ const {
   solrFilters,
   options,
   headers,
-  searchPosition,
   resultsCount,
   currentView,
 } = storeToRefs(photosStore);
