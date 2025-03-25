@@ -40,11 +40,11 @@ function updateOptions(event: DataTableOptions) {
 
 <template>
   <div class="bg-white">
-    <VRow no-gutters>
+    <VRow class="pl-3" no-gutters>
       <VCol
         cols="12"
         sm="auto"
-        class="px-3 my-1 my-sm-4"
+        class="px-3 my-1"
         align-self="center"
       >
         <VSwitch
@@ -75,6 +75,7 @@ function updateOptions(event: DataTableOptions) {
         />
       </VCol>
     </VRow>
+    <VDivider />
     <VRow
       v-if="count > 0"
       no-gutters
@@ -183,6 +184,27 @@ function updateOptions(event: DataTableOptions) {
             </VTooltip>
           </ClientOnly>
         </VCard>
+      </VCol>
+    </VRow>
+    <VDivider />
+    <VRow no-gutters>
+      <VCol class="d-flex justify-end">
+        <BaseDataTablePagination
+          :options="options"
+          :pagination="pagination"
+          :items-per-page-options="footerProps['items-per-page-options']"
+          :items-per-page-text="footerProps['items-per-page-text']"
+          :page-select-text="
+            $t('common.pageSelect', {
+              current: options.page,
+              count: pagination.pageCount,
+            })
+          "
+          :go-to-text="$t('common.goTo')"
+          :go-to-button-text="$t('common.goToBtn')"
+          select-page-id="header-select-btn"
+          @update:options="updateOptions"
+        />
       </VCol>
     </VRow>
     <ImageOverlay

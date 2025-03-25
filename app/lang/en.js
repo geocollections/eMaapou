@@ -83,7 +83,7 @@ export default {
     resetSearchLong: "Clear search fields",
     table: "Table",
     gallery: "Gallery",
-    containImages: "Crop images",
+    containImages: "Show as squares",
     pagination: "Paginate by {value}",
     goBack: "To detailsearch",
     extraOptions: "Extra options",
