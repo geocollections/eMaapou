@@ -1386,10 +1386,18 @@ export const HEADERS_PHOTO: Headers = {
       sortField: ["id_l"],
       ...narrowColumn,
     },
+    title: {
+      title: "photo.title",
+      value: "title",
+      show: true,
+      apiFieldValue: { et: "title", en: "title_en" },
+      sortField: { et: ["title"], en: ["title_en"] },
+      ...wideColumn,
+    },
     image_number: {
       title: "photo.number",
       value: "image_number",
-      show: true,
+      show: false,
       apiFieldValue: "image_number",
       sortField: ["image_number"],
       ...narrowColumn,
@@ -1421,7 +1429,7 @@ export const HEADERS_PHOTO: Headers = {
     image_object: {
       title: "photo.imageObject",
       value: "image_object",
-      show: true,
+      show: false,
       apiFieldValue: "image_object",
       sortField: ["image_object"],
       ...wideColumn,
@@ -1429,7 +1437,7 @@ export const HEADERS_PHOTO: Headers = {
     tags: {
       title: "photo.tags",
       value: "tags",
-      show: true,
+      show: false,
       apiFieldValue: "tags",
       sortField: ["tags"],
       ...wideColumn,
@@ -1445,6 +1453,7 @@ export const HEADERS_PHOTO: Headers = {
   },
   allIds: [
     "id",
+    "title",
     "image_number",
     "agent",
     "date",

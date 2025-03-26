@@ -116,6 +116,8 @@ export const FIELDS_SOLR_LOCALITY = [
 export const FIELDS_SOLR_PHOTO = [
   "id",
   "id_l",
+  "title",
+  "title_en",
   "image_number",
   "agent",
   "author_free",

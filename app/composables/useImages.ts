@@ -21,6 +21,11 @@ export type PreparationImage = Image<{
   dateText: string | null;
 }>;
 
+export type PhotoArchiveImage = Image<{
+  author: string | null;
+  date: string | null;
+}>;
+
 export interface ImageFunc<IT, T = { id: any;[K: string]: any }> {
   (params: { item: T; page: number; rows: number }): Promise<{ images: IT[]; total: number; hasNext: boolean }>;
 }
@@ -142,6 +147,31 @@ export function usePreparationImageFunction() {
       },
     }));
     return { images: newImages, total: res.count, hasNext: res.next !== null };
+  };
+  return imageFunc;
+}
+
+export function usePhotoArchiveImageFunction() {
+  const { $solrFetch } = useNuxtApp();
+  const imageFunc: ImageFunc<PhotoArchiveImage> = async ({ item, page, rows }) => {
+    const res = await $solrFetch<SolrResponse>("/attachment", {
+      query: {
+        q: "*",
+        fq: `id:${item.id}`,
+        rows,
+        start: rows * page,
+      },
+    });
+
+    const newImages = res.response.docs.map((attachment: any) => ({
+      id: attachment.id,
+      filename: attachment.filename,
+      info: {
+        author: attachment.agent,
+        date: attachment.date_created,
+      },
+    }));
+    return { images: newImages, total: res.response.numFound, hasNext: res.response.numFound > rows * (page + 1) };
   };
   return imageFunc;
 }

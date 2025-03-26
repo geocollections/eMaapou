@@ -1035,6 +1035,7 @@ export default {
     size: "Image size",
     viewDetail: "Image info",
     image: "Image",
+    title: "Title",
   },
   news: {
     pageTitle: "News",

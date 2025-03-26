@@ -1036,6 +1036,7 @@ export default {
     size: "Pildi suurus",
     viewDetail: "Pildi info",
     image: "Pilt",
+    title: "Pealkiri",
   },
   news: {
     pageTitle: "Uudised",
