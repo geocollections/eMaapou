@@ -276,7 +276,11 @@ const mapOverlays = computed(() => {
           />
           <TableRow
             :title="$t('file.date')"
-            :value="file.date_created || file.date_created_text"
+            :value="file.date_created"
+          />
+          <TableRow
+            :title="$t('file.dateText')"
+            :value="file.date_created_text"
           />
           <TableRow
             :title="$t('file.description')"

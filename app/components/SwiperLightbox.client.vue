@@ -1,8 +1,8 @@
 <script setup lang="ts" generic="T">
+import type { Image } from "./ImageBar.vue";
 import { mdiFileDownloadOutline, mdiInformationOutline } from "@mdi/js";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
-import type { Image } from "./ImageBar.vue";
 
 const props = withDefaults(defineProps<
   {
@@ -43,6 +43,14 @@ function handleReachEnd() {
   emit("end");
 }
 
+function reset() {
+  swiper.value?.swiper.slideTo(0);
+}
+
+function handleClose() {
+  emit("close");
+}
+
 function renderCustomPagination(_s: any, current: number, _total: number) {
   return `${current} / ${props.total}`;
 }
@@ -72,6 +80,7 @@ onMounted(() => {
         color: white;
         text-align: left;
         padding: 0.5rem;
+        width: fit-content;
       }
       `,
       ],
@@ -108,10 +117,6 @@ watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY
 defineExpose({
   reset,
 });
-
-function reset() {
-  swiper.value?.swiper.slideTo(0);
-}
 </script>
 
 <template>
@@ -130,7 +135,10 @@ function reset() {
         :lazy="true"
         class="d-flex justify-center align-center"
       >
-        <div class="swiper-zoom-container">
+        <div
+          class="swiper-zoom-container"
+          @click.self="handleClose"
+        >
           <NuxtImg
             :src="image.filename"
             provider="geocollections"

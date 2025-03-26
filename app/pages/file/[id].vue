@@ -63,6 +63,8 @@ export interface File {
   image_scalebar: Nullable<string>;
   image_number: Nullable<string>;
   image_people: Nullable<string>;
+  title: Nullable<string>;
+  title_en: Nullable<string>;
   description: Nullable<string>;
   description_en: Nullable<string>;
   date_digitised: Nullable<string>;
@@ -135,6 +137,8 @@ const { data } = await useAsyncData("data", async () => {
         "image_scalebar",
         "image_number",
         "image_people",
+        "title",
+        "title_en",
         "description",
         "description_en",
         "date_digitised",
@@ -221,7 +225,7 @@ const title = computed(() => {
     return "";
   switch (file.value.specimen_image_attachment) {
     case 1:
-      return `${file.value?.specimen?.collection?.number?.split(" ")?.[0]} ${
+      return `${t("file.specimenTitle")} ${file.value?.specimen?.collection?.number?.split(" ")?.[0]} ${
         file.value?.specimen?.number
       } (ID: ${file.value?.specimen?.id})`;
     case 2:
@@ -231,27 +235,14 @@ const title = computed(() => {
     default:
       return `${
         $translate({
-          et: file.value?.description,
-          en: file.value?.description_en,
+          et: file.value?.title,
+          en: file.value?.title_en,
         }) ?? file.value?.id
       }`;
   }
 });
-const pageType = computed(() => {
-  if (!file.value)
-    return "";
-  switch (file.value.specimen_image_attachment) {
-    case 1:
-      return t("file.specimenTitle");
-    case 2:
-      return t("file.imageTitle");
-    case 4:
-      return t("file.referenceTitle");
-    default:
-      return t("file.fileTitle");
-  }
-});
-const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
+
+const pageTitle = computed(() => `${t("file.fileTitle")} ${file.value?.id} | ${title.value}`);
 const isImage = computed(() => file.value?.mime_type?.content_type.includes("image"));
 const isAudio = computed(() => file.value?.mime_type?.content_type.includes("audio"));
 const isVideo = computed(() => file.value?.mime_type?.content_type.includes("video"));
