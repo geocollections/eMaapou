@@ -11,7 +11,7 @@ const emit = defineEmits<{
 const photosStore = usePhotos();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(photosStore);
 const allSolrFilters = computed(() => {
-  return [...solrFilters.value, "specimen_image_attachment:\"2\""];
+  return [...solrFilters.value, "imageset_id:[* TO *]"];
 });
 
 const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
