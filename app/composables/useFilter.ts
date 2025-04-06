@@ -1,12 +1,8 @@
+import type { Position } from "geojson";
 import { geojsonToWKT } from "@terraformer/wkt";
 import earcut from "earcut";
 import cloneDeep from "lodash/cloneDeep";
 import isNil from "lodash/isNil";
-import type { Position } from "geojson";
-
-export function useFilter() {
-  return {};
-}
 
 export type LookupType = "contains" | "exact" | "startswith" | "endswith";
 export type FilterType =
