@@ -1165,6 +1165,11 @@ export default {
     miningPermitOwner: "Kaevandamisloa omanik",
     taxon: "Takson",
     size: "Suurus",
+    title: "Pealkiri",
+    description: "Kirjeldus",
+    authorText: "Autor (tekst)",
+    dateText: "Kuupäev (tekst)",
+    place: "Asukoht",
   },
   intervals: {
     default: {

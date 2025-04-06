@@ -1165,6 +1165,11 @@ export default {
     miningPermitOwner: "Mining permit owner",
     taxon: "Taxon",
     size: "Size",
+    title: "Title",
+    description: "Description",
+    authorText: "Author (text)",
+    dateText: "Date (text)",
+    place: "Place",
   },
   intervals: {
     default: {

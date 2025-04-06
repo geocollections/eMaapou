@@ -88,27 +88,10 @@ function handleSubmit() {
         class="px-2"
         multiple
       >
-        <FilterInputAutocomplete
-          ref="filterLocality"
-          v-model="filters.locality.value"
-          :title="$t('filters.locality')"
-          :query-function="suggestLocality"
-          :hydration-function="hydrateLocality"
-          value="locality"
-          @update:model-value="handleUpdate('locality')"
-        />
-        <FilterInputAutocomplete
-          ref="filterCountry"
-          v-model="filters.country.value"
-          :title="$t('filters.country')"
-          :query-function="suggestCountry"
-          :hydration-function="hydrateCountry"
-          value="country"
-          @update:model-value="handleUpdate('country')"
-        />
-        <FilterMap
-          v-model="filters.geometry.value"
-          value="map"
+        <FilterInputText
+          v-model="filters.title.value"
+          :title="$t('filters.title')"
+          value="title"
           @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
@@ -121,15 +104,68 @@ function handleSubmit() {
           @update:model-value="handleUpdate('author')"
         />
         <FilterInputText
-          v-model="filters.people.value"
-          :title="$t('filters.people')"
-          value="people"
+          v-model="filters.authorText.value"
+          :title="$t('filters.authorText')"
+          value="authorText"
+          @update:model-value="handleUpdate()"
+        />
+        <FilterInputDate
+          v-model="filters.date.value"
+          :title="$t('filters.date')"
+          value="date"
+          @update:model-value="handleUpdate()"
+        />
+        <FilterInputText
+          v-model="filters.dateText.value"
+          :title="$t('filters.dateText')"
+          value="dateText"
+          @update:model-value="handleUpdate()"
+        />
+        <FilterInputText
+          v-model="filters.description.value"
+          :title="$t('filters.description')"
+          value="description"
           @update:model-value="handleUpdate()"
         />
         <FilterInputText
           v-model="filters.tags.value"
           :title="$t('filters.tags')"
           value="tags"
+          @update:model-value="handleUpdate()"
+        />
+        <FilterInputText
+          v-model="filters.people.value"
+          :title="$t('filters.people')"
+          value="people"
+          @update:model-value="handleUpdate()"
+        />
+        <FilterMap
+          v-model="filters.geometry.value"
+          value="map"
+          @update:model-value="handleUpdate()"
+        />
+        <FilterInputAutocomplete
+          ref="filterCountry"
+          v-model="filters.country.value"
+          :title="$t('filters.country')"
+          :query-function="suggestCountry"
+          :hydration-function="hydrateCountry"
+          value="country"
+          @update:model-value="handleUpdate('country')"
+        />
+        <FilterInputAutocomplete
+          ref="filterLocality"
+          v-model="filters.locality.value"
+          :title="$t('filters.locality')"
+          :query-function="suggestLocality"
+          :hydration-function="hydrateLocality"
+          value="locality"
+          @update:model-value="handleUpdate('locality')"
+        />
+        <FilterInputText
+          v-model="filters.place.value"
+          :title="$t('filters.place')"
+          value="place"
           @update:model-value="handleUpdate()"
         />
         <FilterInputText
@@ -142,12 +178,6 @@ function handleSubmit() {
           v-model="filters.size.value"
           :title="$t('filters.imageSize')"
           value="imageSize"
-          @update:model-value="handleUpdate()"
-        />
-        <FilterInputDate
-          v-model="filters.date.value"
-          :title="$t('filters.date')"
-          value="date"
           @update:model-value="handleUpdate()"
         />
         <FilterInputAutocomplete
