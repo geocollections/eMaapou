@@ -48,7 +48,7 @@ function getAttachmentType(type: number) {
       <template #item.reference="{ item }">
         <BaseLinkExternal
           v-if="item.reference_id"
-          @click="$openGeokirjandus('reference', item.reference.id)"
+          @click="$openGeokirjandus('reference', item.reference_id)"
         >
           {{ item.reference }}
         </BaseLinkExternal>
