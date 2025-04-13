@@ -35,14 +35,13 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/dataset_reference/", {
+const { exportData } = useExportApi(`/datasets/${route.params.id}/dataset-references/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    dataset: route.params.id,
-    nest: 2,
-    ordering: sortBy.value,
+    expand: "reference,reference.journal",
+    ordering: sortBy.value ?? "-reference__year",
     ...searchParams.value,
   })),
 });
@@ -56,6 +55,7 @@ const { exportData } = useExportGeoloogiaApi("/dataset_reference/", {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

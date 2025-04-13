@@ -1,16 +1,37 @@
 <script setup lang="ts">
 import { mdiFileExportOutline } from "@mdi/js";
-import type { ExportSelection } from "~/composables/useExport";
+import type { ExportSelection, ExportType } from "~/composables/useExport";
 
-const props = defineProps<{
+interface ExportButton {
+  value: ExportType;
+  text: string;
+};
+
+const props = withDefaults(defineProps<{
   exportFunc: ExportFunc;
-}>();
+  types?: ExportType[];
+}>(), { types: () => ["csv", "xlsx"] });
 
 const { t } = useI18n({ useScope: "local" });
 
 const selection = ref<ExportSelection>("page");
 const exportType = ref<ExportType>("csv");
 const filename = ref("export");
+
+const typeButtonsMap: Record<ExportType, ExportButton> = {
+  csv: {
+    value: "csv",
+    text: "CSV",
+  },
+  xlsx: {
+    value: "xlsx",
+    text: "XLSX",
+  },
+};
+
+const activeTypeButtons = computed(() => {
+  return props.types.map(type => typeButtonsMap[type]);
+});
 
 function handleExport() {
   props.exportFunc({ type: exportType.value, filename: filename.value, selection: selection.value });
@@ -54,11 +75,12 @@ function handleExport() {
             density="compact"
             mandatory
           >
-            <VBtn value="csv">
-              CSV
-            </VBtn>
-            <VBtn value="xlsx">
-              XLSX
+            <VBtn
+              v-for="button in activeTypeButtons"
+              :key="button.value"
+              :value="button.value"
+            >
+              {{ button.text }}
             </VBtn>
           </VBtnToggle>
           <VSelect

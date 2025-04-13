@@ -37,13 +37,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/stratigraphy_stratotype/", {
+const { exportData } = useExportApi(`/localities/${route.params.id}/locality-stratotypes/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    locality: route.params.id,
-    nest: 1,
+    expand: "stratigraphy,reference,type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
@@ -58,6 +57,7 @@ const { exportData } = useExportGeoloogiaApi("/stratigraphy_stratotype/", {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

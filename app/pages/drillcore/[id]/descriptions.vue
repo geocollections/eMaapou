@@ -59,13 +59,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/locality_description/", {
+const { exportData } = useExportApi(`/localities/${props.locality}/locality-descriptions/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    locality: props.locality,
-    nest: 1,
+    expand: "rock,stratigraphy,author,reference",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
@@ -80,6 +79,7 @@ const { exportData } = useExportGeoloogiaApi("/locality_description/", {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

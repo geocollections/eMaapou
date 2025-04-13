@@ -36,13 +36,13 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
+const { exportData } = useExportApi(`/preparations/${route.params.id}/attachments/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    preparation: route.params.id,
-    nest: 2,
+    expand: "mime_type,author",
+    fields: ["id", "uuid_filename", "mime_type.content_type", "description", "description_en", "author.name"].join(","),
     ordering: sortBy.value,
     ...searchParams.value,
   })),
@@ -57,6 +57,7 @@ const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

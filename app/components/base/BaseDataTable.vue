@@ -2,7 +2,7 @@
 import { mdiChevronDown, mdiChevronUp, mdiEye, mdiEyeArrowRight, mdiMagnify } from "@mdi/js";
 import debounce from "lodash/debounce";
 import isEqual from "lodash/isEqual";
-import type { ExportFunc } from "~/composables/useExport";
+import type { ExportFunc, ExportType } from "~/composables/useExport";
 
 const props = withDefaults(defineProps<
   {
@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<
     singleExpand?: boolean;
     dynamicHeaders?: boolean;
     exportFunc?: ExportFunc;
+    exportTypes?: ExportType[];
     itemTo?: (item: any) => string;
     externalTo?: boolean;
   }
@@ -246,6 +247,7 @@ onMounted(() => {
                 v-if="exportFunc"
                 :table-element="tableElement"
                 :export-func="exportFunc"
+                :types="exportTypes"
               />
               <BaseDataTableHeaderMenu
                 v-if="dynamicHeaders"

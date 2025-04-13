@@ -34,13 +34,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/stratigraphy_synonym/", {
+const { exportData } = useExportApi(`/stratigraphies/${route.params.id}/stratigraphy-synonyms/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    stratigraphy: route.params.id,
-    nest: 1,
+    expand: "language,reference",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
@@ -56,6 +55,7 @@ const { exportData } = useExportGeoloogiaApi("/stratigraphy_synonym/", {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"
