@@ -38,13 +38,13 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
+const { exportData } = useExportApi(`/localities/${route.params.id}/attachments/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    locality: route.params.id,
-    nest: 2,
+    expand: "author,mime_type",
+    fields: "id,description,description_en,filename,author.name,mime_type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),

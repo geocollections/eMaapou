@@ -35,14 +35,13 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/locality_reference/", {
+const { exportData } = useExportApi(`/areas/${route.params.id}/area-references/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    area: route.params.id,
-    nest: 1,
-    ordering: sortBy.value,
+    expand: "reference",
+    ordering: sortBy.value ?? "-reference__year",
     ...searchParams.value,
   })),
 });

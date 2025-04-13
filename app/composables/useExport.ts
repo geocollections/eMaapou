@@ -75,14 +75,14 @@ interface GeoloogiaApiQuery {
   [K: string]: any;
 }
 
-export function useExportGeoloogiaApi(path: string, { query, totalRows }: {
+export function useExportApi(path: string, { query, totalRows }: {
   query: Ref<GeoloogiaApiQuery>;
   totalRows: Ref<number>;
 }) {
-  const { $geoloogiaFetch } = useNuxtApp();
+  const { $apiFetch } = useNuxtApp();
 
   const exportData: ExportFunc = async ({ type, filename, selection }) => {
-    const data = await $geoloogiaFetch<string>(path, {
+    const data = await $apiFetch<string>(path, {
       query: {
         ...query.value,
         ...getSelectionParams(selection),

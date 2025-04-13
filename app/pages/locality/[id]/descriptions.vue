@@ -55,13 +55,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   setStateFromQueryParams(route);
   await refresh();
 });
-const { exportData } = useExportGeoloogiaApi("/locality_description/", {
+const { exportData } = useExportApi(`/localities/${route.params.id}/locality-descriptions/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    locality: route.params.id,
-    nest: 1,
+    expand: "rock,stratigraphy,author,reference",
     ordering: sortBy.value,
     ...searchParams.value,
   })),

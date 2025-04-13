@@ -35,13 +35,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/dataset_author/", {
+const { exportData } = useExportApi(`/datasets/${route.params.id}/dataset-authors/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    dataset: route.params.id,
-    nest: 1,
+    expand: "agent,type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),

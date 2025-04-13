@@ -35,13 +35,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/specimen_identification/", {
+const { exportData } = useExportApi(`/specimens/${route.params.id}/specimen-taxa/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    specimen: route.params.id,
-    nest: 1,
+    expand: "taxon,agent,reference,identification_type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),

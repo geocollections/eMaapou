@@ -35,13 +35,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/specimen_identification_geology/", {
+const { exportData } = useExportApi(`/specimens/${route.params.id}/specimen-rocks/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    specimen: route.params.id,
-    nest: 1,
+    expand: "rock,agent,reference,type",
     ordering: sortBy.value,
     ...searchParams.value,
   })),

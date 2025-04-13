@@ -35,13 +35,12 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
   await refresh();
 });
 
-const { exportData } = useExportGeoloogiaApi("/taxon_list/", {
+const { exportData } = useExportApi(`/samples/${route.params.id}/sample-taxa/`, {
   totalRows: computed(() => data.value?.count ?? 0),
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    sample: route.params.id,
-    nest: 1,
+    expand: "taxon",
     ordering: sortBy.value,
     ...searchParams.value,
   })),
