@@ -54,6 +54,7 @@ const { exportData } = useExportApi(`/localities/${route.params.id}/locality-ref
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

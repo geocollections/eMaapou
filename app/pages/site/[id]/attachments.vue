@@ -56,6 +56,7 @@ const { exportData } = useExportApi(`/sites/${route.params.id}/attachments/`, {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     :show-search="false"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

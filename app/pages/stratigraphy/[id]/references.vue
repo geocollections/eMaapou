@@ -55,6 +55,7 @@ const { exportData } = useExportApi(`/stratigraphies/${route.params.id}/stratigr
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

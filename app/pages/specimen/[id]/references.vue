@@ -56,6 +56,7 @@ const { exportData } = useExportApi(`/specimens/${route.params.id}/specimen-refe
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

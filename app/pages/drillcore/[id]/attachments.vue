@@ -71,6 +71,7 @@ const { exportData } = useExportApi("/attachments/", {
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     id-field="attachment"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

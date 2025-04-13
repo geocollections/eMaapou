@@ -76,6 +76,7 @@ const { exportData } = useExportApi(`/sites/${route.params.id}/site-descriptions
     :headers="headers"
     :is-loading="status === 'pending'"
     :export-func="exportData"
+    :export-types="['csv']"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"
