@@ -14,7 +14,8 @@ export type FilterType =
   | "range"
   | "rangeAlt"
   | "parameter"
-  | "dateList";
+  | "dateList"
+  | "date";
 
 export interface BaseFilter {
   type: FilterType;
@@ -63,6 +64,11 @@ export type DateListFilter = Omit<BaseFilter, "value"> & {
   value: string[][];
 };
 
+export type DateFilter = Omit<BaseFilter, "value"> & {
+  type: "date";
+  value: [string | undefined, string | undefined];
+};
+
 export interface ParameterValue {
   value: [null | number, null | number];
   parameter: null | string;
@@ -82,6 +88,7 @@ export type FilterUnion =
   | BooleanFilter
   | RangeAltFilter
   | DateListFilter
+  | DateFilter
   | ParameterFilter;
 
 export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: T) {
@@ -151,6 +158,8 @@ function isValidFilter(filter: FilterUnion): boolean {
       return filter.value.length > 0;
     case "dateList":
       return filter.value.length > 0;
+    case "date":
+      return filter.value.some(value => value !== null);
     case "range":
       return filter.value.some(value => value !== null);
     case "rangeAlt":
@@ -193,6 +202,18 @@ function getSolrFilter(filter: FilterUnion) {
     case "range": {
       const start = isNil(filter.value[0]) ? "*" : filter.value[0];
       const end = isNil(filter.value[1]) ? "*" : filter.value[1];
+
+      return filter.fields
+        .map((field: string) => `${field}:[${start} TO ${end}]`)
+        .join(" OR ");
+    }
+    case "date": {
+      if (isNil(filter.value[0]) && isNil(filter.value[1])) {
+        return "";
+      }
+
+      const start = isNil(filter.value[0]) ? "*" : new Date(filter.value[0]).toISOString();
+      const end = isNil(filter.value[1]) ? "*" : new Date(filter.value[1]).toISOString();
 
       return filter.fields
         .map((field: string) => `${field}:[${start} TO ${end}]`)
