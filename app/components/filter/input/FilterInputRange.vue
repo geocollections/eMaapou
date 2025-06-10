@@ -41,6 +41,7 @@ watch(
     internalValue.value = val;
   },
 );
+
 function handleEnter() {
   if (
     props.modelValue[0] === internalValue.value[0]
@@ -51,12 +52,14 @@ function handleEnter() {
 
   emit("update:model-value", internalValue.value);
 }
+
 function handleInput(input: string, isMin: boolean) {
   if (isMin)
     internalValue.value = [parseInput(input) ?? null, props.modelValue[1]];
   else
     internalValue.value = [props.modelValue[0], parseInput(input) ?? null];
 }
+
 const valueString = computed(() => {
   if (props.modelValue[0] === null && props.modelValue[1] !== null) {
     return t(`${props.intervalLabels}.lessThanEquals`, {
@@ -74,6 +77,7 @@ const valueString = computed(() => {
     max: props.modelValue[1],
   });
 });
+
 function handleRemove() {
   emit("update:model-value", [null, null]);
 }
