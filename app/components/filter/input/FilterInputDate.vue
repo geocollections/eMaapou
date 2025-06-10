@@ -1,80 +1,115 @@
 <script setup lang="ts">
-import cloneDeep from "lodash/cloneDeep";
-
 const props = defineProps<{
-  modelValue: string[][];
+  modelValue: [string | undefined, string | undefined];
   title: string;
 }>();
 
 const emit = defineEmits<{
-  "update:model-value": [value: string[][]];
+  "update:model-value": [value: [string | undefined, string | undefined]];
 }>();
 
 const { locale } = useI18n();
 const panel = ref();
-const currentDatePickerValue = ref<string[]>();
-const internalValue = ref<string[][]>(props.modelValue);
+const internalValue = ref<[string | undefined, string | undefined]>(props.modelValue);
+const internalDateValue = ref<[Date | undefined, Date | undefined]>([undefined, undefined]);
 
 watch(
   () => props.modelValue,
   (newVal) => {
     internalValue.value = newVal;
+
+    if (newVal[0] !== undefined) {
+      internalDateValue.value[0] = new Date(newVal[0]);
+    }
+    if (newVal[1] !== undefined) {
+      internalDateValue.value[1] = new Date(newVal[1]);
+    }
   },
   { immediate: true },
 );
 
-function handleRemove(i: number) {
-  const cloneItems = cloneDeep(internalValue.value);
-  cloneItems.splice(i, 1);
-  internalValue.value = cloneItems;
-  emit("update:model-value", internalValue.value);
+function handleRemove() {
+  emit("update:model-value", [undefined, undefined]);
 }
-function handleAdd() {
-  if (currentDatePickerValue.value === undefined)
-    return;
 
-  internalValue.value = [...internalValue.value, currentDatePickerValue.value];
+function handleEnter() {
+  if (
+    props.modelValue[0] === internalValue.value[0]
+    && props.modelValue[1] === internalValue.value[1]
+  ) {
+    return;
+  }
+
   emit("update:model-value", internalValue.value);
-  currentDatePickerValue.value = undefined;
 }
-function handleClear() {
-  internalValue.value = [];
-  emit("update:model-value", internalValue.value);
+
+function removeDateTimezoneOffset(date: Date | null | undefined) {
+  if (date === null || date === undefined) {
+    return null;
+  }
+
+  const tzoffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
+  return new Date(date.valueOf() - tzoffset)
+    .toISOString()
+    .slice(0, -1);
 }
-function handleDatePickerInput(e: string[]) {
-  currentDatePickerValue.value = e.sort();
+
+function handleInput(input: Date | null, isMin: boolean) {
+  const dateWithoutTimezone = removeDateTimezoneOffset(input);
+  const isoDate = dateWithoutTimezone?.substring(0, dateWithoutTimezone.indexOf("T"));
+
+  if (isMin) {
+    internalValue.value = [isoDate ?? undefined, props.modelValue[1]];
+    internalDateValue.value = [input ?? undefined, internalDateValue.value[1]];
+  }
+  else {
+    internalValue.value = [props.modelValue[0], isoDate ?? undefined];
+    internalDateValue.value = [internalDateValue.value[0], input ?? undefined];
+  }
 }
-function handleChange(i: number) {
-  const cloneItems = cloneDeep(internalValue.value);
-  currentDatePickerValue.value = cloneItems.splice(i, 1)[0];
-  internalValue.value = cloneItems;
-  emit("update:model-value", internalValue.value);
-  if (!panel.value.isActive)
-    panel.value.toggle();
+
+const dateAdapter = useDate();
+function format(date: Date) {
+  return dateAdapter.toISO(date);
 }
-const isAddActive = computed(() => {
-  return currentDatePickerValue.value !== undefined;
-});
-function getDateStr(dateArray: string[]) {
+
+function getDateStr(dateArray: [string | undefined, string | undefined]) {
   const dateFormat = new Intl.DateTimeFormat(locale.value, {
     year: "numeric",
     month: "numeric",
     day: "numeric",
   });
-  const startDateStr = dateArray[0];
-  if (startDateStr === undefined)
-    return "";
-  const startDate = new Date(startDateStr);
 
+  const startDateStr = dateArray[0];
   const endDateStr = dateArray[1];
-  if (endDateStr !== undefined) {
+  if (startDateStr === undefined && endDateStr === undefined) {
+    return "";
+  }
+  else if (startDateStr === undefined && endDateStr !== undefined) {
     const endDate = new Date(endDateStr);
+    return `* - ${dateFormat.format(endDate)}`;
+  }
+  else if (startDateStr !== undefined && endDateStr === undefined) {
+    const startDate = new Date(startDateStr);
+    return `${dateFormat.format(startDate)} - *`;
+  }
+  else {
+    const startDate = new Date(startDateStr as string);
+    const endDate = new Date(endDateStr as string);
     return dateFormat.formatRange(startDate, endDate);
   }
-  return dateFormat.format(startDate);
 }
-const maxDate = computed(() => {
+
+const currentDate = computed(() => {
   return new Date().toISOString().substring(0, 10);
+});
+
+const maxDate = computed(() => {
+  const selectedMaxValue = removeDateTimezoneOffset(internalDateValue.value[1]);
+  if (selectedMaxValue) {
+    return selectedMaxValue.substring(0, 10);
+  }
+  return currentDate.value;
 });
 </script>
 
@@ -92,77 +127,77 @@ const maxDate = computed(() => {
       {{ title }}
     </VExpansionPanelTitle>
     <div
-      v-if="internalValue.length > 0"
+      v-if="modelValue[0] !== undefined || modelValue[1] !== undefined"
       class="bg-white"
     >
       <div
-        v-for="(item, i) in internalValue"
-        :key="i"
         class="d-flex selected-item px-2"
-        @click="handleChange(i)"
       >
         <span>
           <input
             type="checkbox"
             class="checkbox"
             checked
-            @click.prevent.stop="handleRemove(i)"
+            @click.prevent.stop="handleRemove"
           >
         </span>
         <span
           class="align-self-center text-body-2 font-weight-medium pl-2"
           style="word-break: break-word"
         >
-          {{ getDateStr(item) }}
+          {{ getDateStr(internalValue) }}
         </span>
       </div>
     </div>
     <VExpansionPanelText
+      class="pt-1"
       color="white"
-      :class="{ 'border-t': internalValue.length > 0 }"
     >
-      <VDatePicker
-        :model-value="currentDatePickerValue"
-        color="accent"
-        multiple="range"
-        hide-header
-        first-day-of-week="1"
-        show-adjacent-months
-        :max="maxDate"
-        :locale="$i18n.locale === 'et' ? 'et-EE' : 'en-US'"
-        @update:model-value="handleDatePickerInput"
-      />
-      <VRow
-        style="border-top: 1px solid lightgray !important"
-        no-gutters
-        class="py-2 px-4"
-      >
-        <VCol cols="6">
-          <VBtn
-            size="small"
-            variant="text"
-            block
-            class="text-center"
+      <VRow no-gutters>
+        <VCol cols="6" class="">
+          <VDateInput
+            v-model="internalDateValue[0]"
             color="accent"
-            :disabled="internalValue.length < 1"
-            @click="handleClear"
-          >
-            {{ $t("filter.clear") }}
-          </VBtn>
+            variant="outlined"
+            bg-color="white"
+            hide-header
+            hide-details
+            density="compact"
+            prepend-icon=""
+            first-day-of-week="1"
+            :display-format="format"
+            input-format="yyyy-mm-dd"
+            show-adjacent-months
+            clearable
+            clear-icon=""
+            :max="maxDate"
+            @update:model-value="handleInput($event, true)"
+            @keydown.enter.prevent.stop="handleEnter"
+            @blur="handleEnter"
+          />
         </VCol>
-
-        <VCol cols="6">
-          <VBtn
-            size="small"
-            variant="text"
-            block
-            class="text-center"
+        <VCol cols="6" class="pl-1">
+          <VDateInput
+            :model-value="internalDateValue[1]"
             color="accent"
-            :disabled="!isAddActive"
-            @click="handleAdd"
-          >
-            {{ $t("filter.add") }}
-          </VBtn>
+            variant="outlined"
+            bg-color="white"
+            hide-header
+            hide-details
+            density="compact"
+            prepend-icon=""
+            first-day-of-week="1"
+            :display-format="format"
+            input-format="yyyy-mm-dd"
+            show-adjacent-months
+            clearable
+            clear-icon=""
+            :max="currentDate"
+            :min="internalDateValue[0]"
+            @update:model-value="handleInput($event, false)"
+            @keydown.enter.prevent.stop="handleEnter"
+            @blur="handleEnter"
+          />
         </VCol>
       </VRow>
     </VExpansionPanelText>
@@ -171,8 +206,15 @@ const maxDate = computed(() => {
 
 <style scoped>
 :deep(.v-expansion-panel-text__wrapper) {
-  padding: 0;
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-bottom: 8px;
 }
+
+:deep(.v-field__clearable) {
+  display: none;
+}
+
 .checkbox {
   accent-color: rgb(var(--v-theme-accent));
 }

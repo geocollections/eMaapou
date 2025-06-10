@@ -47,6 +47,25 @@ export const dateArrayParamParser = z
   .transform(val => val.split(",").map(v => v.split("~")))
   .catch(_ctx => []);
 
+export const dateParamParser = z
+  .string()
+  .transform((val, ctx) => {
+    const [startStr, endStr] = val.split("~", 2);
+    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Date.parse(startStr)) ? startStr : undefined;
+    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Date.parse(endStr)) ? endStr : undefined;
+
+    if (start !== null && end !== null && start > end) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Start cannot be larger than end",
+      });
+      return z.NEVER;
+    }
+
+    return [start, end] as [undefined | string, undefined | string];
+  })
+  .catch(_ctx => [undefined, undefined]);
+
 export const parameterParamParser = z
   .string()
   .transform(val =>

@@ -1,7 +1,7 @@
 import type { RouteLocation } from "vue-router";
 import { z } from "zod";
 import type {
-  DateListFilter,
+  DateFilter,
   GeomFilter,
   IdListFilter,
   TextListFilter,
@@ -96,11 +96,11 @@ export const usePhotos = defineStore(
         tag: "authorText",
       } as TextListFilter,
       date: {
-        value: [],
-        type: "dateList",
+        value: [undefined, undefined],
+        type: "date",
         fields: ["date_created"],
         tag: "date",
-      } as DateListFilter,
+      } as DateFilter,
       dateText: {
         value: [],
         type: "textList",
@@ -142,7 +142,7 @@ export const usePhotos = defineStore(
       authorText: textParamParser,
       size: rangeParamParser,
       institution: idParamParser(","),
-      date: dateArrayParamParser,
+      date: dateParamParser,
       dateText: textParamParser,
       place: textParamParser,
     });
@@ -183,7 +183,7 @@ export const usePhotos = defineStore(
       authorText: stringArrayValueParser,
       size: rangeValueParser,
       institution: idValueParser(","),
-      date: dateArrayValueParser,
+      date: dateValueParser,
       dateText: stringArrayValueParser,
       place: stringArrayValueParser,
     });

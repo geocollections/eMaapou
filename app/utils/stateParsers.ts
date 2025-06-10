@@ -35,6 +35,19 @@ export const dateArrayValueParser = z
       : undefined,
   );
 
+export const dateValueParser = z
+  .string()
+  .optional()
+  .array()
+  .length(2)
+  .transform((val) => {
+    console.log(val);
+    return val.some(v => v !== undefined)
+      ? val.map(v => (v === undefined ? "*" : v)).join("~")
+      : undefined;
+  },
+  );
+
 export const rangeValueParser = z
   .number()
   .nullable()
