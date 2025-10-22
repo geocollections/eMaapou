@@ -747,7 +747,11 @@ export default {
   },
   maardlad: {
     title: "Maa-amet",
-    description: "Geoloogilised kaardid ja maardlate register",
+    description: "Geoloogilised kaardid",
+  },
+  geologicalSurvey: {
+    title: "Geoloogiateenistus",
+    description: "Geoloogilised andmed ja kaardid",
   },
   turba: {
     title: "TURBA",

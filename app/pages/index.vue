@@ -74,10 +74,15 @@ const otherServices = ref({
     description: "frontStratigraphy.description",
     href: "https://stratotuup.ut.ee",
   },
+  geologicalSurvey: {
+    title: "geologicalSurvey.title",
+    description: "geologicalSurvey.description",
+    href: "https://gis.egt.ee/",
+  },
   maardlad: {
     title: "maardlad.title",
     description: "maardlad.description",
-    href: "https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html",
+    href: "https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k",
   },
   doi: {
     title: "doi.title",
@@ -110,6 +115,7 @@ const otherServices = ref({
     "fossiilid",
     "kivid",
     "fond",
+    "geologicalSurvey",
     "maardlad",
     "stratigraphy",
     "gmre",

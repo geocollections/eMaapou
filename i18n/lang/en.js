@@ -745,8 +745,12 @@ export default {
     remarks: "Remarks",
   },
   maardlad: {
-    title: "Land Board Data",
-    description: "Maps and Registry of Mineral Deposits",
+    title: "Estonian Land Board",
+    description: "Geological data and maps",
+  },
+  geologicalSurvey: {
+    title: "Geological Survey",
+    description: "Geological data and maps",
   },
   turba: {
     title: "TURBA",
