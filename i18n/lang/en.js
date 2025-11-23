@@ -132,6 +132,7 @@ export default {
     dataset: "Dataset",
     preparation: "Preparation",
     collection: "Collection",
+    otherNewsList: "Other news",
   },
   link: {
     github: "GitHub",

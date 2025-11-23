@@ -57,7 +57,7 @@ useHead({
           v-for="(news, i) in newsList"
           :key="i"
           :preview-lenght="500"
-          :date="news.date_added"
+          :date="news.date_published"
           :title="$translate({ et: news.title_et, en: news.title_en })"
           :content="$translate({ et: news.text_et, en: news.text_en })"
           :to="localePath({ name: 'news-id', params: { id: news.id } })"

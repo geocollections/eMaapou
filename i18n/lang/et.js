@@ -133,6 +133,7 @@ export default {
     dataset: "Andmeset",
     preparation: "Preparaat",
     collection: "Kollektsioon",
+    otherNewsList: "Muud uudised",
   },
   link: {
     sarvAPI: "Avalik API",
