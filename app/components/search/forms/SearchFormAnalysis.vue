@@ -113,6 +113,7 @@ function handleSubmit() {
           :title="$t('filters.depth')"
           interval-labels="intervals.depth"
           :step="0.01"
+          number-type="float"
           value="depth"
           @update:model-value="handleUpdate()"
         />

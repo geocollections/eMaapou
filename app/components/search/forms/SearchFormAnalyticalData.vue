@@ -208,6 +208,7 @@ async function suggestParameters({
         v-model="filters.depth.value"
         :title="$t('filters.depth')"
         value="depth"
+        number-type="float"
         @update:model-value="handleUpdate()"
       />
       <FilterInputAutocomplete
