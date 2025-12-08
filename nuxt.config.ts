@@ -113,6 +113,11 @@ export default defineNuxtConfig({
     lazy: true,
     langDir: "lang/",
     defaultLocale: "et",
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "i18n_redirect",
+      redirectOn: "no prefix",
+    },
     strategy: "prefix_and_default",
     baseUrl: "https://geoloogia.info",
     // vueI18n: "./i18n.config.ts",
