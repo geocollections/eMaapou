@@ -71,19 +71,18 @@ jobs:
     steps:
       - run:
           name: Run next container
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_NEW} "cd /var/www/geoloogia/script && . run_production.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_production.sh"
   run-stage:
     executor: docker-publisher
     steps:
       - run:
           name: Run dev container
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_NEW} "cd /var/www/geoloogia/script && . run_staging.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_staging.sh"
 workflows:
   build_deploy_dev:
     when:
       or:
         - equal: [develop, << pipeline.git.branch >>]
-        - equal: [new-cloud-maxhine << pipeline.git.branch >>]
     jobs:
       - test
       - build-image:
@@ -101,7 +100,6 @@ workflows:
     when:
       or:
         - equal: [main, << pipeline.git.branch >>]
-        - equal: [new-cloud-maxhine << pipeline.git.branch >>]
     jobs:
       - test
       - build-image:
