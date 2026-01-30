@@ -36,10 +36,15 @@ export const SERVICES = {
     href: "https://stratotuup.ut.ee",
   },
   // Divider
+  geologicalSurvey: {
+    title: "geologicalSurvey.title",
+    description: "geologicalSurvey.description",
+    href: "https://gis.egt.ee/",
+  },
   maardlad: {
     title: "maardlad.title",
     description: "maardlad.description",
-    href: "https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html",
+    href: "https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k",
   },
   doi: {
     title: "doi.title",
@@ -72,6 +77,7 @@ export const SERVICES = {
     "fossiilid",
     "kivid",
     "fond",
+    "geologicalSurvey",
     "maardlad",
     "stratigraphy",
     "gmre",
@@ -86,6 +92,7 @@ export const SERVICES = {
       "fossiilid" |
       "kivid" |
       "fond" |
+      "geologicalSurvey" |
       "maardlad" |
       "stratigraphy" |
       "gmre" |

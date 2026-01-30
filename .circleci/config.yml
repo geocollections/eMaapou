@@ -81,7 +81,8 @@ jobs:
 workflows:
   build_deploy_dev:
     when:
-      equal: [develop, << pipeline.git.branch >>]
+      or:
+        - equal: [develop, << pipeline.git.branch >>]
     jobs:
       - test
       - build-image:
@@ -97,7 +98,8 @@ workflows:
             - publish-image
   build_deploy_prod:
     when:
-      equal: [main, << pipeline.git.branch >>]
+      or:
+        - equal: [main, << pipeline.git.branch >>]
     jobs:
       - test
       - build-image:

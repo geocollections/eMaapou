@@ -17,8 +17,8 @@ export const rangeParamParser = z
   .string()
   .transform((val, ctx) => {
     const [startStr, endStr] = val.split("-", 2);
-    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Number(startStr)) ? Number.parseInt(startStr) : null;
-    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Number(endStr)) ? Number.parseInt(endStr) : null;
+    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Number(startStr)) ? Number(startStr) : null;
+    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Number(endStr)) ? Number(endStr) : null;
 
     if (start !== null && end !== null && start > end) {
       ctx.addIssue({
@@ -92,7 +92,7 @@ function parseParameterValue(value: string | undefined) {
   if (value === "*") {
     return null;
   }
-  const num = Number.parseInt(value, 10);
+  const num = Number(value);
   if (Number.isNaN(num)) {
     return null;
   }
