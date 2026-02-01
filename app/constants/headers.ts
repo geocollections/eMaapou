@@ -1414,8 +1414,8 @@ export const HEADERS_PHOTO: Headers = {
       title: "photo.date",
       value: "date",
       show: true,
-      apiFieldValue: "date_created_dt,date_created_free",
-      sortField: ["date_created_dt", "date_created_free"],
+      apiFieldValue: "date_created_dt,date_created,date_created_free",
+      sortField: ["date_created_dt", "date_created", "date_created_free"],
       ...normalColumn,
     },
     locality: {
