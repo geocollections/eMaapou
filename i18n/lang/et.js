@@ -1031,7 +1031,7 @@ export default {
     agent: "Autor",
     date: "Aeg",
     dateFree: "Aeg vaba",
-    locality: "Leiukoht",
+    locality: "Koht",
     imageObject: "Kategooria",
     people: "Inimesed",
     tags: "Märksõnad",
