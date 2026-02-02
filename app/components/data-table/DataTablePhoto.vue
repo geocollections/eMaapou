@@ -42,11 +42,15 @@ function handleEnd() {
     </template>
     <template #item.locality="{ item }">
       <NuxtLink
+        v-if="item.locality_id"
         class="text-link"
-        :to="localePath({ name: 'locality-id', params: { id: item.id } })"
+        :to="localePath({ name: 'locality-id', params: { id: item.locality_id } })"
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </NuxtLink>
+      <div v-else>
+        {{ item.image_place }}
+      </div>
     </template>
 
     <template #item.agent="{ item }">

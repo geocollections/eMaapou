@@ -128,6 +128,7 @@ export const FIELDS_SOLR_PHOTO = [
   "locality",
   "locality_en",
   "image_object",
+  "image_place",
   "tags",
   "filename",
   "uuid_filename",
