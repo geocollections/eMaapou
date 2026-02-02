@@ -122,6 +122,7 @@ export const FIELDS_SOLR_PHOTO = [
   "agent",
   "author_free",
   "date_created_dt",
+  "date_created",
   "date_created_free",
   "locality_id",
   "locality",
