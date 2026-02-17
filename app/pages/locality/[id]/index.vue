@@ -166,6 +166,7 @@ const mapOverlays = computed(() => {
             })
             "
           />
+          <TableRow :title="$t('locality.depth')" :value="locality.depth" />
           <TableRow :title="$t('locality.elevation')" :value="locality.elevation" />
           <TableRow :title="$t('locality.coordinates')" :value="`${locality.latitude}, ${locality.longitude}`" />
           <TableRow :title="$t('locality.coordinateSystem')" :value="locality.coordinate_system" />

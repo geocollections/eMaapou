@@ -41,7 +41,6 @@ export const dateValueParser = z
   .array()
   .length(2)
   .transform((val) => {
-    console.log(val);
     return val.some(v => v !== undefined)
       ? val.map(v => (v === undefined ? "*" : v)).join("~")
       : undefined;

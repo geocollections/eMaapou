@@ -193,6 +193,7 @@ export interface Locality {
   number: Nullable<string>;
   longitude: Nullable<number>;
   latitude: Nullable<number>;
+  depth: Nullable<number>;
   elevation: Nullable<string>;
   coordx: Nullable<number>;
   coordy: Nullable<number>;
@@ -253,6 +254,7 @@ const { data } = await useAsyncData("locality", async () => {
         "longitude",
         "latitude",
         "elevation",
+        "depth",
         "coordx",
         "coordy",
         "remarks",

@@ -608,6 +608,7 @@ export const EXPORT_SOLR_DRILLCORE = [
   "database_name_en",
   "date_added",
   "date_changed",
+  "locality_depth",
   "depth",
   "direction_lr",
   "drillcore",

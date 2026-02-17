@@ -985,6 +985,16 @@ export const HEADERS_DRILLCORE: Headers = {
       sortField: { et: ["drillcore"], en: ["drillcore_en"] },
       ...wideColumn,
     },
+    locality_depth: {
+      title: "drillcore.localityDepth",
+      value: "locality_depth",
+      show: true,
+      apiFieldValue: "locality_depth",
+      sortField: ["locality_depth"],
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
+    },
     depth: {
       title: "drillcore.depth",
       value: "depth",
@@ -1041,6 +1051,7 @@ export const HEADERS_DRILLCORE: Headers = {
   allIds: [
     "id",
     "drillcore",
+    "locality_depth",
     "depth",
     "boxes",
     "box_numbers",
@@ -1122,6 +1133,14 @@ export const HEADERS_LOCALITY: Headers = {
       ...numberFieldProps,
       ...wideColumn,
       align: "start",
+    },
+    depth: {
+      title: "locality.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth",
+      sortField: ["depth"],
+      ...normalColumn,
     },
     references: {
       title: "locality.relatedReferences",
@@ -1211,6 +1230,7 @@ export const HEADERS_LOCALITY: Headers = {
     "locality",
     "country",
     "coordinates",
+    "depth",
     "references",
     "specimens",
     "samples",
