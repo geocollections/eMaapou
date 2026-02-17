@@ -242,6 +242,7 @@ export default {
     samples: "Proovid ({number})",
     analyses: "Analüüsid ({number})",
     specimens: "Eksemplarid ({number})",
+    localityDepth: "Sügavus (m)",
     depth: "Sügavus",
     acronym: "Omanik",
     drillcore: "Puursüdamik",

@@ -240,6 +240,7 @@ export default {
     samples: "Samples ({number})",
     analyses: "Analyses ({number})",
     specimens: "Specimens ({number})",
+    localityDepth: "Depth (m)",
     depth: "Depth",
     acronym: "Owner",
     drillcore: "Drillcore",
