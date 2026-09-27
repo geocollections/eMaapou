@@ -16,62 +16,79 @@ const { $translate, $apiFetch } = useNuxtApp();
 const localePath = useLocalePath();
 const route = useRoute();
 
-const { data } = await useAsyncData("general", async () => {
-  const attachmentKeywordsResponse = await $apiFetch<GeoloogiaListResponse>(`/attachments/${route.params.id}/keywords/`);
+const { data } = await useAsyncData(
+  "general",
+  async () => {
+    const attachmentKeywordsResponse = await $apiFetch<GeoloogiaListResponse>(
+      `/attachments/${route.params.id}/keywords/`,
+    );
 
-  if (props.file.specimen) {
-    const specimenIdentificationPromise = $apiFetch<GeoloogiaListResponse>(
-      `/specimens/${props.file.specimen.id}/specimen-taxa/`,
-      {
-        query: {
-          is_current: true,
-          expand: "taxon",
+    if (props.file.specimen) {
+      const specimenIdentificationPromise = $apiFetch<GeoloogiaListResponse>(
+        `/specimens/${props.file.specimen.id}/specimen-taxa/`,
+        {
+          query: {
+            is_current: true,
+            expand: "taxon",
+          },
         },
-      },
-    );
-    const specimenIdentificationGeologyPromise = $apiFetch<GeoloogiaListResponse>(
-      `/specimens/${props.file.specimen.id}/specimen-rocks/`,
-      {
-        query: {
-          is_current: true,
-          expand: "rock",
-        },
-      },
-    );
-    const [
-      specimenIdentificationResponse,
-      specimenIdentificationGeologyResponse,
-    ] = await Promise.all([
-      specimenIdentificationPromise,
-      specimenIdentificationGeologyPromise,
-    ]);
+      );
+      const specimenIdentificationGeologyPromise
+        = $apiFetch<GeoloogiaListResponse>(
+          `/specimens/${props.file.specimen.id}/specimen-rocks/`,
+          {
+            query: {
+              is_current: true,
+              expand: "rock",
+            },
+          },
+        );
+      const [
+        specimenIdentificationResponse,
+        specimenIdentificationGeologyResponse,
+      ] = await Promise.all([
+        specimenIdentificationPromise,
+        specimenIdentificationGeologyPromise,
+      ]);
+      return {
+        attachmentKeywords: attachmentKeywordsResponse.results,
+        specimenIdentification: specimenIdentificationResponse.results,
+        specimenIdentificationGeology:
+          specimenIdentificationGeologyResponse.results,
+      };
+    }
     return {
       attachmentKeywords: attachmentKeywordsResponse.results,
-      specimenIdentification: specimenIdentificationResponse.results,
-      specimenIdentificationGeology:
-        specimenIdentificationGeologyResponse.results,
+      specimenIdentification: [],
+      specimenIdentificationGeology: [],
     };
-  }
-  return {
-    attachmentKeywords: attachmentKeywordsResponse.results,
-    specimenIdentification: [],
-    specimenIdentificationGeology: [],
-  };
-}, {
-  default: () => ({
-    attachmentKeywords: [],
-    specimenIdentification: [],
-    specimenIdentificationGeology: [],
-  }),
-});
+  },
+  {
+    default: () => ({
+      attachmentKeywords: [],
+      specimenIdentification: [],
+      specimenIdentificationGeology: [],
+    }),
+  },
+);
 const imageSize = computed(() => {
   return props.file.image_width && props.file.image_height
     ? `${props.file.image_width} × ${props.file.image_height} px`
     : undefined;
 });
-const isImage = computed(() => props.file.mime_type?.content_type.includes("image"));
-const isAudio = computed(() => props.file.mime_type?.content_type.includes("audio"));
-const isVideo = computed(() => props.file.mime_type?.content_type.includes("video"));
+
+// NOTE: Added `image/tif` exception, because browsers don't support showing it
+const isImage = computed(
+  () =>
+    props.file.mime_type?.content_type.includes("image")
+    && props.file.mime_type?.content_type !== "image/tif",
+);
+const isAudio = computed(() =>
+  props.file.mime_type?.content_type.includes("audio"),
+);
+const isVideo = computed(() =>
+  props.file.mime_type?.content_type.includes("video"),
+);
 
 const imageSizes = computed(() => {
   if (!isImage.value)
@@ -109,12 +126,14 @@ const mapLocalityText = computed(() => {
       props.file.locality?.name
       || props.file.specimen?.locality?.name
       || props.file.image_place
-      || props.file.description || "Lokaliteet",
+      || props.file.description
+      || "Lokaliteet",
     en:
       props.file.locality?.name_en
       || props.file.specimen?.locality?.name_en
       || props.file.image_place
-      || props.file.description_en || "Locality",
+      || props.file.description_en
+      || "Locality",
   });
 });
 
@@ -157,7 +176,12 @@ const mapOverlays = computed(() => {
       <VCol>
         <div
           v-if="isImage"
-          style="width: 100%; max-height: 700px; margin-left: auto; margin-right: auto;"
+          style="
+            width: 100%;
+            max-height: 700px;
+            margin-left: auto;
+            margin-right: auto;
+          "
           class="d-flex justify-center rounded bg-grey-lighten-4"
         >
           <NuxtImg
@@ -165,39 +189,35 @@ const mapOverlays = computed(() => {
             provider="geocollections"
             :modifiers="{ size: 'large' }"
             fit="inside"
-            style="max-height: 700px; max-width: 100%; margin-left: auto; margin-right: auto;"
+            style="
+              max-height: 700px;
+              max-width: 100%;
+              margin-left: auto;
+              margin-right: auto;
+            "
           />
         </div>
 
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>
-          <source
-            :src="`https://files.geocollections.info/${file.filename}`"
-          >
+          <source :src="`https://files.geocollections.info/${file.filename}`">
           Your browser does not support the audio element.
           <VIcon>{{ mdiFileMusicOutline }}</VIcon>
         </audio>
 
         <!-- Video -->
         <video v-else-if="isVideo" controls>
-          <source
-            :src="`https://files.geocollections.info/${file.filename}`"
-          >
+          <source :src="`https://files.geocollections.info/${file.filename}`">
           Your browser does not support the video element.
           <VIcon>{{ mdiFileVideoOutline }}</VIcon>
         </video>
 
         <!-- File -->
-        <div
-          v-else
-          class="rounded file-download text-primary"
-        >
+        <div v-else class="rounded file-download text-primary">
           <VBtn
             variant="outlined"
             @click="
-              $openWindow(
-                `https://files.geocollections.info/${file.filename}`,
-              )
+              $openWindow(`https://files.geocollections.info/${file.filename}`)
             "
           >
             <VIcon
@@ -230,11 +250,11 @@ const mapOverlays = computed(() => {
           </div>
 
           <div class="text-center">
-            <span v-for="(size, index) in imageSizes" :key="`image-size-${index}`">
-              <a
-                class="text-link"
-                @click="$openImage(file.filename, size)"
-              >
+            <span
+              v-for="(size, index) in imageSizes"
+              :key="`image-size-${index}`"
+            >
+              <a class="text-link" @click="$openImage(file.filename, size)">
                 {{ $t(`common.${size}`) }}
                 <VIcon
                   v-if="size === 'original'"
@@ -266,18 +286,9 @@ const mapOverlays = computed(() => {
               })
             "
           />
-          <TableRow
-            :title="$t('file.author')"
-            :value="file.author?.name"
-          />
-          <TableRow
-            :title="$t('file.author')"
-            :value="file.author_text"
-          />
-          <TableRow
-            :title="$t('file.date')"
-            :value="file.date_created"
-          />
+          <TableRow :title="$t('file.author')" :value="file.author?.name" />
+          <TableRow :title="$t('file.author')" :value="file.author_text" />
+          <TableRow :title="$t('file.date')" :value="file.date_created" />
           <TableRow
             :title="$t('file.dateText')"
             :value="file.date_created_text"
@@ -305,9 +316,7 @@ const mapOverlays = computed(() => {
                   })
                 "
               >
-                {{
-                  value.number
-                }}
+                {{ value.number }}
               </BaseLink>
             </template>
           </TableRow>
@@ -325,9 +334,7 @@ const mapOverlays = computed(() => {
                   })
                 "
               >
-                {{
-                  value.number
-                }}
+                {{ value.number }}
               </BaseLink>
             </template>
           </TableRow>
@@ -339,9 +346,7 @@ const mapOverlays = computed(() => {
               :value="item.taxon"
             >
               <template #value="{ value }">
-                <BaseLink
-                  :to="`https://fossiilid.info/${value.id}`"
-                >
+                <BaseLink :to="`https://fossiilid.info/${value.id}`">
                   {{ value.name }}
                 </BaseLink>
                 <template v-if="item.name">
@@ -358,12 +363,12 @@ const mapOverlays = computed(() => {
               :value="item.rock"
             >
               <template #value="{ value }">
-                <BaseLink
-                  :to="`https://kivid.info/${value.id}`"
-                >
+                <BaseLink :to="`https://kivid.info/${value.id}`">
                   {{ $translate({ et: value.name, en: value.name_en }) }}
                 </BaseLink>
-                <template v-if="$translate({ et: item.name, en: item.name_en })">
+                <template
+                  v-if="$translate({ et: item.name, en: item.name_en })"
+                >
                   | {{ $translate({ et: item.name, en: item.name_en }) }}
                 </template>
               </template>
@@ -434,10 +439,7 @@ const mapOverlays = computed(() => {
             :title="$t('file.imagesetDescription')"
             :value="imageset.description"
           />
-          <TableRow
-            :title="$t('file.imagePlace')"
-            :value="file.image_place"
-          />
+          <TableRow :title="$t('file.imagePlace')" :value="file.image_place" />
           <TableRow
             :title="$t('file.imageLatitude')"
             :value="file.image_latitude"
@@ -463,10 +465,7 @@ const mapOverlays = computed(() => {
               </ul>
             </template>
           </TableRow>
-          <TableRow
-            :title="$t('file.tags')"
-            :value="file.tags"
-          />
+          <TableRow :title="$t('file.tags')" :value="file.tags" />
           <TableRow
             v-if="type"
             :title="$t('file.type')"
@@ -490,19 +489,14 @@ const mapOverlays = computed(() => {
             :title="$t('file.dateDigitised')"
             :value="file.date_digitised || file.date_digitised_text"
           />
-          <TableRow
-            :title="$t('file.imageSize')"
-            :value="imageSize"
-          />
+          <TableRow :title="$t('file.imageSize')" :value="imageSize" />
           <TableRow
             v-if="database"
             :title="$t('file.institution')"
             :value="database"
           >
             <template #value="{ value }">
-              <BaseLink
-                :to="value.url"
-              >
+              <BaseLink :to="value.url">
                 {{
                   $translate({
                     et: value.name,
@@ -518,17 +512,12 @@ const mapOverlays = computed(() => {
             :value="licence"
           >
             <template #value="{ value }">
-              <BaseLinkExternal
-                :to="value.url"
-              >
+              <BaseLinkExternal :to="value.url">
                 {{ value.name }}
               </BaseLinkExternal>
             </template>
           </TableRow>
-          <TableRow
-            :title="$t('file.remarks')"
-            :value="file.remarks"
-          />
+          <TableRow :title="$t('file.remarks')" :value="file.remarks" />
           <TableRow
             v-if="file.date_added"
             :title="$t('file.dateAdded')"

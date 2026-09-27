@@ -16,7 +16,10 @@ const emit = defineEmits<{
   "click:image": [];
 }>();
 
-const isImage = computed(() => props.type?.startsWith("image"));
+// NOTE: Added `image/tif` exception, because browsers don't support showing it
+const isImage = computed(
+  () => props.type?.startsWith("image") && props.type !== "image/tif",
+);
 const isVideo = computed(() => props.type?.startsWith("video"));
 </script>
 
