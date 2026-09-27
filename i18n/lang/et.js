@@ -400,6 +400,7 @@ export default {
     rockIdentifications: "Kivimi määrangud ({number})",
     lithostratigraphy: "Litostratigraafia",
     references: "Viited ({number})",
+    attachments: "Failid ({number})",
     name: "Nimi",
     sample: "Proov",
     has_image: "Näita ainult piltidega kirjeid",
@@ -644,7 +645,8 @@ export default {
     elm: "Eesti Loodusmuuseum",
     el: "Euroopa Liidu struktuuritoetused",
   },
-  privacyNotice: "See lehekülg kasutab {0}, et analüüsida liiklust ja aidata meil lehekülje kasutajakogemust parandada. Me töötleme teie IP aadressi, vaadatud lehti, laadimisaegu ja seadme informatsiooni. Neid andmeid töötleme ainult meie.",
+  privacyNotice:
+    "See lehekülg kasutab {0}, et analüüsida liiklust ja aidata meil lehekülje kasutajakogemust parandada. Me töötleme teie IP aadressi, vaadatud lehti, laadimisaegu ja seadme informatsiooni. Neid andmeid töötleme ainult meie.",
   frontDrillcores: {
     title: "Puursüdamikud",
     description: "Puursüdamike kataloog",

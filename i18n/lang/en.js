@@ -398,6 +398,7 @@ export default {
     rockIdentifications: "Rock identifications ({number})",
     lithostratigraphy: "Lithostratigraphy",
     references: "References ({number})",
+    attachments: "Attachments ({number})",
     name: "Name",
     sample: "Sample",
     has_image: "Show only data with images",

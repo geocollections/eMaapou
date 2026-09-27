@@ -8,7 +8,8 @@ const { t } = useI18n();
 const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 const specimensStore = useSpecimens();
 const { getQueryParams } = specimensStore;
-const { solrFilters, solrQuery, solrSort, currentView } = storeToRefs(specimensStore);
+const { solrFilters, solrQuery, solrSort, currentView }
+  = storeToRefs(specimensStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const tabs = {
@@ -57,6 +58,22 @@ const tabs = {
     count: async (_ctx) => {
       return await $apiFetch<GeoloogiaListResponse>(
         `/specimens/${route.params.id}/specimen-references/`,
+        {
+          query: {
+            limit: 0,
+          },
+        },
+      ).then(res => res.count);
+    },
+    props: {},
+  },
+  attachments: {
+    type: "dynamic",
+    routeName: "specimen-id-attachments",
+    title: "specimen.attachments",
+    count: async (_ctx) => {
+      return await $apiFetch<GeoloogiaListResponse>(
+        `/specimens/${route.params.id}/attachments/`,
         {
           query: {
             limit: 0,
@@ -144,111 +161,117 @@ export interface Specimen {
   }>;
 }
 
-const { data } = await useAsyncData("specimen", async () => {
-  const specimen = await $apiFetch<Specimen>(`/specimens/${route.params.id}/`, {
-    query: {
-      expand: "collector,classification,locality,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type",
-      fields: [
-        "id",
-        "number",
-        "date_collected",
-        "date_collected_text",
-        "old_number",
-        "part",
-        "depth",
-        "remarks",
-        "collector.name",
-        "type.value",
-        "type.value_en",
-        "classification.name",
-        "classification.name_en",
-        "locality.id",
-        "locality.name",
-        "locality.name_en",
-        "locality.longitude",
-        "locality.latitude",
-        "locality.country.name",
-        "locality.country.name_en",
-        "locality.country.iso_3166_1_alpha_2",
-        "stratigraphy.id",
-        "stratigraphy.name",
-        "stratigraphy.name_en",
-        "stratigraphy_text",
-        "lithostratigraphy.id",
-        "lithostratigraphy.name",
-        "lithostratigraphy.name_en",
-        "database.id",
-        "database.acronym",
-        "database.name",
-        "database.name_en",
-        "database.url",
-        "sample.id",
-        "sample.number",
-        "parent.id",
-        "parent.number",
-        "collection.id",
-        "collection.number",
-        "collection.name",
-        "collection.name_en",
-        "original_status.id",
-        "original_status.value",
-        "original_status.value_en",
-        "fossil.id",
-        "fossil.value",
-        "fossil.value_en",
-      ].join(","),
-    },
-    onResponseError: (_error) => {
-      showError({
-        statusCode: 404,
-        message: t("error.notFound"),
-        fatal: true,
-      });
-    },
-  });
+const { data } = await useAsyncData(
+  "specimen",
+  async () => {
+    const specimen = await $apiFetch<Specimen>(
+      `/specimens/${route.params.id}/`,
+      {
+        query: {
+          expand:
+            "collector,classification,locality,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type",
+          fields: [
+            "id",
+            "number",
+            "date_collected",
+            "date_collected_text",
+            "old_number",
+            "part",
+            "depth",
+            "remarks",
+            "collector.name",
+            "type.value",
+            "type.value_en",
+            "classification.name",
+            "classification.name_en",
+            "locality.id",
+            "locality.name",
+            "locality.name_en",
+            "locality.longitude",
+            "locality.latitude",
+            "locality.country.name",
+            "locality.country.name_en",
+            "locality.country.iso_3166_1_alpha_2",
+            "stratigraphy.id",
+            "stratigraphy.name",
+            "stratigraphy.name_en",
+            "stratigraphy_text",
+            "lithostratigraphy.id",
+            "lithostratigraphy.name",
+            "lithostratigraphy.name_en",
+            "database.id",
+            "database.acronym",
+            "database.name",
+            "database.name_en",
+            "database.url",
+            "sample.id",
+            "sample.number",
+            "parent.id",
+            "parent.number",
+            "collection.id",
+            "collection.number",
+            "collection.name",
+            "collection.name_en",
+            "original_status.id",
+            "original_status.value",
+            "original_status.value_en",
+            "fossil.id",
+            "fossil.value",
+            "fossil.value_en",
+          ].join(","),
+        },
+        onResponseError: (_error) => {
+          showError({
+            statusCode: 404,
+            message: t("error.notFound"),
+            fatal: true,
+          });
+        },
+      },
+    );
 
-  const specimenNameRes = await $solrFetch<SolrResponse>(
-    `/specimen`,
-    {
+    const specimenNameRes = await $solrFetch<SolrResponse>(`/specimen`, {
       query: {
         q: `id:${route.params.id}`,
       },
-    },
-  );
-  const specimenAlt = specimenNameRes?.response.docs[0];
+    });
+    const specimenAlt = specimenNameRes?.response.docs[0];
 
-  const imagesRes = await $solrFetch<SolrResponse>("/attachment", {
-    query: {
-      q: "*",
-      fq: `specimen_id:${route.params.id} AND specimen_image_attachment:1`,
-      sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
-      rows: 1,
-    },
-  });
+    const imagesRes = await $solrFetch<SolrResponse>("/attachment", {
+      query: {
+        q: "*",
+        fq: `specimen_id:${route.params.id} AND specimen_image_attachment:1`,
+        sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
+        rows: 1,
+      },
+    });
 
-  const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { specimen } },
-  });
+    const hydratedTabs = await hydrateTabs(tabs, {
+      props: { general: { specimen } },
+    });
 
-  return {
-    specimen,
-    specimenAlt,
-    tabs: filterHydratedTabs(hydratedTabs, [
-      "general",
-      "identification",
-      "identificationGeology",
-      "reference",
-    ]),
-    images: imagesRes.response.docs,
-  };
-}, {
-  default: () => ({
-    specimen: null,
-    specimenAlt: null,
-    tabs: [] as HydratedTab[],
-    images: [],
-  }),
-});
+    return {
+      specimen,
+      specimenAlt,
+      tabs: filterHydratedTabs(hydratedTabs, [
+        "general",
+        "identification",
+        "identificationGeology",
+        "reference",
+        "attachments",
+      ]),
+      images: imagesRes.response.docs,
+    };
+  },
+  {
+    default: () => ({
+      specimen: null,
+      specimenAlt: null,
+      tabs: [] as HydratedTab[],
+      images: [],
+    }),
+  },
+);
 
 const {
   data: specimensRes,
@@ -264,7 +287,9 @@ const {
   },
 });
 
-const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
+const similarSpecimens = computed(
+  () => specimensRes.value?.response.docs ?? [],
+);
 
 const isRock = computed(() => !!data.value.specimenAlt?.rock);
 const isTaxon = computed(() => !!data.value.specimenAlt?.taxon);
@@ -343,9 +368,7 @@ useSeoMeta({
               class="text-grey-darken-2"
               :href="`https://kivid.info/${data.specimenAlt?.rock_id}`"
             >{{ titleAlt }}</a>
-            <span v-if="isRock && isTaxon && titleAlt" vertical>
-              |
-            </span>
+            <span v-if="isRock && isTaxon && titleAlt" vertical> | </span>
             <a
               v-if="isTaxon && titleAlt"
               target="_blank"
@@ -382,8 +405,14 @@ useSeoMeta({
         :page="page"
         :results="similarSpecimens"
         :total-results="specimensRes?.response.numFound ?? 0"
-        :search-route="localePath({ path: '/specimen', query: { ...getQueryParams(), view: currentView } })"
-        :get-result-route="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })
+        :search-route="
+          localePath({
+            path: '/specimen',
+            query: { ...getQueryParams(), view: currentView },
+          })
+        "
+        :get-result-route="
+          (item) => localePath({ name: 'specimen-id', params: { id: item.id } })
         "
         @page:next="page++"
         @page:previous="page--"
