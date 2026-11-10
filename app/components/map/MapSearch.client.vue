@@ -6,7 +6,7 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet.fullscreen";
-import "leaflet.fullscreen/Control.FullScreen.css";
+import 'leaflet.fullscreen/dist/Control.FullScreen.css'
 
 const props = defineProps<{ modelValue: Nullable<any> }>();
 const emit = defineEmits<{
