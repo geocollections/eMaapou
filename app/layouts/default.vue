@@ -9,43 +9,23 @@ import {
 
 const display = useDisplay();
 const drawer = ref(false);
-const navigationRailDrawer = ref(true);
-const userInteractedWithRailDrawer = ref(false);
 
-const { mdAndUp, lgAndUp } = useDisplay();
-
+const { mdAndUp } = useDisplay();
 watchEffect(() => {
-  if (mdAndUp.value) {
+  if (mdAndUp)
     drawer.value = false;
-  }
 });
 
-// Open navigation rail drawer when display size changes and user hasn't already clicked the open/close button
-watchEffect(() => {
-  if (userInteractedWithRailDrawer.value) {
-    return;
-  }
-
-  navigationRailDrawer.value = !lgAndUp.value;
-});
-
+const railDrawer = ref(true);
 const localePath = useLocalePath();
 
 const { t } = useI18n({ useScope: "local" });
 
 const showDrawer = ref(false);
-watch(
-  () => display.smAndDown.value,
-  (value) => {
-    if (!value)
-      showDrawer.value = false;
-  },
-);
-
-function handleRailDrawerClick() {
-  navigationRailDrawer.value = !navigationRailDrawer.value;
-  userInteractedWithRailDrawer.value = true;
-}
+watch(() => display.smAndDown.value, (value) => {
+  if (!value)
+    showDrawer.value = false;
+});
 </script>
 
 <template>
@@ -60,9 +40,9 @@ function handleRailDrawerClick() {
       <VNavigationDrawer
         v-if="mdAndUp"
         app
-        :rail="navigationRailDrawer"
+        :rail="railDrawer"
         color="grey-darken-3"
-        style="z-index: 1004"
+        style="z-index:1004"
         elevation="2"
         permanent
         :width="200"
@@ -72,9 +52,12 @@ function handleRailDrawerClick() {
           nav
           model-value="specimen"
         >
-          <VListItem :title="t('closeSidebar')" @click="handleRailDrawerClick">
+          <VListItem
+            :title="t('closeSidebar')"
+            @click="railDrawer = !railDrawer"
+          >
             <template #prepend>
-              <VIcon v-if="navigationRailDrawer">
+              <VIcon v-if="railDrawer">
                 {{ mdiChevronDoubleRight }}
               </VIcon>
               <VIcon v-else>

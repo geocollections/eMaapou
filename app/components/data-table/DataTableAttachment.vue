@@ -9,7 +9,6 @@ function openOverlay(image: AttachmentImage) {
   images.value = [image];
 }
 const localePath = useLocalePath();
-const router = useRouter();
 const img = useImage();
 </script>
 
@@ -40,15 +39,14 @@ const img = useImage();
             info: undefined,
           })
         "
-        @click="
-          router.push(localePath({ name: 'file-id', params: { id: item.id } }))
-        "
       />
     </template>
     <template #item.description="{ item }">
       <NuxtLink
         class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item.id } })"
+        :to="
+          localePath({ name: 'file-id', params: { id: item.id } })
+        "
       >
         {{
           $translate({

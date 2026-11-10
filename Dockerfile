@@ -1,4 +1,4 @@
-FROM node:22.23.4-alpine AS base
+FROM node:20.18.0-bullseye-slim AS base
 
 # ENV NODE_ENV=production
 
