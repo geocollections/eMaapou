@@ -4,6 +4,7 @@
 @theme {
   --font-sans: "Noto Sans", sans-serif;
   --font-heading: "Montserrat", sans-serif;
+  --color-link: #076C78;
 }
 
 @layer base {

@@ -2,6 +2,11 @@ export default {
   title: "Geocollections",
   subtitle: "Geoscience data and e\u2011services in Estonia",
   slogan: "Estonian geology data portal",
+  services: {
+    title: "E-Services",
+    sub: "Find specialist geological databases and tools",
+    link: "Open service",
+  },
   landing: {
     searchTitle: "Find from e·Maapõu",
     drillcores: "Drillcores",

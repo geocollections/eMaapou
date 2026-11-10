@@ -394,21 +394,3 @@ function handleSearch() {
     </VContainer>
   </div>
 </template>
-
-<style lang="scss" scoped>
-@import "vuetify/settings";
-
-.spacer {
-  aspect-ratio: 900/600;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: bottom, center;
-  background-size: cover, cover;
-
-  @media #{map-get($display-breakpoints, 'xl-and-up')} {
-    background-position:
-      bottom -5rem right,
-      center;
-  }
-}
-</style>
