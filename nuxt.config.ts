@@ -151,6 +151,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  seoUtils: {
+    automaticTwitterTags: false,
+  },
   linkChecker: {
     enabled: false,
   },
