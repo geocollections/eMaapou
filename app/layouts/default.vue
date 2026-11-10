@@ -40,6 +40,7 @@ watch(() => display.smAndDown.value, (value) => {
       <VNavigationDrawer
         v-if="mdAndUp"
         app
+        class="!top-18 !h-[calc(100%-72px)]"
         :rail="railDrawer"
         color="grey-darken-3"
         style="z-index:1004"
