@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     dirs: ["types", "constants"],
   },
   css: [
-    '~/assets/css/main.css',
+    '~/assets/css/tailwind.css',
   ],
   vite: {
     css: {
