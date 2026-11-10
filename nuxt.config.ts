@@ -31,7 +31,6 @@ export default defineNuxtConfig({
     "@nuxtjs/seo",
     "vuetify-nuxt-module",
     "@nuxt/test-utils/module",
-    "@nuxt/eslint",
   ],
   imports: {
     dirs: ["types", "constants"],
@@ -50,6 +49,7 @@ export default defineNuxtConfig({
   },
   vuetify: {
     moduleOptions: {
+      importComposables: false,
       // ssrClientHints: {
       // viewportSize: true,
       // reloadOnFirstRequest: true,
