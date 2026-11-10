@@ -9,23 +9,43 @@ import {
 
 const display = useDisplay();
 const drawer = ref(false);
+const navigationRailDrawer = ref(true);
+const userInteractedWithRailDrawer = ref(false);
 
-const { mdAndUp } = useDisplay();
+const { mdAndUp, lgAndUp } = useDisplay();
+
 watchEffect(() => {
-  if (mdAndUp)
+  if (mdAndUp.value) {
     drawer.value = false;
+  }
 });
 
-const railDrawer = ref(true);
+// Open navigation rail drawer when display size changes and user hasn't already clicked the open/close button
+watchEffect(() => {
+  if (userInteractedWithRailDrawer.value) {
+    return;
+  }
+
+  navigationRailDrawer.value = !lgAndUp.value;
+});
+
 const localePath = useLocalePath();
 
 const { t } = useI18n({ useScope: "local" });
 
 const showDrawer = ref(false);
-watch(() => display.smAndDown.value, (value) => {
-  if (!value)
-    showDrawer.value = false;
-});
+watch(
+  () => display.smAndDown.value,
+  (value) => {
+    if (!value)
+      showDrawer.value = false;
+  },
+);
+
+function handleRailDrawerClick() {
+  navigationRailDrawer.value = !navigationRailDrawer.value;
+  userInteractedWithRailDrawer.value = true;
+}
 </script>
 
 <template>
@@ -40,9 +60,9 @@ watch(() => display.smAndDown.value, (value) => {
       <VNavigationDrawer
         v-if="mdAndUp"
         app
-        :rail="railDrawer"
+        :rail="navigationRailDrawer"
         color="grey-darken-3"
-        style="z-index:1004"
+        style="z-index: 1004"
         elevation="2"
         permanent
         :width="200"
@@ -52,12 +72,9 @@ watch(() => display.smAndDown.value, (value) => {
           nav
           model-value="specimen"
         >
-          <VListItem
-            :title="t('closeSidebar')"
-            @click="railDrawer = !railDrawer"
-          >
+          <VListItem :title="t('closeSidebar')" @click="handleRailDrawerClick">
             <template #prepend>
-              <VIcon v-if="railDrawer">
+              <VIcon v-if="navigationRailDrawer">
                 {{ mdiChevronDoubleRight }}
               </VIcon>
               <VIcon v-else>
