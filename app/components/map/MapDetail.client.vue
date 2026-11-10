@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
-import "leaflet.fullscreen/Control.FullScreen.css";
+import 'leaflet.fullscreen/dist/Control.FullScreen.css'
 
 export type MapBaseLayer = keyof typeof baseLayers;
 export type MapOverlay = keyof typeof overlays;

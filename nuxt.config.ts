@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     strict: true,
   },
   modules: [
+    "@nuxt/fonts",
+    "@nuxt/ui",
+    "@nuxt/eslint",
     "@nuxtjs/i18n",
     "@nuxt/image",
     "@pinia/nuxt",
@@ -33,7 +36,9 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["types", "constants"],
   },
-  css: ["~/assets/main.scss"],
+  css: [
+    '~/assets/css/main.css',
+  ],
   vite: {
     css: {
       preprocessorOptions: {

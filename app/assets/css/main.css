@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --font-sans: "Noto Sans", sans-serif;
+  --font-heading: "Montserrat", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+.layout-enter-active,
+.layout-leave-active {
+  @apply transition-opacity duration-200;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  @apply opacity-0;
+}
+
+.is-preferred {
+  color: gray;
+}
+
+.underline {
+  @apply inline-block;
+}
+
+.underline::after {
+  content: "";
+  @apply block h-px w-0 transition-all duration-300;
+  background: var(--ui-primary);
+}
+
+.underline:hover::after {
+  @apply w-full;
+}
+
+.text-link,
+.text-link-visit {
+  @apply inline-block cursor-pointer no-underline transition-colors duration-200;
+  color: #1e88e5 !important;
+}
+
+.text-link .v-icon,
+.text-link-visit .v-icon {
+  color: inherit !important;
+}
+
+.text-link:hover,
+.text-link-visit:hover {
+  @apply underline;
+  color: #1565c0 !important;
+}
+
+.text-link-visit:visited {
+  @apply underline;
+  color: #9c27b0 !important;
+}
+
+.text-link-footer {
+  @apply inline-block cursor-pointer text-[13px] no-underline transition-colors duration-200;
+  color: white !important;
+}
+
+.text-link-footer .v-icon {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.text-link-footer:hover {
+  @apply underline;
+}
+
+.text-link-grey {
+  @apply no-underline transition-colors duration-200;
+  color: #757575 !important;
+}
+
+.text-link-grey:hover {
+  @apply underline;
+  color: var(--ui-primary) !important;
+}
+
+.menu-link {
+  @apply no-underline transition-colors duration-200;
+  color: #616161 !important;
+}
+
+.menu-link:hover {
+  @apply underline;
+  color: var(--ui-primary) !important;
+}
+
+.menu-link-active {
+  @apply inline-block;
+  color: var(--ui-primary) !important;
+}
+
+.menu-link-active::after {
+  content: "";
+  @apply block h-px w-full transition-all duration-300;
+  background: var(--ui-primary);
+}
+
+.title-link {
+  @apply no-underline transition-colors duration-200;
+  color: white !important;
+}
+
+.title-link:hover {
+  color: #e0e0e0 !important;
+}
+
+.no-value {
+  color: lightgray;
+}
+
+.on-hover {
+  background-color: #f5f5f5 !important;
+}
+
+.header-menu-item {
+  @apply transition-all duration-[350ms];
+}
+
+.header-menu-item.header-menu-item-active {
+  background-color: rgb(9 98 124 / 12%) !important;
+}
+
+.drillcore-box__card {
+  @apply transition-colors duration-200;
+}
+
+.drillcore-box__card:hover {
+  background: #eee !important;
+}
+
+.static-cell-header {
+  background-color: #f5f5f5;
+}
+
+.static-cell {
+  color: #757575;
+}
+
+.header-icon-button {
+  height: 36px !important;
+  width: 36px !important;
+}
+
+.image-content {
+  width: inherit !important;
+}
+
+.frontsearch {
+  @apply bg-white text-[1.4em] font-bold;
+  color: #406451 !important;
+}
+
+.chip-active {
+  @apply border border-solid font-bold;
+  border-color: var(--ui-primary) !important;
+}
+
+/* Leaflet overrides */
+.leaflet-draw-toolbar.leaflet-control-toolbar {
+  margin-top: 0 !important;
+}
+
+.leaflet-draw-toolbar {
+  padding-left: 0 !important;
+}
+
+.leaflet-draw-toolbar .leaflet-toolbar-1 .leaflet-toolbar-icon {
+  float: unset !important;
+}
+
+.leaflet-draw-toolbar .leaflet-toolbar-1 div {
+  border-color: white !important;
+}
+
+.leaflet-draw-toolbar .fa-fill-drip::before {
+  content: "\F020A";
+}
+
+.leaflet-draw-toolbar .fas::before {
+  display: inline-block;
+  font: normal normal normal 16px/1 "Material Design Icons";
+  color: grey;
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+}
+
+.montserrat,
+.subsection-title {
+  font-family: "Montserrat", "Open Sans", sans-serif !important;
+}
