@@ -4,8 +4,8 @@ import earcut from "earcut";
 import cloneDeep from "lodash/cloneDeep";
 import isNil from "lodash/isNil";
 
-export type LookupType = "contains" | "exact" | "startswith" | "endswith";
-export type FilterType =
+export type FilterLookup = "contains" | "exact" | "startswith" | "endswith";
+export type FilterKind =
   | "text"
   | "idList"
   | "textList"
@@ -18,7 +18,7 @@ export type FilterType =
   | "date";
 
 export interface BaseFilter {
-  type: FilterType;
+  type: FilterKind;
   value: any;
   fields: string[];
   tag?: string;
@@ -31,7 +31,7 @@ export type BooleanFilter = Omit<BaseFilter, "value"> & {
 
 export type TextListFilter = Omit<BaseFilter, "value"> & {
   type: "textList";
-  lookup?: LookupType;
+  lookup?: FilterLookup;
   value: string[];
 };
 
@@ -44,7 +44,7 @@ export type StringIdListFilter = Omit<BaseFilter, "value"> & {
   type: "idList";
   value: string[];
   alphaNumeric: boolean;
-  lookup?: LookupType;
+  lookup?: FilterLookup;
 };
 
 export type GeomFilter = Omit<BaseFilter, "value"> & {
@@ -125,7 +125,7 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
 }
 
 function getLookupFn(
-  lookup: LookupType | undefined,
+  lookup: FilterLookup | undefined,
 ): (field: string, value: string) => string {
   switch (lookup) {
     case "contains":

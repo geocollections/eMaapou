@@ -31,13 +31,12 @@ export default defineNuxtConfig({
     "@nuxtjs/seo",
     "vuetify-nuxt-module",
     "@nuxt/test-utils/module",
-    "@nuxt/eslint",
   ],
   imports: {
     dirs: ["types", "constants"],
   },
   css: [
-    '~/assets/css/main.css',
+    '~/assets/css/tailwind.css',
   ],
   vite: {
     css: {
@@ -50,6 +49,7 @@ export default defineNuxtConfig({
   },
   vuetify: {
     moduleOptions: {
+      importComposables: false,
       // ssrClientHints: {
       // viewportSize: true,
       // reloadOnFirstRequest: true,
@@ -150,6 +150,9 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  seoUtils: {
+    automaticTwitterTags: false,
   },
   linkChecker: {
     enabled: false,

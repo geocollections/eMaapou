@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
 import { mdiChevronDoubleLeft, mdiViewList } from "@mdi/js";
 
 const props = withDefaults(defineProps<{

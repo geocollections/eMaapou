@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
 import { LineChart } from "echarts/charts";
 import {
   AxisPointerComponent,
