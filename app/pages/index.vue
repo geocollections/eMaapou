@@ -265,7 +265,7 @@ function handleSearch() {
 <template>
   <div>
     <div
-      class="spacer pt-16"
+      class="aspect-[900/600] w-full bg-cover bg-position-[bottom,center] bg-no-repeat pt-16 min-[1920px]:bg-position-[right_bottom_-5rem,center]"
       :style="{
         'background-image': background,
         'background-color': '#333333',
@@ -394,21 +394,3 @@ function handleSearch() {
     </VContainer>
   </div>
 </template>
-
-<style lang="scss" scoped>
-@import "vuetify/settings";
-
-.spacer {
-  aspect-ratio: 900/600;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: bottom, center;
-  background-size: cover, cover;
-
-  @media #{map-get($display-breakpoints, 'xl-and-up')} {
-    background-position:
-      bottom -5rem right,
-      center;
-  }
-}
-</style>
