@@ -41,6 +41,7 @@
   --color-portal-text: var(--color-text);
   --color-portal-muted: var(--color-text-muted);
   --color-portal-primary: var(--color-primary);
+  --color-portal-primary-hover: var(--color-primary-hover);
   --color-portal-link: var(--color-link);
   --color-portal-mint: var(--color-mint);
   --color-portal-selected: var(--color-selected);
@@ -279,4 +280,16 @@
 .montserrat,
 .subsection-title {
   font-family: "Montserrat", "Open Sans", sans-serif !important;
+}
+
+@utility about-card {
+  @apply flex min-w-0 items-start gap-4 rounded-portal-card bg-portal-background p-5 text-portal-text no-underline shadow-none transition-colors duration-200 hover:bg-portal-selected focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-portal-focus;
+}
+
+@utility about-card-title {
+  @apply mb-1 font-sans text-lg leading-snug font-semibold text-portal-heading;
+}
+
+@utility about-card-action {
+  @apply inline-flex min-h-6 items-center gap-1 text-sm font-semibold text-portal-link group-hover:underline [&_svg]:transition-transform motion-safe:group-hover:[&_svg]:translate-x-0.5;
 }
