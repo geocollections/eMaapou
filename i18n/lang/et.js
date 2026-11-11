@@ -2,6 +2,11 @@ export default {
   title: "eMaapõu",
   subtitle: "Geoloogilised andmed ja e\u2011teenused",
   slogan: "Kogu info Eesti maapõuest",
+  services: {
+    title: "E-Teenused",
+    sub: "Geoloogiaga seotud andmebaasid ja tööriistad",
+    link: "Ava teenus",
+  },
   landing: {
     searchTitle: "Leia e·Maapõuest",
     drillcores: "Puursüdamikud",
