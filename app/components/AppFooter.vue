@@ -1,401 +1,314 @@
 <script setup lang="ts">
-import { mdiChevronRight } from "@mdi/js";
+import { mdiOpenInNew } from "@mdi/js";
+import {
+  BROWSE_GEOLOGY_LIST,
+  BROWSE_LAB_LIST,
+  BROWSE_TAXON_LIST,
+  SERVICES,
+} from "~/constants";
 
+const { locale, t } = useI18n();
 const localePath = useLocalePath();
+const copy = computed(() =>
+  locale.value === "en"
+    ? {
+        subtitle: "Estonian geological data portal",
+        collections: "Data collections",
+        research: "Research & places",
+        services: "External services",
+        about: "About the portal",
+        policies: "Data & source code",
+        portal: "About the portal",
+        news: "News",
+        search: "Search all data",
+        api: "SARV API",
+        source: "Source code",
+        partners: "Partners & infrastructure",
+        privacyTitle: "Privacy & analytics",
+        reuseTitle: "Using the data",
+        licence:
+          "Unless otherwise indicated, portal materials are generally available under the CC BY-SA 3.0 licence. Check each record’s source and licence before reuse.",
+        licenceLink: "Read the licence",
+        external: "External website",
+      }
+    : {
+        subtitle: "Eesti geoloogiliste andmete portaal",
+        collections: "Andmekogud",
+        research: "Teadusandmed ja paigad",
+        services: "Välised teenused",
+        about: "Portaalist",
+        policies: "Andmed ja lähtekood",
+        portal: "Portaalist",
+        news: "Uudised",
+        search: "Otsi kõigist andmetest",
+        api: "SARVe API",
+        source: "Lähtekood",
+        partners: "Partnerid ja taristu",
+        privacyTitle: "Privaatsus ja analüütika",
+        reuseTitle: "Andmete kasutamine",
+        licence:
+          "Kui pole märgitud teisiti, on portaali materjalid üldjuhul kasutatavad CC BY-SA 3.0 litsentsi alusel. Enne taaskasutust kontrolli kirje allikat ja litsentsi.",
+        licenceLink: "Loe litsentsi",
+        external: "Väline veebileht",
+      },
+);
 
-const logo = "/logos/emaapou5orange.svg";
-const imageLinks = [
+type FooterLink = { label: string; to: string; external?: boolean };
+const dataLink = (item: { routeName: string; label: string }): FooterLink => ({
+  label: t(item.label),
+  to: localePath({ name: item.routeName }),
+});
+const groups = computed(() => [
+  {
+    id: "collections",
+    title: copy.value.collections,
+    links: [...BROWSE_TAXON_LIST, ...BROWSE_LAB_LIST.slice(0, 1)].map(dataLink),
+  },
+  {
+    id: "research",
+    title: copy.value.research,
+    links: [...BROWSE_LAB_LIST.slice(1), ...BROWSE_GEOLOGY_LIST].map(dataLink),
+  },
+  {
+    id: "services",
+    title: copy.value.services,
+    links: (
+      [
+        "kirjandus",
+        "fossiilid",
+        "kivid",
+        "fond",
+        "eurocore",
+        "geocollections",
+        "sarv",
+      ] as const
+    ).map((id) => ({
+      label: t(SERVICES[id].title),
+      to: SERVICES[id].href,
+      external: true,
+    })),
+  },
+  {
+    id: "about",
+    title: copy.value.about,
+    links: [
+      { label: copy.value.portal, to: localePath({ name: "about" }) },
+      { label: copy.value.news, to: localePath({ name: "news" }) },
+      { label: copy.value.search, to: localePath({ name: "search" }) },
+    ],
+  },
+  {
+    id: "policies",
+    title: copy.value.policies,
+    links: [
+      {
+        label: "CC BY-SA 3.0",
+        to: "https://creativecommons.org/licenses/by-sa/3.0/",
+        external: true,
+      },
+      {
+        label: copy.value.api,
+        to: "https://api.geoloogia.info",
+        external: true,
+      },
+      {
+        label: copy.value.source,
+        to: "https://github.com/geocollections/eMaapou",
+        external: true,
+      },
+    ],
+  },
+]);
+const partners = [
   {
     href: "https://geocollections.info",
     src: "/logos/sarv_logo.svg",
-    title: "footerLinks.sarv",
     alt: "footerLinks.sarv",
-    format: null,
     width: 172,
     height: 60,
   },
   {
     href: "https://natarc.ut.ee",
     src: "/logos/natarc_logo_black.svg",
-    title: "footerLinks.natarc",
     alt: "footerLinks.natarc",
-    format: "webp",
     width: 60,
     height: 60,
   },
   {
     href: "https://taltech.ee/geoloogia-instituut",
     src: "/logos/taltech_black.png",
-    title: "footerLinks.ttu",
     alt: "footerLinks.ttu",
-    format: "webp",
-    height: 60,
     width: 105,
+    height: 60,
   },
   {
-    href: "http://www.natmuseum.ut.ee/et/content/geoloogiakogud",
+    href: "https://natmuseum.ut.ee",
     src: "/logos/Tartu_Ülikool_logo.png",
-    title: "footerLinks.tu",
     alt: "footerLinks.tu",
-    format: "webp",
     width: 58,
     height: 60,
   },
   {
     href: "https://loodusmuuseum.ee/geoloogilised-kogud",
     src: "/logos/eesti_loodusmuuseum.png",
-    title: "footerLinks.elm",
     alt: "footerLinks.elm",
-    format: "webp",
-    height: 60,
     width: 127,
-  },
-  /* {
-          href: 'https://struktuurifondid.ee',
-          src: '/logos/EL_mv.png',
-          title: 'footerLinks.el',
-          alt: 'footerLinks.el',
-        }, */
-];
-const textLinks = [
-  {
-    href: "https://creativecommons.org/licenses/by-sa/3.0/",
-    text: "CC BY-SA",
-  },
-  {
-    href: "https://natarc.ut.ee/",
-    text: "NATARC",
-  },
-  {
-    href: "https://geocollections.info/",
-    text: "SARV",
-  },
-  {
-    href: "https://taltech.ee/geoloogia-instituut",
-    text: "TalTech",
-  },
-  {
-    href: "https://nuxtjs.org/",
-    text: "Nuxt.js",
-  },
-  {
-    href: "https://github.com/geocollections/EMA",
-    text: "GitHub",
-  },
-];
-const links = [
-  { name: "geocollections.title", url: "https://geocollections.info" },
-  { name: "kirjandus.title", url: "https://kirjandus.geoloogia.info" },
-  { name: "gmre.title", url: "https://geoloogia.info/geology" },
-  { name: "fond.title", url: "https://fond.egt.ee" },
-  { name: "fossiilid.title", url: "https://fossiilid.info" },
-  { name: "kivid.title", url: "https://kivid.info" },
-  { name: "stratigraphy.title", url: "http://stratigraafia.info" },
-  {
-    name: "maardlad.title",
-    url: "https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html",
-  },
-  { name: "doi.title", url: "https://doi.geocollections.info" },
-  { name: "turba.title", url: "https://turba.geoloogia.info" },
-  { name: "geocase.title", url: "https://geocase.eu" },
-  { name: "eurocore.title", url: "eurocore.description" },
-  { name: "sarv.title", url: "https://edit.geocollections.info" },
-  { name: "link.geologyAPI", url: "https://api.geoloogia.info" },
-];
-
-const searchRoutes = [
-  {
-    routeName: "locality",
-    text: "locality.pageTitle",
-  },
-  {
-    routeName: "site",
-    text: "site.pageTitle",
-  },
-  {
-    routeName: "drillcore",
-    text: "drillcore.pageTitle",
-  },
-  {
-    routeName: "sample",
-    text: "sample.pageTitle",
-  },
-  {
-    routeName: "analysis",
-    text: "analysis.pageTitle",
-  },
-  {
-    routeName: "analytical-data",
-    text: "analyticalData.pageTitle",
-  },
-  {
-    routeName: "dataset",
-    text: "dataset.pageTitle",
-  },
-  {
-    routeName: "taxon",
-    text: "taxon.pageTitle",
-  },
-  {
-    routeName: "stratigraphy",
-    text: "stratigraphy.pageTitle",
-  },
-  {
-    routeName: "photo",
-    text: "photo.pageTitle",
-  },
-  {
-    routeName: "specimen",
-    text: "specimen.pageTitle",
-  },
-  { routeName: "preparation", text: "preparation.pageTitle" },
-  { routeName: "area", text: "area.pageTitle" },
-];
-const routes = [
-  {
-    routeName: "search",
-    text: "common.search",
-  },
-  {
-    routeName: "about",
-    text: "common.about",
-  },
-  {
-    routeName: "news",
-    text: "common.news",
+    height: 60,
   },
 ];
 </script>
 
 <template>
-  <div class="bg-grey-lighten-5 border-t">
-    <VContainer :fluid="$vuetify.display.lgAndDown">
-      <VRow no-gutters>
-        <VCol cols="12" lg="auto">
-          <div class="d-md-flex justify-center">
-            <div class="ml-4 ml-md-0 mr-4 mb-6">
-              <NuxtImg
-                :src="logo"
-                height="24"
-                width="60"
-                format="webp"
-                style="margin-bottom: 10px"
-                :alt="$t('logo.alt')"
-              />
-              <div
-                v-for="link in routes"
-                :key="link.routeName"
-                class="d-flex mb-2"
-              >
-                <VIcon
-                  class="align-self-center"
-                  :icon="mdiChevronRight"
-                  size="x-small"
-                />
-                <NuxtLink
-                  :to="localePath(link.routeName)"
-                  class="text-body-2 text-decoration-none text-grey-darken-3 d-block ml-1"
-                  style="font-weight: 500 !important"
-                >
-                  {{ $t(link.text) }}
-                </NuxtLink>
-              </div>
-            </div>
-            <div class="mx-4 mb-6">
-              <div
-                class="section-title font-weight-medium montserrat mb-4"
-              >
-                {{ $t("landing.searchRoutes") }}
-              </div>
-
-              <div class="d-sm-inline-block" style="column-count: 2">
-                <div
-                  v-for="link in searchRoutes"
-                  :key="link.routeName"
-                  class="d-flex mb-2"
-                >
-                  <VIcon
-                    class="align-self-center"
-                    :icon="mdiChevronRight"
-                    size="x-small"
-                  />
-                  <NuxtLink
-                    :to="localePath(link.routeName)"
-                    class="text-body-2 text-decoration-none text-grey-darken-3 d-block ml-1"
-                    style="font-weight: 500 !important"
-                  >
-                    {{ $t(link.text) }}
-                  </NuxtLink>
-                </div>
-              </div>
-            </div>
-            <div class="ml-3 mb-6">
-              <div
-                class="section-title font-weight-medium montserrat mb-4"
-              >
-                {{ $t("common.links") }}
-              </div>
-
-              <div class="d-sm-inline-block" style="column-count: 2">
-                <div
-                  v-for="link in links"
-                  :key="link.name"
-                  class="d-flex mb-2"
-                >
-                  <VIcon
-                    class="align-self-center"
-                    :icon="mdiChevronRight"
-                    size="x-small"
-                  />
-                  <a
-                    :href="link.url"
-                    class="text-body-2 text-decoration-none text-grey-darken-3 d-block ml-1"
-                    style="font-weight: 500 !important"
-                  >
-                    {{ $t(link.name) }}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </VCol>
-        <VCol>
-          <div class="ml-3 mb-6">
-            <div
-              class="section-title font-weight-medium montserrat mb-4"
-            >
-              {{ $t("common.partners") }}
-            </div>
-            <div>
-              <a
-                v-for="(item, index) in imageLinks"
-                :key="`footer-image-${index}`"
-                :href="item.href"
-                target="FooterLink"
-                rel="noopener noreferrer"
-              >
-                <NuxtImg
-                  :src="item.src"
-                  :alt="$t(item.alt)"
-                  :height="item.height"
-                  :width="item.width"
-                  class="footer-logo py-1 py-sm-0 px-3"
-                />
-                <ClientOnly>
-                  <VTooltip
-                    activator="parent"
-                    location="bottom"
-                    :aria-label="item.title"
-                  >
-                    {{ $t(item.title) }}
-                  </VTooltip>
-                </ClientOnly>
-              </a>
-            </div>
-          </div>
-        </VCol>
-      </VRow>
-    </VContainer>
-    <VContainer fluid class="border-t">
-      <VContainer :fluid="$vuetify.display.lgAndDown">
-        <VRow class="pb-2">
-          <VCol class="text-body-2 text-center">
-            <div class="text-center d-flex justify-center align-center">
-              <div style="max-width: 700px">
-                <I18nT
-                  class="text-body-2 "
-                  keypath="privacyNotice"
-                  scope="global"
-                  tag="div"
-                >
-                  <a
-                    href="https://matomo.org"
-                    class="font-weight-bold text-blue-darken-3 text-decoration-none"
-                  >Matomo</a>
-                </I18nT>
-              </div>
-            </div>
-          </VCol>
-        </VRow>
-        <VRow no-gutters>
-          <VCol cols="12" align-self="center">
-            <div class="text-center d-flex justify-center align-center">
-              <div style="max-width: 700px">
-                <I18nT
-                  class="text-body-2 "
-                  keypath="footer"
-                  scope="global"
-                  tag="div"
-                >
-                  <a
-                    v-for="(item, index) in textLinks"
-                    :key="`text-link-${index}`"
-                    :href="item.href"
-                    class="font-weight-bold text-blue-darken-3 text-decoration-none"
-                  >
-                    {{ item.text }}
-                  </a>
-                </I18nT>
-              </div>
-            </div>
-          </VCol>
-          <VCol
-            cols="12"
-            align-self="center"
-            class="text-center mt-3"
+  <footer
+    class="border-t border-portal-border bg-portal-background font-sans text-portal-text"
+  >
+    <UContainer
+      class="w-full max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8 lg:pt-10"
+    >
+      <div class="grid gap-8 xl:grid-cols-[200px_minmax(0,1fr)] xl:gap-10">
+        <div>
+          <ULink
+            raw
+            :to="localePath('/')"
+            class="header-focus inline-flex items-center rounded-portal-control text-portal-heading no-underline"
+            aria-label="eMaapõu"
           >
-            <a href="https://github.com/geocollections/eMaapou">
-              <NuxtImg
-                src="/logos/github-mark.png"
-                alt="GitHub"
-                format="webp"
-                class="github-logo py-1 py-sm-0 px-3"
-                width="32"
-                height="32"
+            <img
+              src="/logos/emaapou5blue.svg"
+              alt="eMaapõu"
+              width="160"
+              height="48"
+              class="h-auto w-40"
+              loading="lazy"
+            />
+          </ULink>
+          <p class="mt-3 max-w-52 text-sm leading-relaxed text-portal-muted">
+            {{ copy.subtitle }}
+          </p>
+        </div>
+        <div
+          class="grid min-w-0 grid-cols-1 gap-x-6 gap-y-6 min-[360px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
+        >
+          <nav
+            v-for="group in groups"
+            :key="group.id"
+            :aria-labelledby="`footer-${group.id}-title`"
+            class="min-w-0"
+          >
+            <h2
+              :id="`footer-${group.id}-title`"
+              class="mb-3 text-sm leading-normal font-semibold text-portal-heading"
+            >
+              {{ group.title }}
+            </h2>
+            <ul class="m-0 list-none p-0">
+              <li v-for="link in group.links" :key="link.to">
+                <ULink
+                  raw
+                  :to="link.to"
+                  :external="link.external || link.to.startsWith('#')"
+                  :target="link.external ? '_blank' : undefined"
+                  :rel="link.external ? 'noopener noreferrer' : undefined"
+                  class="flex min-h-11 w-fit items-start gap-2 rounded-portal-control py-2 text-sm leading-normal text-portal-text no-underline underline-offset-3 hover:text-portal-link hover:underline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-portal-focus lg:min-h-8 lg:py-1"
+                >
+                  <span>{{ link.label }}</span>
+                  <svg
+                    v-if="link.external"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="mt-0.5 size-3.5 shrink-0 text-portal-muted"
+                  >
+                    <path :d="mdiOpenInNew" />
+                  </svg>
+                  <span v-if="link.external" class="sr-only"
+                    >({{ copy.external }})</span
+                  >
+                </ULink>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <section
+        class="mt-8 flex flex-col gap-5 border-t border-portal-border pt-6 md:flex-row md:items-center md:gap-8"
+        aria-labelledby="footer-partners-title"
+      >
+        <h2
+          id="footer-partners-title"
+          class="shrink-0 text-sm font-semibold text-portal-heading"
+        >
+          {{ copy.partners }}
+        </h2>
+        <ul
+          class="m-0 flex list-none flex-wrap items-center gap-x-8 gap-y-5 p-0"
+        >
+          <li v-for="partner in partners" :key="partner.href">
+            <ULink
+              raw
+              :href="partner.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="header-focus inline-flex min-h-11 items-center rounded-portal-control"
+              :aria-label="`${$t(partner.alt)} (${copy.external})`"
+            >
+              <img
+                :src="partner.src"
+                :alt="$t(partner.alt)"
+                :width="partner.width"
+                :height="partner.height"
+                class="h-9 w-auto max-w-32 object-contain"
+                loading="lazy"
               />
-            </a>
-          </VCol>
-        </VRow>
-      </VContainer>
-    </VContainer>
-  </div>
+            </ULink>
+          </li>
+        </ul>
+      </section>
+      <div
+        class="mt-6 grid gap-6 border-t border-portal-border pt-6 text-[13px] leading-relaxed md:grid-cols-2 md:gap-10"
+      >
+        <section
+          id="footer-privacy"
+          class="scroll-mt-24"
+          aria-labelledby="footer-privacy-title"
+        >
+          <h2
+            id="footer-privacy-title"
+            class="mb-2 text-sm font-semibold text-portal-heading"
+          >
+            {{ copy.privacyTitle }}
+          </h2>
+          <I18nT keypath="privacyNotice" scope="global" tag="p"
+            ><ULink
+              raw
+              href="https://matomo.org"
+              class="header-focus text-portal-link underline underline-offset-2"
+              >Matomo</ULink
+            ></I18nT
+          >
+        </section>
+        <section
+          id="footer-reuse"
+          class="scroll-mt-24"
+          aria-labelledby="footer-reuse-title"
+        >
+          <h2
+            id="footer-reuse-title"
+            class="mb-2 text-sm font-semibold text-portal-heading"
+          >
+            {{ copy.reuseTitle }}
+          </h2>
+          <p>
+            {{ copy.licence }}
+            <ULink
+              raw
+              href="https://creativecommons.org/licenses/by-sa/3.0/"
+              class="header-focus text-portal-link underline underline-offset-2"
+              >{{ copy.licenceLink }}</ULink
+            >
+          </p>
+        </section>
+      </div>
+    </UContainer>
+  </footer>
 </template>
-
-<style scoped lang="scss">
-.footer {
-  -webkit-box-shadow: 0 -2px 4px -1px rgba(0, 0, 0, 0.2),
-    0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12) !important;
-  box-shadow: 0 -2px 4px -1px rgba(0, 0, 0, 0.2),
-    0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12) !important;
-}
-
-.v-card__text {
-  font-size: 0.7em;
-  font-weight: 400;
-  color: white !important;
-}
-
-/* .v-card__text a:visited,
-.v-card__text a:link,
-.v-card__text a:active {
-  color: white !important;
-  font-weight: 600;
-} */
-
-.footer-logo {
-  // height: 60px;
-  width: auto;
-  /*padding: 0 10px;*/
-}
-
-.github-logo {
-  height: 32px;
-  width: auto;
-  /*padding: 0 10px;*/
-}
-
-.hall {
-  background-color: #5c6598 !important;
-  border-color: #5c6598 !important;
-}
-</style>
