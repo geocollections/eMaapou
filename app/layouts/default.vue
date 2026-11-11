@@ -3,13 +3,13 @@
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col">
+  <V-App class="flex min-h-dvh flex-col">
     <AppBar />
 
-    <main class="flex-1 my-16 mx-16">
+    <main class="flex-1 m-16">
       <slot />
     </main>
 
     <AppFooter />
-  </div>
+  </V-App>
 </template>
