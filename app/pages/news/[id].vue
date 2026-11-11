@@ -44,10 +44,20 @@ const returnPage = computed(() => {
   const value = Number(route.query.page);
   return Number.isSafeInteger(value) && value > 1 ? value : undefined;
 });
+const returnFilters = computed(() => {
+  const keyword = typeof route.query.q === "string" ? route.query.q.trim() : "";
+  return {
+    q: keyword || undefined,
+    field: keyword && route.query.field === "content" ? "content" : undefined,
+  };
+});
 const backTo = computed(() =>
   localePath({
     name: "news",
-    query: returnPage.value ? { page: returnPage.value } : {},
+    query: {
+      ...returnFilters.value,
+      ...(returnPage.value ? { page: returnPage.value } : {}),
+    },
   }),
 );
 const {
@@ -266,6 +276,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
             :article="article"
             heading-tag="h3"
             :page="returnPage"
+            :filters="returnFilters"
           />
         </section>
       </template>

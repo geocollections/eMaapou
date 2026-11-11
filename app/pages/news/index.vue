@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { mdiChevronLeft, mdiChevronRight, mdiHomeOutline } from "@mdi/js";
+import {
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiClose,
+  mdiHomeOutline,
+  mdiMagnify,
+} from "@mdi/js";
 import type { NewsArticle } from "~/types/api";
 
 definePageMeta({ layout: false });
@@ -24,6 +30,18 @@ const copy = computed(() =>
         previous: "Previous",
         next: "Next",
         page: "Page",
+        keyword: "Keyword",
+        placeholder: "Enter a keyword…",
+        searchIn: "Search in",
+        inTitle: "Titles",
+        inContent: "Article text",
+        search: "Search news",
+        clear: "Clear filters",
+        remove: "Remove filter",
+        titleFilter: "Title",
+        contentFilter: "Text",
+        noMatches:
+          "No news matches these filters. Try another keyword or clear the filters.",
       }
     : {
         home: "Avaleht",
@@ -39,6 +57,18 @@ const copy = computed(() =>
         previous: "Eelmine",
         next: "Järgmine",
         page: "Leht",
+        keyword: "Märksõna",
+        placeholder: "Sisesta märksõna…",
+        searchIn: "Otsi",
+        inTitle: "Pealkirjast",
+        inContent: "Uudise tekstist",
+        search: "Otsi uudiseid",
+        clear: "Tühjenda filtrid",
+        remove: "Eemalda filter",
+        titleFilter: "Pealkiri",
+        contentFilter: "Tekst",
+        noMatches:
+          "Filtritele vastavaid uudiseid ei leitud. Proovi teist märksõna või tühjenda filtrid.",
       },
 );
 const perPage = 5;
@@ -46,11 +76,53 @@ const page = computed(() => {
   const value = Number(route.query.page);
   return Number.isSafeInteger(value) && value > 0 ? value : 1;
 });
+type SearchField = "title" | "content";
+const searchTerm = computed(() =>
+  typeof route.query.q === "string" ? route.query.q.trim() : "",
+);
+const searchField = computed<SearchField>(() =>
+  route.query.field === "content" ? "content" : "title",
+);
+const draftKeyword = ref(searchTerm.value);
+const draftField = ref<SearchField>(searchField.value);
+watch([searchTerm, searchField], ([keyword, field]) => {
+  draftKeyword.value = keyword;
+  draftField.value = field;
+});
+const listFilters = computed(() => ({
+  q: searchTerm.value || undefined,
+  field:
+    searchTerm.value && searchField.value === "content" ? "content" : undefined,
+}));
 const query = computed(() => ({
   offset: (page.value - 1) * perPage,
   limit: perPage,
   ordering: "-date_added",
+  ...(searchTerm.value
+    ? {
+        [`${searchField.value === "content" ? "text" : "title"}_${en.value ? "en" : "et"}__icontains`]:
+          searchTerm.value,
+      }
+    : {}),
 }));
+async function applyFilters() {
+  const keyword = draftKeyword.value.trim();
+  await router.push({
+    query: {
+      ...route.query,
+      q: keyword || undefined,
+      field: keyword && draftField.value === "content" ? "content" : undefined,
+      page: undefined,
+    },
+  });
+}
+async function clearFilters() {
+  draftKeyword.value = "";
+  draftField.value = "title";
+  await router.push({
+    query: { ...route.query, q: undefined, field: undefined, page: undefined },
+  });
+}
 const { data, status, error, refresh } = await useApiFetch<
   GeoloogiaListResponse<NewsArticle>
 >("/web-news/", {
@@ -140,6 +212,107 @@ useHead(() => ({ title: copy.value.title }));
         </h1>
         <p class="text-base leading-relaxed">{{ copy.intro }}</p>
       </header>
+      <form
+        class="mb-8"
+        role="search"
+        :aria-label="copy.search"
+        @submit.prevent="applyFilters"
+      >
+        <div
+          class="grid items-end gap-4 sm:grid-cols-[minmax(0,1fr)_180px_auto]"
+        >
+          <div class="min-w-0">
+            <label
+              for="news-keyword"
+              class="mb-2 block text-sm font-medium text-portal-heading"
+              >{{ copy.keyword }}</label
+            >
+            <UInput
+              id="news-keyword"
+              v-model="draftKeyword"
+              :placeholder="copy.placeholder"
+              type="search"
+              class="w-full"
+              color="neutral"
+              variant="outline"
+              :ui="{
+                base: 'h-11 rounded-portal-control bg-portal-background text-base text-portal-text ring-portal-border focus-visible:ring-2 focus-visible:ring-portal-focus',
+              }"
+            />
+          </div>
+          <div class="min-w-0">
+            <label
+              for="news-search-field"
+              class="mb-2 block text-sm font-medium text-portal-heading"
+              >{{ copy.searchIn }}</label
+            >
+            <USelect
+              id="news-search-field"
+              v-model="draftField"
+              :items="[
+                { label: copy.inTitle, value: 'title' },
+                { label: copy.inContent, value: 'content' },
+              ]"
+              class="w-full"
+              color="neutral"
+              variant="outline"
+              :ui="{
+                base: 'h-11 rounded-portal-control bg-portal-background text-base text-portal-text ring-portal-border focus-visible:ring-2 focus-visible:ring-portal-focus',
+                content: 'z-[1200] bg-portal-background',
+              }"
+            />
+          </div>
+          <UButton
+            type="submit"
+            color="neutral"
+            variant="solid"
+            class="header-focus min-h-11 justify-center gap-2 rounded-portal-control bg-portal-primary px-4 text-sm font-semibold text-white hover:bg-portal-primary-hover"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              class="size-5 shrink-0"
+            >
+              <path :d="mdiMagnify" /></svg
+            >{{ copy.search }}
+          </UButton>
+        </div>
+        <div v-if="searchTerm" class="mt-4 flex flex-wrap items-center gap-3">
+          <UButton
+            type="button"
+            color="neutral"
+            variant="soft"
+            :aria-label="`${copy.remove}: ${searchTerm}`"
+            class="header-focus min-h-11 max-w-full gap-2 rounded-portal-control bg-portal-mint px-3 text-sm text-portal-link hover:bg-portal-selected"
+            @click="clearFilters"
+          >
+            <span class="min-w-0 break-words"
+              >{{
+                searchField === "content"
+                  ? copy.contentFilter
+                  : copy.titleFilter
+              }}: {{ searchTerm }}</span
+            >
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              class="size-4 shrink-0"
+            >
+              <path :d="mdiClose" />
+            </svg>
+          </UButton>
+          <UButton
+            type="button"
+            color="neutral"
+            variant="ghost"
+            class="header-focus min-h-11 px-2 text-sm text-portal-link hover:bg-portal-subtle"
+            @click="clearFilters"
+            >{{ copy.clear }}</UButton
+          >
+        </div>
+      </form>
       <section
         id="news-list"
         :aria-label="copy.title"
@@ -189,14 +362,15 @@ useHead(() => ({ title: copy.value.title }));
               :key="article.id"
               :article="article"
               :page="page"
+              :filters="listFilters"
             />
           </div>
           <div v-else role="status" class="py-8">
-            <p>{{ copy.empty }}</p>
+            <p>{{ searchTerm ? copy.noMatches : copy.empty }}</p>
             <ULink
               v-if="page > 1"
               raw
-              :to="localePath({ name: 'news' })"
+              :to="localePath({ name: 'news', query: listFilters })"
               class="header-focus mt-4 inline-flex min-h-11 items-center text-portal-link [text-decoration-line:underline] underline-offset-4"
               >{{ copy.first }}</ULink
             >
