@@ -3,13 +3,13 @@
 </script>
 
 <template>
-  <div class="mx-12 flex min-h-dvh flex-col">
-    <header class="mb-6">Mingi stuff</header>
+  <div class="flex min-h-dvh flex-col">
+    <AppBar />
 
-    <main class="flex-1">
+    <main class="flex-1 my-16 mx-16">
       <slot />
     </main>
 
-    <footer>Mingi stuff</footer>
+    <AppFooter />
   </div>
 </template>

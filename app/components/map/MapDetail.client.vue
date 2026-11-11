@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTheme } from "vuetify";
 import type { GeoJsonObject } from "geojson";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";

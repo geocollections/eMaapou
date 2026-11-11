@@ -265,7 +265,7 @@ function handleSearch() {
 <template>
   <div>
     <div
-      class="spacer pt-16"
+      class="aspect-[900/600] w-full bg-cover bg-position-[bottom,center] bg-no-repeat pt-16 min-[1920px]:bg-position-[right_bottom_-5rem,center]"
       :style="{
         'background-image': background,
         'background-color': '#333333',
