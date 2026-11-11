@@ -13,8 +13,8 @@ executors:
     environment:
       IMAGE_NAME: geocollections/geoloogia
     docker:
-      - image: cimg/node:20.10.0
-
+      - image: cimg/node:22.14
+  
 jobs:
   test:
     executor: docker-publisher
