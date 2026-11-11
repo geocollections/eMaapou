@@ -12,3 +12,13 @@ export interface SolrResponse<T = any> {
     docs: T[];
   };
 }
+
+export interface NewsArticle {
+  id: number;
+  title_et: string | null;
+  title_en: string | null;
+  text_et: string | null;
+  text_en: string | null;
+  date_published: string | null;
+  date_added: string;
+}
