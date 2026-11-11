@@ -96,14 +96,14 @@ watch(() => route.fullPath, () => { openMenu.value = null; });
               </div>
             </section></template>
         </UPopover>
-        <UButton color="neutral" variant="ghost" class="header-control hidden min-w-11 min-[700px]:flex" :to="localePath({ name: 'about' })" :aria-label="copy.about"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="size-5 shrink-0"><path :d="mdiInformationOutline" /></svg><span class="hidden min-[960px]:inline">{{ copy.about }}</span></UButton>
+        <UButton color="neutral" variant="ghost" class="header-control hidden min-w-11 min-[700px]:flex" :class="route.name?.toString().split('___')[0] === 'about' ? 'bg-portal-mint text-portal-link' : ''" :to="localePath({ name: 'about' })" :aria-label="copy.about"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="size-5 shrink-0"><path :d="mdiInformationOutline" /></svg><span class="hidden min-[960px]:inline">{{ copy.about }}</span></UButton>
         <UPopover :open="openMenu === 'help'" :content="{ align: 'end', sideOffset: 16, collisionPadding: 16 }" :ui="{ content: 'header-panel z-[1200] w-[min(320px,calc(100vw-32px))]' }" @update:open="setMenu('help', $event)">
           <UButton color="neutral" variant="ghost" class="header-control hidden min-w-11 min-[700px]:flex" :aria-label="copy.help"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="size-5 shrink-0"><path :d="mdiHelpCircleOutline" /></svg><span class="hidden min-[960px]:inline">{{ copy.help }}</span></UButton>
           <template #content><div class="p-6"><h2 class="header-menu-heading">{{ copy.help }}</h2><p class="header-menu-description">{{ copy.helpText }}</p><UButton color="neutral" variant="ghost" class="header-menu-link" :to="localePath({ name: 'about' })">{{ copy.more }}<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="size-4 shrink-0"><path :d="mdiChevronRight" /></svg></UButton></div></template>
         </UPopover>
       </nav>
       <nav class="flex shrink-0 items-center border-portal-border min-[700px]:gap-1 min-[700px]:border-l min-[700px]:pl-2 min-[960px]:pl-3" :aria-label="en ? 'Language' : 'Keel'">
-        <UButton v-for="language in ['en', 'et'] as const" :key="language" color="neutral" variant="ghost" :to="switchLocalePath(language)" :lang="language" :aria-label="language === 'en' ? 'English' : 'Eesti'" :aria-current="locale === language ? 'true' : undefined" :active="false" class="header-control min-w-9 px-2 text-[13px] min-[700px]:min-w-11" :class="locale === language ? 'bg-portal-mint font-bold text-portal-link' : ''">{{ language.toUpperCase() }}</UButton>
+        <UButton v-for="language in ['en', 'et'] as const" :key="language" color="neutral" variant="ghost" :to="switchLocalePath(language)" :locale="false" :lang="language" :aria-label="language === 'en' ? 'English' : 'Eesti'" :aria-current="locale === language ? 'true' : undefined" :active="false" class="header-control min-w-9 px-2 text-[13px] min-[700px]:min-w-11" :class="locale === language ? 'bg-portal-mint font-bold text-portal-link' : ''">{{ language.toUpperCase() }}</UButton>
       </nav>
     </div>
   </header>
