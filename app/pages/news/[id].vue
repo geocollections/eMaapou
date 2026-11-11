@@ -118,7 +118,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
     />
     <UContainer
       as="main"
-      class="w-full max-w-7xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
+      class="w-full max-w-3xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
     >
       <nav
         :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
@@ -215,7 +215,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
         >
       </div>
       <template v-else-if="news">
-        <article aria-labelledby="news-title" class="max-w-[960px]">
+        <article aria-labelledby="news-title" class="w-full">
           <header class="mb-8 border-b border-portal-border pb-6 md:pb-8">
             <h1
               id="news-title"
@@ -234,7 +234,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
           <div
             v-if="content"
             :lang="contentLanguage"
-            class="max-w-[760px] text-base leading-relaxed break-words [&_a]:text-portal-link [&_a]:underline [&_a]:underline-offset-4 [&_a:focus-visible]:outline-3 [&_a:focus-visible]:outline-offset-3 [&_a:focus-visible]:outline-portal-focus [&_blockquote]:my-6 [&_blockquote]:border-l-2 [&_blockquote]:border-portal-border [&_blockquote]:pl-5 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-portal-heading [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-portal-heading [&_img]:my-6 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-portal-card [&_li]:mb-2 [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_table]:my-6 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_td]:border [&_td]:border-portal-border [&_td]:p-3 [&_th]:border [&_th]:border-portal-border [&_th]:bg-portal-subtle [&_th]:p-3 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6"
+            class="text-base leading-relaxed break-words [&_a]:text-portal-link [&_a]:underline [&_a]:underline-offset-4 [&_a:focus-visible]:outline-3 [&_a:focus-visible]:outline-offset-3 [&_a:focus-visible]:outline-portal-focus [&_blockquote]:my-6 [&_blockquote]:border-l-2 [&_blockquote]:border-portal-border [&_blockquote]:pl-5 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-portal-heading [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-portal-heading [&_img]:my-6 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-portal-card [&_li]:mb-2 [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_table]:my-6 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_td]:border [&_td]:border-portal-border [&_td]:p-3 [&_th]:border [&_th]:border-portal-border [&_th]:bg-portal-subtle [&_th]:p-3 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6"
             v-html="content"
           />
           <p v-else class="leading-relaxed text-portal-muted">
@@ -244,7 +244,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
         <section
           v-if="otherNews.length"
           aria-labelledby="other-news-title"
-          class="mt-10 max-w-5xl border-t border-portal-border pt-8 md:mt-12"
+          class="mt-10 border-t border-portal-border pt-8 md:mt-12"
         >
           <div class="mb-8 flex flex-wrap items-center justify-between gap-3">
             <h2

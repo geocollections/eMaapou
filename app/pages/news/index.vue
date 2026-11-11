@@ -103,7 +103,7 @@ useHead(() => ({ title: copy.value.title }));
     />
     <UContainer
       as="main"
-      class="w-full max-w-7xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
+      class="w-full max-w-5xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
     >
       <nav
         :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
@@ -144,7 +144,7 @@ useHead(() => ({ title: copy.value.title }));
         id="news-list"
         :aria-label="copy.title"
         :aria-busy="status === 'pending'"
-        class="max-w-5xl scroll-mt-24"
+        class="scroll-mt-24"
       >
         <div v-if="status === 'pending'" role="status" class="space-y-6 py-4">
           <span class="sr-only">{{ copy.loading }}</span>
