@@ -18,6 +18,17 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
   },
+  ui: {
+    colorMode: false,
+  },
+  app: {
+    head: {
+      htmlAttrs: {
+        class: "light",
+        style: "color-scheme: light",
+      },
+    },
+  },
   modules: [
     "@nuxt/fonts",
     "@nuxt/ui",
@@ -35,9 +46,7 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["types", "constants"],
   },
-  css: [
-    '~/assets/css/tailwind.css',
-  ],
+  css: ["~/assets/css/tailwind.css"],
   vite: {
     css: {
       preprocessorOptions: {
@@ -60,7 +69,6 @@ export default defineNuxtConfig({
         defaultSet: "mdi-svg",
       },
       theme: {
-
         defaultTheme: "light",
         variations: {
           colors: ["primary", "secondary", "accent"],
@@ -129,13 +137,13 @@ export default defineNuxtConfig({
   },
   vue: {
     compilerOptions: {
-      isCustomElement: tag => tag.startsWith("swiper-"),
+      isCustomElement: (tag) => tag.startsWith("swiper-"),
     },
   },
   googleFonts: {
     families: {
-      "Roboto": false,
-      "Montserrat": [300, 400, 500, 700],
+      Roboto: false,
+      Montserrat: [300, 400, 500, 700],
       "Noto+Sans": [400, 500, 700],
       "Noto+Sans+Mono": [400, 500, 700],
     },
