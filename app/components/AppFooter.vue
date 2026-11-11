@@ -173,14 +173,10 @@ const partners = [
             class="header-focus inline-flex items-center rounded-portal-control text-portal-heading no-underline"
             aria-label="eMaapõu"
           >
-            <img
-              src="/logos/emaapou5blue.svg"
-              alt="eMaapõu"
-              width="160"
-              height="48"
-              class="h-auto w-40"
-              loading="lazy"
-            />
+            <span
+              class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]"
+              >eMaapõu</span
+            >
           </ULink>
           <p class="mt-3 max-w-52 text-sm leading-relaxed text-portal-muted">
             {{ copy.subtitle }}
