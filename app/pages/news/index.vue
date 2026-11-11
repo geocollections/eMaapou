@@ -204,21 +204,87 @@ useHead(() => ({ title: copy.value.title }));
           <nav
             v-if="data && data.count > perPage"
             :aria-label="copy.pagination"
-            class="mt-6 border-t border-portal-border pt-6"
+            class="mt-6 flex flex-col gap-4 border-t border-portal-border pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
           >
-            <UPagination
-              :page="page"
-              :total="data.count"
-              :items-per-page="perPage"
-              :sibling-count="1"
-              :show-edges="false"
-              active-color="neutral"
-              active-variant="soft"
-              color="neutral"
-              variant="ghost"
-              :ui="{ item: 'min-h-11 min-w-11' }"
-              @update:page="changePage"
-            />
+            <p class="text-sm text-portal-muted tabular-nums" role="status">
+              {{ firstVisible }}–{{ lastVisible }} / {{ data.count }}
+              {{ articleLabel }}
+            </p>
+            <div class="flex items-center justify-between gap-2 sm:justify-end">
+              <UButton
+                color="neutral"
+                variant="outline"
+                :disabled="page <= 1"
+                class="header-focus min-h-11 shrink-0 gap-1 rounded-portal-control border border-portal-border bg-portal-background px-3 text-sm text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-40"
+                @click="changePage(page - 1)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  class="size-4 shrink-0"
+                >
+                  <path :d="mdiChevronLeft" />
+                </svg>
+                {{ copy.previous }}
+              </UButton>
+              <span
+                class="text-sm text-portal-heading tabular-nums sm:hidden"
+                aria-live="polite"
+                >{{ copy.page }} {{ page }} / {{ pageCount }}</span
+              >
+              <UPagination
+                class="hidden sm:block"
+                :page="page"
+                :total="data.count"
+                :items-per-page="perPage"
+                :sibling-count="1"
+                :show-edges="true"
+                :show-controls="false"
+                :ui="{ list: 'gap-1' }"
+                @update:page="changePage"
+              >
+                <template #item="{ item }">
+                  <UButton
+                    color="neutral"
+                    variant="ghost"
+                    :aria-label="`${en ? 'Page' : 'Lehekülg'} ${item.value}`"
+                    :aria-current="page === item.value ? 'page' : undefined"
+                    class="header-focus size-11 justify-center rounded-portal-control border text-sm font-medium tabular-nums shadow-none"
+                    :class="
+                      page === item.value
+                        ? 'border-portal-primary bg-portal-primary text-white hover:bg-portal-primary-hover'
+                        : 'border-transparent bg-transparent text-portal-heading hover:border-portal-border hover:bg-portal-subtle'
+                    "
+                    >{{ item.value }}</UButton
+                  >
+                </template>
+                <template #ellipsis
+                  ><span
+                    aria-hidden="true"
+                    class="flex size-11 items-center justify-center text-portal-muted"
+                    >…</span
+                  ></template
+                >
+              </UPagination>
+              <UButton
+                color="neutral"
+                variant="outline"
+                :disabled="page >= pageCount"
+                class="header-focus min-h-11 shrink-0 gap-1 rounded-portal-control border border-portal-border bg-portal-background px-3 text-sm text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-40"
+                @click="changePage(page + 1)"
+              >
+                {{ copy.next }}
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  class="size-4 shrink-0"
+                >
+                  <path :d="mdiChevronRight" />
+                </svg>
+              </UButton>
+            </div>
           </nav>
         </template>
       </section>
