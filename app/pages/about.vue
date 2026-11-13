@@ -12,14 +12,14 @@ const text = computed(() =>
         home: "Home",
         about: "About",
         title: "About eMaapõu",
-        subtitle: "A window into Estonia’s geological information.",
+        subtitle: "A window into geological information.",
         intro:
           "eMaapõu provides direct access to geological data hosted in the SARV geoscience data platform, together with links to external resources and applications.",
         dataDescription:
           "Explore geological collections, fossil specimens, rock samples, drillcores, localities, analytical data and photographs. The portal brings these records together with links to specialist databases and publications.",
         searchDescription:
           "Use the global search to get started, or browse a data group to explore a particular topic. Detailed searches let you refine your query, view records on a map, browse images and export data.",
-        photo: "Fossils preserved in a geological rock sample",
+        photo: "Sandstone cliffs at Kallaste beside Lake Peipus",
         explore: "Explore geological information",
         collections: "Collections",
         collectionsText:
@@ -54,14 +54,14 @@ const text = computed(() =>
         home: "Avaleht",
         about: "Tutvustus",
         title: "eMaapõust",
-        subtitle: "Aken Eesti geoloogiliste andmete juurde.",
+        subtitle: "Aken geoloogiliste andmete juurde.",
         intro:
           "eMaapõu annab ligipääsu maapõue infosüsteemis SARV talletatud geoloogilistele andmetele ning koondab viiteid välistele andmekogudele ja rakendustele.",
         dataDescription:
           "Portaalist leiad geoloogilised kollektsioonid, fossiilid, kivimiproovid, puursüdamikud, leiukohad, analüüsiandmed ja fotod. Nendega koos on kättesaadavad viited erialastele andmebaasidele ja geoloogia-alastele publikatsioonidele.",
         searchDescription:
           "Alusta üldotsingust või vali sirvimismenüüst huvipakkuv andmerühm. Täpsemas otsingus saad päringut piiritleda, vaadata kirjeid kaardil, sirvida pilte ja eksportida andmeid.",
-        photo: "Kivimiproovis säilinud fossiilid",
+        photo: "Kallaste liivakivipaljand Peipsi järve kaldal",
         explore: "Avasta geoloogilisi andmeid",
         collections: "Kollektsioonid",
         collectionsText:
@@ -159,10 +159,10 @@ useSeoMeta({ description: () => text.value.intro });
 </script>
 
 <template>
-  <div class="min-h-screen bg-portal-background font-sans text-portal-text">
+  <div class="flex min-h-screen flex-col bg-portal-background font-sans text-portal-text">
     <AppBar />
     <main
-      class="mx-auto w-full max-w-7xl px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
+      class="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
     >
       <nav
         :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
@@ -212,11 +212,14 @@ useSeoMeta({ description: () => text.value.intro });
             <p>{{ text.searchDescription }}</p>
           </div>
         </div>
+        <!-- Kallaste cliff, Gennadi Baranov, CC BY 4.0.
+             Source: https://geoloogia.info/en/file/25899
+             Licence: https://creativecommons.org/licenses/by/4.0/ -->
         <img
-          src="/frontpage/header_img2.jpg"
+          src="https://files.geocollections.info/large/6198cc14-5312-4fb4-8e4c-1b9820d6cd46.jpg"
           :alt="text.photo"
-          width="1599"
-          height="1066"
+          width="3320"
+          height="2136"
           class="h-52 w-full rounded-portal-card object-cover md:h-full md:max-h-[360px] md:min-h-64"
           fetchpriority="high"
         />
@@ -427,5 +430,6 @@ useSeoMeta({ description: () => text.value.intro });
         </div>
       </section>
     </main>
+    <AppFooter />
   </div>
 </template>
