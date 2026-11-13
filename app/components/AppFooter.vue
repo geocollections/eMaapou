@@ -12,7 +12,7 @@ const localePath = useLocalePath();
 const copy = computed(() =>
   locale.value === "en"
     ? {
-        subtitle: "Estonian geological data portal",
+        subtitle: "Geoscience Data Estonia",
         collections: "Data collections",
         research: "Research & places",
         services: "External services",
@@ -163,16 +163,17 @@ const partners = [
     class="border-t border-portal-border bg-portal-background font-sans text-portal-text"
   >
     <UContainer
-      class="w-full max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8 lg:pt-10"
+      class="w-full max-w-[1600px] px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:pt-14"
     >
-      <div class="grid gap-8 xl:grid-cols-[200px_minmax(0,1fr)] xl:gap-10">
+      <div class="grid gap-10 xl:grid-cols-[200px_minmax(0,1fr)] xl:gap-10">
         <div>
           <ULink
             raw
             :to="localePath('/')"
-            class="header-focus inline-flex items-center rounded-portal-control text-portal-heading no-underline"
+            class="header-focus inline-flex items-center gap-1.5 min-[700px]:gap-2 rounded-portal-control text-portal-heading no-underline"
             aria-label="eMaapõu"
           >
+            <img src="/logos/emaapou-icon.svg" alt="" width="32" height="36" class="h-7 w-auto shrink-0 min-[700px]:h-8 min-[960px]:h-9" />
             <span
               class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]"
               >eMaapõu</span
@@ -193,7 +194,7 @@ const partners = [
           >
             <h2
               :id="`footer-${group.id}-title`"
-              class="mb-3 text-sm leading-normal font-semibold text-portal-heading"
+              class="mb-4 text-sm leading-normal font-semibold tracking-wide text-portal-heading"
             >
               {{ group.title }}
             </h2>
@@ -227,7 +228,7 @@ const partners = [
         </div>
       </div>
       <section
-        class="mt-8 flex flex-col gap-5 border-t border-portal-border pt-6 md:flex-row md:items-center md:gap-8"
+        class="mt-10 flex flex-col gap-5 border-t border-portal-border pt-6 md:flex-row md:items-center md:gap-8 lg:mt-12"
         aria-labelledby="footer-partners-title"
       >
         <h2
@@ -260,9 +261,9 @@ const partners = [
           </li>
         </ul>
       </section>
-      <div
-        class="mt-6 grid gap-6 border-t border-portal-border pt-6 text-[13px] leading-relaxed md:grid-cols-2 md:gap-10"
-      >
+    </UContainer>
+    <div class="bg-portal-heading">
+      <UContainer class="grid w-full max-w-[1600px] gap-6 px-4 py-7 text-[13px] leading-relaxed text-slate-300 sm:px-6 md:grid-cols-2 md:gap-10 lg:px-8">
         <section
           id="footer-privacy"
           class="scroll-mt-24"
@@ -270,7 +271,7 @@ const partners = [
         >
           <h2
             id="footer-privacy-title"
-            class="mb-2 text-sm font-semibold text-portal-heading"
+            class="mb-2 text-sm font-semibold text-white"
           >
             {{ copy.privacyTitle }}
           </h2>
@@ -278,7 +279,7 @@ const partners = [
             ><ULink
               raw
               href="https://matomo.org"
-              class="header-focus text-portal-link underline underline-offset-2"
+              class="header-focus text-portal-mint underline underline-offset-2"
               >Matomo</ULink
             ></I18nT
           >
@@ -290,7 +291,7 @@ const partners = [
         >
           <h2
             id="footer-reuse-title"
-            class="mb-2 text-sm font-semibold text-portal-heading"
+            class="mb-2 text-sm font-semibold text-white"
           >
             {{ copy.reuseTitle }}
           </h2>
@@ -299,12 +300,12 @@ const partners = [
             <ULink
               raw
               href="https://creativecommons.org/licenses/by-sa/3.0/"
-              class="header-focus text-portal-link underline underline-offset-2"
+              class="header-focus text-portal-mint underline underline-offset-2"
               >{{ copy.licenceLink }}</ULink
             >
           </p>
         </section>
-      </div>
-    </UContainer>
+      </UContainer>
+    </div>
   </footer>
 </template>
