@@ -27,7 +27,7 @@
   --space-6: 32px;
   --space-7: 48px;
   --space-8: 64px;
-  --radius-control: 6px;
+  --radius-control: var(--radius-card);
   --radius-card: 8px;
   --radius-chip: 999px;
   --shadow-dropdown: 0 8px 24px rgba(16, 33, 58, .10), 0 2px 6px rgba(16, 33, 58, .04);
