@@ -14,8 +14,8 @@ useHead({
   link: [
     {
       rel: "icon",
-      type: "image/x-icon",
-      href: "/favicon.ico",
+      type: "image/svg+xml",
+      href: "/logos/emaapou-icon.svg",
     },
   ],
 });
