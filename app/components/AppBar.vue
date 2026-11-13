@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronRight, mdiMagnify, mdiFlaskOutline, mdiMapMarkerRadiusOutline, mdiBug, mdiOpenInNew } from "@mdi/js";
+import { mdiMenu, mdiChevronDown, mdiChevronRight, mdiMagnify, mdiFlaskOutline, mdiMapMarkerRadiusOutline, mdiBug, mdiOpenInNew } from "@mdi/js";
 import { BROWSE_GEOLOGY_LIST, BROWSE_LAB_LIST, BROWSE_TAXON_LIST, SERVICES } from "~/constants";
 
 const { locale } = useI18n();
@@ -9,7 +9,7 @@ const query = ref("");
 const route = useRoute();
 const en = computed(() => locale.value === "en");
 const copy = computed(() => en.value ? {
-  subtitle: "Estonian geological data portal", browse: "Browse data", search: "Search all data", services: "E-services", about: "About", help: "Help",
+  subtitle: "Geoscience Data Estonia", browse: "Browse data", search: "Search all data", services: "E-services", about: "About", help: "Help",
   collections: "Collections", collectionsText: "Physical and digital collections of geological material.", research: "Research data", researchText: "Research material, analytical results and derived datasets.", places: "Places & geology", placesText: "Geographical information and geological context.",
   external: "Services open on their own websites.", helpText: "Search across geological data or browse a category to find specimens, samples, places and research results.", more: "About this portal",
 } : {
@@ -36,16 +36,16 @@ watch(() => route.fullPath, () => { openMenu.value = null; });
 
 <template>
   <header class="sticky top-0 z-[1100] shrink-0 border-b border-portal-border bg-portal-background font-sans text-sm font-medium text-portal-heading">
-    <div class="mx-auto flex h-16 w-full max-w-[1600px] items-center gap-1 px-2 min-[420px]:px-4 min-[700px]:gap-2 min-[960px]:h-18 min-[960px]:gap-3 min-[960px]:px-6 xl:gap-6 xl:px-8">
+    <div class="mx-auto flex h-16 w-full max-w-[1600px] items-center gap-3 px-4 min-[420px]:px-4 min-[700px]:gap-2 min-[960px]:h-18 min-[960px]:gap-3 min-[960px]:px-6 xl:gap-6 xl:px-8">
       <ULink :to="localePath('/')" raw class="header-focus flex shrink-0 items-center gap-3 text-portal-heading no-underline" aria-label="eMaapõu">
-        <span class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]">eMaapõu</span>
+        <span class="inline-flex items-center gap-1.5 min-[700px]:gap-2"><img src="/logos/emaapou-icon.svg" alt="" width="32" height="36" class="h-7 w-auto shrink-0 min-[700px]:h-8 min-[960px]:h-9" /><span class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]">eMaapõu</span></span>
         <span class="hidden max-w-[130px] border-l border-portal-border pl-3 text-[11px] leading-snug xl:block">{{ copy.subtitle }}</span>
       </ULink>
       <UPopover :open="openMenu === 'browse'" :content="{ align: 'start', sideOffset: 16, collisionPadding: 16 }" :ui="{ content: 'header-panel z-[1200] w-[min(1056px,calc(100vw-32px))]' }" @update:open="setMenu('browse', $event)">
-        <UButton color="neutral" variant="ghost" class="header-control gap-0 bg-portal-mint px-2 text-[13px] font-semibold hover:bg-portal-selected min-[420px]:gap-2 min-[700px]:px-4 min-[700px]:text-sm" :aria-label="copy.browse">
+        <UButton color="neutral" variant="ghost" class="header-control order-last size-11 shrink-0 justify-center gap-2 p-0 min-[700px]:order-none min-[700px]:h-auto min-[700px]:w-auto min-[700px]:bg-portal-mint min-[700px]:px-4 min-[700px]:text-sm min-[700px]:hover:bg-portal-selected" :aria-label="en ? 'Menu' : 'Menüü'">
           <span class="hidden min-[700px]:inline">{{ copy.browse }}</span>
-          <span class="min-[700px]:hidden">{{ en ? "Data" : "Andmed" }}</span>
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="size-[18px] transition-transform shrink-0" :class="{ 'rotate-180': openMenu === 'browse' }"><path :d="mdiChevronDown" /></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="size-6 min-[700px]:hidden"><path :d="mdiMenu" /></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="hidden size-[18px] transition-transform shrink-0 min-[700px]:block" :class="{ 'rotate-180': openMenu === 'browse' }"><path :d="mdiChevronDown" /></svg>
         </UButton>
         <template #content>
           <nav class="grid max-h-[calc(100dvh-96px)] grid-cols-1 overflow-y-auto p-4 min-[700px]:grid-cols-3 min-[700px]:p-6" :aria-label="copy.browse">
@@ -60,9 +60,11 @@ watch(() => route.fullPath, () => { openMenu.value = null; });
             </section>
             <section class="border-t border-portal-border pt-4 min-[700px]:hidden">
               <UButton :to="localePath({ name: 'about' })" color="neutral" variant="ghost" class="header-menu-link">{{ copy.about }}</UButton>
-              <h2 class="header-menu-heading mt-3">{{ copy.help }}</h2><p class="header-menu-description">{{ copy.helpText }}</p>
+              <div class="mt-3 flex gap-2" :aria-label="en ? 'Language' : 'Keel'">
+                <UButton v-for="language in ['en', 'et'] as const" :key="language" :to="switchLocalePath(language)" :locale="false" :lang="language" color="neutral" variant="ghost" class="header-control px-4" :class="locale === language ? 'bg-portal-mint text-portal-link' : ''" :aria-current="locale === language ? 'true' : undefined" @click="openMenu = null">{{ language === 'en' ? 'English' : 'Eesti' }}</UButton>
+              </div>
             </section>
-            <section class="border-t border-portal-border pt-4 min-[380px]:hidden">
+            <section class="border-t border-portal-border pt-4 min-[700px]:hidden">
               <h2 class="header-menu-heading">{{ copy.services }}</h2>
               <p class="header-menu-description">{{ copy.external }}</p>
               <div class="grid min-[700px]:grid-cols-2 min-[700px]:gap-x-4">
@@ -82,7 +84,7 @@ watch(() => route.fullPath, () => { openMenu.value = null; });
         </UInput>
       </form>
       <UButton color="neutral" variant="ghost" class="header-control ml-auto size-11 p-0 min-[700px]:hidden" :to="localePath({ name: 'search' })" :aria-label="copy.search"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" class="size-5 shrink-0"><path :d="mdiMagnify" /></svg></UButton>
-      <nav class="hidden items-center gap-1 min-[380px]:flex" :aria-label="en ? 'Main navigation' : 'Põhinavigatsioon'">
+      <nav class="hidden items-center gap-1 min-[700px]:flex" :aria-label="en ? 'Main navigation' : 'Põhinavigatsioon'">
         <UPopover :open="openMenu === 'services'" :content="{ align: 'end', sideOffset: 16, collisionPadding: 16 }" :ui="{ content: 'header-panel z-[1200] w-[min(600px,calc(100vw-32px))]' }" @update:open="setMenu('services', $event)">
           <UButton color="neutral" variant="ghost" class="header-control min-w-11" :aria-label="copy.services"><span>{{ copy.services }}</span></UButton>
           <template #content><section class="max-h-[min(620px,calc(100dvh-96px))] overflow-y-auto p-6">
@@ -98,9 +100,21 @@ watch(() => route.fullPath, () => { openMenu.value = null; });
         </UPopover>
         <UButton color="neutral" variant="ghost" class="header-control hidden min-w-11 min-[700px]:flex" :class="route.name?.toString().split('___')[0] === 'about' ? 'bg-portal-mint text-portal-link' : ''" :to="localePath({ name: 'about' })" :aria-label="copy.about"><span>{{ copy.about }}</span></UButton>
       </nav>
-      <nav class="flex shrink-0 items-center border-portal-border min-[700px]:gap-1 min-[700px]:border-l min-[700px]:pl-2 min-[960px]:pl-3" :aria-label="en ? 'Language' : 'Keel'">
+      <UButton :href="SERVICES.sarv.href" target="_blank" rel="noopener noreferrer" color="neutral" variant="ghost" class="header-control hidden shrink-0 gap-2 min-[960px]:inline-flex">
+        SARV Workbench
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="size-4"><path :d="mdiOpenInNew" /></svg>
+        <span class="sr-only">({{ copy.external }})</span>
+      </UButton>
+      <nav class="hidden shrink-0 items-center border-portal-border min-[700px]:flex min-[700px]:gap-1 min-[700px]:border-l min-[700px]:pl-2 min-[960px]:pl-3" :aria-label="en ? 'Language' : 'Keel'">
         <UButton v-for="language in ['en', 'et'] as const" :key="language" color="neutral" variant="ghost" :to="switchLocalePath(language)" :locale="false" :lang="language" :aria-label="language === 'en' ? 'English' : 'Eesti'" :aria-current="locale === language ? 'true' : undefined" :active="false" class="header-control min-w-9 px-2 text-[13px] min-[700px]:min-w-11" :class="locale === language ? 'bg-portal-mint font-bold text-portal-link' : ''">{{ language.toUpperCase() }}</UButton>
       </nav>
+    </div>
+    <div class="border-t border-portal-border bg-portal-subtle px-4 min-[960px]:hidden">
+      <UButton :href="SERVICES.sarv.href" target="_blank" rel="noopener noreferrer" color="neutral" variant="ghost" class="header-focus flex min-h-11 w-full items-center justify-between rounded-portal-control px-0 text-sm font-medium text-portal-link hover:bg-transparent hover:underline">
+        SARV Workbench
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="size-4"><path :d="mdiOpenInNew" /></svg>
+        <span class="sr-only">({{ copy.external }})</span>
+      </UButton>
     </div>
   </header>
 </template>
