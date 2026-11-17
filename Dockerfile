@@ -1,22 +1,21 @@
-FROM node:22.14.0-bullseye-slim AS base
-
-# ENV NODE_ENV=production
+FROM node:22.23.0-bullseye-slim AS base
 
 WORKDIR /code
 
-FROM base as build
+FROM base AS build
 
 COPY --link package*.json ./
 
-RUN npm install --production=false
+RUN npm ci --include=dev
 
 COPY --link . .
 
-RUN npm run build && npm prune
+RUN npx nuxt prepare && npm run build
 
-FROM base
+FROM base AS runtime
+
+ENV NODE_ENV=production
 
 COPY --from=build /code/.output /code/.output
 
 CMD [ "node", "./.output/server/index.mjs" ]
-
