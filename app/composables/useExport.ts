@@ -19,36 +19,32 @@ export function useExportSolr(path: string, { query, totalRows }: {
   const { $solrFetch } = useNuxtApp();
 
   const exportData: ExportFunc = async ({ type, filename, selection }) => {
-    const data = await $solrFetch<string>(path, {
+    const data = await $solrFetch<Blob>(path, {
+      responseType: "blob",
       query: {
         json: {
           query: query.value.query,
           filter: query.value.filter,
+          sort: query.value.sort,
           fields: query.value.fields,
           ...getSelectionParams(selection),
         },
         wt: type,
       },
     });
-
-    if (type === "csv") {
-      const label = `${filename}.${type}`;
-      const blob = new Blob([data], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = label;
-      link.click();
-      URL.revokeObjectURL(link.href);
+    if (type === "xlsx") {
+      const signature = new Uint8Array(await data.slice(0, 2).arrayBuffer());
+      if (signature[0] !== 0x50 || signature[1] !== 0x4B)
+        throw new Error("The data service did not return an XLSX workbook.");
     }
-    else if (type === "xlsx") {
-      const label = `${filename}.${type}`;
-      const blob = new Blob([data], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = label;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(data);
+    link.href = url;
+    link.download = `${filename}.${type}`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const maxRows = 10000;
@@ -56,10 +52,14 @@ export function useExportSolr(path: string, { query, totalRows }: {
   function getSelectionParams(selection: ExportSelection) {
     if (selection === "all") {
       return {
-        limit: totalRows.value > maxRows ? maxRows : totalRows.value,
+        limit: totalRows.value > maxRows
+          ? maxRows
+          : totalRows.value,
       };
     }
-    const limit = (query.value.limit ?? 25) > totalRows.value ? totalRows.value : query.value.limit;
+    const limit = (query.value.limit ?? 25) > totalRows.value
+      ? totalRows.value
+      : query.value.limit;
     return {
       limit,
       offset: query.value.offset,
@@ -115,10 +115,14 @@ export function useExportApi(path: string, { query, totalRows }: {
   function getSelectionParams(selection: ExportSelection) {
     if (selection === "all") {
       return {
-        limit: totalRows.value > maxRows ? maxRows : totalRows.value,
+        limit: totalRows.value > maxRows
+          ? maxRows
+          : totalRows.value,
       };
     }
-    const limit = (query.value.limit ?? 25) > totalRows.value ? totalRows.value : query.value.limit;
+    const limit = (query.value.limit ?? 25) > totalRows.value
+      ? totalRows.value
+      : query.value.limit;
     return {
       limit,
       offset: query.value.offset,
