@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NewsArticle } from "~/types/api";
 import {
   mdiChevronLeft,
   mdiChevronRight,
@@ -6,7 +7,6 @@ import {
   mdiHomeOutline,
   mdiMagnify,
 } from "@mdi/js";
-import type { NewsArticle } from "~/types/api";
 
 definePageMeta({ layout: false });
 const route = useRoute();
@@ -74,14 +74,20 @@ const copy = computed(() =>
 const perPage = 5;
 const page = computed(() => {
   const value = Number(route.query.page);
-  return Number.isSafeInteger(value) && value > 0 ? value : 1;
+  return Number.isSafeInteger(value) && value > 0
+    ? value
+    : 1;
 });
 type SearchField = "title" | "content";
 const searchTerm = computed(() =>
-  typeof route.query.q === "string" ? route.query.q.trim() : "",
+  typeof route.query.q === "string"
+    ? route.query.q.trim()
+    : "",
 );
 const searchField = computed<SearchField>(() =>
-  route.query.field === "content" ? "content" : "title",
+  route.query.field === "content"
+    ? "content"
+    : "title",
 );
 const draftKeyword = ref(searchTerm.value);
 const draftField = ref<SearchField>(searchField.value);
@@ -92,7 +98,9 @@ watch([searchTerm, searchField], ([keyword, field]) => {
 const listFilters = computed(() => ({
   q: searchTerm.value || undefined,
   field:
-    searchTerm.value && searchField.value === "content" ? "content" : undefined,
+    searchTerm.value && searchField.value === "content"
+      ? "content"
+      : undefined,
 }));
 const query = computed(() => ({
   offset: (page.value - 1) * perPage,
@@ -100,7 +108,9 @@ const query = computed(() => ({
   ordering: "-date_added",
   ...(searchTerm.value
     ? {
-        [`${searchField.value === "content" ? "text" : "title"}_${en.value ? "en" : "et"}__icontains`]:
+        [`${searchField.value === "content"
+          ? "text"
+          : "title"}_${en.value ? "en" : "et"}__icontains`]:
           searchTerm.value,
       }
     : {}),
@@ -111,7 +121,9 @@ async function applyFilters() {
     query: {
       ...route.query,
       q: keyword || undefined,
-      field: keyword && draftField.value === "content" ? "content" : undefined,
+      field: keyword && draftField.value === "content"
+        ? "content"
+        : undefined,
       page: undefined,
     },
   });
@@ -120,7 +132,12 @@ async function clearFilters() {
   draftKeyword.value = "";
   draftField.value = "title";
   await router.push({
-    query: { ...route.query, q: undefined, field: undefined, page: undefined },
+    query: {
+      ...route.query,
+      q: undefined,
+      field: undefined,
+      page: undefined,
+    },
   });
 }
 const { data, status, error, refresh } = await useApiFetch<
@@ -142,7 +159,9 @@ const pageCount = computed(() =>
   Math.max(1, Math.ceil((data.value?.count || 0) / perPage)),
 );
 const firstVisible = computed(() =>
-  articles.value.length ? (page.value - 1) * perPage + 1 : 0,
+  articles.value.length
+    ? (page.value - 1) * perPage + 1
+    : 0,
 );
 const lastVisible = computed(() =>
   Math.min(
@@ -152,14 +171,20 @@ const lastVisible = computed(() =>
 );
 async function changePage(value: number) {
   if (
-    !Number.isInteger(value) ||
-    value < 1 ||
-    value > pageCount.value ||
-    value === page.value
-  )
+    !Number.isInteger(value)
+    || value < 1
+    || value > pageCount.value
+    || value === page.value
+  ) {
     return;
+  }
   await router.push({
-    query: { ...route.query, page: value > 1 ? String(value) : undefined },
+    query: {
+      ...route.query,
+      page: value > 1
+        ? String(value)
+        : undefined,
+    },
     hash: "#news-list",
   });
 }
@@ -168,32 +193,32 @@ useHead(() => ({ title: copy.value.title }));
 
 <template>
   <div
-    class="flex min-h-screen flex-col bg-portal-background font-sans text-portal-text"
+    class="portal-page-shell"
   >
     <AppBar
-      class="max-[700px]:[&>div]:gap-0 max-[700px]:[&>div]:px-1 max-[700px]:[&_.header-control]:px-1"
+      class="portal-responsive-header"
     />
     <UContainer
       as="main"
-      class="w-full max-w-5xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
+      class="portal-news-container"
     >
       <nav
         :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
-        class="mb-6 flex items-center gap-2 text-[13px] text-portal-muted"
+        class="portal-breadcrumbs"
       >
         <ULink
           raw
           :to="localePath('/')"
-          class="header-focus inline-flex min-h-6 items-center gap-2 text-portal-text hover:text-portal-link"
-          ><svg
+          class="portal-breadcrumb-link header-focus"
+        >
+          <svg
             viewBox="0 0 24 24"
             fill="currentColor"
             aria-hidden="true"
             class="size-4"
           >
-            <path :d="mdiHomeOutline" /></svg
-          >{{ copy.home }}</ULink
-        >
+            <path :d="mdiHomeOutline" /></svg>{{ copy.home }}
+        </ULink>
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
@@ -204,13 +229,15 @@ useHead(() => ({ title: copy.value.title }));
         </svg>
         <span aria-current="page">{{ copy.title }}</span>
       </nav>
-      <header class="mb-8 border-b border-portal-border pb-6 md:mb-10 md:pb-8">
+      <header class="portal-page-heading">
         <h1
-          class="mb-3 text-[28px] leading-tight font-bold tracking-tight text-portal-heading md:text-4xl"
+          class="portal-page-title"
         >
           {{ copy.title }}
         </h1>
-        <p class="text-base leading-relaxed">{{ copy.intro }}</p>
+        <p class="text-base leading-relaxed">
+          {{ copy.intro }}
+        </p>
       </header>
       <form
         class="mb-8"
@@ -219,14 +246,13 @@ useHead(() => ({ title: copy.value.title }));
         @submit.prevent="applyFilters"
       >
         <div
-          class="grid items-end gap-4 sm:grid-cols-[minmax(0,1fr)_180px_auto]"
+          class="portal-news-search"
         >
           <div class="min-w-0">
             <label
               for="news-keyword"
-              class="mb-2 block text-sm font-medium text-portal-heading"
-              >{{ copy.keyword }}</label
-            >
+              class="portal-field-label"
+            >{{ copy.keyword }}</label>
             <UInput
               id="news-keyword"
               v-model="draftKeyword"
@@ -243,9 +269,8 @@ useHead(() => ({ title: copy.value.title }));
           <div class="min-w-0">
             <label
               for="news-search-field"
-              class="mb-2 block text-sm font-medium text-portal-heading"
-              >{{ copy.searchIn }}</label
-            >
+              class="portal-field-label"
+            >{{ copy.searchIn }}</label>
             <USelect
               id="news-search-field"
               v-model="draftField"
@@ -266,7 +291,7 @@ useHead(() => ({ title: copy.value.title }));
             type="submit"
             color="neutral"
             variant="solid"
-            class="header-focus min-h-11 justify-center gap-2 rounded-portal-control bg-portal-primary px-4 text-sm font-semibold text-white hover:bg-portal-primary-hover"
+            class="portal-search-button header-focus"
           >
             <svg
               viewBox="0 0 24 24"
@@ -274,26 +299,23 @@ useHead(() => ({ title: copy.value.title }));
               aria-hidden="true"
               class="size-5 shrink-0"
             >
-              <path :d="mdiMagnify" /></svg
-            >{{ copy.search }}
+              <path :d="mdiMagnify" /></svg>{{ copy.search }}
           </UButton>
         </div>
-        <div v-if="searchTerm" class="mt-4 flex flex-wrap items-center gap-3">
+        <div v-if="searchTerm" class="portal-active-filters">
           <UButton
             type="button"
             color="neutral"
             variant="soft"
             :aria-label="`${copy.remove}: ${searchTerm}`"
-            class="header-focus min-h-11 max-w-full gap-2 rounded-portal-control bg-portal-mint px-3 text-sm text-portal-link hover:bg-portal-selected"
+            class="portal-filter-chip header-focus"
             @click="clearFilters"
           >
-            <span class="min-w-0 break-words"
-              >{{
-                searchField === "content"
-                  ? copy.contentFilter
-                  : copy.titleFilter
-              }}: {{ searchTerm }}</span
-            >
+            <span class="min-w-0 break-words">{{
+              searchField === "content"
+                ? copy.contentFilter
+                : copy.titleFilter
+            }}: {{ searchTerm }}</span>
             <svg
               viewBox="0 0 24 24"
               fill="currentColor"
@@ -307,10 +329,11 @@ useHead(() => ({ title: copy.value.title }));
             type="button"
             color="neutral"
             variant="ghost"
-            class="header-focus min-h-11 px-2 text-sm text-portal-link hover:bg-portal-subtle"
+            class="portal-clear-button header-focus"
             @click="clearFilters"
-            >{{ copy.clear }}</UButton
           >
+            {{ copy.clear }}
+          </UButton>
         </div>
       </form>
       <section
@@ -319,40 +342,47 @@ useHead(() => ({ title: copy.value.title }));
         :aria-busy="status === 'pending'"
         class="scroll-mt-24"
       >
-        <div v-if="status === 'pending'" role="status" class="space-y-6 py-4">
+        <div
+          v-if="status === 'pending'"
+          role="status"
+          class="space-y-6 py-4"
+        >
           <span class="sr-only">{{ copy.loading }}</span>
           <div
             v-for="item in 3"
             :key="item"
             aria-hidden="true"
-            class="grid gap-4 border-b border-portal-border pb-6 md:grid-cols-[140px_1fr] md:gap-8"
+            class="portal-news-item"
           >
-            <USkeleton class="h-5 w-28 bg-portal-subtle" />
+            <USkeleton class="portal-date-skeleton" />
             <div class="space-y-3">
-              <USkeleton class="h-6 w-3/4 bg-portal-subtle" /><USkeleton
-                class="h-4 w-full bg-portal-subtle"
-              /><USkeleton class="h-4 w-2/3 bg-portal-subtle" />
+              <USkeleton class="portal-title-skeleton" /><USkeleton
+                class="portal-line-skeleton"
+              /><USkeleton class="portal-short-line-skeleton" />
             </div>
           </div>
         </div>
         <div
           v-else-if="error"
           role="alert"
-          class="rounded-portal-card border border-portal-border p-6"
+          class="portal-empty-card"
         >
-          <p class="mb-4">{{ copy.error }}</p>
+          <p class="mb-4">
+            {{ copy.error }}
+          </p>
           <UButton
             color="neutral"
             variant="outline"
-            class="header-control border border-portal-border"
+            class="portal-outline-button header-control"
             @click="refresh()"
-            >{{ copy.retry }}</UButton
           >
+            {{ copy.retry }}
+          </UButton>
         </div>
         <template v-else>
           <p
             v-if="data && data.count > 0"
-            class="mb-6 text-sm text-portal-muted tabular-nums"
+            class="portal-results-count"
           >
             {{ data.count }} {{ articleLabel }}
           </p>
@@ -365,31 +395,36 @@ useHead(() => ({ title: copy.value.title }));
               :filters="listFilters"
             />
           </div>
-          <div v-else role="status" class="py-8">
+          <div
+            v-else
+            role="status"
+            class="py-8"
+          >
             <p>{{ searchTerm ? copy.noMatches : copy.empty }}</p>
             <ULink
               v-if="page > 1"
               raw
               :to="localePath({ name: 'news', query: listFilters })"
-              class="header-focus mt-4 inline-flex min-h-11 items-center text-portal-link [text-decoration-line:underline] underline-offset-4"
-              >{{ copy.first }}</ULink
+              class="portal-read-more header-focus"
             >
+              {{ copy.first }}
+            </ULink>
           </div>
           <nav
             v-if="data && data.count > perPage"
             :aria-label="copy.pagination"
-            class="mt-6 flex flex-col gap-4 border-t border-portal-border pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+            class="portal-news-pagination"
           >
-            <p class="text-sm text-portal-muted tabular-nums" role="status">
+            <p class="portal-page-count" role="status">
               {{ firstVisible }}–{{ lastVisible }} / {{ data.count }}
               {{ articleLabel }}
             </p>
-            <div class="flex items-center justify-between gap-2 sm:justify-end">
+            <div class="portal-pagination-controls">
               <UButton
                 color="neutral"
                 variant="outline"
                 :disabled="page <= 1"
-                class="header-focus min-h-11 shrink-0 gap-1 rounded-portal-control border border-portal-border bg-portal-background px-3 text-sm text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-40"
+                class="portal-page-arrow header-focus"
                 @click="changePage(page - 1)"
               >
                 <svg
@@ -403,10 +438,9 @@ useHead(() => ({ title: copy.value.title }));
                 {{ copy.previous }}
               </UButton>
               <span
-                class="text-sm text-portal-heading tabular-nums sm:hidden"
+                class="portal-mobile-page-count"
                 aria-live="polite"
-                >{{ copy.page }} {{ page }} / {{ pageCount }}</span
-              >
+              >{{ copy.page }} {{ page }} / {{ pageCount }}</span>
               <UPagination
                 class="hidden sm:block"
                 :page="page"
@@ -420,32 +454,33 @@ useHead(() => ({ title: copy.value.title }));
               >
                 <template #item="{ item }">
                   <UButton
+                    v-if="item.type === 'page'"
                     color="neutral"
                     variant="ghost"
                     :aria-label="`${en ? 'Page' : 'Lehekülg'} ${item.value}`"
                     :aria-current="page === item.value ? 'page' : undefined"
-                    class="header-focus size-11 justify-center rounded-portal-control border text-sm font-medium tabular-nums shadow-none"
+                    class="portal-page-number header-focus"
                     :class="
                       page === item.value
                         ? 'border-portal-primary bg-portal-primary text-white hover:bg-portal-primary-hover'
                         : 'border-transparent bg-transparent text-portal-heading hover:border-portal-border hover:bg-portal-subtle'
                     "
-                    >{{ item.value }}</UButton
                   >
+                    {{ item.value }}
+                  </UButton>
                 </template>
-                <template #ellipsis
-                  ><span
+                <template #ellipsis>
+                  <span
                     aria-hidden="true"
-                    class="flex size-11 items-center justify-center text-portal-muted"
-                    >…</span
-                  ></template
-                >
+                    class="portal-page-ellipsis"
+                  >…</span>
+                </template>
               </UPagination>
               <UButton
                 color="neutral"
                 variant="outline"
                 :disabled="page >= pageCount"
-                class="header-focus min-h-11 shrink-0 gap-1 rounded-portal-control border border-portal-border bg-portal-background px-3 text-sm text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-40"
+                class="portal-page-arrow"
                 @click="changePage(page + 1)"
               >
                 {{ copy.next }}
