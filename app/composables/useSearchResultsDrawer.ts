@@ -22,7 +22,9 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
   } = storeToRefs(searchPositionStore);
 
   const page = ref(
-    !fromSearch ? 1 : Math.floor(searchPosition.value / perPage) + 1,
+    !fromSearch
+      ? 1
+      : Math.floor(searchPosition.value / perPage) + 1,
   );
 
   const showDrawer = computed(() => {
@@ -33,7 +35,7 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
     if (searchPosition.value < 0)
       return false;
     if (
-      !getRouteBaseName(route)?.startsWith(
+      !getRouteBaseName(route)?.toString().startsWith(
         rootDetailRoute.value.name.toString(),
       )
     ) {
@@ -59,7 +61,10 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
     if (searchPosition.value < 0)
       return;
     setSearchPosition(
-      { name: routeName, params: { id } },
+      {
+        name: routeName,
+        params: { id },
+      },
       index + (page.value - 1) * perPage,
     );
   }

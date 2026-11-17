@@ -17,10 +17,14 @@ export const rangeParamParser = z
   .string()
   .transform((val, ctx) => {
     const [startStr, endStr] = val.split("-", 2);
-    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Number(startStr)) ? Number(startStr) : null;
-    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Number(endStr)) ? Number(endStr) : null;
+    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Number(startStr))
+      ? Number(startStr)
+      : null;
+    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Number(endStr))
+      ? Number(endStr)
+      : null;
 
-    if (start !== null && end !== null && start > end) {
+    if (start != null && end != null && start > end) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Start cannot be larger than end",
@@ -51,10 +55,14 @@ export const dateParamParser = z
   .string()
   .transform((val, ctx) => {
     const [startStr, endStr] = val.split("~", 2);
-    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Date.parse(startStr)) ? startStr : undefined;
-    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Date.parse(endStr)) ? endStr : undefined;
+    const start = startStr !== undefined && startStr.length > 0 && !Number.isNaN(Date.parse(startStr))
+      ? startStr
+      : undefined;
+    const end = endStr !== undefined && endStr.length > 0 && !Number.isNaN(Date.parse(endStr))
+      ? endStr
+      : undefined;
 
-    if (start !== null && end !== null && start > end) {
+    if (start != null && end != null && start > end) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Start cannot be larger than end",
