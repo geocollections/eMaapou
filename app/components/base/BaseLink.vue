@@ -1,8 +1,9 @@
 <script setup lang="ts">
+defineSlots<{ default: () => any }>();
 </script>
 
 <template>
-  <NuxtLink class="text-link">
+  <ULink class="portal-record-link">
     <slot />
-  </NuxtLink>
+  </ULink>
 </template>
