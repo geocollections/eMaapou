@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { File } from "../[id].vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import {
   mdiFileDownloadOutline,
   mdiFileMusicOutline,
   mdiFileVideoOutline,
 } from "@mdi/js";
-import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
-import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
   file: File;
@@ -84,7 +83,7 @@ const showMap = computed(() => {
     (props.file.locality?.latitude && props.file.locality?.longitude)
     || (props.file.specimen?.locality?.latitude
       && props.file.specimen?.locality?.longitude)
-      || (props.file.image_latitude && props.file.image_longitude)
+    || (props.file.image_latitude && props.file.image_longitude)
   );
 });
 
@@ -152,78 +151,76 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow>
-      <VCol>
+  <div class="portal-content-margin portal-content">
+    <div class="portal-row">
+      <div class="portal-column">
         <div
           v-if="isImage"
-          style="width: 100%; max-height: 700px; margin-left: auto; margin-right: auto;"
-          class="d-flex justify-center rounded bg-grey-lighten-4"
+
+          class="portal-centered-media portal-file-frame"
         >
           <NuxtImg
             :src="file.filename"
             provider="geocollections"
             :modifiers="{ size: 'large' }"
             fit="inside"
-            style="max-height: 700px; max-width: 100%; margin-left: auto; margin-right: auto;"
+            class="portal-file-image"
           />
         </div>
 
-        <!-- Audio -->
         <audio v-else-if="isAudio" controls>
           <source
-            :src="`https://files.geocollections.info/${file.filename}`"
+            :src="externalUrl(`files.geocollections.info/${file.filename}`)"
           >
           Your browser does not support the audio element.
-          <VIcon>{{ mdiFileMusicOutline }}</VIcon>
+          <PortalIcon :path="mdiFileMusicOutline" />
         </audio>
 
-        <!-- Video -->
         <video v-else-if="isVideo" controls>
           <source
-            :src="`https://files.geocollections.info/${file.filename}`"
+            :src="externalUrl(`files.geocollections.info/${file.filename}`)"
           >
           Your browser does not support the video element.
-          <VIcon>{{ mdiFileVideoOutline }}</VIcon>
+          <PortalIcon :path="mdiFileVideoOutline" />
         </video>
 
-        <!-- File -->
         <div
           v-else
-          class="rounded file-download text-primary"
+          class="portal-primary-surface"
         >
-          <VBtn
-            variant="outlined"
+          <UButton
+            variant="outline"
+            color="neutral"
+            class="portal-button"
             @click="
               $openWindow(
-                `https://files.geocollections.info/${file.filename}`,
+                externalUrl(`files.geocollections.info/${file.filename}`),
               )
             "
           >
-            <VIcon
+            <PortalIcon
               start
               size="large"
               color="primary-darken-2"
-            >
-              {{ mdiFileDownloadOutline }}
-            </VIcon>
+              :path="mdiFileDownloadOutline"
+            />
             {{ $t("file.download") }}
-          </VBtn>
+          </UButton>
         </div>
 
         <div
           v-if="isImage"
-          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
+          class="portal-responsive-toolbar"
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
             <div v-if="file.author || file.author_text">
-              <span class="font-weight-bold">{{ $t("file.author") }}: </span>
+              <span class="font-bold">{{ $t("file.author") }}: </span>
               <span v-if="file.author">{{ file.author.name }}</span>
               <span v-else>{{ file.author_text }}</span>
             </div>
             <div v-if="file.date_created || file.date_created_text">
-              <span class="font-weight-bold">{{ $t("file.date") }}: </span>
+              <span class="font-bold">{{ $t("file.date") }}: </span>
               <span v-if="file.date_created">{{ file.date_created }}</span>
               <span v-else>{{ file.date_created }}</span>
             </div>
@@ -232,314 +229,311 @@ const mapOverlays = computed(() => {
           <div class="text-center">
             <span v-for="(size, index) in imageSizes" :key="`image-size-${index}`">
               <a
-                class="text-link"
+                class="portal-record-link"
                 @click="$openImage(file.filename, size)"
               >
                 {{ $t(`common.${size}`) }}
-                <VIcon
+                <PortalIcon
                   v-if="size === 'original'"
                   size="small"
                   color="primary-darken-2"
-                >
-                  {{ mdiFileDownloadOutline }}
-                </VIcon>
+                  :path="mdiFileDownloadOutline"
+                />
               </a>
               <span v-if="index < imageSizes.length - 1">| </span>
             </span>
           </div>
         </div>
-      </VCol>
-      <VCol
-        :cols="12"
-        :sm="12"
-        :md="6"
-        :lg="5"
-        :xl="5"
+      </div>
+      <div
+        class="portal-record-details portal-column"
       >
-        <BaseTable class="border rounded mb-2">
-          <TableRow
-            :title="$t('file.title')"
-            :value="
-              $translate({
-                et: file.title,
-                en: file.title_en,
-              })
-            "
-          />
-          <TableRow
-            :title="$t('file.author')"
-            :value="file.author?.name"
-          />
-          <TableRow
-            :title="$t('file.author')"
-            :value="file.author_text"
-          />
-          <TableRow
-            :title="$t('file.date')"
-            :value="file.date_created"
-          />
-          <TableRow
-            :title="$t('file.dateText')"
-            :value="file.date_created_text"
-          />
-          <TableRow
-            :title="$t('file.description')"
-            :value="
-              $translate({
-                et: file.description,
-                en: file.description_en,
-              })
-            "
-          />
-          <TableRow
-            v-if="specimen?.collection"
-            :title="$t('file.collectionNr')"
-            :value="specimen.collection"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'collection-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  value.number
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="specimen"
-            :title="$t('file.specimenNr')"
-            :value="specimen"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'specimen-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  value.number
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <template v-for="(item, index) in specimenIdentification">
+        <table class="portal-spaced-table portal-metadata-table">
+          <tbody>
             <TableRow
-              v-if="item.taxon"
-              :key="`identification-${index}`"
-              :title="$t('file.name')"
-              :value="item.taxon"
+              :title="$t('file.title')"
+              :value="
+                $translate({
+                  et: file.title,
+                  en: file.title_en,
+                })
+              "
+            />
+            <TableRow
+              :title="$t('file.author')"
+              :value="file.author?.name"
+            />
+            <TableRow
+              :title="$t('file.author')"
+              :value="file.author_text"
+            />
+            <TableRow
+              :title="$t('file.date')"
+              :value="file.date_created"
+            />
+            <TableRow
+              :title="$t('file.dateText')"
+              :value="file.date_created_text"
+            />
+            <TableRow
+              :title="$t('file.description')"
+              :value="
+                $translate({
+                  et: file.description,
+                  en: file.description_en,
+                })
+              "
+            />
+            <TableRow
+              v-if="specimen?.collection"
+              :title="$t('file.collectionNr')"
+              :value="specimen.collection"
             >
               <template #value="{ value }">
                 <BaseLink
-                  :to="`https://fossiilid.info/${value.id}`"
+                  :to="
+                    localePath({
+                      name: 'collection-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    value.number
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="specimen"
+              :title="$t('file.specimenNr')"
+              :value="specimen"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'specimen-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    value.number
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <template v-for="(item, index) in specimenIdentification">
+              <TableRow
+                v-if="item.taxon"
+                :key="`identification-${index}`"
+                :title="$t('file.name')"
+                :value="item.taxon"
+              >
+                <template #value="{ value }">
+                  <BaseLink
+                    :to="externalUrl(`fossiilid.info/${value.id}`)"
+                  >
+                    {{ value.name }}
+                  </BaseLink>
+                  <template v-if="item.name">
+                    | {{ item.name }}
+                  </template>
+                </template>
+              </TableRow>
+            </template>
+            <template v-for="(item, index) in specimenIdentificationGeology">
+              <TableRow
+                v-if="item.rock"
+                :key="`identification-geology-${index}`"
+                :title="$t('file.name')"
+                :value="item.rock"
+              >
+                <template #value="{ value }">
+                  <BaseLink
+                    :to="externalUrl(`kivid.info/${value.id}`)"
+                  >
+                    {{ $translate({ et: value.name, en: value.name_en }) }}
+                  </BaseLink>
+                  <template v-if="$translate({ et: item.name, en: item.name_en })">
+                    | {{ $translate({ et: item.name, en: item.name_en }) }}
+                  </template>
+                </template>
+              </TableRow>
+            </template>
+            <TableRow
+              v-if="locality"
+              :title="$t('file.locality')"
+              :value="locality"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'locality-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="specimen?.stratigraphy"
+              :title="$t('file.stratigraphy')"
+              :value="specimen.stratigraphy"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'stratigraphy-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="file.image_scalebar"
+              :title="$t('file.scalebar')"
+              :value="file.image_scalebar"
+            />
+            <TableRow
+              :title="$t('file.imageNumber')"
+              :value="file.image_number"
+            />
+            <TableRow
+              v-if="imageset"
+              :title="$t('file.imagesetNumber')"
+              :value="imageset.number"
+            />
+            <TableRow
+              v-if="imageset"
+              :title="$t('file.imagesetDescription')"
+              :value="imageset.description"
+            />
+            <TableRow
+              :title="$t('file.imagePlace')"
+              :value="file.image_place"
+            />
+            <TableRow
+              :title="$t('file.imageLatitude')"
+              :value="file.image_latitude"
+            />
+            <TableRow
+              :title="$t('file.imageLongitude')"
+              :value="file.image_longitude"
+            />
+            <TableRow
+              :title="$t('file.imagePeople')"
+              :value="file.image_people"
+            />
+            <TableRow
+              v-if="attachmentKeywords.length > 0"
+              :title="$t('file.keywords')"
+              :value="attachmentKeywords"
+            >
+              <template #value="{ value }">
+                <ul class="portal-list-inside">
+                  <li v-for="(item, index) in value" :key="`keyword-${index}`">
+                    {{ item.name }}
+                  </li>
+                </ul>
+              </template>
+            </TableRow>
+            <TableRow
+              :title="$t('file.tags')"
+              :value="file.tags"
+            />
+            <TableRow
+              v-if="type"
+              :title="$t('file.type')"
+              :value="
+                $translate({
+                  et: type.value,
+                  en: type.value_en,
+                })
+              "
+            />
+            <TableRow
+              :title="$t('file.format')"
+              :value="file.mime_type?.content_type"
+            />
+            <TableRow
+              v-if="agentDigitised"
+              :title="$t('file.personDigitised')"
+              :value="agentDigitised.name"
+            />
+            <TableRow
+              :title="$t('file.dateDigitised')"
+              :value="file.date_digitised || file.date_digitised_text"
+            />
+            <TableRow
+              :title="$t('file.imageSize')"
+              :value="imageSize"
+            />
+            <TableRow
+              v-if="database"
+              :title="$t('file.institution')"
+              :value="database"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="value.url"
+                >
+                  {{
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="licence"
+              :title="$t('file.licence')"
+              :value="licence"
+            >
+              <template #value="{ value }">
+                <BaseLinkExternal
+                  :to="value.url"
                 >
                   {{ value.name }}
-                </BaseLink>
-                <template v-if="item.name">
-                  | {{ item.name }}
-                </template>
+                </BaseLinkExternal>
               </template>
             </TableRow>
-          </template>
-          <template v-for="(item, index) in specimenIdentificationGeology">
             <TableRow
-              v-if="item.rock"
-              :key="`identification-geology-${index}`"
-              :title="$t('file.name')"
-              :value="item.rock"
-            >
-              <template #value="{ value }">
-                <BaseLink
-                  :to="`https://kivid.info/${value.id}`"
-                >
-                  {{ $translate({ et: value.name, en: value.name_en }) }}
-                </BaseLink>
-                <template v-if="$translate({ et: item.name, en: item.name_en })">
-                  | {{ $translate({ et: item.name, en: item.name_en }) }}
-                </template>
-              </template>
-            </TableRow>
-          </template>
-          <TableRow
-            v-if="locality"
-            :title="$t('file.locality')"
-            :value="locality"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="specimen?.stratigraphy"
-            :title="$t('file.stratigraphy')"
-            :value="specimen.stratigraphy"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="file.image_scalebar"
-            :title="$t('file.scalebar')"
-            :value="file.image_scalebar"
-          />
-          <TableRow
-            :title="$t('file.imageNumber')"
-            :value="file.image_number"
-          />
-          <TableRow
-            v-if="imageset"
-            :title="$t('file.imagesetNumber')"
-            :value="imageset.number"
-          />
-          <TableRow
-            v-if="imageset"
-            :title="$t('file.imagesetDescription')"
-            :value="imageset.description"
-          />
-          <TableRow
-            :title="$t('file.imagePlace')"
-            :value="file.image_place"
-          />
-          <TableRow
-            :title="$t('file.imageLatitude')"
-            :value="file.image_latitude"
-          />
-          <TableRow
-            :title="$t('file.imageLongitude')"
-            :value="file.image_longitude"
-          />
-          <TableRow
-            :title="$t('file.imagePeople')"
-            :value="file.image_people"
-          />
-          <TableRow
-            v-if="attachmentKeywords.length > 0"
-            :title="$t('file.keywords')"
-            :value="attachmentKeywords"
-          >
-            <template #value="{ value }">
-              <ul style="list-style-position: inside">
-                <li v-for="(item, index) in value" :key="`keyword-${index}`">
-                  {{ item.name }}
-                </li>
-              </ul>
-            </template>
-          </TableRow>
-          <TableRow
-            :title="$t('file.tags')"
-            :value="file.tags"
-          />
-          <TableRow
-            v-if="type"
-            :title="$t('file.type')"
-            :value="
-              $translate({
-                et: type.value,
-                en: type.value_en,
-              })
-            "
-          />
-          <TableRow
-            :title="$t('file.format')"
-            :value="file.mime_type?.content_type"
-          />
-          <TableRow
-            v-if="agentDigitised"
-            :title="$t('file.personDigitised')"
-            :value="agentDigitised.name"
-          />
-          <TableRow
-            :title="$t('file.dateDigitised')"
-            :value="file.date_digitised || file.date_digitised_text"
-          />
-          <TableRow
-            :title="$t('file.imageSize')"
-            :value="imageSize"
-          />
-          <TableRow
-            v-if="database"
-            :title="$t('file.institution')"
-            :value="database"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="value.url"
-              >
-                {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="licence"
-            :title="$t('file.licence')"
-            :value="licence"
-          >
-            <template #value="{ value }">
-              <BaseLinkExternal
-                :to="value.url"
-              >
-                {{ value.name }}
-              </BaseLinkExternal>
-            </template>
-          </TableRow>
-          <TableRow
-            :title="$t('file.remarks')"
-            :value="file.remarks"
-          />
-          <TableRow
-            v-if="file.date_added"
-            :title="$t('file.dateAdded')"
-            :value="$formatDate(file.date_added)"
-          />
-          <TableRow
-            v-if="file.date_changed"
-            :title="$t('file.dateChanged')"
-            :value="$formatDate(file.date_changed)"
-          />
-        </BaseTable>
+              :title="$t('file.remarks')"
+              :value="file.remarks"
+            />
+            <TableRow
+              v-if="file.date_added"
+              :title="$t('file.dateAdded')"
+              :value="$formatDate(file.date_added)"
+            />
+            <TableRow
+              v-if="file.date_changed"
+              :title="$t('file.dateChanged')"
+              :value="$formatDate(file.date_changed)"
+            />
+          </tbody>
+        </table>
 
         <MapDetail
           v-if="showMap"
@@ -557,7 +551,7 @@ const mapOverlays = computed(() => {
             },
           ]"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>
