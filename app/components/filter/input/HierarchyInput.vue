@@ -1,84 +1,55 @@
 <script setup lang="ts">
-import { mdiMenuDown } from "@mdi/js";
-
-const props = defineProps<{
-  search: string;
-  items: any[];
-}>();
-
-const emit = defineEmits<{
-  "update:search": [value: string];
-  "select": [item: any];
-  "end": [isIntersecting: boolean];
-}>();
-
-const { t } = useI18n({ useScope: "local" });
+const props = defineProps<{ search: string; items: any[] }>();
+const emit = defineEmits<{ "update:search": [value: string]; "select": [item: any]; "end": [value: boolean] }>();
+const { locale } = useI18n();
 const { $translate } = useNuxtApp();
 const input = ref();
-const menuRef = ref();
-const menuOpen = ref(false);
-
-watch(() => props.search, () => {
-  if (props.search)
-    menuOpen.value = true;
-});
-
+const open = ref(false);
+watch(() => props.search, value => open.value = !!value);
 function focus() {
-  nextTick(() => {
-    input.value.focus();
-  });
+  nextTick(() => input.value?.inputRef?.focus());
 }
-
-defineExpose({
-  focus,
-});
-
-function handleEnd(isIntersecting: boolean) {
-  emit("end", isIntersecting);
-}
+defineExpose({ focus });
 </script>
 
 <template>
-  <div>
-    <VTextField
-      ref="input"
-      :model-value="search"
-      variant="outlined"
-      density="compact"
-      bg-color="white"
-      hide-details
-      :placeholder="t('search')"
-      :append-inner-icon="mdiMenuDown"
-      @update:model-value="emit('update:search', $event)"
-    >
-      <ClientOnly>
-        <VMenu
-          ref="menuRef"
-          v-model="menuOpen"
-          activator="parent"
-          location="bottom"
-          max-height="400px"
-          :close-on-content-click="false"
+  <UPopover
+    v-model:open="open"
+    :content="{ align: 'start' }"
+    :ui="{ content: 'portal-hierarchy-menu' }"
+  >
+    <template #anchor>
+      <UInput
+        ref="input"
+        type="text"
+        :model-value="search"
+        :aria-label="locale === 'et' ? 'Otsi hierarhiast' : 'Search hierarchy'"
+        :placeholder="locale === 'et' ? 'Otsi' : 'Search'"
+        trailing-icon="i-lucide-chevron-down"
+        class="portal-full-field"
+        @update:model-value="emit('update:search', String($event ?? ''))"
+      />
+    </template>
+    <template #content>
+      <div class="portal-hierarchy-options">
+        <UButton
+          v-for="item in items"
+          :key="String(item.id)"
+          color="neutral"
+          variant="ghost"
+          class="portal-hierarchy-option"
+          @click="emit('select', item)"
         >
-          <VList elevation="0" class="border">
-            <VListItem
-              v-for="(item, index) in items"
-              :key="index"
-              @click="emit('select', item)"
-            >
-              <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
-            </VListItem>
-            <div v-intersect="handleEnd" />
-          </VList>
-        </VMenu>
-      </ClientOnly>
-    </VTextField>
-  </div>
+          {{ $translate(item.name) }}
+        </UButton><UButton
+          v-if="items.length"
+          color="neutral"
+          variant="link"
+          @click="emit('end', true)"
+        >
+          {{ locale === 'et' ? 'Näita rohkem' : 'Load more' }}
+        </UButton>
+      </div>
+    </template>
+  </UPopover>
 </template>
-
-<i18n lang="yaml">
-et:
-  search: Otsi
-en:
-  search: Search
-  </i18n>

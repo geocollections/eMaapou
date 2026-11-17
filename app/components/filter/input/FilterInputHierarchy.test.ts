@@ -1,19 +1,12 @@
-// @vitest-environment nuxt
+import type { TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 import { createI18n } from "vue-i18n";
-import { createVuetify } from "vuetify";
-import * as components from "vuetify/components";
-import * as directives from "vuetify/directives";
-import FilterInputHierarchy, { type TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";
+import FilterInputHierarchy from "~/components/filter/input/FilterInputHierarchy.vue";
 
 const titleSelector = "[data-test=\"title\"]";
 
 describe("filterInputHierarchy", () => {
-  const vuetify = createVuetify({
-    components,
-    directives,
-  });
   const i18n = createI18n({
   });
   enableAutoUnmount(afterEach);
@@ -22,7 +15,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -31,7 +24,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>
 `,
     }, {
@@ -47,7 +40,7 @@ describe("filterInputHierarchy", () => {
         };
       },
       global: {
-        plugins: [vuetify, i18n],
+        plugins: [i18n],
       },
     });
 
@@ -60,7 +53,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -69,7 +62,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>
 `,
     }, {
@@ -80,27 +73,32 @@ describe("filterInputHierarchy", () => {
           modelValue: [],
           rootValue: "",
           hydrationFunction: async () => [],
-          getChildren: async (): Promise<[TreeNode[], number]> => ([[{
-            id: 1,
-            name: "item1",
-            leaf: true,
-            children: [],
-            childrenLoaded: false,
-            showChildren: false,
-            count: 0,
-            value: "item1",
-          }], 1]),
+          getChildren: async (): Promise<[TreeNode[], number]> => ([
+            [
+              {
+                id: 1,
+                name: "item1",
+                leaf: true,
+                children: [],
+                childrenLoaded: false,
+                showChildren: false,
+                count: 0,
+                value: "item1",
+              },
+            ],
+            1,
+          ]),
           suggestionFunction: async () => [],
         };
       },
       global: {
-        plugins: [vuetify, i18n],
+        plugins: [i18n],
       },
     });
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
-    await nextTick();
+    await flushPromises();
 
     const treeItem = wrapper.get("[data-test=\"tree-item\"]");
 
@@ -112,7 +110,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -121,7 +119,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>`,
     }, {
       components: { FilterInputHierarchy },
@@ -131,27 +129,32 @@ describe("filterInputHierarchy", () => {
           modelValue: [],
           rootValue: "",
           hydrationFunction: async () => [],
-          getChildren: async (): Promise<[TreeNode[], number]> => ([[{
-            id: 1,
-            name: "item1",
-            leaf: false,
-            children: [],
-            childrenLoaded: false,
-            showChildren: false,
-            count: 0,
-            value: "item1",
-          }], 1]),
+          getChildren: async (): Promise<[TreeNode[], number]> => ([
+            [
+              {
+                id: 1,
+                name: "item1",
+                leaf: false,
+                children: [],
+                childrenLoaded: false,
+                showChildren: false,
+                count: 0,
+                value: "item1",
+              },
+            ],
+            1,
+          ]),
           suggestionFunction: async () => [],
         };
       },
       global: {
-        plugins: [vuetify, i18n],
+        plugins: [i18n],
       },
     });
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
-    await nextTick();
+    await flushPromises();
 
     const rootTreeItem = wrapper.get("[data-test=\"tree-item\"]");
     await rootTreeItem.get("[data-test=\"show-children\"]").trigger("click");
@@ -170,7 +173,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -179,7 +182,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>`,
     }, {
       components: { FilterInputHierarchy },
@@ -200,19 +203,22 @@ describe("filterInputHierarchy", () => {
               count: 0,
               value: "item1",
             };
-            return [Array.from({ length: 10 }, _e => ({ ...child })), 20];
+            return [
+              Array.from({ length: 10 }, _e => ({ ...child })),
+              20,
+            ];
           },
           suggestionFunction: async () => [],
         };
       },
       global: {
-        plugins: [vuetify, i18n],
+        plugins: [i18n],
       },
     });
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
-    await nextTick();
+    await flushPromises();
 
     const rootTreeItem = wrapper.get("[data-test=\"tree-item\"]");
     await rootTreeItem.get("[data-test=\"show-children\"]").trigger("click");
@@ -230,7 +236,7 @@ describe("filterInputHierarchy", () => {
     const wrapper = mount({
       template: `
         <Suspense>
-        <VExpansionPanels>
+        <div>
           <FilterInputHierarchy 
             v-model=\"modelValue\" 
             :title=\"title\" 
@@ -239,7 +245,7 @@ describe("filterInputHierarchy", () => {
             :get-children=\"getChildren\"
             :suggestion-function=\"suggestionFunction\"
           />
-        </VExpansionPanels>
+        </div>
         </Suspense>`,
     }, {
       components: { FilterInputHierarchy },
@@ -260,19 +266,22 @@ describe("filterInputHierarchy", () => {
               count: 0,
               value: "item1",
             };
-            return [Array.from({ length: 10 }, _e => ({ ...child })), 20];
+            return [
+              Array.from({ length: 10 }, _e => ({ ...child })),
+              20,
+            ];
           },
           suggestionFunction: async () => [],
         };
       },
       global: {
-        plugins: [vuetify, i18n],
+        plugins: [i18n],
       },
     });
 
     await flushPromises();
     await wrapper.find(titleSelector).trigger("click");
-    await nextTick();
+    await flushPromises();
 
     const rootTreeItem = wrapper.get("[data-test=\"tree-item\"]");
     await rootTreeItem.get("[data-test=\"show-children\"]").trigger("click");
