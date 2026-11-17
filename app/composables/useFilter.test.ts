@@ -1,3 +1,4 @@
+import { wktToGeoJSON } from "@terraformer/wkt";
 import { describe, expect, it } from "vitest";
 
 const initFilters = {
@@ -26,6 +27,36 @@ const initFilters = {
 };
 
 describe("useFilter", () => {
+  it("converts a drawn polygon into a valid spatial query", () => {
+    const { solrFilters } = useFilters({
+      geometry: {
+        type: "geom",
+        fields: ["latlong"],
+        value: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [24, 58],
+                [25, 58],
+                [25, 59],
+                [24, 59],
+                [24, 58],
+              ],
+            ],
+          },
+        },
+      } as GeomFilter,
+    });
+    expect(solrFilters.value).toHaveLength(1);
+    const filter = String(solrFilters.value[0]);
+    expect(filter).toMatch(/^latlong:"intersects\(/);
+    const geometry = wktToGeoJSON(filter.slice("latlong:\"intersects(".length, -2));
+    expect(geometry.type).toBe("MultiPolygon");
+  });
+
   it("sets value", () => {
     const { filters } = useFilters(initFilters);
 

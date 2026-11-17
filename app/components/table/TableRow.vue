@@ -6,6 +6,8 @@ const props = defineProps<{
   value: T;
 }>();
 
+defineSlots<{ value: (props: { value: T }) => unknown }>();
+
 const isInvalid = computed(() => {
   if (typeof props.value === "number")
     return false;
@@ -15,7 +17,7 @@ const isInvalid = computed(() => {
 
 <template>
   <tr v-if="!isInvalid">
-    <td class="font-weight-medium">
+    <td class="font-medium">
       {{ title }}
     </td>
     <td>

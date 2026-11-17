@@ -6,3 +6,9 @@ export interface MapMarker {
   latitude: number;
   route?: RouteLocationRaw;
 }
+
+export interface MapLocation {
+  latitude: number;
+  longitude: number;
+  count: number;
+}

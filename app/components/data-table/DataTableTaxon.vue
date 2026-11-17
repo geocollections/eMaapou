@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import type { PortalTableProps } from "~/components/PortalDataTable.vue";
+
+defineOptions({ inheritAttrs: false });
+const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, dynamicHeaders: true });
 const localePath = useLocalePath();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable
-    v-bind="$attrs"
-    :item-to="(item) => `https://fossiilid.info/${item.id}`"
+  <PortalDataTable
+    v-bind="{ ...$attrs, ...props }"
+    :item-to="(item) => externalUrl(`fossiilid.info/${item.id}`)"
     external-to
   >
     <template #item.taxon="{ item }">
@@ -16,7 +19,7 @@ const localePath = useLocalePath();
     <template #item.fossil_group="{ item }">
       <BaseLinkExternal
         v-if="item.fossil_group_id"
-        :href="`https://fossiilid.info/${item.fossil_group_id}`"
+        :href="externalUrl(`fossiilid.info/${item.fossil_group_id}`)"
       >
         {{ item.fossil_group }}
       </BaseLinkExternal>
@@ -28,7 +31,7 @@ const localePath = useLocalePath();
     <template #item.parent_taxon="{ item }">
       <BaseLinkExternal
         v-if="item.parent_id"
-        :href="`https://fossiilid.info/${item.parent_id}`"
+        :href="externalUrl(`fossiilid.info/${item.parent_id}`)"
       >
         {{ item.parent_taxon }}
       </BaseLinkExternal>
@@ -40,7 +43,7 @@ const localePath = useLocalePath();
     <template #item.locality="{ item }">
       <NuxtLink
         v-if="item.locality_id"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({ name: 'locality-id', params: { id: item.locality_id } })
         "
@@ -52,7 +55,7 @@ const localePath = useLocalePath();
     <template #item.fad="{ item }">
       <NuxtLink
         v-if="item.stratigraphy_base"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({ name: 'stratigraphy-id', params: { id: item.stratigraphy_base } })
         "
@@ -63,7 +66,7 @@ const localePath = useLocalePath();
     <template #item.lad="{ item }">
       <NuxtLink
         v-if="item.stratigraphy_top"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({ name: 'stratigraphy-id', params: { id: item.stratigraphy_top } })
         "
@@ -80,5 +83,5 @@ const localePath = useLocalePath();
     <template #item.is_valid="{ item }">
       <BaseBoolean :model-value="!!item.is_valid" />
     </template>
-  </BaseDataTable>
+  </PortalDataTable>
 </template>

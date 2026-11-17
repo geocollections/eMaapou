@@ -1,34 +1,20 @@
 <script setup lang="ts">
-import { mdiArrowTopRight } from "@mdi/js";
 import type { RouteLocationRaw } from "vue-router";
 
-defineProps<{
+const props = defineProps<{
   href?: RouteLocationRaw;
+  to?: RouteLocationRaw;
   target?: string;
 }>();
+defineSlots<{ default: () => any; icon?: () => any }>();
 </script>
 
 <template>
-  <NuxtLink
-    :to="href"
+  <ULink
+    :to="props.to ?? props.href"
     :target="target"
-    class="text-link"
+    class="portal-record-link"
   >
-    <slot />
-    <span style="white-space: nowrap; display: inline-block">
-      <slot name="icon">
-        <VIcon class="open-new-icon" size="x-small">{{ mdiArrowTopRight }}</VIcon>
-      </slot>
-    </span>
-  </NuxtLink>
+    <slot /><span class="portal-link-icon"><slot name="icon"><UIcon name="i-lucide-arrow-up-right" /></slot></span>
+  </ULink>
 </template>
-
-<style scoped>
-.open-new-icon {
-  vertical-align: text-top !important;
-}
-
-.open-new-icon:hover {
-  text-decoration: none !important;
-}
-</style>

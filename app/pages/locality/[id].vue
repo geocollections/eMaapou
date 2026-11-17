@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Nullable } from "vitest";
+import type { Tab } from "~/composables/useTabs";
 import {
   mdiBookOpenPageVariantOutline,
   mdiChartScatterPlot,
@@ -8,7 +8,6 @@ import {
   mdiOpenInNew,
   mdiScrewMachineFlatTop,
 } from "@mdi/js";
-import type { Tab } from "~/composables/useTabs";
 
 const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 
@@ -299,7 +298,7 @@ const { data } = await useAsyncData("locality", async () => {
       limit: 1,
     },
   });
-  // Checking if locality has a related .las file to show in graph tab
+
   const lasFilePromise = $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/attachments/`, {
     query: {
       attachment__uuid_filename__iendswith: ".las",
@@ -312,7 +311,9 @@ const { data } = await useAsyncData("locality", async () => {
     lasFilePromise,
   ]);
   const drillcore
-    = drillcoreResponse.results.length > 0 ? drillcoreResponse.results[0] : null;
+    = drillcoreResponse.results.length > 0
+      ? drillcoreResponse.results[0]
+      : null;
 
   const hydratedTabs = await hydrateTabs(tabs, {
     props: {
@@ -328,9 +329,9 @@ const { data } = await useAsyncData("locality", async () => {
 
   hydratedTabs.analysis_results.count
     = hydratedTabs.analysis_results.count
-    + hydratedTabs.locality_description.count
-    + hydratedTabs.sample.count
-    + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
+      + hydratedTabs.locality_description.count
+      + hydratedTabs.sample.count
+      + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
   const imagesRes = await $apiFetch<GeoloogiaListResponse>(`/localities/${route.params.id}/locality-images/`, {
     query: {
@@ -422,12 +423,12 @@ useHead({
 useSeoMeta({
   ogImage: data.value?.images[0]?.attachment?.filename
     ? img(
-      `${data.value.images[0].attachment.filename}`,
-      { size: "medium" },
-      {
-        provider: "geocollections",
-      },
-    )
+        `${data.value.images[0].attachment.filename}`,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+      )
     : null,
 });
 </script>
@@ -451,13 +452,11 @@ useSeoMeta({
           />
         </template>
         <template #sub>
-          <VBtn
+          <UButton
             v-if="data?.drillcore"
-            size="small"
-            rounded
-            flat
-            color="accent"
-            class="mt-2 mr-2 montserrat text-none"
+
+            class="portal-record-action-spaced portal-button"
+            color="neutral"
             @click="
               $router.push(
                 localePath({
@@ -467,52 +466,40 @@ useSeoMeta({
               )
             "
           >
-            <VIcon start>
-              {{ mdiScrewMachineFlatTop }}
-            </VIcon>
+            <PortalIcon start :path="mdiScrewMachineFlatTop" />
             {{
               $translate({
                 et: data?.drillcore.name,
                 en: data?.drillcore.name_en,
               })
             }}
-          </VBtn>
-          <VBtn
+          </UButton>
+          <UButton
             v-if="data?.analysisResultsCount > 0"
-            size="small"
-            rounded
-            flat
-            color="accent"
-            class="mt-2 mr-2 montserrat text-none"
+
+            class="portal-record-action-spaced"
             :to="
               localePath({
                 path: '/analytical-data',
                 query: { locality: route.params.id },
               })
             "
+            color="neutral"
           >
-            <VIcon start>
-              {{ mdiChartScatterPlot }}
-            </VIcon>
+            <PortalIcon start :path="mdiChartScatterPlot" />
             {{ $t("locality.linkToAnalyticalData") }}
-          </VBtn>
-          <VBtn
+          </UButton>
+          <UButton
             v-if="data?.referenceCount > 0"
-            size="small"
-            rounded
-            flat
-            color="accent"
-            class="mt-2 montserrat text-none"
+
+            class="portal-record-action portal-button"
             :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
+            color="neutral"
           >
-            <VIcon start>
-              {{ mdiBookOpenPageVariantOutline }}
-            </VIcon>
+            <PortalIcon start :path="mdiBookOpenPageVariantOutline" />
             {{ $t("locality.linkGeoscienceLiterature") }}
-            <VIcon end>
-              {{ mdiOpenInNew }}
-            </VIcon>
-          </VBtn>
+            <PortalIcon end :path="mdiOpenInNew" />
+          </UButton>
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
@@ -538,17 +525,19 @@ useSeoMeta({
         @select="handleSelect"
       >
         <template #itemTitle="{ item: locality }">
-          <div class="font-weight-medium text-wrap">
+          <div class="font-medium text-wrap">
             {{
               $translate({ et: locality.locality, en: locality.locality_en })
             }}
           </div>
         </template>
         <template #itemSubtitle="{ item: locality }">
-          <div v-if="locality.country_id" class="d-flex align-center">
-            <VIcon start size="small">
-              {{ mdiEarth }}
-            </VIcon>
+          <div v-if="locality.country_id" class="flex items-center">
+            <PortalIcon
+              start
+              size="small"
+              :path="mdiEarth"
+            />
             <span class="text--secondary">
               {{
                 $translate({

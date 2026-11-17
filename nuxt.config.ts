@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
@@ -25,7 +24,6 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: {
         class: "light",
-        style: "color-scheme: light",
       },
     },
   },
@@ -51,7 +49,6 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          api: "modern-compiler",
         },
       },
     },
@@ -68,51 +65,14 @@ export default defineNuxtConfig({
       icons: {
         defaultSet: "mdi-svg",
       },
-      theme: {
-        defaultTheme: "light",
-        variations: {
-          colors: ["primary", "secondary", "accent"],
-          lighten: 5,
-          darken: 5,
-        },
-        themes: {
-          dark: {
-            dark: true,
-            colors: {
-              primary: "#7c8996",
-              secondary: "#cfd6dc",
-              tertiary: "#333333",
-              quaternary: "#fff",
-              quinary: "#fcf2df",
-              anchor: "#5a5957",
-              header: "#3091b5",
-              accent: "#577daf",
-            },
-          },
-          light: {
-            dark: false,
-            colors: {
-              background: "#ffffff",
-              primary: "#7c8996",
-              secondary: "#cfd6dc",
-              tertiary: "#333333",
-              quaternary: "#fff",
-              quinary: "#fcf2df",
-              anchor: "#5a5957",
-              header: "#3091b5",
-              // accent: "#577daf",
-              accent: "#ec643b",
-            },
-          },
-        },
-      },
+
     },
   },
   i18n: {
     locales: [
       {
         code: "en",
-        language: "et-US",
+        language: "en-US",
         file: "en.js",
         name: "English",
       },
@@ -123,7 +83,6 @@ export default defineNuxtConfig({
         name: "Eesti",
       },
     ],
-    lazy: true,
     langDir: "lang/",
     defaultLocale: "et",
     detectBrowserLanguage: {
@@ -137,13 +96,13 @@ export default defineNuxtConfig({
   },
   vue: {
     compilerOptions: {
-      isCustomElement: (tag) => tag.startsWith("swiper-"),
+      isCustomElement: tag => tag.startsWith("swiper-"),
     },
   },
   googleFonts: {
     families: {
-      Roboto: false,
-      Montserrat: [300, 400, 500, 700],
+      "Roboto": false,
+      "Montserrat": [300, 400, 500, 700],
       "Noto+Sans": [400, 500, 700],
       "Noto+Sans+Mono": [400, 500, 700],
     },
@@ -159,7 +118,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  seoUtils: {
+  seo: {
     automaticTwitterTags: false,
   },
   linkChecker: {

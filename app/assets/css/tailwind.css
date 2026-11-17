@@ -33,7 +33,7 @@
   --shadow-dropdown: 0 8px 24px rgba(16, 33, 58, .10), 0 2px 6px rgba(16, 33, 58, .04);
 }
 
-/* Shared Tailwind theme and component utilities. */
+
 @theme inline {
   --color-portal-background: var(--color-background);
   --color-portal-subtle: var(--color-surface-subtle);
@@ -103,7 +103,7 @@
 }
 
 .is-preferred {
-  color: gray;
+  color: var(--color-text-muted);
 }
 
 .underline {
@@ -247,7 +247,7 @@
   border-color: var(--ui-primary) !important;
 }
 
-/* Leaflet overrides */
+
 .leaflet-draw-toolbar.leaflet-control-toolbar {
   margin-top: 0 !important;
 }
@@ -293,3 +293,242 @@
 @utility about-card-action {
   @apply inline-flex min-h-6 items-center gap-1 text-sm font-semibold text-portal-link group-hover:underline [&_svg]:transition-transform motion-safe:group-hover:[&_svg]:translate-x-0.5;
 }
+
+:root { --color-chart-overlay: rgb(255 255 255 / .8); }
+@utility portal-filter-section { @apply min-w-0 max-w-full border-b border-portal-border; }
+@utility portal-filter-trigger { @apply flex min-h-11 w-full justify-between rounded-portal-control px-1 text-sm font-medium text-portal-heading; }
+@utility portal-filter-content { @apply grid min-w-0 gap-2 px-1 pt-1 pb-3; }
+@utility portal-filter-choice { @apply min-w-0 rounded-portal-control px-1 py-1.5 hover:bg-portal-subtle; }
+@utility portal-choice-wrapper { @apply min-w-0 flex-1; }
+@utility portal-choice-label { @apply flex! w-full min-w-0 items-start justify-between gap-2 text-sm; }
+@utility portal-choice-name { @apply min-w-0 flex-1 break-words; }
+@utility portal-choice-count { @apply shrink-0 text-xs text-portal-muted tabular-nums; }
+@utility portal-filter-pages { @apply flex items-center justify-between gap-2 text-xs text-portal-muted tabular-nums; }
+@utility portal-photo-dialog { @apply max-w-5xl rounded-portal-card bg-portal-background; }
+@utility portal-photo-body { @apply p-4; }
+@utility portal-photo-footer { @apply flex flex-wrap items-center justify-between gap-3; }
+@utility portal-photo-image { @apply mx-auto max-h-[65dvh] w-full object-contain; }
+@utility portal-photo-navigation { @apply flex items-center gap-3 text-sm text-portal-muted tabular-nums; }
+
+@utility portal-full-field { @apply w-full min-w-0; }
+@utility portal-supporting { @apply text-sm text-portal-muted; }
+@utility portal-selected-text { @apply flex min-h-10 cursor-pointer items-center gap-2 rounded-portal-control px-1 text-sm hover:bg-portal-subtle; }
+@utility portal-filter-add { @apply min-h-10 justify-center rounded-portal-control bg-portal-primary text-white; }
+@utility portal-filter-tree { @apply min-w-0 pl-1; }
+@utility portal-filter-pair { @apply grid min-w-0 grid-cols-2 gap-2; }
+@utility portal-filter-form { @apply grid w-full min-w-0 max-w-full grid-cols-1 gap-2; }
+@utility portal-filter-list { @apply w-full min-w-0 px-1; }
+@utility portal-hierarchy-menu { @apply z-[1400] max-h-80 w-64 overflow-y-auto rounded-portal-card border border-portal-border bg-portal-background; }
+@utility portal-hierarchy-options { @apply grid gap-1 p-2; }
+@utility portal-hierarchy-option { @apply min-h-10 justify-start whitespace-normal text-left text-sm; }
+
+@utility portal-image-strip { @apply flex items-center gap-3 overflow-x-auto rounded-portal-card border border-portal-border bg-portal-subtle p-2; }
+@utility portal-image-strip-item { @apply shrink-0; }
+@utility portal-image-trigger { @apply rounded-portal-control p-0; }
+@utility portal-image-thumbnail { @apply h-[175px] rounded-portal-control object-contain transition-opacity hover:opacity-80; }
+@utility portal-record-link { @apply cursor-pointer text-portal-link underline underline-offset-3; }
+@utility portal-link-icon { @apply ml-1 inline-flex size-3.5 align-text-top; }
+@utility portal-detail-map { height: var(--map-height); @apply rounded-portal-card border border-portal-border font-sans; }
+@utility portal-flog-chart { @apply min-w-0; }
+@utility portal-chart-toolbar { @apply flex items-center gap-3 bg-portal-background py-2; }
+@utility portal-chart-settings { @apply z-[1400] rounded-portal-card border border-portal-border bg-portal-background shadow-portal-dropdown; }
+@utility portal-chart-settings-body { @apply grid gap-4 p-4; }
+@utility portal-chart-scale { @apply flex items-center gap-2; }
+@utility portal-chart-scroll { @apply overflow-x-auto; }
+@utility portal-flog-canvas { width: var(--chart-width); height: var(--chart-height); @apply p-2; }
+@utility portal-chart-loading { height: var(--chart-height); @apply flex w-full items-center justify-center; }
+@utility portal-loading-icon { @apply size-10 animate-spin text-portal-primary; }
+@utility portal-chart-dot { background-color: var(--chart-dot-color); @apply mr-2 inline-block size-2.5 rounded-full; }
+
+:root { color-scheme: light; --ui-primary: var(--color-primary); --ui-border: var(--color-border); }
+.v-theme--light, .v-theme--dark { --v-theme-primary: 8,127,140 !important; --v-theme-accent: 8,127,140 !important; --v-theme-header: 16,33,58 !important; }
+@utility portal-icon { @apply inline-block size-5 shrink-0 fill-current align-middle; }
+@utility portal-button { @apply min-h-11 justify-center rounded-portal-control shadow-none; }
+@utility portal-content { @apply w-full min-w-0 p-4; }
+@utility portal-row { @apply -mx-2 flex flex-wrap; }
+@utility portal-column { @apply min-w-0 flex-1 px-2 py-2; }
+@utility portal-content-margin { @apply m-0; }
+@utility portal-full-width { @apply w-full; }
+@utility portal-horizontal-scroll { @apply overflow-x-auto; }
+@utility portal-file-frame { @apply mx-auto flex max-h-[700px] w-full justify-center rounded-portal-card bg-portal-subtle; }
+@utility portal-file-image { @apply mx-auto max-h-[700px] max-w-full object-contain; }
+@utility portal-list-inside { @apply list-inside; }
+@utility portal-notice { @apply mb-2 rounded-portal-card border border-portal-border bg-portal-subtle text-sm; }
+@utility portal-metadata-table { @apply w-full border-collapse text-sm [&_td]:border-b [&_td]:border-portal-border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top; }
+
+@utility portal-tree-node { @apply min-w-0 list-none; }
+@utility portal-tree-choice { @apply mt-1 flex min-w-0 items-center justify-between gap-1; }
+@utility portal-tree-children { @apply ml-2 border-l border-portal-border pl-2; }
+@utility portal-table-toolbar { @apply flex flex-wrap items-center justify-end gap-3 p-3; }
+@utility portal-table-search { @apply mr-auto w-full max-w-xs; }
+@utility portal-expanded-record { @apply p-3; }
+
+@utility specimen-gallery { @apply overflow-hidden rounded-portal-card border border-portal-border bg-portal-background; }
+@utility specimen-gallery__intro { @apply flex flex-wrap items-baseline justify-between gap-3 border-b border-portal-border p-4 text-[13px] leading-relaxed text-portal-muted [&>span]:whitespace-nowrap [&>span]:tabular-nums; }
+@utility specimen-gallery__message { @apply p-6 text-portal-muted [&>button]:text-portal-link [&>button]:underline; }
+@utility specimen-gallery__grid { @apply grid max-h-[600px] grid-cols-2 content-start gap-3 overflow-y-auto p-3 outline-portal-focus focus-visible:outline-3 min-[700px]:max-h-[720px] min-[700px]:grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] min-[700px]:gap-4 min-[700px]:p-4; }
+@utility specimen-gallery__card { @apply min-w-0 overflow-hidden rounded-portal-card border border-portal-border; }
+@utility specimen-gallery__photo { @apply relative flex aspect-4/3 w-full cursor-zoom-in items-center justify-center bg-portal-subtle p-2 whitespace-normal disabled:cursor-default [&>img]:block [&>img]:size-full [&>img]:object-contain; }
+@utility specimen-gallery__enlarge { @apply absolute right-2 bottom-2 size-7 rounded-portal-control border border-portal-border bg-portal-background text-center leading-[26px] text-portal-link; }
+@utility specimen-gallery__caption { @apply p-3 text-[13px] [&>a]:inline-block [&>a]:text-sm [&>a]:font-semibold [&>a]:text-portal-link [&>a]:underline [&>a]:underline-offset-3 [&>p]:mt-1 [&>p]:text-portal-muted; }
+@utility portal-description-text { @apply pt-2 pb-4 pr-2; }
+@utility portal-half-column { @apply flex-none basis-[100.0%] max-w-[100.0%] md:flex-none md:basis-[50.0%] md:max-w-[50.0%]; }
+@utility specimen-record-link { @apply text-portal-link underline underline-offset-3; }
+@utility portal-specimen-subtitle { @apply pl-1 text-portal-muted font-medium; }
+@utility portal-filter-actions { @apply mt-3 flex gap-2 border-t border-portal-border py-3; }
+@utility portal-filter-clear { @apply min-h-11 flex-1 justify-center rounded-portal-control text-portal-heading; }
+@utility portal-filter-submit { @apply min-h-11 flex-1 justify-center rounded-portal-control bg-portal-primary text-white hover:bg-portal-primary-hover; }
+@utility portal-record-primary { @apply sm:flex-none sm:basis-[100.0%] sm:max-w-[100.0%] md:flex-none md:basis-[50.0%] md:max-w-[50.0%] lg:flex-none lg:basis-[58.333333%] lg:max-w-[58.333333%] xl:flex-none xl:basis-[41.666667%] xl:max-w-[41.666667%]; }
+@utility portal-bordered-table { @apply border rounded-portal-card; }
+@utility portal-record-secondary { @apply md:flex-none md:basis-[50.0%] md:max-w-[50.0%] lg:flex-none lg:basis-[41.666667%] lg:max-w-[41.666667%] xl:flex-none xl:basis-[33.333333%] xl:max-w-[33.333333%]; }
+@utility portal-section-title { @apply text-lg font-semibold py-2; }
+@utility portal-column-third { @apply xl:flex-none xl:basis-[33.333333%] xl:max-w-[33.333333%]; }
+@utility portal-column-two-thirds { @apply xl:flex-none xl:basis-[66.666667%] xl:max-w-[66.666667%]; }
+@utility portal-thumbnail-row { @apply flex my-2 items-center; }
+@utility portal-clickable-thumbnail { @apply rounded-portal-card cursor-pointer mr-3; }
+@utility portal-record-sidebar { @apply flex-none basis-[100.0%] max-w-[100.0%] xl:flex-none xl:basis-[33.333333%] xl:max-w-[33.333333%]; }
+@utility portal-centered-media { @apply flex justify-center rounded-portal-card bg-portal-subtle; }
+@utility portal-primary-surface { @apply rounded-portal-card  text-portal-primary; }
+@utility portal-responsive-toolbar { @apply justify-center flex flex-col md:justify-between md:flex-row; }
+@utility portal-record-details { @apply flex-none basis-[100.0%] max-w-[100.0%] sm:flex-none sm:basis-[100.0%] sm:max-w-[100.0%] md:flex-none md:basis-[50.0%] md:max-w-[50.0%] lg:flex-none lg:basis-[41.666667%] lg:max-w-[41.666667%] xl:flex-none xl:basis-[41.666667%] xl:max-w-[41.666667%]; }
+@utility portal-spaced-table { @apply border rounded-portal-card mb-2; }
+@utility portal-record-action-spaced { @apply mt-2 mr-2 font-sans normal-case; }
+@utility portal-record-action { @apply mt-2 font-sans normal-case; }
+@utility portal-page-shell { @apply flex min-h-screen flex-col bg-portal-background font-sans text-portal-text; }
+@utility portal-responsive-header { @apply max-[700px]:[&>div]:gap-0 max-[700px]:[&>div]:px-1 max-[700px]:[&_.header-control]:px-1; }
+@utility portal-news-container { @apply w-full max-w-5xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12; }
+@utility portal-breadcrumbs { @apply mb-6 flex items-center gap-2 text-[13px] text-portal-muted; }
+@utility portal-breadcrumb-link { @apply inline-flex min-h-6 items-center gap-2 text-portal-text hover:text-portal-link; }
+@utility portal-page-heading { @apply mb-8 border-b border-portal-border pb-6 md:mb-10 md:pb-8; }
+@utility portal-page-title { @apply mb-3 text-[28px] leading-tight font-bold tracking-tight text-portal-heading md:text-4xl; }
+@utility portal-news-search { @apply grid items-end gap-4 sm:grid-cols-[minmax(0,1fr)_180px_auto]; }
+@utility portal-field-label { @apply mb-2 block text-sm font-medium text-portal-heading; }
+@utility portal-search-button { @apply min-h-11 justify-center gap-2 rounded-portal-control bg-portal-primary px-4 text-sm font-semibold text-white hover:bg-portal-primary-hover; }
+@utility portal-active-filters { @apply mt-4 flex flex-wrap items-center gap-3; }
+@utility portal-filter-chip { @apply min-h-11 max-w-full gap-2 rounded-portal-control bg-portal-mint px-3 text-sm text-portal-link hover:bg-portal-selected; }
+@utility portal-clear-button { @apply min-h-11 px-2 text-sm text-portal-link hover:bg-portal-subtle; }
+@utility portal-news-item { @apply grid gap-4 border-b border-portal-border pb-6 md:grid-cols-[140px_1fr] md:gap-8; }
+@utility portal-date-skeleton { @apply h-5 w-28 bg-portal-subtle; }
+@utility portal-title-skeleton { @apply h-6 w-3/4 bg-portal-subtle; }
+@utility portal-line-skeleton { @apply h-4 w-full bg-portal-subtle; }
+@utility portal-short-line-skeleton { @apply h-4 w-2/3 bg-portal-subtle; }
+@utility portal-empty-card { @apply rounded-portal-card border border-portal-border p-6; }
+@utility portal-outline-button { @apply border border-portal-border; }
+@utility portal-results-count { @apply mb-6 text-sm text-portal-muted tabular-nums; }
+@utility portal-read-more { @apply mt-4 inline-flex min-h-11 items-center text-portal-link [text-decoration-line:underline] underline-offset-4; }
+@utility portal-news-pagination { @apply mt-6 flex flex-col gap-4 border-t border-portal-border pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between; }
+@utility portal-page-count { @apply text-sm text-portal-muted tabular-nums; }
+@utility portal-pagination-controls { @apply flex items-center justify-between gap-2 sm:justify-end; }
+@utility portal-page-arrow { @apply min-h-11 shrink-0 gap-1 rounded-portal-control border border-portal-border bg-portal-background px-3 text-sm text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-40; }
+@utility portal-mobile-page-count { @apply text-sm text-portal-heading tabular-nums sm:hidden; }
+@utility portal-page-number { @apply size-11 justify-center rounded-portal-control border text-sm font-medium tabular-nums shadow-none; }
+@utility portal-page-ellipsis { @apply flex size-11 items-center justify-center text-portal-muted; }
+@utility specimen-search { @apply [--ui-primary:var(--color-primary)] flex min-h-dvh flex-col bg-portal-background font-sans text-portal-text; }
+@utility specimen-search__main { @apply min-w-0 flex-1; }
+@utility specimen-search__page { @apply mx-auto max-w-[1600px] px-4 pt-6 pb-8 sm:px-6 lg:px-8; }
+@utility specimen-search__breadcrumbs { @apply mb-4 flex flex-wrap items-center gap-4 text-[13px] text-portal-muted; }
+@utility specimen-search__intro { @apply mb-6 grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_320px] lg:grid-cols-[minmax(0,1fr)_520px]; }
+@utility specimen-search__heading { @apply [&>h1]:text-[28px] [&>h1]:leading-tight [&>h1]:font-bold [&>h1]:tracking-[-.035em] [&>h1]:text-portal-heading md:[&>h1]:text-4xl [&>p]:mt-3 [&>p]:max-w-[80ch] [&>p]:text-[15px] [&>p]:leading-relaxed [&>p]:text-portal-muted; }
+@utility specimen-search__map { @apply mb-6 overflow-hidden rounded-portal-card border border-portal-border [&>p]:bg-portal-subtle [&>p]:px-3 [&>p]:py-2 [&>p]:text-[13px] [&>p]:leading-relaxed [&>p]:text-portal-muted; }
+@utility specimen-search__layout { @apply grid items-start gap-6; }
+@utility specimen-search__filters { @apply min-w-0 rounded-portal-card border border-portal-border bg-portal-background px-3 pt-4; }
+@utility specimen-search__filter-heading { @apply mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-portal-border px-1 pb-3 [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:text-portal-heading [&>button]:text-[13px] [&>button]:text-portal-link; }
+@utility specimen-search__show { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-portal-control border border-portal-border bg-portal-background px-3 py-2 text-sm font-medium text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-50; }
+@utility specimen-search__chips { @apply mb-4 flex flex-wrap items-center gap-2 text-[13px] [&>button]:min-h-11 [&>button]:rounded-portal-control [&>button]:bg-portal-mint [&>button]:px-3 [&>button]:py-1.5 [&>button]:whitespace-normal [&>button]:text-left; }
+@utility specimen-search__clear { @apply text-portal-link underline; }
+@utility specimen-search__toolbar { @apply mb-3 flex flex-wrap items-center gap-3 [&>h2]:mr-auto [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:tracking-tight [&>h2]:text-portal-heading [&>h2>span]:text-portal-heading [&>h2>span]:tabular-nums [&>[role=status]:empty]:hidden; }
+@utility specimen-search__message { @apply bg-portal-subtle p-4 [&>button]:text-portal-link [&>button]:underline; }
+@utility specimen-view-switch { @apply mb-4 inline-flex items-center gap-1 rounded-portal-control border border-portal-border bg-portal-subtle p-1; }
+@utility portal-view-button { @apply min-h-11 gap-2 rounded-portal-control px-3.5 py-2 text-sm; }
+@utility portal-view-icon { @apply size-[18px] shrink-0 fill-current; }
+@utility specimen-view-switch__count { @apply rounded-portal-control bg-portal-background px-1.5 py-0.5 text-xs text-portal-muted tabular-nums; }
+@utility portal-data-table { @apply overflow-hidden rounded-portal-card border border-portal-border bg-portal-background; }
+@utility portal-sort-button { @apply -ml-2 min-h-9 gap-1 rounded-portal-control px-2 text-[13px] font-semibold text-portal-heading; }
+@utility portal-data-table__pagination { @apply flex flex-wrap items-center gap-4 border-t border-portal-border p-3 text-[13px] text-portal-muted tabular-nums sm:px-4; }
+@utility portal-data-table__page-size { @apply inline-flex items-center gap-2; }
+@utility portal-page-size-select { @apply min-h-11 w-20 rounded-portal-control; }
+@utility portal-pagination-nav { @apply ml-auto flex items-center gap-2; }
+@utility portal-pagination-arrow { @apply size-11 justify-center rounded-portal-control border-portal-border bg-portal-background p-0 text-portal-link shadow-none; }
+@utility portal-pagination-page { @apply inline-flex items-center gap-2 whitespace-nowrap; }
+@utility portal-table-tools { @apply flex gap-2; }
+@utility portal-table-tool { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-portal-control border border-portal-border bg-portal-background px-3 py-2 text-sm font-medium text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-50; }
+@utility portal-table-popover__body { @apply grid gap-4 p-5 [&>h3]:text-base [&>h3]:font-semibold [&>h3]:text-portal-heading; }
+@utility portal-table-field { @apply grid gap-1.5 text-[13px] [&>input]:min-h-10 [&>input]:rounded-portal-control [&>input]:border [&>input]:border-portal-border [&>input]:px-3 [&>select]:min-h-10 [&>select]:rounded-portal-control [&>select]:border [&>select]:border-portal-border [&>select]:px-3; }
+@utility portal-table-column-list { @apply grid max-h-[280px] gap-3 overflow-y-auto; }
+@utility portal-table-reset { @apply min-h-10 cursor-pointer text-left text-portal-link underline; }
+@utility portal-table-download { @apply min-h-11 justify-center rounded-portal-control bg-portal-primary text-white hover:bg-portal-primary-hover disabled:opacity-50; }
+@utility specimen-intro-collage { @apply grid h-40 w-full max-w-[420px] grid-cols-3 grid-rows-2 gap-1 overflow-hidden rounded-portal-card border border-portal-border bg-portal-background justify-self-start md:h-44 md:justify-self-end lg:h-48 lg:max-w-[520px] lg:grid-cols-5; }
+@utility portal-collage-link {
+  @apply relative flex min-h-0 items-center justify-center overflow-hidden bg-portal-subtle focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-portal-focus;
+  &:nth-child(n+7) { @apply hidden; }
+  @media (min-width: 1024px) {
+    &:nth-child(n+7) { @apply flex; }
+  }
+}
+@utility portal-collage-message { @apply col-span-full row-span-full grid place-items-center bg-portal-subtle p-4 text-center text-sm text-portal-muted; }
+@utility portal-collage-image { @apply size-full object-cover transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none; }
+@utility specimen-map-wrap { @apply relative [&_.leaflet-bar]:overflow-hidden [&_.leaflet-bar]:rounded-portal-control [&_.leaflet-popup-content-wrapper]:rounded-portal-card; }
+@utility specimen-map-controls { @apply flex flex-wrap items-center gap-2 border-b border-portal-border p-3; }
+@utility portal-map-button { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-portal-control border border-portal-border bg-portal-background px-3 py-2 text-sm font-medium text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-50; }
+@utility portal-map-primary-button { @apply min-h-11 justify-center rounded-portal-control bg-portal-primary px-3 py-2 text-sm text-white hover:bg-portal-primary-hover disabled:opacity-50; }
+@utility specimen-map-help { @apply basis-full text-[13px] text-portal-muted; }
+@utility specimen-results-map { @apply relative z-0 h-[200px] rounded-portal-card min-[600px]:h-[260px]; }
+@utility specimen-map-status { @apply absolute right-14 bottom-6 left-3 z-1 rounded-portal-control bg-portal-background p-2 text-[13px] text-portal-text; }
+@utility portal-selected-image { @apply border-portal-primary opacity-60; }
+
+@utility portal-table-scroll { @apply max-h-[440px] min-[700px]:max-h-[520px]; }
+@utility portal-table-base { @apply w-full min-w-[680px]; }
+@utility portal-table-head { @apply bg-portal-subtle; }
+@utility portal-table-body { @apply divide-y divide-portal-border; }
+@utility portal-table-row { @apply hover:bg-portal-selected; }
+@utility portal-table-heading { @apply whitespace-nowrap px-3 py-2.5 text-[13px] font-semibold text-portal-heading; }
+@utility portal-table-cell { @apply h-12 px-3 py-2 text-sm text-portal-text [&_a]:text-portal-link! [&_a]:underline [&_a]:underline-offset-3 [&_img]:h-9 [&_img]:w-14 [&_img]:rounded-portal-control [&_img]:object-cover; }
+@utility portal-filter-grid { @apply min-[700px]:grid-cols-[280px_minmax(0,1fr)]; }
+@utility portal-results-grid { @apply grid-cols-1; }
+@utility portal-view-active { @apply bg-portal-mint text-portal-link; }
+@utility portal-view-inactive { @apply text-portal-muted; }
+
+@utility portal-table-popover { @apply [--ui-primary:var(--color-primary)] z-[1300] w-[min(340px,calc(100vw-24px))] rounded-portal-card border border-portal-border bg-portal-background font-sans text-sm leading-relaxed text-portal-text shadow-portal-dropdown; }
+
+@utility portal-field-control { @apply min-h-11 rounded-portal-control ring-portal-border; }
+
+@utility portal-select-control { @apply min-h-11 rounded-portal-control bg-portal-background text-portal-heading ring-portal-border; }
+
+@utility portal-page-input { @apply h-11 rounded-portal-control bg-portal-background text-center text-portal-heading ring-portal-border [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none; }
+
+@utility portal-filter-title { @apply flex min-w-0 items-center gap-2 text-left; }
+@utility portal-filter-count { @apply justify-center rounded-portal-control text-xs tabular-nums; }
+@utility portal-filter-summary { @apply grid gap-1 pb-3; }
+@utility portal-filter-choice-selected { @apply bg-portal-selected; }
+
+@utility portal-filter-hint { @apply px-1 pt-1 pb-3 text-xs leading-relaxed text-portal-muted; }
+
+@utility portal-filter-chip-close { @apply size-3.5 shrink-0; }
+
+@utility specimen-map-expand { @apply ml-auto; }
+@utility specimen-map-expanded { @apply [&_.specimen-results-map]:h-[360px]! min-[600px]:[&_.specimen-results-map]:h-[460px]!; }
+
+@utility specimen-search__results { @apply min-w-0; }
+@utility specimen-search__results-table {
+  @media (min-width: 700px) {
+    height: var(--specimen-results-height, auto);
+    @apply flex flex-col [&>.specimen-view-switch]:self-start [&>.specimen-search__show]:self-start;
+  }
+}
+@utility specimen-search__views { @apply min-[700px]:min-h-0 min-[700px]:flex-1; }
+@utility specimen-search__table-view {
+  @media (min-width: 700px) {
+    @apply h-full [&_.portal-data-table]:flex [&_.portal-data-table]:h-full [&_.portal-data-table]:flex-col [&_.portal-table-scroll]:min-h-0 [&_.portal-table-scroll]:max-h-none [&_.portal-table-scroll]:flex-1;
+  }
+}
+
+@utility specimen-map-popup {
+  @apply [&_.leaflet-popup-content]:m-0! [&_.leaflet-popup-content]:w-[min(360px,calc(100vw-64px))]! [&_.leaflet-popup-content-wrapper]:rounded-portal-card! [&_.leaflet-popup-content-wrapper]:p-0!;
+}
+@utility specimen-map-records { @apply font-sans text-sm text-portal-text; }
+@utility specimen-map-records__heading { @apply px-3 pt-2 pb-1 [&>h3]:font-semibold [&>h3]:text-portal-heading [&>p]:m-0! [&>p]:text-xs [&>p]:text-portal-muted; }
+@utility specimen-map-records__list {
+  max-height: max(48px, calc(var(--specimen-map-height, 260px) - 160px));
+  @apply grid gap-1 overflow-y-auto px-2 py-1;
+}
+@utility specimen-map-records__item { @apply grid min-h-11 gap-0.5 rounded-portal-control p-2 hover:bg-portal-selected [&>span:first-child]:font-semibold [&>span:first-child]:text-portal-link [&>span:not(:first-child)]:text-xs [&>span:not(:first-child)]:text-portal-muted; }

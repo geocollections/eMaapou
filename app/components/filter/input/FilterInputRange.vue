@@ -18,7 +18,7 @@ const props = withDefaults(
   },
 );
 const emit = defineEmits<{
-  "update:model-value": [value: [null | number, null | number]];
+  "update:modelValue": [value: [null | number, null | number]];
 }>();
 
 const { t } = useI18n();
@@ -50,7 +50,7 @@ function handleEnter() {
     return;
   }
 
-  emit("update:model-value", internalValue.value);
+  emit("update:modelValue", internalValue.value);
 }
 
 function handleInput(input: string, isMin: boolean) {
@@ -79,109 +79,47 @@ const valueString = computed(() => {
 });
 
 function handleRemove() {
-  emit("update:model-value", [null, null]);
+  emit("update:modelValue", [null, null]);
 }
 
 const input = ref();
-
-function handleOpen(value: { value: boolean }) {
-  if (!value.value)
-    return;
-
-  nextTick(() => {
-    input.value.focus();
-  });
-}
+const open = ref(false);
+useFilterFocus(open, input);
 </script>
 
 <template>
-  <VExpansionPanel
-    style="background-color: transparent"
-    elevation="0"
-    :rounded="0"
-    @group:selected="handleOpen"
-  >
-    <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
-      style="min-height: 40px;"
-    >
-      {{ title }}
-    </VExpansionPanelTitle>
-    <div
-      v-if="modelValue[0] !== null || modelValue[1] !== null"
-      class="bg-white"
-    >
-      <div class="d-flex selected-item py-1 px-2">
-        <span>
-          <input
-            type="checkbox"
-            class="checkbox"
-            checked
-            @click.prevent.stop="handleRemove"
-          >
-        </span>
-        <span class="align-self-center pl-2 text-body-2 font-weight-medium">
-          {{ valueString }}
-        </span>
-      </div>
+  <PortalFilterSection v-model:open="open" :title="title">
+    <template #selection>
+      <PortalFilterChoice
+        v-if="modelValue[0] !== null || modelValue[1] !== null"
+        :label="valueString"
+        :selected="true"
+        @select="handleRemove"
+      />
+    </template>
+    <div class="portal-filter-pair">
+      <UFormField :label="fieldLabels.min">
+        <UInput
+          ref="input"
+          :model-value="String(modelValue[0] ?? '')"
+          type="number"
+          :step="step"
+          class="portal-full-field"
+          @update:model-value="handleInput(String($event ?? ''), true)"
+          @keydown.enter.prevent.stop="handleEnter"
+          @blur="handleEnter"
+        />
+      </UFormField><UFormField :label="fieldLabels.max">
+        <UInput
+          :model-value="String(modelValue[1] ?? '')"
+          type="number"
+          :step="step"
+          class="portal-full-field"
+          @update:model-value="handleInput(String($event ?? ''), false)"
+          @keydown.enter.prevent.stop="handleEnter"
+          @blur="handleEnter"
+        />
+      </UFormField>
     </div>
-    <VExpansionPanelText
-      class="pt-1"
-      color="white"
-    >
-      <VRow no-gutters>
-        <VCol cols="6" class="">
-          <VTextField
-            ref="input"
-            :model-value="modelValue[0]"
-            color="primary-darken-3"
-            :label="fieldLabels.min"
-            hide-details
-            single-line
-            bg-color="white"
-            variant="outlined"
-            density="compact"
-            type="number"
-            :step="step"
-            @update:model-value="handleInput($event, true)"
-            @keydown.enter.prevent.stop="handleEnter"
-            @blur="handleEnter"
-          />
-        </VCol>
-        <VCol cols="6" class="pl-1">
-          <VTextField
-            :model-value="modelValue[1]"
-            color="primary-darken-3"
-            :label="fieldLabels.max"
-            hide-details
-            single-line
-            bg-color="white"
-            variant="outlined"
-            density="compact"
-            type="number"
-            :step="step"
-            @update:model-value="handleInput($event, false)"
-            @keydown.enter.prevent.stop="handleEnter"
-            @blur="handleEnter"
-          />
-        </VCol>
-      </VRow>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+  </PortalFilterSection>
 </template>
-
-<style lang="scss" scoped>
-:deep(.v-expansion-panel-text__wrapper) {
-  padding-right: 8px;
-  padding-left: 8px;
-  padding-bottom: 8px;
-}
-.v-text-field {
-  padding-top: 0px;
-  margin-top: 0px;
-}
-.selected-item:hover {
-  background-color: #eeeeee;
-  cursor: pointer;
-}
-</style>

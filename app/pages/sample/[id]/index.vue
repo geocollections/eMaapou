@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import BaseLinkExternal from "~/components/base/BaseLinkExternal.vue";
-import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import type { Sample } from "../[id].vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
   sample: Sample;
@@ -107,9 +106,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow v-if="images.length > 0">
-      <VCol>
+  <div class="portal-content-margin portal-content">
+    <div v-if="images.length > 0" class="portal-row">
+      <div class="portal-column">
         <ImageBar
           :images="images"
           :total="total"
@@ -117,11 +116,11 @@ const mapOverlays = computed(() => {
         >
           <template #tooltipInfo="{ item }">
             <div v-if="item.info.author">
-              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span class="font-bold">{{ $t("photo.author") }}: </span>
               <span>{{ item.info.author }}</span>
             </div>
             <div v-if="item.info.date || item.info.dateText">
-              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span class="font-bold">{{ $t("photo.date") }}: </span>
               <span v-if="item.info.date">
                 {{ $formatDate(item.info.date) }}
               </span>
@@ -130,11 +129,11 @@ const mapOverlays = computed(() => {
           </template>
           <template #overlayInfo="{ item }">
             <div v-if="item.info.author">
-              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span class="font-bold">{{ $t("photo.author") }}: </span>
               <span>{{ item.info.author }}</span>
             </div>
             <div v-if="item.info.date || item.info.dateText">
-              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span class="font-bold">{{ $t("photo.date") }}: </span>
               <span v-if="item.info.date">
                 {{ $formatDate(item.info.date) }}
               </span>
@@ -142,90 +141,167 @@ const mapOverlays = computed(() => {
             </div>
           </template>
         </ImageBar>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol
-        :sm="12"
-        :md="6"
-        :lg="7"
-        :xl="5"
+      </div>
+    </div>
+    <div class="portal-row">
+      <div
+        class="portal-record-primary"
       >
-        <BaseTable class="border rounded">
-          <TableRow
-            :title="$t('sample.number')"
-            :value="sample.number"
-          />
-          <TableRow
-            v-if="parent"
-            :title="$t('sample.parent')"
-            :value="parent"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'sample-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  value.number
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="parentSpecimen"
-            :title="$t('sample.parentSpecimen')"
-            :value="parentSpecimen"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'specimen-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  value.number
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            :title="$t('sample.parentSpecimen')"
-            :value="sample.igsn"
-          >
-            <template #value="{ value }">
-              <BaseLinkExternal
-                :to="`http://igsn.org/${value}`"
-              >
-                {{ value }}
-              </BaseLinkExternal>
-            </template>
-          </TableRow>
-          <TableRow
-            :title="$t('sample.numberAdditional')"
-            :value="sample.number_additional"
-          />
-          <TableRow
-            :title="$t('sample.numberField')"
-            :value="sample.number_field"
-          />
-          <template v-if="locality">
+        <table class="portal-bordered-table">
+          <tbody>
             <TableRow
-              :title="$t('locality.locality')"
-              :value="locality"
+              :title="$t('sample.number')"
+              :value="sample.number"
+            />
+            <TableRow
+              v-if="parent"
+              :title="$t('sample.parent')"
+              :value="parent"
             >
               <template #value="{ value }">
                 <BaseLink
                   :to="
                     localePath({
-                      name: 'locality-id',
+                      name: 'sample-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    value.number
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="parentSpecimen"
+              :title="$t('sample.parentSpecimen')"
+              :value="parentSpecimen"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'specimen-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    value.number
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              :title="$t('sample.parentSpecimen')"
+              :value="sample.igsn"
+            >
+              <template #value="{ value }">
+                <BaseLinkExternal
+                  :to="externalUrl(`igsn.org/${value}`, 'http:')"
+                >
+                  {{ value }}
+                </BaseLinkExternal>
+              </template>
+            </TableRow>
+            <TableRow
+              :title="$t('sample.numberAdditional')"
+              :value="sample.number_additional"
+            />
+            <TableRow
+              :title="$t('sample.numberField')"
+              :value="sample.number_field"
+            />
+            <template v-if="locality">
+              <TableRow
+                :title="$t('locality.locality')"
+                :value="locality"
+              >
+                <template #value="{ value }">
+                  <BaseLink
+                    :to="
+                      localePath({
+                        name: 'locality-id',
+                        params: { id: value.id },
+                      })
+                    "
+                  >
+                    {{
+                      $translate({
+                        et: value.name,
+                        en: value.name_en,
+                      })
+                    }}
+                  </BaseLink>
+                </template>
+              </TableRow>
+              <TableRow
+                :title="$t('sample.localityFree')"
+                :value="sample.locality_text"
+              />
+              <TableRow
+                v-if="locality.country"
+                :title="$t('locality.country')"
+                :value="
+                  $translate({
+                    et: locality.country.name,
+                    en: locality.country.name_en,
+                  })
+                "
+              />
+              <TableRow
+                :title="$t('locality.coordinates')"
+                :value="`${locality.latitude}, ${locality.longitude}`"
+              />
+              <TableRow
+                :title="$t('locality.elevation')"
+                :value="locality.elevation"
+              />
+            </template>
+            <template v-if="site">
+              <TableRow
+                :title="$t('sample.site')"
+                :value="site"
+              >
+                <template #value="{ value }">
+                  <BaseLink
+                    :to="
+                      localePath({
+                        name: 'site-id',
+                        params: { id: value.id },
+                      })
+                    "
+                  >
+                    {{
+                      value.name
+                    }}
+                  </BaseLink>
+                </template>
+              </TableRow>
+              <TableRow
+                :title="$t('locality.coordinates')"
+                :value="`${site.latitude}, ${site.longitude}`"
+              />
+            </template>
+            <TableRow
+              :title="$t('sample.depth')"
+              :value="sample.depth"
+            />
+            <TableRow
+              :title="$t('sample.depthInterval')"
+              :value="sample.depth_interval"
+            />
+            <TableRow
+              v-if="stratigraphy"
+              :title="$t('sample.stratigraphy')"
+              :value="stratigraphy"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'stratigraphy-id',
                       params: { id: value.id },
                     })
                   "
@@ -240,227 +316,152 @@ const mapOverlays = computed(() => {
               </template>
             </TableRow>
             <TableRow
-              :title="$t('sample.localityFree')"
-              :value="sample.locality_text"
-            />
-            <TableRow
-              v-if="locality.country"
-              :title="$t('locality.country')"
-              :value="
-                $translate({
-                  et: locality.country.name,
-                  en: locality.country.name_en,
-                })
-              "
-            />
-            <TableRow
-              :title="$t('locality.coordinates')"
-              :value="`${locality.latitude}, ${locality.longitude}`"
-            />
-            <TableRow
-              :title="$t('locality.elevation')"
-              :value="locality.elevation"
-            />
-          </template>
-          <template v-if="site">
-            <TableRow
-              :title="$t('sample.site')"
-              :value="site"
+              v-if="lithostratigraphy"
+              :title="$t('sample.lithostratigraphy')"
+              :value="lithostratigraphy"
             >
               <template #value="{ value }">
                 <BaseLink
                   :to="
                     localePath({
-                      name: 'site-id',
+                      name: 'stratigraphy-id',
                       params: { id: value.id },
                     })
                   "
                 >
                   {{
-                    value.name
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
                   }}
                 </BaseLink>
               </template>
             </TableRow>
             <TableRow
-              :title="$t('locality.coordinates')"
-              :value="`${site.latitude}, ${site.longitude}`"
+              :title="$t('sample.stratigraphyFree')"
+              :value="sample.stratigraphy_text"
             />
-          </template>
-          <TableRow
-            :title="$t('sample.depth')"
-            :value="sample.depth"
-          />
-          <TableRow
-            :title="$t('sample.depthInterval')"
-            :value="sample.depth_interval"
-          />
-          <TableRow
-            v-if="stratigraphy"
-            :title="$t('sample.stratigraphy')"
-            :value="stratigraphy"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="lithostratigraphy"
-            :title="$t('sample.lithostratigraphy')"
-            :value="lithostratigraphy"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: value.id },
-                  })
-                "
-              >
-                {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            :title="$t('sample.stratigraphyFree')"
-            :value="sample.stratigraphy_text"
-          />
-          <TableRow
-            :title="$t('sample.stratigraphyBed')"
-            :value="sample.stratigraphy_bed"
-          />
-          <TableRow
-            :title="$t('sample.dateCollected')"
-            :value="sample.date_collected || sample.date_collected_text"
-          />
-          <TableRow
-            v-if="collector || sample.collector_text"
-            :title="$t('sample.agentCollected')"
-            :value="collector?.name || sample.collector_text"
-          />
-          <TableRow
-            :title="$t('sample.mass')"
-            :value="sample.mass"
-          />
-          <TableRow
-            v-if="series"
-            :title="$t('sample.series')"
-            :value="series.name"
-          />
-          <TableRow
-            v-if="samplePurpose"
-            :title="$t('sample.samplePurpose')"
-            :value="
-              $translate({
-                et: samplePurpose.value,
-                en: samplePurpose.value_en,
-              })
-            "
-          />
-          <TableRow
-            :title="$t('sample.rock')"
-            :value="
-              $translate({
-                et: sample.rock_text,
-                en: sample.rock_text_en,
-              })
-            "
-          />
-          <TableRow
-            v-if="classificationRock"
-            :title="$t('sample.classificationRock')"
-            :value="
-              $translate({
-                et: classificationRock.name,
-                en: classificationRock.name_en,
-              })
-            "
-          />
-          <TableRow
-            v-if="sample.is_palaeontology"
-            :title="$t('sample.palaeontology')"
-            :value="sample.is_palaeontology"
-          >
-            <template #value="{ value }">
-              <BaseBoolean :model-value="value" />
-            </template>
-          </TableRow>
-          <TableRow
-            :title="$t('sample.fossils')"
-            :value="sample.fossils"
-          />
-          <TableRow
-            :title="$t('sample.remarks')"
-            :value="sample.remarks"
-          />
-          <TableRow
-            v-if="owner"
-            :title="$t('sample.owner')"
-            :value="owner.name"
-          />
-          <TableRow
-            v-if="database"
-            :title="$t('sample.database')"
-            :value="database"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="value.url"
-              >
-                {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="project"
-            :title="$t('sample.project')"
-            :value="
-              $translate({
-                et: project.name,
-                en: project.name_en,
-              })
-            "
-          />
-          <TableRow
-            v-if="sample.date_added"
-            :title="$t('sample.dateAdded')"
-            :value="$formatDate(sample.date_added)"
-          />
-          <TableRow
-            v-if="
-              sample.date_changed && sample.date_changed !== sample.date_added
-            "
-            :title="$t('sample.dateChanged')"
-            :value="$formatDate(sample.date_changed)"
-          />
-        </BaseTable>
-      </VCol>
-      <VCol v-if="showMap" :xl="4">
+            <TableRow
+              :title="$t('sample.stratigraphyBed')"
+              :value="sample.stratigraphy_bed"
+            />
+            <TableRow
+              :title="$t('sample.dateCollected')"
+              :value="sample.date_collected || sample.date_collected_text"
+            />
+            <TableRow
+              v-if="collector || sample.collector_text"
+              :title="$t('sample.agentCollected')"
+              :value="collector?.name || sample.collector_text"
+            />
+            <TableRow
+              :title="$t('sample.mass')"
+              :value="sample.mass"
+            />
+            <TableRow
+              v-if="series"
+              :title="$t('sample.series')"
+              :value="series.name"
+            />
+            <TableRow
+              v-if="samplePurpose"
+              :title="$t('sample.samplePurpose')"
+              :value="
+                $translate({
+                  et: samplePurpose.value,
+                  en: samplePurpose.value_en,
+                })
+              "
+            />
+            <TableRow
+              :title="$t('sample.rock')"
+              :value="
+                $translate({
+                  et: sample.rock_text,
+                  en: sample.rock_text_en,
+                })
+              "
+            />
+            <TableRow
+              v-if="classificationRock"
+              :title="$t('sample.classificationRock')"
+              :value="
+                $translate({
+                  et: classificationRock.name,
+                  en: classificationRock.name_en,
+                })
+              "
+            />
+            <TableRow
+              v-if="sample.is_palaeontology"
+              :title="$t('sample.palaeontology')"
+              :value="sample.is_palaeontology"
+            >
+              <template #value="{ value }">
+                <BaseBoolean :model-value="value" />
+              </template>
+            </TableRow>
+            <TableRow
+              :title="$t('sample.fossils')"
+              :value="sample.fossils"
+            />
+            <TableRow
+              :title="$t('sample.remarks')"
+              :value="sample.remarks"
+            />
+            <TableRow
+              v-if="owner"
+              :title="$t('sample.owner')"
+              :value="owner.name"
+            />
+            <TableRow
+              v-if="database"
+              :title="$t('sample.database')"
+              :value="database"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="value.url"
+                >
+                  {{
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="project"
+              :title="$t('sample.project')"
+              :value="
+                $translate({
+                  et: project.name,
+                  en: project.name_en,
+                })
+              "
+            />
+            <TableRow
+              v-if="sample.date_added"
+              :title="$t('sample.dateAdded')"
+              :value="$formatDate(sample.date_added)"
+            />
+            <TableRow
+              v-if="
+                sample.date_changed && sample.date_changed !== sample.date_added
+              "
+              :title="$t('sample.dateChanged')"
+              :value="$formatDate(sample.date_changed)"
+            />
+          </tbody>
+        </table>
+      </div>
+      <div
+        v-if="showMap"
+        class="portal-column-third"
+      >
         <MapDetail
           v-if="showMap"
           class="mb-4"
@@ -469,7 +470,7 @@ const mapOverlays = computed(() => {
           :center="mapCenter"
           :markers="mapMarkers"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

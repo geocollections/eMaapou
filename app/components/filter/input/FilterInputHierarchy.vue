@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
 import difference from "lodash/difference";
 import orderBy from "lodash/orderBy";
-import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 export interface TreeNode {
   id: number;
@@ -15,7 +15,7 @@ export interface TreeNode {
 }
 
 interface SelectedItem {
-  id: number;
+  id: string | number;
   name: string | { et: string; en: string };
   value: string;
   count: number;
@@ -31,7 +31,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  "update:model-value": [value: string[]];
+  "update:modelValue": [value: string[]];
 }>();
 
 defineExpose({
@@ -45,7 +45,9 @@ function translateName(name: string | { et: string; en: string }): string {
   if (typeof name === "string")
     return name;
 
-  return locale.value === "et" ? name.et : name.en;
+  return locale.value === "et"
+    ? name.et
+    : name.en;
 }
 
 const numBucketsMap = ref<{ [key: string]: number }>({});
@@ -77,10 +79,15 @@ const { refresh: refreshAutocomplete, status } = await useAsyncData(
     if (res.length < 10)
       suggestionsEnd.value = true;
 
-    if (autocompletePage.value > 1)
-      suggestions.value = [...suggestions.value, ...res];
-    else
+    if (autocompletePage.value > 1) {
+      suggestions.value = [
+        ...suggestions.value,
+        ...res,
+      ];
+    }
+    else {
       suggestions.value = res;
+    }
 
     return suggestions.value;
   },
@@ -92,12 +99,12 @@ const { refresh: refreshAutocomplete, status } = await useAsyncData(
 const selectedItems = ref<SelectedItem[]>([]);
 selectedItems.value = await props.hydrationFunction(props.modelValue);
 
-watch(() => props.modelValue, (newVal, oldVal) => {
-  // Clear selected items if new model value is empty and previous was not
-  if (oldVal.length > 0 && newVal.length < 1) {
-    selectedItems.value = [];
-    refreshTree();
-  }
+watch(() => props.modelValue, async (values) => {
+  const hasMissing = values.some(value => !selectedItems.value.some(item => item.value === value));
+  const items = hasMissing
+    ? await props.hydrationFunction(values)
+    : selectedItems.value;
+  selectedItems.value = items.filter(item => props.modelValue.includes(item.value));
 });
 
 const filteredSelectedItems = computed(() => {
@@ -115,12 +122,12 @@ const filteredSelectedValues = computed(() => {
 
 watch(filteredSelectedValues, (newVal) => {
   if (newVal.length < props.modelValue.length)
-    emit("update:model-value", newVal);
+    emit("update:modelValue", newVal);
 
   if (difference(newVal, props.modelValue).length === 0)
     return;
 
-  emit("update:model-value", newVal);
+  emit("update:modelValue", newVal);
 });
 
 const orderedSelectedItems = computed(() => {
@@ -133,7 +140,9 @@ const orderedSelectedItems = computed(() => {
 
 async function addChildren(node: TreeNode) {
   const nodePage = paginationMap.value[node.value];
-  const newPage = nodePage !== undefined ? nodePage + 1 : 1;
+  const newPage = nodePage !== undefined
+    ? nodePage + 1
+    : 1;
 
   const perPage = 15;
   const [children, numBuckets] = await props.getChildren(node.value, { page: newPage, perPage });
@@ -141,7 +150,10 @@ async function addChildren(node: TreeNode) {
   numBucketsMap.value[node.value] = numBuckets;
   paginationMap.value[node.value] = newPage;
 
-  node.children = [...node.children, ...children];
+  node.children = [
+    ...node.children,
+    ...children,
+  ];
   if (numBuckets < newPage * perPage) {
     node.childrenLoaded = true;
   }
@@ -150,8 +162,8 @@ async function addChildren(node: TreeNode) {
   return numBuckets ?? 0;
 }
 
-function handleRemove(index: number) {
-  selectedItems.value.splice(index, 1);
+function handleRemove(value: string) {
+  selectedItems.value = selectedItems.value.filter(item => item.value !== value);
 }
 function handleSelect(node: TreeNode) {
   if (selectedItems.value.some(item => item.id === node.id)) {
@@ -188,7 +200,7 @@ function handleSearch(value: string) {
 watch(queryDebounced, () => {
   autocompletePage.value = 1;
   suggestionsEnd.value = false;
-  // suggestions.value = [];
+
   refreshAutocomplete();
 });
 
@@ -218,125 +230,77 @@ function handleListEnd(isIntersecting: boolean) {
   refreshAutocomplete();
 }
 
+const open = ref(false);
+const visibleValues = computed(() => {
+  const values = new Set<string>();
+  function visit(nodes: TreeNode[]) {
+    for (const node of nodes) {
+      values.add(node.value);
+      if (node.showChildren)
+        visit(node.children);
+    }
+  }
+  visit(tree.value ?? []);
+  return values;
+});
+const summaryItems = computed(() => orderedSelectedItems.value.filter(item => !open.value || !visibleValues.value.has(item.value)));
+
 const input = ref();
 const isFirstOpen = ref(true);
-
-async function handleOpen(value: { value: boolean }) {
-  if (isFirstOpen.value) {
-    await refreshTree();
-    isFirstOpen.value = false;
-  }
-
-  if (!input.value)
+useFilterFocus(open, input);
+watch(open, async (value) => {
+  if (!value || !isFirstOpen.value)
     return;
-  if (!value.value)
-    return;
-
-  nextTick(() => {
-    input.value.focus();
-  });
-}
+  await refreshTree();
+  isFirstOpen.value = false;
+});
 </script>
 
 <template>
-  <VExpansionPanel
-    bg-color="transparent"
-    elevation="0"
-    :rounded="0"
-    @group:selected="handleOpen"
+  <PortalFilterSection
+    v-model:open="open"
+    :title="title"
+    :selected-count="orderedSelectedItems.length"
   >
-    <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
-      style="min-height: 40px;"
-      data-test="title"
-    >
-      {{ title }}
-    </VExpansionPanelTitle>
-    <div
-      v-if="selectedItems.length > 0"
-      class="bg-white"
-    >
-      <div
-        v-for="(item, i) in orderedSelectedItems"
-        :key="i"
-        class="d-flex selected-item px-2 py-1"
-        @click="handleRemove(i)"
-      >
-        <span>
-          <input
-            type="checkbox"
-            class="checkbox"
-            checked
-            @click.prevent.stop="handleRemove(i)"
-          >
-        </span>
-        <span
-          class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
-          style="word-break: break-word"
-        >
-          <slot name="selection" :item="item">
-            <span class="mr-2">{{ translateName(item.name) }}</span>
-            <span class="ml-auto text-medium-emphasis text-caption mr-1" style="word-break: keep-all">{{
-              item.count
-            }}</span>
-          </slot>
-        </span>
-      </div>
-    </div>
-    <VExpansionPanelText
-      color="white"
-    >
-      <HierarchyInput
-        ref="input"
-        class="my-2"
-        :search="query"
-        :items="suggestions ?? []"
-        @update:search="handleSearch"
-        @select="handleAdd"
-        @end="handleListEnd"
+    <template #selection>
+      <PortalFilterChoice
+        v-for="item in summaryItems"
+        :key="item.value"
+        :label="translateName(item.name)"
+        :count="item.count"
+        :selected="true"
+        @select="handleRemove(item.value)"
       />
-      <div
-        v-if="(tree?.length ?? 0) < 1"
-        class="text-medium-emphasis text-body-2"
-      >
-        {{ t("noOptions") }}
-      </div>
-      <ul v-else class="ml-1">
-        <TreeItem
-          v-for="(node, index) in tree"
-          :key="`tree-item-${index}`"
-          data-test="tree-item"
-          :disabled="false"
-          :node="node"
-          :num-children="numBucketsMap[node.value] ?? 0"
-          :add-children="addChildren"
-          :selected-values="selectedValues"
-          @select="handleSelect"
-        />
-      </ul>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+    </template>
+    <HierarchyInput
+      ref="input"
+      :search="query"
+      :items="suggestions ?? []"
+      @update:search="handleSearch"
+      @select="handleAdd"
+      @end="handleListEnd"
+    />
+    <p v-if="!tree?.length" class="portal-supporting">
+      {{ t('noOptions') }}
+    </p>
+    <ul v-else class="portal-filter-tree">
+      <TreeItem
+        v-for="node in tree"
+        :key="node.value"
+        data-test="tree-item"
+        :disabled="false"
+        :node="node"
+        :add-children="addChildren"
+        :selected-values="selectedValues"
+        @select="handleSelect"
+      />
+    </ul>
+  </PortalFilterSection>
 </template>
-
-<style scoped>
-:deep(.v-expansion-panel-text__wrapper) {
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 0;
-  padding-bottom: 8px;
-}
-
-.selected-item:hover {
-  background-color: #eeeeee;
-  cursor: pointer;
-}
-</style>
 
 <i18n lang="yaml">
 et:
-  search: Otsi
-  noOptions: "Valikud puuduvad"
+  noOptions: Valikud puuduvad
 en:
-  search: Search
-  noOptions: "No options available"
-  </i18n>
+  noOptions: No options available
+</i18n>

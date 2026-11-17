@@ -1,7 +1,19 @@
 <script setup lang="ts">
-const img = useImage();
+import type { PortalTableProps } from "~/components/PortalDataTable.vue";
+
+defineOptions({ inheritAttrs: false });
+const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, dynamicHeaders: true });
+
+const emit = defineEmits<{ "click:row": [payload: { index: number; id: number }] }>();
+function recordClick(item: any) {
+  const index = props.items.findIndex(row => row.id === item.id);
+  emit("click:row", {
+    index: Math.max(0, index),
+    id: Number(item.id),
+  });
+}
+const source = useCollectionImage();
 const localePath = useLocalePath();
-const imageOverlay = ref();
 const showOverlay = ref(false);
 const currentOverlaySpecimen = ref<any>();
 const initIndex = ref(0);
@@ -11,7 +23,6 @@ const { images, total, nextImages, reset: resetImages } = useImages(specimenImag
 
 async function openOverlay(sample: any) {
   resetImages();
-  imageOverlay.value.reset();
 
   currentOverlaySpecimen.value = sample;
   await nextImages(sample);
@@ -27,21 +38,25 @@ function handleEnd() {
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable
-    v-bind="$attrs"
+  <PortalDataTable
+    v-bind="{ ...$attrs, ...props }"
     :item-to="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })"
+    @click:row="emit('click:row', { index: $event.index, id: Number($event.id) })"
   >
     <template #item.id="{ item }">
       {{ item.id }}
     </template>
     <template #item.specimen_full_name="{ item }">
-      {{ item.specimen_full_name }}
+      <NuxtLink
+        class="specimen-record-link"
+        :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
+        @click="recordClick(item)"
+      >{{ item.specimen_full_name }}</NuxtLink>
     </template>
     <template #item.locality="{ item }">
       <NuxtLink
         v-if="item.locality_id"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({
             name: 'locality-id',
@@ -66,7 +81,7 @@ function handleEnd() {
     <template #item.stratigraphy="{ item }">
       <NuxtLink
         v-if="item.stratigraphy_id"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({
             name: 'stratigraphy-id',
@@ -85,7 +100,7 @@ function handleEnd() {
     <template #item.lithostratigraphy="{ item }">
       <NuxtLink
         v-if="item.lithostratigraphy_id"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({
             name: 'stratigraphy-id',
@@ -110,18 +125,18 @@ function handleEnd() {
       </BaseLinkExternal>
     </template>
     <template #item.image="{ item }">
-      <div class="d-flex align-center">
+      <div class="flex items-center">
         <ThumbnailImage
-          v-if="item.image !== undefined"
+          v-if="item.image"
           class="my-1"
           :src="
-            img(item.image, { size: 'small' }, { provider: 'geocollections' })
+            source(item.image, 'small')
           "
           @click="
             openOverlay(item)
           "
         />
-        <span v-if="item.image_count > 1" class="pl-1 text-medium-emphasis font-weight-medium">
+        <span v-if="item.image_count > 1" class="portal-specimen-subtitle">
           +{{ item.image_count - 1 }}
         </span>
       </div>
@@ -150,40 +165,43 @@ function handleEnd() {
         $translate({ et: item.original_status, en: item.original_status_en })
       }}
     </template>
+    <template #item.depthCombined="{ item }">
+      <span v-if="item.depth != null">{{ Number(item.depth).toLocaleString(undefined, { maximumFractionDigits: 2 }) }}<template v-if="item.depth_interval != null">–{{ Number(item.depth_interval).toLocaleString(undefined, { maximumFractionDigits: 2 }) }}</template></span>
+      <span v-else>—</span>
+    </template>
     <template #item.depthFrom="{ item }">
-      <span v-if="item.depth">
+      <span v-if="item.depth != null">
         {{
           item.depth.toFixed(2)
         }}
       </span>
     </template>
     <template #item.depthTo="{ item }">
-      <span v-if="item.depth_interval">
+      <span v-if="item.depth_interval != null">
         {{
           item.depth_interval.toFixed(2)
         }}
       </span>
     </template>
-  </BaseDataTable>
-  <ImageOverlay
-    ref="imageOverlay"
+  </PortalDataTable>
+  <PortalPhotoViewer
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"
     :total="total"
     @end="handleEnd"
   >
-    <template #overlayInfo="{ item }">
+    <template #info="{ item }">
       <div v-if="item.info.author">
-        <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+        <span class="font-bold">{{ $t("photo.author") }}: </span>
         <span>{{ item.info.author }}</span>
       </div>
       <div v-if="item.info.date">
-        <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+        <span class="font-bold">{{ $t("photo.date") }}: </span>
         <span>
           {{ $formatDate(item.info.date) }}
         </span>
       </div>
     </template>
-  </ImageOverlay>
+  </PortalPhotoViewer>
 </template>

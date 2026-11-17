@@ -27,3 +27,7 @@ export function useSolrFetch<T = SolrResponse>(request: Request, options: UseFet
 
   return useFetch(request, params);
 }
+
+export function externalUrl(destination: string, protocol: "https:" | "http:" = "https:"): string {
+  return `${protocol}//${destination}`;
+}

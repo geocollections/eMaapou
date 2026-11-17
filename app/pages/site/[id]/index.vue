@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Site } from "../[id].vue";
-import { mdiFileDownloadOutline } from "@mdi/js";
 import type { Image } from "~/components/ImageBar.vue";
 import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 import type { ImageAttachment } from "~/composables/useImages";
+import { mdiFileDownloadOutline } from "@mdi/js";
 
 const props = defineProps<{ site: Site }>();
 
@@ -13,7 +13,9 @@ const { $formatDate, $apiFetch } = useNuxtApp();
 const locality = computed(() => props.site.locality);
 const area = computed(() => props.site.area);
 const planArray = computed(() => {
-  return props.site.area?.plans ? props.site.area?.plans.split(",") : [];
+  return props.site.area?.plans
+    ? props.site.area?.plans.split(",")
+    : [];
 });
 const elevation = computed(() => {
   return props.site.elevation_accuracy
@@ -79,9 +81,9 @@ const mapOverlays = computed(() => {
 </script>
 
 <template>
-  <VContainer style="margin: initial">
-    <VRow v-if="images.length > 0">
-      <VCol>
+  <div class="portal-content-margin portal-content">
+    <div v-if="images.length > 0" class="portal-row">
+      <div class="portal-column">
         <ImageBar
           :images="images"
           :total="total"
@@ -89,11 +91,11 @@ const mapOverlays = computed(() => {
         >
           <template #tooltipInfo="{ item }">
             <div v-if="item.info.author">
-              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span class="font-bold">{{ $t("photo.author") }}: </span>
               <span>{{ item.info.author }}</span>
             </div>
             <div v-if="item.info.date || item.info.dateText">
-              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span class="font-bold">{{ $t("photo.date") }}: </span>
               <span v-if="item.info.date">
                 {{ $formatDate(item.info.date) }}
               </span>
@@ -102,11 +104,11 @@ const mapOverlays = computed(() => {
           </template>
           <template #overlayInfo="{ item }">
             <div v-if="item.info.author">
-              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span class="font-bold">{{ $t("photo.author") }}: </span>
               <span>{{ item.info.author }}</span>
             </div>
             <div v-if="item.info.date || item.info.dateText">
-              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span class="font-bold">{{ $t("photo.date") }}: </span>
               <span v-if="item.info.date">
                 {{ $formatDate(item.info.date) }}
               </span>
@@ -114,191 +116,195 @@ const mapOverlays = computed(() => {
             </div>
           </template>
         </ImageBar>
-      </VCol>
-    </VRow>
-    <VRow>
-      <VCol
-        :sm="12"
-        :md="6"
-        :lg="7"
-        :xl="5"
+      </div>
+    </div>
+    <div class="portal-row">
+      <div
+        class="portal-record-primary"
       >
-        <BaseTable class="border rounded">
-          <TableRow
-            :title="$t('site.name')"
-            :value="$translate({
-              et: site.name,
-              en: site.name_en ?? site.name,
-            })
-            "
-          />
-          <TableRow
-            v-if="area"
-            :title="$t('site.area')"
-            :value="area"
-          >
-            <template #value>
-              <BaseLinkExternal
-                v-if="area.type === 2"
-                :to="`https://turba.geoloogia.info/turbaala/${area.id}`"
-              >
-                {{
-                  $translate({
-                    et: area.name,
-                    en: area.name_en,
-                  })
-                }}
-              </BaseLinkExternal>
-              <BaseLink
-                v-else
-                :to="localePath({
-                  name: 'area-id',
-                  params: { id: area.id },
-                })
-                "
-              >
-                {{
-                  $translate({
-                    et: area.name,
-                    en: area.name_en,
-                  })
-                }}
-              </BaseLink>
-            </template>
-          </TableRow>
-
-          <TableRow
-            v-if="area && area.type === 2"
-            :title="$t('site.areaText1')"
-            :value="planArray"
-          >
-            <template #value>
-              <span v-for="(item, index) in planArray" :key="index">
-                <a
-                  class="text-link"
-                  :download="item.trim()"
+        <table class="portal-bordered-table">
+          <tbody>
+            <TableRow
+              :title="$t('site.name')"
+              :value="$translate({
+                et: site.name,
+                en: site.name_en ?? site.name,
+              })
+              "
+            />
+            <TableRow
+              v-if="area"
+              :title="$t('site.area')"
+              :value="area"
+            >
+              <template #value>
+                <BaseLinkExternal
+                  v-if="area.type === 2"
+                  :to="externalUrl(`turba.geoloogia.info/turbaala/${area.id}`)"
                 >
-                  {{ item }}
-                  <VIcon size="small" color="primary-darken-2">
-                    {{ mdiFileDownloadOutline }}
-                  </VIcon>
-                </a>
-                <span v-if="index !== planArray.length - 1" class="mr-1">|</span>
-              </span>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="site.project"
-            :title="$t('site.project')"
-            :value="$translate({
-              et: site.project.name,
-              en: site.project.name_en,
-            })
-            "
-          />
-          <TableRow :title="$t('site.coordx')" :value="site.coordx" />
-          <TableRow :title="$t('site.coordy')" :value="site.coordy" />
-          <TableRow :title="$t('site.extent')" :value="site.extent" />
-          <TableRow :title="$t('site.depth')" :value="site.depth" />
-
-          <TableRow
-            v-if="locality"
-            :title="$t('locality.locality')"
-            :value="locality"
-          >
-            <template #value="{ value }">
-              <BaseLink
-                :to="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: value.id },
+                  {{
+                    $translate({
+                      et: area.name,
+                      en: area.name_en,
+                    })
+                  }}
+                </BaseLinkExternal>
+                <BaseLink
+                  v-else
+                  :to="localePath({
+                    name: 'area-id',
+                    params: { id: area.id },
                   })
-                "
-              >
+                  "
+                >
+                  {{
+                    $translate({
+                      et: area.name,
+                      en: area.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+
+            <TableRow
+              v-if="area && area.type === 2"
+              :title="$t('site.areaText1')"
+              :value="planArray"
+            >
+              <template #value>
+                <span v-for="(item, index) in planArray" :key="index">
+                  <a
+                    class="portal-record-link"
+                    :download="item.trim()"
+                  >
+                    {{ item }}
+                    <PortalIcon
+                      size="small"
+                      color="primary-darken-2"
+                      :path="mdiFileDownloadOutline"
+                    />
+                  </a>
+                  <span v-if="index !== planArray.length - 1" class="mr-1">|</span>
+                </span>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="site.project"
+              :title="$t('site.project')"
+              :value="$translate({
+                et: site.project.name,
+                en: site.project.name_en,
+              })
+              "
+            />
+            <TableRow :title="$t('site.coordx')" :value="site.coordx" />
+            <TableRow :title="$t('site.coordy')" :value="site.coordy" />
+            <TableRow :title="$t('site.extent')" :value="site.extent" />
+            <TableRow :title="$t('site.depth')" :value="site.depth" />
+
+            <TableRow
+              v-if="locality"
+              :title="$t('locality.locality')"
+              :value="locality"
+            >
+              <template #value="{ value }">
+                <BaseLink
+                  :to="
+                    localePath({
+                      name: 'locality-id',
+                      params: { id: value.id },
+                    })
+                  "
+                >
+                  {{
+                    $translate({
+                      et: value.name,
+                      en: value.name_en,
+                    })
+                  }}
+                </BaseLink>
+              </template>
+            </TableRow>
+            <TableRow
+              v-if="locality?.country"
+              :title="$t('locality.country')"
+              :value="$translate({
+                et: locality.country.name,
+                en: locality.country.name_en,
+              })
+              "
+            >
+              <template #value>
                 {{
-                  $translate({
-                    et: value.name,
-                    en: value.name_en,
+                  $t("locality.countryFormat", {
+                    name: $translate({
+                      et: locality.country.name,
+                      en: locality.country.name_en,
+                    }),
+                    iso: locality.country.iso_3166_1_alpha_2,
                   })
                 }}
-              </BaseLink>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="locality?.country"
-            :title="$t('locality.country')"
-            :value="$translate({
-              et: locality.country.name,
-              en: locality.country.name_en,
-            })
-            "
-          >
-            <template #value>
-              {{
-                $t("locality.countryFormat", {
-                  name: $translate({
-                    et: locality.country.name,
-                    en: locality.country.name_en,
-                  }),
-                  iso: locality.country.iso_3166_1_alpha_2,
-                })
-              }}
-            </template>
-          </TableRow>
-          <TableRow :title="$t('locality.coordinates')" :value="`${site.latitude}, ${site.longitude}`" />
-          <TableRow
-            v-if="elevation"
-            :title="$t('site.elevation')"
-            :value="elevation"
-          />
-          <TableRow
-            v-if="locality"
-            :title="$t('locality.depth')"
-            :value="locality.depth"
-          />
-          <TableRow
-            v-if="site.accuracy"
-            :title="$t('site.locationAccuracy')"
-            :value="site.accuracy"
-          />
-          <TableRow
-            v-if="site.coordinate_method"
-            :title="$t('site.coordDetMethod')"
-            :value="$translate({
-              et: site.coordinate_method.value,
-              en: site.coordinate_method.value_en,
-            })
-            "
-          />
-          <TableRow :title="$t('site.description')" :value="site.description" />
-          <TableRow
-            v-if="site.remarks"
-            :title="$t('site.remarks')"
-            :value="site.remarks"
-          />
-          <TableRow
-            v-if="site.remarks_location"
-            :title="$t('site.remarksLocation')"
-            :value="site.remarks_location"
-          />
-          <TableRow
-            v-if="studied"
-            :title="$t('site.studied')"
-            :value="studied"
-          />
-          <TableRow
-            v-if="site.date_added"
-            :title="$t('site.dateAdded')"
-            :value="$formatDate(site.date_added)"
-          />
-          <TableRow
-            v-if="site.date_changed"
-            :title="$t('site.dateChanged')"
-            :value="$formatDate(site.date_changed)"
-          />
-        </BaseTable>
-      </VCol>
-      <VCol v-if="(site.latitude && site.longitude) || site.locality" :xl="4">
+              </template>
+            </TableRow>
+            <TableRow :title="$t('locality.coordinates')" :value="`${site.latitude}, ${site.longitude}`" />
+            <TableRow
+              v-if="elevation"
+              :title="$t('site.elevation')"
+              :value="elevation"
+            />
+            <TableRow
+              v-if="locality"
+              :title="$t('locality.depth')"
+              :value="locality.depth"
+            />
+            <TableRow
+              v-if="site.accuracy"
+              :title="$t('site.locationAccuracy')"
+              :value="site.accuracy"
+            />
+            <TableRow
+              v-if="site.coordinate_method"
+              :title="$t('site.coordDetMethod')"
+              :value="$translate({
+                et: site.coordinate_method.value,
+                en: site.coordinate_method.value_en,
+              })
+              "
+            />
+            <TableRow :title="$t('site.description')" :value="site.description" />
+            <TableRow
+              v-if="site.remarks"
+              :title="$t('site.remarks')"
+              :value="site.remarks"
+            />
+            <TableRow
+              v-if="site.remarks_location"
+              :title="$t('site.remarksLocation')"
+              :value="site.remarks_location"
+            />
+            <TableRow
+              v-if="studied"
+              :title="$t('site.studied')"
+              :value="studied"
+            />
+            <TableRow
+              v-if="site.date_added"
+              :title="$t('site.dateAdded')"
+              :value="$formatDate(site.date_added)"
+            />
+            <TableRow
+              v-if="site.date_changed"
+              :title="$t('site.dateChanged')"
+              :value="$formatDate(site.date_changed)"
+            />
+          </tbody>
+        </table>
+      </div>
+      <div
+        v-if="(site.latitude && site.longitude) || site.locality"
+        class="portal-column-third"
+      >
         <MapDetail
           v-if="site.latitude && site.longitude"
           :base-layer="mapBaseLayer"
@@ -322,7 +328,7 @@ const mapOverlays = computed(() => {
             },
           ]"
         />
-      </VCol>
-    </VRow>
-  </VContainer>
+      </div>
+    </div>
+  </div>
 </template>

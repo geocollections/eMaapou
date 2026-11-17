@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTheme } from "vuetify";
+import type { ECElementEvent } from "echarts";
 import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
 import type {
   AxisPointerComponentOption,
@@ -14,7 +14,8 @@ import type {
   YAXisComponentOption,
 } from "echarts/types/dist/echarts.js";
 import type { TitleOption } from "echarts/types/dist/shared.js";
-import { mdiCog, mdiRefresh } from "@mdi/js";
+import type { Renderer } from "~/types/enums";
+import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
 import { CustomChart, LineChart } from "echarts/charts";
 import {
   AxisPointerComponent,
@@ -30,13 +31,7 @@ import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 import differenceBy from "lodash/differenceBy";
 import groupBy from "lodash/groupBy";
 import orderBy from "lodash/orderBy";
-import VChart from "vue-echarts";
-import type { Renderer } from "~/types/enums";
-import clipRectByRect from "~/utils/clipRectByRect";
-import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
-import mm2px from "~/utils/mm2px";
-import px2mm from "~/utils/px2mm";
-import range from "~/utils/range";
+import ScientificChart from "vue-echarts";
 
 type ECOption = ComposeOption<
   | GridComponentOption
@@ -92,7 +87,7 @@ interface ChartComponents {
 }
 
 const { $translate } = useNuxtApp();
-const theme = useTheme();
+const colors = usePortalColors();
 const { t } = useI18n();
 const localeRoute = useLocaleRoute();
 const state = reactive({
@@ -120,14 +115,8 @@ const state = reactive({
 
 const { renderer, ppi } = storeToRefs(useSettings());
 const containerFlogChart = ref<HTMLElement>();
-const flogChart = ref<typeof VChart>();
+const flogChart = ref<typeof ScientificChart>();
 
-const icons = computed(() => {
-  return {
-    mdiCog,
-    mdiRefresh,
-  };
-});
 const initOptions = computed(() => {
   return {
     renderer: renderer.value,
@@ -178,13 +167,13 @@ function calculateScale(
 function calculateTotalWidth() {
   const parameterModuleWidth
     = selectedParametersGrouped.value.length
-    * (state.parameterChartWidth + state.parameterChartPadding)
-    + state.parameterModulePadding;
+      * (state.parameterChartWidth + state.parameterChartPadding)
+      + state.parameterModulePadding;
 
   const totalWidth
     = state.sampleChartWidth
-    + state.sampleChartPaddingLeft
-    + parameterModuleWidth;
+      + state.sampleChartPaddingLeft
+      + parameterModuleWidth;
 
   if (containerFlogChart.value) {
     return containerFlogChart.value.clientWidth
@@ -205,9 +194,11 @@ function scaleChartHeight() {
 }
 const router = useRouter();
 
-function handleClick(params: echarts.ECElementEvent): any {
+function handleClick(params: ECElementEvent): any {
   if (params.seriesId === "samples-series") {
-    const sampleId = Array.isArray(params.data) ? params.data[3] as string : undefined;
+    const sampleId = Array.isArray(params.data)
+      ? params.data[3] as string
+      : undefined;
     if (sampleId === undefined) {
       return;
     }
@@ -306,7 +297,6 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
     const groupedNewParameters = groupBy(newSelectedParameters, "value");
     const newOptions = addedParameters.reduce(
       (prev, addedParameter) => {
-        // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
         if (groupedNewParameters[addedParameter.value]!.length > 1) {
           const series = chart
             ?.getOption()
@@ -320,14 +310,16 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
             }) as GroupedParameter,
             series.xAxisIndex,
             -1,
-            { returnComponents: ["series"] },
+            {
+              returnComponents: ["series"],
+            },
           );
           prev.series.push(...newChartComponents.series);
           return prev;
         }
 
         const nullGridIndex = chart?.getOption().grid.indexOf(null, fromIndex);
-        // if empty spot in echarts grid list, use the empty spot index as `gridIndex`, as echarts wants these empty spaces to be filled
+
         if (nullGridIndex > -1) {
           state.nextGridIndex = nullGridIndex;
           fromIndex = nullGridIndex + 1;
@@ -355,7 +347,12 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
         prev.series.push(...newChartComponents.series);
         return prev;
       },
-      { grid: [], xAxis: [], yAxis: [], series: [] },
+      {
+        grid: [],
+        xAxis: [],
+        yAxis: [],
+        series: [],
+      },
     );
     state.replace = false;
     newOptions.dataZoom = {
@@ -382,8 +379,6 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
           return prev;
 
         if (!grid.id.startsWith("parameter")) {
-          // !!! using `i` is not correct as the grids have been reordered
-          // this should not cause any problems right now but, could when other chart tpyes are added (taxon, stratigraphy) or when samples chart can be disabled
           prev.grid.push({ id: grid.id });
           prev.xAxis.push({ id: currentOption.xAxis[i].id });
           prev.yAxis.push({ id: currentOption.yAxis[i].id });
@@ -403,8 +398,6 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
           (series?.id as string)?.endsWith(`-${parameterValueStr}`),
         );
 
-        // if one of the parameter methods removed but some method, for that parameter, still selected,
-        // update series data and grid position
         if (modified.some(m => m.value === parameterValue)) {
           const param = groupedParameters.find(
             m => m.value === parameterValue,
@@ -413,7 +406,9 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
             param,
             xAxis.gridIndex,
             position,
-            { returnComponents: ["series", "grid"] },
+            {
+              returnComponents: ["series", "grid"],
+            },
           );
           position += 1;
 
@@ -426,7 +421,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
           prev.series.push(...newChartComponents.series);
           return prev;
         }
-        // if chart is not modified or removed, leave it as is, only update grid position.
+
         if (!removed.some(m => m.value === parameterValue)) {
           const param = groupedParameters.find(
             m => m.value === parameterValue,
@@ -435,7 +430,9 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
             param,
             -1,
             position,
-            { returnComponents: ["grid"] },
+            {
+              returnComponents: ["grid"],
+            },
           );
           position += 1;
           prev.grid.push({
@@ -449,7 +446,12 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
         }
         return prev;
       },
-      { grid: [], xAxis: [], yAxis: [], series: [] },
+      {
+        grid: [],
+        xAxis: [],
+        yAxis: [],
+        series: [],
+      },
     );
     state.replace = true;
     state.option = newOptions;
@@ -549,7 +551,7 @@ function createParameterChartComponents<
       borderWidth: 0,
       tooltip: {
         trigger: "item",
-        backgroundColor: "rgba(255, 255, 255, 0.8)",
+        backgroundColor: colors.overlay,
       },
     };
   }
@@ -619,14 +621,16 @@ function createParameterChartComponents<
           formatter(params: any) {
             const data: [number, number, number, number, string] = params.data;
             return `
-                <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
-  params.color
-}"></span>
+                <span class="portal-chart-dot" style="--chart-dot-color: ${
+                  params.color
+                }"></span>
                 <span>
                   ${data[4]}<br />
                   ${params.seriesName}: <b>${data[0]}</b><br />
                   Depth: <b>${data[2]}</b>
-                  ${data[3] ? `<br />Depth interval: <b>${data[3]}</b>` : ""}
+                  ${data[3]
+                    ? `<br />Depth interval: <b>${data[3]}</b>`
+                    : ""}
                 </span>
                 `;
           },
@@ -642,9 +646,15 @@ function createParameterChartComponents<
               : t.depth;
             return [
               t.value,
-              props.reverse ? -avgDepth : avgDepth,
-              props.reverse ? -t.depth : t.depth,
-              props.reverse ? -t.depth_interval : t.depth_interval,
+              props.reverse
+                ? -avgDepth
+                : avgDepth,
+              props.reverse
+                ? -t.depth
+                : t.depth,
+              props.reverse
+                ? -t.depth_interval
+                : t.depth_interval,
               t.analysis_id,
             ];
           })
@@ -673,7 +683,12 @@ function createOption(): ECOption {
       prev.series.push(...parameterComponents.series);
       return prev;
     },
-    { grid: [], xAxis: [], yAxis: [], series: [] } as {
+    {
+      grid: [],
+      xAxis: [],
+      yAxis: [],
+      series: [],
+    } as {
       grid: GridComponentOption[];
       xAxis: XAXisComponentOption[];
       yAxis: YAXisComponentOption[];
@@ -725,14 +740,16 @@ function createOption(): ECOption {
     },
     axisPointer: [
       {
-        link: [{ yAxisIndex: "all" }],
+        link: [
+          { yAxisIndex: "all" },
+        ],
         triggerTooltip: false,
         label: {
           fontSize: 10,
-          backgroundColor: theme.current.value.colors.warning as string,
+          backgroundColor: colors.primary,
         },
         lineStyle: {
-          color: theme.current.value.colors.warning as string,
+          color: colors.primary,
           width: 1,
         },
       },
@@ -752,7 +769,9 @@ function createOption(): ECOption {
       {
         id: "samples-x-axis",
         type: "category",
-        data: [t("flogChart.samples") as string],
+        data: [
+          t("flogChart.samples") as string,
+        ],
         position: "top",
         axisLabel: {
           fontWeight: "bold",
@@ -780,8 +799,6 @@ function createOption(): ECOption {
         splitNumber: 7,
         axisTick: {
           show: true,
-          // @ts-expect-error - nah, this exists https://echarts.apache.org/en/option.html#yAxis.axisTick.interval
-          interval: 0.1,
 
         },
         axisLabel: {
@@ -821,13 +838,15 @@ function createOption(): ECOption {
             const data: [number, number, number, number, string] = params.data;
 
             return `
-              <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
-  params.color
-}"></span>
+              <span class="portal-chart-dot" style="--chart-dot-color: ${
+                params.color
+              }"></span>
               <span>
                 ${data[4]}<br />
                 Depth: <b>${data[1]}</b><br />
-                ${data[2] ? `Depth interval: <b>${data[2]}</b>` : ""}
+                ${data[2]
+                  ? `Depth interval: <b>${data[2]}</b>`
+                  : ""}
               </span>
               `;
           },
@@ -838,19 +857,23 @@ function createOption(): ECOption {
         label: {
           show: true,
           position: "right",
-          color: "black",
+          color: colors.heading,
           fontSize: 12,
-          // @ts-expect-error - this is OK
-          formatter: "{@[4]}",
+
         },
         renderItem(params, api) {
+          const coordSys = params.coordSys as unknown as { x: number; y: number; width: number; height: number };
           const categoryIndex = api.value(0);
           const depthInterval = api.value(2)
             ? api.value(2)
             : (api.value(1) as number) - 0.1;
           const switchDepths = api.value(1) < depthInterval;
-          const startDepth = switchDepths ? depthInterval : api.value(1);
-          const endDepth = switchDepths ? api.value(1) : depthInterval;
+          const startDepth = switchDepths
+            ? depthInterval
+            : api.value(1);
+          const endDepth = switchDepths
+            ? api.value(1)
+            : depthInterval;
           const start = api.coord([categoryIndex, startDepth]);
           const end = api.coord([categoryIndex, endDepth]);
 
@@ -859,9 +882,13 @@ function createOption(): ECOption {
             : 0;
           const dynamicHeight = end[1]! - start[1]!;
           const height
-            = api.value(2) || dynamicHeight < 10 ? dynamicHeight : 10;
+            = api.value(2) || dynamicHeight < 10
+              ? dynamicHeight
+              : 10;
           const x = start[0]! - categoryWidth! * 0.5;
-          const y = api.value(2) ? start[1]! : start[1]! - height / 2;
+          const y = api.value(2)
+            ? start[1]!
+            : start[1]! - height / 2;
           const rectShape = clipRectByRect(
             {
               x,
@@ -870,33 +897,42 @@ function createOption(): ECOption {
               height,
             },
             {
-              // @ts-expect-error - this is OK
-              x: params.coordSys.x,
-              // @ts-expect-error - this is OK
-              y: params.coordSys.y,
-              // @ts-expect-error - this is OK
-              width: params.coordSys.width,
-              // @ts-expect-error - this is OK
-              height: params.coordSys.height,
+
+              x: coordSys.x,
+
+              y: coordSys.y,
+
+              width: coordSys.width,
+
+              height: coordSys.height,
             },
           );
           return (
-            rectShape && {
-              type: "rect",
-              transition: [],
-              shape: rectShape,
-              style: { ...api.style(), fill: "#000000" },
-              emphasis: {
-                style: api.style(),
-              },
-            }
+            rectShape
+              ? {
+                  type: "rect",
+                  transition: [],
+                  shape: rectShape,
+                  style: {
+                    ...api.style(),
+                    fill: colors.heading,
+                  },
+                  emphasis: {
+                    style: api.style(),
+                  },
+                }
+              : undefined
           );
         },
         data: props.samples.map((item: any) => {
           return [
             0,
-            props.reverse ? -item.depth : item.depth,
-            props.reverse ? -item.depth_interval : item.depth_interval,
+            props.reverse
+              ? -item.depth
+              : item.depth,
+            props.reverse
+              ? -item.depth_interval
+              : item.depth_interval,
             item.id,
             item.sample_number || item.sample_id,
           ];
@@ -906,7 +942,7 @@ function createOption(): ECOption {
     ],
   };
 }
-// Set initial selected parameters
+
 if (props.parameters.length > 0) {
   state.selectedParameters = props.parameters[0]!.children.slice(
     0,
@@ -917,112 +953,64 @@ if (props.parameters.length > 0) {
 }
 state.totalWidth = calculateTotalWidth();
 state.option = createOption();
+watch(colors, () => state.option = createOption());
 </script>
 
 <template>
-  <div class="">
-    <VToolbar
-      flat
-      color="white"
-      density="compact"
-    >
+  <div class="portal-flog-chart">
+    <div class="portal-chart-toolbar">
       <OptionsParameterTreeView
         :parameters="parameters"
         :initial-selection="state.selectedParameters"
         @input="handleParametersUpdate"
-      />
-      <VBtn
-        class="ml-3"
-        icon
-        size="small"
-      >
-        <VIcon> {{ icons.mdiCog }} </VIcon>
-        <ClientOnly>
-          <VMenu
-            activator="parent"
-            transition="slide-y-transition"
-            offset="10"
-            content-class="white"
-            :close-on-content-click="false"
-          >
-            <VCard>
-              <VCardTitle class="montserrat pb-2">
-                {{ $t("flogChart.settings") }}
-              </VCardTitle>
-              <VCardText>
-                <RendererSwitch
-                  :renderer="renderer"
-                  @update="handleRenderSwitch"
-                />
-                <VDivider class="my-2" />
-                <VTextField
+      /><UPopover :ui="{ content: 'portal-chart-settings' }">
+        <UButton
+          color="neutral"
+          variant="ghost"
+          icon="i-lucide-settings"
+          :aria-label="$t('flogChart.settings')"
+        /><template #content>
+          <div class="portal-chart-settings-body">
+            <h3>{{ $t('flogChart.settings') }}</h3><RendererSwitch :renderer="renderer" @update="handleRenderSwitch" /><USeparator /><UFormField :label="$t('flogChart.heightScale')">
+              <div class="portal-chart-scale">
+                <span>1:</span><UInput
                   v-model="state.scale"
                   type="number"
-                  :label="$t('flogChart.heightScale')"
-                  prefix="1:"
-                  variant="underlined"
-                  hide-details
                   @change="handleScaleChange"
-                >
-                  <template #append-inner>
-                    <VIcon @click="handleScaleReset">
-                      {{ icons.mdiRefresh }}
-                    </VIcon>
-                  </template>
-                  <template #append>
-                    <VBtnToggle
-                      density="compact"
-                      color="accent"
-                      :model-value="ppi"
-                      @update:model-value="handlePpiChange"
-                    >
-                      <VBtn
-                        width="65"
-                        size="small"
-                        class="text-none montserrat"
-                        :variant="ppi !== 96 ? 'outlined' : undefined"
-                        :value="96"
-                      >
-                        96 PPI
-                      </VBtn>
-                      <VBtn
-                        width="65"
-                        size="small"
-                        class="text-none montserrat"
-                        :variant="ppi !== 72 ? 'outlined' : undefined"
-                        :value="72"
-                      >
-                        72 PPI
-                      </VBtn>
-                    </VBtnToggle>
-                  </template>
-                </VTextField>
-                <VTextField
-                  :model-value="state.parameterChartWidth"
-                  type="number"
-                  class="d-inline-flex"
-                  variant="underlined"
-                  hide-details
-                  suffix="px"
-                  :label="$t('flogChart.parameterChartWidth')"
-                  @change="handleParameterChartWidthChange"
+                /><UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-rotate-ccw"
+                  :aria-label="$t('common.resetSearch')"
+                  @click="handleScaleReset"
                 />
-              </VCardText>
-            </VCard>
-          </VMenu>
-        </ClientOnly>
-      </VBtn>
-    </VToolbar>
-    <VDivider />
-    <div ref="containerFlogChart" class="overflow-x-auto">
+              </div>
+            </UFormField><div class="portal-chart-scale">
+              <UButton
+                v-for="value in [96, 72]"
+                :key="value"
+                :variant="ppi === value ? 'solid' : 'outline'"
+                @click="handlePpiChange(value)"
+              >
+                {{ value }} PPI
+              </UButton>
+            </div><UFormField :label="$t('flogChart.parameterChartWidth')">
+              <UInput
+                :model-value="state.parameterChartWidth"
+                type="number"
+                @update:model-value="handleParameterChartWidthChange(String($event))"
+              />
+            </UFormField>
+          </div>
+        </template>
+      </UPopover>
+    </div>
+    <USeparator /><div ref="containerFlogChart" class="portal-chart-scroll">
       <ClientOnly>
-        <VChart
+        <ScientificChart
           ref="flogChart"
-          class="chart pa-2"
-          :style="{
-            width: `${state.totalWidth}px`,
-            height: `${state.currentHeight + 200}px`,
-          }"
+          class="portal-flog-canvas"
+          :style="{ '--chart-width': `${state.totalWidth}px`, '--chart-height': `${state.currentHeight + 200}px` }"
           v-bind="$attrs"
           autoresize
           :init-options="initOptions"
@@ -1030,27 +1018,12 @@ state.option = createOption();
           :update-options="updateOptions"
           @click="handleClick"
           @datazoom="handleDataZoom"
-        />
-        <template #placeholder>
-          <div
-            :style="`height: ${state.initialHeight + 200}px; width: 100%`"
-            class="d-flex align-center justify-center"
-          >
-            <VProgressCircular
-              indeterminate
-              color="accent"
-              :size="100"
-              :width="6"
-            />
+        /><template #fallback>
+          <div class="portal-chart-loading" :style="{ '--chart-height': `${state.initialHeight + 200}px` }">
+            <UIcon name="i-lucide-loader-circle" class="portal-loading-icon" />
           </div>
         </template>
       </ClientOnly>
     </div>
   </div>
 </template>
-
-<style scoped>
-:deep(.v-input__append-inner) {
-  align-self: flex-end !important;
-}
-</style>

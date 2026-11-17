@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { useTheme } from "vuetify";
 import type { GeoJsonObject } from "geojson";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
-import 'leaflet.fullscreen/dist/Control.FullScreen.css'
+import "leaflet.fullscreen/dist/Control.FullScreen.css";
 
 export type MapBaseLayer = keyof typeof baseLayers;
 export type MapOverlay = keyof typeof overlays;
@@ -25,12 +24,12 @@ const props = withDefaults(defineProps<{
   center: () => ({ latitude: 58.5, longitude: 25.5 }),
   baseLayer: "OpenStreetMap",
   overlays: () => [],
-  gestureHandling: true,
+  ...{ gestureHandling: true },
   showLinks: true,
   markers: () => [],
 });
 
-const theme = useTheme();
+const colors = usePortalColors();
 const { t } = useI18n();
 const currentCenter = ref({
   lat: props.center.latitude,
@@ -162,15 +161,17 @@ onMounted(() => {
     map.value = L.map("map", {
       center: [58.5, 25.5],
       zoom: 5,
-      // @ts-expect-error - gestureHandling does not have types
-      gestureHandling: props.gestureHandling,
-      gestureHandlingOptions: {
-        text: {
-          touch: t("gestureHandling.touch"),
-          scroll: t("gestureHandling.scroll"),
-          scrollMac: t("gestureHandling.scrollMac"),
+
+      ...{ gestureHandling: props.gestureHandling },
+      ...{
+        gestureHandlingOptions: {
+          text: {
+            touch: t("gestureHandling.touch"),
+            scroll: t("gestureHandling.scroll"),
+            scrollMac: t("gestureHandling.scrollMac"),
+          },
+          duration: 1000,
         },
-        duration: 1000,
       },
       layers: mapLayers.value,
       fullscreenControl: true,
@@ -187,8 +188,8 @@ onMounted(() => {
       const markerInstance = L.circleMarker([marker.latitude, marker.longitude], {
         radius: 6,
         weight: 1.5,
-        color: "#fff",
-        fillColor: theme.current.value.colors.warning,
+        color: colors.background,
+        fillColor: colors.primary,
         fillOpacity: 1,
 
       });
@@ -232,10 +233,11 @@ onMounted(() => {
   <div>
     <div
       id="map"
-      class="border rounded"
+      class="portal-detail-map"
+      :class="height === '100%' ? 'absolute' : 'relative'"
       :style="{
-        height: `${height}`,
-        position: height === '100%' ? 'absolute' : 'relative',
+        '--map-height': height,
+
       }"
     />
     <MapLinks
@@ -245,23 +247,3 @@ onMounted(() => {
     />
   </div>
 </template>
-
-<style lang="scss" scoped>
-.cursor-crosshair {
-  cursor: crosshair;
-}
-
-.cursor-crosshair:active {
-  cursor: grabbing;
-}
-
-.leaflet-container {
-  font-family: "Open Sans", sans-serif;
-
-  :deep(.leaflet-control-layers-toggle) {
-    width: 30px;
-    height: 30px;
-    background-size: 20px;
-  }
-}
-</style>

@@ -26,71 +26,51 @@ function handleEnd() {
 </script>
 
 <template>
-  <div class="d-flex align-center bg-grey-lighten-4 pa-2 rounded border" style="overflow-x: auto">
+  <div class="portal-image-strip">
     <div
       v-for="(item, index) in images"
-      :key="index"
-      class="mr-3 "
+      :key="item.id"
+      class="portal-image-strip-item"
     >
       <slot name="image" :item="item">
-        <NuxtImg
-          :src="item.filename"
-          provider="geocollections"
-          :modifiers="{ size: 'medium' }"
-          height="175"
-          class="rounded cursor-pointer thumbnail-image"
-          @click="
-            openOverlay(index)
-          "
-        >
-          <template #placeholder>
-            <VRow
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <VProgressCircular indeterminate color="grey-lighten-5" />
-            </VRow>
-          </template>
-        </NuxtImg>
+        <UTooltip>
+          <template #content>
+            <slot name="tooltipInfo" :item="item" />
+          </template><UButton
+            color="neutral"
+            variant="ghost"
+            class="portal-image-trigger"
+            :aria-label="$t('common.clickToOpen')"
+            @click="openOverlay(index)"
+          >
+            <NuxtImg
+              :src="item.filename"
+              provider="geocollections"
+              :modifiers="{ size: 'medium' }"
+              height="175"
+              class="portal-image-thumbnail"
+            />
+          </UButton>
+        </UTooltip>
       </slot>
-      <ClientOnly>
-        <VTooltip
-          activator="parent"
-          location="bottom"
-          color="accent"
-        >
-          <slot name="tooltipInfo" :item="item">
-            <div>
-              {{ $t("common.clickToOpen") }}
-            </div>
-          </slot>
-        </VTooltip>
-      </ClientOnly>
-    </div>
-    <div v-intersect="loadMore" />
-    <ImageOverlay
+    </div><UButton
+      v-if="images.length < total"
+      color="neutral"
+      variant="outline"
+      icon="i-lucide-plus"
+      :aria-label="$t('common.showMore')"
+      @click="loadMore"
+    /><PortalPhotoViewer
+      v-if="showOverlay"
       v-model="showOverlay"
       :initial-slide="initIndex"
       :images="images"
       :total="total"
       @end="handleEnd"
     >
-      <template #overlayInfo="{ item }">
+      <template #info="{ item }">
         <slot name="overlayInfo" :item="item" />
       </template>
-    </ImageOverlay>
+    </PortalPhotoViewer>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.thumbnail-image {
-  transition: all 0.2s ease-in-out;
-  box-sizing: border-box;
-  border: 1px solid transparent;
-
-  &:hover {
-    border: 1px solid #1565C0;
-  }
-}
-</style>

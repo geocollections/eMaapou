@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import type { ComponentExposed } from "vue-component-type-helpers";
-import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
-
 defineProps<{ resultView: "table" | "image" }>();
 
 const emit = defineEmits<{
@@ -10,6 +7,7 @@ const emit = defineEmits<{
   submit: [];
 }>();
 
+const { locale } = useI18n();
 const specimensStore = useSpecimens();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);
 
@@ -89,17 +87,18 @@ const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChild
   filter: filters.value.taxon,
 });
 
-const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterCollector = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterCollection = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterFossilGroup = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterOriginalStatus = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterReference = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<ComponentExposed<typeof FilterInputHierarchy>>();
-const filterRock = ref<ComponentExposed<typeof FilterInputHierarchy>>();
-const filterTaxon = ref<ComponentExposed<typeof FilterInputHierarchy>>();
+interface FilterControl { refreshSuggestions: () => void }
+const filterLocality = ref<FilterControl>();
+const filterCollector = ref<FilterControl>();
+const filterInstitution = ref<FilterControl>();
+const filterCollection = ref<FilterControl>();
+const filterFossilGroup = ref<FilterControl>();
+const filterCountry = ref<FilterControl>();
+const filterOriginalStatus = ref<FilterControl>();
+const filterReference = ref<FilterControl>();
+const filterStratigraphy = ref<FilterControl>();
+const filterRock = ref<FilterControl>();
+const filterTaxon = ref<FilterControl>();
 
 const suggestionRefreshMap = computed(() => {
   return {
@@ -142,26 +141,40 @@ function handleHasImageUpdate(value: boolean) {
 </script>
 
 <template>
-  <VForm class="pb-10" @submit.prevent="handleSubmit">
-    <SearchFormInput v-model="query" />
-    <SearchActions class="mb-3" @click="handleReset" />
-    <FilterInputCheckbox
-      :model-value="resultView === 'image' ? true : filters.hasImage.value"
-      :label="$t('filters.hasImage')"
+  <form class="portal-filter-form" @submit.prevent="handleSubmit">
+    <UFormField
+      :label="locale === 'et' ? 'Otsi eksemplare' : 'Search specimens'"
+      :description="locale === 'et' ? 'Otsimiseks vajuta Enter.' : 'Press Enter to search.'"
+      class="mb-2 px-1"
+      :ui="{ label: 'text-[13px] text-portal-text', description: 'text-xs text-portal-muted' }"
+    >
+      <UInput
+        v-model="query"
+        type="search"
+        :placeholder="locale === 'et' ? 'Nimi või katalooginumber' : 'Name or catalogue number'"
+        color="neutral"
+        class="w-full"
+        :ui="{ base: 'min-h-11 rounded-portal-control ring-portal-border' }"
+      />
+    </UFormField>
+    <UCheckbox
+      :model-value="resultView === 'image' || filters.hasImage.value"
       :disabled="resultView === 'image'"
-      @update:model-value="handleHasImageUpdate"
+      :label="$t('filters.hasImage')"
+      class="px-1 py-1.5"
+      @update:model-value="handleHasImageUpdate(!!$event)"
     />
-    <FilterInputCheckbox
+    <UCheckbox
       v-model="filters.hasCoordinates.value"
       :label="$t('filters.hasCoordinates')"
+      class="px-1 py-1.5"
       @update:model-value="handleUpdate()"
     />
-    <VDivider class="mx-2" />
-    <VExpansionPanels
-      variant="accordion"
-      class="px-2"
-      multiple
-    >
+    <p class="portal-filter-hint">
+      {{ locale === 'et' ? 'Filtrivalikud rakenduvad kohe.' : 'Filter selections apply immediately.' }}
+    </p>
+    <USeparator />
+    <div class="portal-filter-list">
       <FilterInputText
         v-model="filters.number.value"
         :title="$t('filters.number')"
@@ -226,11 +239,6 @@ function handleHasImageUpdate(value: boolean) {
         value="country"
         @update:model-value="handleUpdate('country')"
       />
-      <FilterMap
-        v-model="filters.geometry.value"
-        value="map"
-        @update:model-value="handleUpdate"
-      />
       <FilterInputHierarchy
         ref="filterStratigraphy"
         v-model="filters.stratigraphy.value"
@@ -286,7 +294,18 @@ function handleHasImageUpdate(value: boolean) {
         value="institution"
         @update:model-value="handleUpdate('institution')"
       />
-    </VExpansionPanels>
-    <VDivider class="mx-2" />
-  </VForm>
+    </div>
+    <div class="portal-filter-actions">
+      <UButton
+        color="neutral"
+        variant="outline"
+        class="portal-filter-clear"
+        @click="handleReset"
+      >
+        {{ $t('common.resetSearch') }}
+      </UButton><UButton type="submit" class="portal-filter-submit">
+        {{ $t('common.searchCommand') }}
+      </UButton>
+    </div>
+  </form>
 </template>

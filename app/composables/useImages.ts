@@ -26,7 +26,7 @@ export type PhotoArchiveImage = Image<{
   date: string | null;
 }>;
 
-export interface ImageFunc<IT, T = { id: any;[K: string]: any }> {
+export interface ImageFunc<IT, T = { id: any; [K: string]: any }> {
   (params: { item: T; page: number; rows: number }): Promise<{ images: IT[]; total: number; hasNext: boolean }>;
 }
 
@@ -47,7 +47,10 @@ export function useImages<IT, T>(imageFunc: ImageFunc<IT, T>) {
     loading.value = true;
     const { images: newImages, total: totalImages, hasNext } = await imageFunc({ item, page: page.value, rows: rows.value });
     page.value += 1;
-    images.value = [...images.value, ...newImages];
+    images.value = [
+      ...images.value,
+      ...newImages,
+    ];
     total.value = totalImages;
     finished.value = !hasNext;
     loading.value = false;
@@ -61,7 +64,15 @@ export function useImages<IT, T>(imageFunc: ImageFunc<IT, T>) {
     loading.value = false;
   }
 
-  return { images, nextImages, reset, page, rows, total, finished };
+  return {
+    images,
+    nextImages,
+    reset,
+    page,
+    rows,
+    total,
+    finished,
+  };
 }
 
 export function useSpecimenImageFunction() {
@@ -174,4 +185,9 @@ export function usePhotoArchiveImageFunction() {
     return { images: newImages, total: res.response.numFound, hasNext: res.response.numFound > rows * (page + 1) };
   };
   return imageFunc;
+}
+
+export function useCollectionImage() {
+  const image = useImage();
+  return (filename: string, size: "small" | "medium" | "large" = "medium") => image(filename, { size }, { provider: "geocollections" });
 }

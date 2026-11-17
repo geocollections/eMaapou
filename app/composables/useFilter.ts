@@ -1,21 +1,21 @@
 import type { Position } from "geojson";
 import { geojsonToWKT } from "@terraformer/wkt";
-import earcut from "earcut";
+import earcut, { flatten } from "earcut";
 import cloneDeep from "lodash/cloneDeep";
 import isNil from "lodash/isNil";
 
 export type FilterLookup = "contains" | "exact" | "startswith" | "endswith";
-export type FilterKind =
-  | "text"
-  | "idList"
-  | "textList"
-  | "geom"
-  | "boolean"
-  | "range"
-  | "rangeAlt"
-  | "parameter"
-  | "dateList"
-  | "date";
+export type FilterKind
+  = | "text"
+    | "idList"
+    | "textList"
+    | "geom"
+    | "boolean"
+    | "range"
+    | "rangeAlt"
+    | "parameter"
+    | "dateList"
+    | "date";
 
 export interface BaseFilter {
   type: FilterKind;
@@ -79,17 +79,17 @@ export type ParameterFilter = Omit<BaseFilter, "value" | "fields"> & {
   value: ParameterValue[];
 };
 
-export type FilterUnion =
-  | TextListFilter
-  | IdListFilter
-  | StringIdListFilter
-  | GeomFilter
-  | RangeFilter
-  | BooleanFilter
-  | RangeAltFilter
-  | DateListFilter
-  | DateFilter
-  | ParameterFilter;
+export type FilterUnion
+  = | TextListFilter
+    | IdListFilter
+    | StringIdListFilter
+    | GeomFilter
+    | RangeFilter
+    | BooleanFilter
+    | RangeAltFilter
+    | DateListFilter
+    | DateFilter
+    | ParameterFilter;
 
 export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: T) {
   const filters = ref<T>(cloneDeep(initFilters));
@@ -168,7 +168,7 @@ function isValidFilter(filter: FilterUnion): boolean {
       return filter.value !== null;
     }
     case "parameter": {
-      return filter.value.filter(val => val.parameter !== null).length > 0;
+      return filter.value.some(val => val.parameter !== null);
     }
     case "boolean":
       return filter.value;
@@ -200,8 +200,12 @@ function getSolrFilter(filter: FilterUnion) {
         .join(" OR ");
     }
     case "range": {
-      const start = isNil(filter.value[0]) ? "*" : filter.value[0];
-      const end = isNil(filter.value[1]) ? "*" : filter.value[1];
+      const start = isNil(filter.value[0])
+        ? "*"
+        : filter.value[0];
+      const end = isNil(filter.value[1])
+        ? "*"
+        : filter.value[1];
 
       return filter.fields
         .map((field: string) => `${field}:[${start} TO ${end}]`)
@@ -212,8 +216,12 @@ function getSolrFilter(filter: FilterUnion) {
         return "";
       }
 
-      const start = isNil(filter.value[0]) ? "*" : new Date(filter.value[0]).toISOString();
-      const end = isNil(filter.value[1]) ? "*" : new Date(filter.value[1]).toISOString();
+      const start = isNil(filter.value[0])
+        ? "*"
+        : new Date(filter.value[0]).toISOString();
+      const end = isNil(filter.value[1])
+        ? "*"
+        : new Date(filter.value[1]).toISOString();
 
       return filter.fields
         .map((field: string) => `${field}:[${start} TO ${end}]`)
@@ -250,7 +258,9 @@ function getSolrFilter(filter: FilterUnion) {
               .map((v) => {
                 return lookupFn(
                   field,
-                  filter.alphaNumeric ? removeNonAlphanumeric(v) : v,
+                  filter.alphaNumeric
+                    ? removeNonAlphanumeric(v)
+                    : v,
                 );
               })
               .join(" OR "),
@@ -263,22 +273,23 @@ function getSolrFilter(filter: FilterUnion) {
     }
     case "parameter": {
       return filter.value.filter(val => val.parameter !== null).map((val) => {
-        const start = isNil(val.value[0]) ? "*" : val.value[0];
-        const end = isNil(val.value[1]) ? "*" : val.value[1];
+        const start = isNil(val.value[0])
+          ? "*"
+          : val.value[0];
+        const end = isNil(val.value[1])
+          ? "*"
+          : val.value[1];
         return `${val.parameter}:[${start} TO ${end}]`;
       }).join(" AND ");
     }
     case "geom": {
       if (filter.value?.geometry.type === "Polygon") {
-        // LON LAT
         const value = cloneDeep(filter.value);
 
-        // Polygon triangulation
         if (value.geometry.type === "Polygon") {
-          const data = earcut.flatten(value.geometry.coordinates);
+          const data = flatten(value.geometry.coordinates);
           const triangles = earcut(data.vertices, data.holes, data.dimensions);
 
-          // Reversing triangles to geo coordinates
           const coordinates = triangles.map((item: any) => {
             const startIndex = item * 2;
             return [data.vertices[startIndex], data.vertices[startIndex + 1]] as Position;
@@ -298,7 +309,6 @@ function getSolrFilter(filter: FilterUnion) {
             [] as Position[][],
           );
 
-          // Creating WKT string for query
           let wktString = geojsonToWKT({
             coordinates:
               [triangleCoordinates],
@@ -314,4 +324,16 @@ function getSolrFilter(filter: FilterUnion) {
       return undefined;
     }
   }
+}
+
+export function useFilterFocus(open: Ref<boolean>, input: Ref<any>) {
+  watch([open, input], async () => {
+    if (!open.value)
+      return;
+    await nextTick();
+    if (!open.value)
+      return;
+    const target = input.value?.inputRef ?? input.value;
+    target?.focus?.();
+  }, { flush: "post" });
 }

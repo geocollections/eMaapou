@@ -1,154 +1,67 @@
 <script setup lang="ts">
-import cloneDeep from "lodash/cloneDeep";
-
-const props = defineProps<{
-  title: string;
-  modelValue: string[];
-}>();
-
-const emit = defineEmits<{
-  "update:model-value": [value: string[]];
-}>();
-
+const props = defineProps<{ title: string; modelValue: string[] }>();
+const emit = defineEmits<{ "update:modelValue": [value: string[]] }>();
 const { t } = useI18n();
-
+const open = ref(false);
 const internalValue = ref("");
-const panel = ref();
-const selectedItems = ref(props.modelValue);
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    selectedItems.value = newVal;
-  },
-  { immediate: true },
-);
-
-function handleAdd() {
-  const trimmedValue = internalValue.value.trim();
-  if (trimmedValue === "")
-    return;
-  selectedItems.value = [...selectedItems.value, trimmedValue];
-  internalValue.value = "";
-  emit("update:model-value", selectedItems.value);
-}
-function handleRemove(i: number) {
-  const cloneItems = cloneDeep(selectedItems.value);
-  cloneItems.splice(i, 1);
-  selectedItems.value = cloneItems;
-
-  emit("update:model-value", selectedItems.value);
-}
-function handleChange(i: number) {
-  const cloneItems = cloneDeep(selectedItems.value);
-  internalValue.value = cloneItems.splice(i, 1)[0]!; // NOTE: the item has to exist, as otherwise it would be impossible to change it
-  selectedItems.value = cloneItems;
-  emit("update:model-value", selectedItems.value);
-  if (!panel.value.groupItem.isSelected.value)
-    panel.value.groupItem.toggle();
-}
-
 const input = ref();
-
-function handleOpen(value: { value: boolean }) {
-  if (!value.value)
+useFilterFocus(open, input);
+function handleAdd() {
+  const value = internalValue.value.trim();
+  if (!value || props.modelValue.includes(value))
     return;
-
-  nextTick(() => {
-    input.value.focus();
-  });
+  emit("update:modelValue", [...props.modelValue, value]);
+  internalValue.value = "";
+}
+function handleRemove(index: number) {
+  emit("update:modelValue", props.modelValue.filter((_, position) => position !== index));
+}
+function handleChange(index: number) {
+  internalValue.value = props.modelValue[index] ?? "";
+  handleRemove(index);
+  open.value = true;
 }
 </script>
 
 <template>
-  <VExpansionPanel
-    ref="panel"
+  <PortalFilterSection
+    v-model:open="open"
+    :title="title"
+    :selected-count="modelValue.length"
     data-test="panel"
-    bg-color="transparent"
-    elevation="0"
-    :rounded="0"
-    @group:selected="handleOpen"
   >
-    <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
-      style="min-height: 40px;"
-      data-test="title"
-    >
-      {{ title }}
-    </VExpansionPanelTitle>
-    <div
-      v-if="selectedItems.length > 0"
-      class="bg-white"
-    >
+    <template #selection>
       <div
-        v-for="(item, i) in selectedItems"
-        :key="i"
-        class="d-flex py-1 selected-item px-2"
+        v-for="(item, index) in modelValue"
+        :key="item"
         data-test="selected-item"
-        @click="handleChange(i)"
+        class="portal-selected-text"
+        @click="handleChange(index)"
       >
-        <span>
-          <input
-            type="checkbox"
-            class="checkbox"
-            checked
-            @click.prevent.stop="handleRemove(i)"
-          >
-        </span>
-        <span
-          class="align-self-center text-body-2 font-weight-medium pl-2"
-          style="word-break: break-word"
-        >
-          <slot name="selection" :item="item">
-            {{ item }}
-          </slot>
-        </span>
+        <UCheckbox
+          :model-value="true"
+          :aria-label="item"
+          @click.stop
+          @update:model-value="handleRemove(index)"
+        /><span>{{ item }}</span>
       </div>
-    </div>
-    <VExpansionPanelText
-      class="py-2 text-right"
-      color="white"
+    </template>
+    <UInput
+      ref="input"
+      v-model="internalValue"
+      data-test="text-input"
+      :aria-label="title"
+      :placeholder="t('filters.filter')"
+      class="portal-full-field"
+      @keydown.enter.prevent.stop="handleAdd"
+    />
+    <UButton
+      data-test="add-button"
+      class="portal-filter-add"
+      :disabled="!internalValue.trim()"
+      @click="handleAdd"
     >
-      <VTextField
-        ref="input"
-        v-model="internalValue"
-        data-test="text-input"
-        variant="outlined"
-        bg-color="white"
-        hide-details
-        density="compact"
-        :placeholder="t('filters.filter')"
-        @keydown.enter="handleAdd"
-      />
-      <VBtn
-        class="mt-2"
-        color="accent"
-        variant="tonal"
-        size="small"
-        data-test="add-button"
-        :disabled="internalValue.length < 1"
-        @click="handleAdd"
-      >
-        {{ t("filter.add") }}
-      </VBtn>
-    </VExpansionPanelText>
-  </VExpansionPanel>
+      {{ t('common.add') }}
+    </UButton>
+  </PortalFilterSection>
 </template>
-
-<style scoped lang="scss">
-:deep(.v-expansion-panel-text__wrapper) {
-  padding-right: 8px;
-  padding-left: 8px;
-  padding-bottom: 8px;
-  padding-top:0;
-}
-
-.selected-item:hover {
-  background-color: #eeeeee;
-  cursor: pointer;
-}
-
-.checkbox {
-  accent-color: var(--v-accent-base);
-}
-</style>

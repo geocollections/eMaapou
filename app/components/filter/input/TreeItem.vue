@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import type { TreeNode } from "./FilterInputHierarchy.vue";
 
 const props = defineProps<{
@@ -13,8 +12,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   select: [node: TreeNode];
 }>();
-
-const checkbox = ref<HTMLInputElement>();
 
 const { t } = useI18n({ useScope: "local" });
 
@@ -30,11 +27,6 @@ const isIndeterminate = computed(() => {
   });
 });
 
-watch(isIndeterminate, (val) => {
-  if (checkbox.value)
-    checkbox.value.indeterminate = val;
-});
-
 function formatCount(count: number): string {
   if (count < 1000)
     return count.toLocaleString();
@@ -47,19 +39,19 @@ function translateName(name: string | { et: string; en: string }): string {
   if (typeof name === "string")
     return name;
 
-  return locale.value === "et" ? name.et : name.en;
+  return locale.value === "et"
+    ? name.et
+    : name.en;
 }
 function select(node: TreeNode) {
   emit("select", node);
 }
 
-const numChildren = ref(0);
 async function handleAddChildren(node: TreeNode) {
   node.showChildren = !node.showChildren;
   if (node.children.length > 0)
     return;
   const _numChildren = await props.addChildren(node);
-  numChildren.value = _numChildren;
   return _numChildren ?? 0;
 }
 
@@ -70,92 +62,48 @@ async function handleAddSiblings() {
 </script>
 
 <template>
-  <li style="list-style-type: none">
-    <div class="d-flex align-center mt-1">
-      <div style="position: relative">
-        <div
-          class="d-flex align-center px-1"
-          :class="{ 'child-node': hasChildren }"
-          style="min-height: 28px"
-        >
-          <input
-            :id="`checkbox-${node.id}`"
-            ref="checkbox"
-            type="checkbox"
-            :checked="selected || disabled"
-            :disabled="disabled || node.count < 1"
-            :indeterminate="isIndeterminate"
-            @click="select(node)"
-          >
-          <label :for="`checkbox-${node.id}`" class="ml-2 text-body-2">
-            <span class="font-weight-medium">{{
-              translateName(node.name)
-            }}</span>
-            <span class="text-caption font-italic">
-              ({{ formatCount(node.count) }})
-            </span>
-          </label>
-        </div>
-      </div>
-      <VBtn
+  <li class="portal-tree-node">
+    <div class="portal-tree-choice">
+      <UCheckbox
+        :model-value="selected || disabled ? true : isIndeterminate ? 'indeterminate' : false"
+        :disabled="disabled || node.count < 1"
+        :label="`${translateName(node.name)} (${formatCount(node.count)})`"
+        @update:model-value="select(node)"
+      /><UButton
         v-if="!node.leaf"
-        variant="text"
-        class="text-body-2"
         data-test="show-children"
-        slim
-        :icon="node.showChildren ? mdiChevronUp : mdiChevronDown"
-        height="28"
-        width="28"
-        style="text-transform: none"
+        color="neutral"
+        variant="ghost"
+        :icon="node.showChildren ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
+        :aria-label="translateName(node.name)"
         @click="handleAddChildren(node)"
       />
-    </div>
-    <ul v-if="node.showChildren" class="border-s ml-2">
+    </div><ul v-if="node.showChildren" class="portal-tree-children">
       <TreeItem
-        v-for="(child, index) in node.children"
-        :key="index"
-        style="position: relative"
-        class="ml-2"
+        v-for="child in node.children"
+        :key="child.value"
         data-test="tree-item"
         :disabled="selected || disabled"
         :selected-values="selectedValues"
         :node="child"
         :add-children="addChildren"
-        :add-siblings="handleAddSiblings"
-        :child="true"
         @select="select"
-      />
-      <VBtn
+      /><UButton
         v-if="!node.childrenLoaded"
-        class="ml-1 text-none text-body-2"
         data-test="show-more"
-        variant="text"
-        color="accent"
+        color="neutral"
+        variant="link"
         @click="handleAddSiblings"
       >
-        {{ t("more") }}
-      </VBtn>
+        {{ t('more') }}
+      </UButton>
     </ul>
   </li>
 </template>
 
-<style scoped lang="scss">
-.child-node {
-  &:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -8px;
-    width: 8px;
-    height: 0;
-    border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  }
-}
-</style>
-
 <i18n lang="yaml">
 et:
-  more: "...rohkem"
+  more: Näita rohkem
 en:
-  more: "...more"
+  more: Load more
 </i18n>
