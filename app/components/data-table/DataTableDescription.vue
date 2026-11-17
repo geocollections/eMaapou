@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import type { PortalTableProps } from "~/components/PortalDataTable.vue";
 import round from "lodash/round";
+
+defineOptions({ inheritAttrs: false });
+const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, dynamicHeaders: true });
 
 const localePath = useLocalePath();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable expandable v-bind="$attrs">
-    <template #expanded-row="{ columns, item }">
-      <tr>
-        <td class="py-2" :colspan="columns.length">
-          <VRow no-gutters>
-            <VCol class="pt-2 pb-4 pr-2">
-              <template v-if="item.description">
-                <div class="font-weight-bold">
-                  {{ $t("drillcore.description") }}
-                </div>
-                <div>
-                  {{ item.description }}
-                </div>
-              </template>
-            </VCol>
-            <VCol cols="12" md="6">
-              <BaseTable>
+  <PortalDataTable v-bind="{ ...$attrs, ...props }" expandable>
+    <template #expanded-row="{ item }">
+      <div class="portal-expanded-record">
+        <div class="portal-row">
+          <div class="portal-description-text portal-column">
+            <template v-if="item.description">
+              <div class="font-bold">
+                {{ $t("drillcore.description") }}
+              </div>
+              <div>
+                {{ item.description }}
+              </div>
+            </template>
+          </div>
+          <div class="portal-half-column portal-column">
+            <table class="portal-metadata-table">
+              <tbody>
                 <TableRow
                   :title="$t('localityDescription.zeroLevel')"
                   :value="item.zero_level"
@@ -39,7 +41,7 @@ const localePath = useLocalePath();
                 >
                   <template #value="{ value }">
                     <BaseLinkExternal
-                      :to="`https://kirjandus.geoloogia.info/reference/${value.id}`"
+                      :to="externalUrl(`kirjandus.geoloogia.info/reference/${value.id}`)"
                     >
                       {{
                         value.reference
@@ -69,11 +71,11 @@ const localePath = useLocalePath();
                   :title="$t('localityDescription.remarks')"
                   :value="item.remarks"
                 />
-              </BaseTable>
-            </VCol>
-          </VRow>
-        </td>
-      </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </template>
     <template #item.rock="{ item }">
       <div v-if="item.rock">
@@ -90,7 +92,7 @@ const localePath = useLocalePath();
     <template #item.stratigraphy="{ item }">
       <NuxtLink
         v-if="item.stratigraphy"
-        class="text-link"
+        class="portal-record-link"
         :to="
           localePath({
             name: 'stratigraphy-id',
@@ -109,7 +111,7 @@ const localePath = useLocalePath();
     <template #item.author="{ item }">
       <BaseLinkExternal
         v-if="item.reference"
-        class="text-link"
+        class="portal-record-link"
         :class="{ 'is-preferred': !item.is_preferred }"
         @click="$openGeokirjandus('reference', item.reference.id)"
       >
@@ -139,22 +141,5 @@ const localePath = useLocalePath();
         }}
       </span>
     </template>
-    <template #item.data-table-expand="{ item, internalItem, toggleExpand, isExpanded }">
-      <VBtn
-        v-if="item.canExpand"
-        icon
-        variant="text"
-        size="small"
-        @click="toggleExpand(internalItem)"
-      >
-        <VIcon>
-          {{
-            isExpanded(internalItem)
-              ? mdiChevronUp
-              : mdiChevronDown
-          }}
-        </VIcon>
-      </VBtn>
-    </template>
-  </BaseDataTable>
+  </PortalDataTable>
 </template>
