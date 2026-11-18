@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { TableColumn } from "@nuxt/ui";
+import type { TableColumn, TableRow } from "@nuxt/ui";
 import type { ExportFunc, ExportType } from "~/composables/useExport";
 
-export interface PortalTableProps { items: any[]; headers: Header[]; options: DataTableOptions; count: number; isLoading: boolean; exportFunc?: ExportFunc; exportTypes?: ExportType[]; modern?: boolean; onlyTable?: boolean; showSearch?: boolean; dynamicHeaders?: boolean; expandable?: boolean; itemTo?: (item: any) => string; externalTo?: boolean }
-const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, dynamicHeaders: true });
+export interface PortalTableProps { mobileCards?: boolean; items: any[]; headers: Header[]; options: DataTableOptions; count: number; isLoading: boolean; exportFunc?: ExportFunc; exportTypes?: ExportType[]; modern?: boolean; onlyTable?: boolean; showSearch?: boolean; showTools?: boolean; dynamicHeaders?: boolean; expandable?: boolean; itemTo?: (item: any) => string; externalTo?: boolean }
+const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, showTools: true, dynamicHeaders: true });
 const emit = defineEmits<{ "update": [payload: { options: DataTableOptions; search: string }]; "change:headers": [key: string]; "reset:headers": []; "click:row": [payload: { index: number; id: string }] }>();
 const search = ref("");
 watchDebounced(search, () => emit("update", {
@@ -32,6 +32,46 @@ const columns = computed<TableColumn<any>[]>(() => {
     result.unshift({ id: "expand", header: "", enableSorting: false });
   return result;
 });
+const cardHeaders = computed(() => props.headers.filter(header => header.show));
+const primaryHeaders = computed(() => cardHeaders.value.filter(header => [
+  "id",
+  "specimen_full_name",
+  "name",
+  "locality",
+].includes(header.value)));
+const detailHeaders = computed(() => cardHeaders.value.filter(header => !primaryHeaders.value.includes(header)));
+const rowNavigation = computed(() => props.modern && !!props.itemTo);
+const openRecordLabel = computed(() => locale.value === "et"
+  ? "Ava detailvaade"
+  : "Open record details");
+function recordLabel(item: any) {
+  return `${openRecordLabel.value}: ${item.specimen_full_name || item.id}`;
+}
+function recordClick(item: any, index: number) {
+  emit("click:row", {
+    index,
+    id: String(item.id),
+  });
+}
+function openRow(event: Event, item: any, index: number) {
+  if (!rowNavigation.value || (event.target as HTMLElement).closest("a, button, input, label, select, textarea, [role='button']"))
+    return;
+  if (window.getSelection()?.toString())
+    return;
+  const destination = props.itemTo?.(item);
+  if (!destination)
+    return;
+  recordClick(item, index);
+  const mouse = event as MouseEvent;
+  navigateTo(destination, mouse.ctrlKey || mouse.metaKey
+    ? {
+        open: { target: "_blank" },
+      }
+    : { external: props.externalTo });
+}
+function selectRow(event: Event, row: TableRow<any>) {
+  openRow(event, row.original, row.index);
+}
 function sortBy(key: string) {
   const current = props.options.sortBy.find(sort => sort.key === key);
   const sortBy: SortItem[] = !current
@@ -51,8 +91,8 @@ function sortBy(key: string) {
 </script>
 
 <template>
-  <div class="portal-data-table">
-    <div v-if="!onlyTable" class="portal-table-toolbar">
+  <div class="portal-data-table" :class="{ 'portal-data-table-linked': rowNavigation }">
+    <div v-if="!onlyTable && (showSearch || showTools)" class="portal-table-toolbar">
       <UInput
         v-if="showSearch !== false"
         v-model="search"
@@ -61,6 +101,7 @@ function sortBy(key: string) {
         class="portal-table-search"
       />
       <PortalTableTools
+        v-if="showTools"
         :headers="headers"
         :show-columns="dynamicHeaders !== false"
         :sort-by="options.sortBy"
@@ -70,13 +111,96 @@ function sortBy(key: string) {
         @reset="emit('reset:headers')"
       />
     </div>
+    <p v-if="rowNavigation" class="portal-table-navigation-hint">
+      <UIcon name="i-lucide-mouse-pointer-2" />
+      {{ locale === 'et' ? 'Klõpsa real, et avada detailvaade. Rea lingid avavad vastava seotud lehe.' : 'Click a row to open its details. Links within a row open the related page.' }}
+    </p>
+    <div
+      v-if="mobileCards"
+      class="portal-record-cards"
+      :aria-busy="isLoading"
+    >
+      <article
+        v-for="(item, index) in items"
+        :key="item.id"
+        class="portal-record-card"
+        @click="openRow($event, item, index)"
+      >
+        <UButton
+          v-if="itemTo"
+          :to="itemTo(item)"
+          :aria-label="recordLabel(item)"
+          color="primary"
+          variant="soft"
+          trailing-icon="i-lucide-arrow-right"
+          class="portal-record-card-action"
+          @click="recordClick(item, index)"
+        >
+          {{ openRecordLabel }}
+        </UButton>
+        <dl>
+          <div
+            v-for="header in primaryHeaders"
+            :key="header.value"
+            class="portal-record-field"
+          >
+            <dt>{{ header.title }}</dt>
+            <dd>
+              <slot
+                :name="`item.${header.value}`"
+                :item="item"
+                :index="index"
+              >
+                {{ item[header.value] ?? '—' }}
+              </slot>
+            </dd>
+          </div>
+        </dl>
+        <UCollapsible v-if="detailHeaders.length">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            trailing-icon="i-lucide-chevron-down"
+          >
+            {{ locale === 'et' ? 'Lisateave' : 'Details' }}
+          </UButton>
+          <template #content>
+            <dl>
+              <div
+                v-for="header in detailHeaders"
+                :key="header.value"
+                class="portal-record-field"
+              >
+                <dt>{{ header.title }}</dt>
+                <dd>
+                  <slot
+                    :name="`item.${header.value === 'depth' ? 'depthCombined' : header.value}`"
+                    :item="item"
+                    :index="index"
+                  >
+                    {{ item[header.value] ?? '—' }}
+                  </slot>
+                </dd>
+              </div>
+            </dl>
+          </template>
+        </UCollapsible>
+      </article>
+      <p v-if="!items.length">
+        {{ isLoading ? (locale === 'et' ? 'Laadin…' : 'Loading…') : t('table.noData') }}
+      </p>
+    </div>
     <UTable
       :data="items"
       :columns="columns"
       :loading="isLoading"
+      :sorting="options.sortBy.map(sort => ({ id: sort.key, desc: sort.order === 'desc' }))"
+      :sorting-options="{ manualSorting: true }"
       sticky="header"
+      :on-select="rowNavigation ? selectRow : undefined"
       :expanded-options="{ getRowCanExpand: row => !!row.original.canExpand }"
       class="portal-table-scroll"
+      :class="{ 'portal-table-desktop': mobileCards }"
       :ui="{ base: 'portal-table-base', thead: 'portal-table-head', tbody: 'portal-table-body', tr: 'portal-table-row', th: 'portal-table-heading', td: 'portal-table-cell' }"
     >
       <template
@@ -107,15 +231,20 @@ function sortBy(key: string) {
         />
       </template>
       <template #record-cell="{ row }">
-        <UButton
-          color="neutral"
-          variant="ghost"
-          :to="itemTo?.(row.original)"
-          :target="externalTo ? '_blank' : undefined"
-          :icon="externalTo ? 'i-lucide-external-link' : 'i-lucide-arrow-right'"
-          :aria-label="locale === 'et' ? 'Ava kirje' : 'Open record'"
-          @click="emit('click:row', { index: row.index, id: String(row.original.id) })"
-        />
+        <UTooltip :text="recordLabel(row.original)" :delay-duration="250">
+          <UButton
+            color="primary"
+            :variant="modern ? 'soft' : 'ghost'"
+            :to="itemTo?.(row.original)"
+            :target="externalTo ? '_blank' : undefined"
+            :trailing-icon="externalTo ? 'i-lucide-external-link' : 'i-lucide-arrow-right'"
+            :aria-label="recordLabel(row.original)"
+            class="portal-table-record-action header-focus"
+            @click="recordClick(row.original, row.index)"
+          >
+            {{ modern ? (locale === 'et' ? 'Ava' : 'View') : '' }}
+          </UButton>
+        </UTooltip>
       </template>
       <template #expand-cell="{ row }">
         <UButton
