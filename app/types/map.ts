@@ -8,6 +8,8 @@ export interface MapMarker {
 }
 
 export interface MapLocation {
+  name?: string;
+  nameEn?: string;
   latitude: number;
   longitude: number;
   count: number;

@@ -69,7 +69,7 @@ function currentSearch() {
 }
 const appliedSearch = shallowRef(currentSearch());
 const { data: mapData, status: mapStatus, refresh: refreshMap } = await useSolrFetch<{
-  facets?: { locations?: { buckets?: { val: number; longitudes?: { buckets?: { val: number; count: number }[] } }[] } };
+  facets?: { locations?: { buckets?: { val: number; longitudes?: { buckets?: { val: number; count: number; name?: { buckets?: { val: string }[] }; nameEn?: { buckets?: { val: string }[] } }[] } }[] } };
 }>("/specimen", {
   query: computed(() => ({
     json: {
@@ -91,6 +91,10 @@ const { data: mapData, status: mapStatus, refresh: refreshMap } = await useSolrF
             longitudes: {
               type: "terms",
               field: "longitude",
+              facet: {
+                name: { type: "terms", field: "locality", limit: 1 },
+                nameEn: { type: "terms", field: "locality_en", limit: 1 },
+              },
               limit: 1000,
               sort: "count desc",
             },
@@ -106,7 +110,13 @@ const mapLocations = computed<MapLocation[]>(() => {
   const locations: MapLocation[] = [];
   for (const latitude of mapData.value?.facets?.locations?.buckets ?? []) {
     for (const longitude of latitude.longitudes?.buckets ?? []) {
-      locations.push({ latitude: latitude.val, longitude: longitude.val, count: longitude.count });
+      locations.push({
+        latitude: latitude.val,
+        longitude: longitude.val,
+        count: longitude.count,
+        name: longitude.name?.buckets?.[0]?.val,
+        nameEn: longitude.nameEn?.buckets?.[0]?.val,
+      });
       if (locations.length === 1000)
         return locations;
     }
