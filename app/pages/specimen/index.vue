@@ -293,6 +293,14 @@ const filterLabels: Record<string, string> = {
   reference: "reference",
   geometry: "map",
 };
+const selectionFilters = computed(() => currentView.value === "image"
+  ? [...appliedSearch.value.filters, "has_image:true"]
+  : appliedSearch.value.filters);
+const selectionOptions = {
+  query: computed(() => appliedSearch.value.query),
+  filter: selectionFilters,
+};
+const resolvedFilterCounts = ref<Record<string, Record<string, number>>>({});
 const resolvedFilterNames = ref<Record<string, Record<string, string>>>({});
 const labelHydrators = Object.fromEntries(Object.entries({
   country: [
@@ -312,10 +320,11 @@ const labelHydrators = Object.fromEntries(Object.entries({
     { et: "original_status", en: "original_status_en" },
   ],
 }).map(([key, fields]) => [key, useAutocomplete("/specimen", {
+  solrParams: selectionOptions,
   idField: fields[0] as string,
   nameField: fields[1] as string | { et: string; en: string },
 }).hydrate]));
-const hierarchyOptions = { query: solrQuery, filter: solrFilters };
+const hierarchyOptions = selectionOptions;
 const hierarchyHydrators = {
   stratigraphy: useStratigraphyHierarchyFilter("/specimen", { solrParams: hierarchyOptions, filter: filters.value.stratigraphy }).hydrate,
   rock: useRockHierarchyFilter("/specimen", { solrParams: hierarchyOptions, filter: filters.value.rock }).hydrate,
@@ -324,7 +333,7 @@ const hierarchyHydrators = {
 const nameHydrators = {
   ...labelHydrators,
   ...hierarchyHydrators,
-  reference: useAutocompleteReference("/specimen", { field: "specimen_references_kws" }).hydrate,
+  reference: useAutocompleteReference("/specimen", { field: "specimen_references_kws", solrParams: selectionOptions }).hydrate,
 };
 function filterValues(key: string) {
   const raw = route.query[key];
@@ -341,17 +350,23 @@ function filterValues(key: string) {
 watch([
   () => JSON.stringify(Object.keys(filterLabels).map(key => route.query[key])),
   locale,
+  () => JSON.stringify([appliedSearch.value, currentView.value]),
 ], async (_value, _oldValue, onCleanup) => {
   let cancelled = false;
   onCleanup(() => {
     cancelled = true;
   });
   const names: Record<string, Record<string, string>> = {};
+  const counts: Record<string, Record<string, number>> = {};
   await Promise.allSettled(Object.entries(nameHydrators).map(async ([key, hydrate]) => {
     const values = filterValues(key);
     if (!values.length)
       return;
     const items = await hydrate(values);
+    counts[key] = Object.fromEntries(items.map((item: { value?: string; id: string | number; count?: number }) => [
+      String(item.value ?? item.id),
+      item.count ?? 0,
+    ]));
     names[key] = Object.fromEntries(items.map((item: { id: string | number; value?: string; name: string | { et: string; en: string } }) => [
       item.value ?? String(item.id),
       typeof item.name === "string"
@@ -361,8 +376,10 @@ watch([
           : item.name.en,
     ]));
   }));
-  if (!cancelled)
+  if (!cancelled) {
     resolvedFilterNames.value = names;
+    resolvedFilterCounts.value = counts;
+  }
 }, { immediate: true });
 const listFilters = new Set([
   ...Object.keys(nameHydrators),
@@ -379,6 +396,7 @@ const activeFilters = computed(() => Object.entries(route.query)
     return values.map(rawValue => ({
       key,
       rawValue,
+      count: resolvedFilterCounts.value[key]?.[rawValue],
       label: key === "q"
         ? (locale.value === "et"
             ? "Otsing"
@@ -506,6 +524,19 @@ useHead({
             >
               {{ $t('common.showFilters') }}
             </UButton>
+            <div class="specimen-search__toolbar">
+              <h2>{{ text.results }} <span v-if="status === 'success'">({{ (currentView === 'image' ? imageData?.response.numFound ?? 0 : data?.response.numFound ?? 0).toLocaleString(locale) }})</span></h2>
+              <UButton
+                type="button"
+                color="neutral"
+                variant="ghost"
+                class="specimen-search__show"
+                @click="copySearchLink"
+              >
+                {{ text.copy }}
+              </UButton>
+              <span role="status">{{ copyStatus }}</span>
+            </div>
             <div
               v-if="activeFilters.length"
               class="specimen-search__chips"
@@ -522,7 +553,7 @@ useHead({
                 :aria-label="`${text.remove}: ${filter.label} ${filter.value}`"
                 @click="removeFilter(filter.key, filter.rawValue)"
               >
-                <span>{{ filter.label }}<template v-if="filter.value">: {{ filter.value }}</template></span><UIcon name="i-lucide-x" class="portal-filter-chip-close" />
+                <span>{{ filter.label }}<template v-if="filter.value">: {{ filter.value }}</template><template v-if="filter.count !== undefined"> ({{ filter.count.toLocaleString(locale) }})</template></span><UIcon name="i-lucide-x" class="portal-filter-chip-close" />
               </UButton>
               <UButton
                 type="button"
@@ -534,19 +565,13 @@ useHead({
                 {{ text.clear }}
               </UButton>
             </div>
-            <div class="specimen-search__toolbar">
-              <h2>{{ text.results }} <span v-if="status === 'success'">({{ (data?.response.numFound ?? 0).toLocaleString() }})</span></h2>
-              <UButton
-                type="button"
-                color="neutral"
-                variant="ghost"
-                class="specimen-search__show"
-                @click="copySearchLink"
-              >
-                {{ text.copy }}
-              </UButton>
-              <span role="status">{{ copyStatus }}</span>
-            </div>
+            <p
+              v-if="currentView === 'image'"
+              class="specimen-image-explanation"
+              role="status"
+            >
+              {{ locale === 'et' ? 'Pildivaade on valitud. Tulemuste arv näitab fotosid, mitte eksemplare: ühel eksemplaril võib olla mitu fotot ning piltideta kirjeid siin ei kuvata.' : 'Images selected. The result count shows photographs rather than specimens: a specimen can have multiple photographs, and records without images are excluded.' }}
+            </p>
             <div
               v-if="error"
               role="alert"
@@ -569,46 +594,58 @@ useHead({
               {{ text.empty }}
             </p>
             <ClientOnly>
-              <div
-                class="specimen-view-switch"
-                role="group"
-                :aria-label="locale === 'et' ? 'Tulemuste vaade' : 'Results view'"
-              >
-                <UButton
-                  type="button"
-                  color="neutral"
-                  variant="ghost"
-                  :aria-pressed="currentView === 'table'"
-                  class="portal-view-button"
-                  :class="currentView === 'table' ? 'portal-view-active' : 'portal-view-inactive'"
-                  aria-controls="specimen-table-view"
-                  @click="setResultView('table')"
+              <div class="specimen-results-toolbar">
+                <div
+                  class="specimen-view-switch"
+                  role="group"
+                  :aria-label="locale === 'et' ? 'Tulemuste vaade' : 'Results view'"
                 >
-                  <svg
-                    class="portal-view-icon"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  ><path :d="mdiTableLarge" /></svg>
-                  <span>{{ $t('common.table') }}</span>
-                </UButton>
-                <UButton
-                  type="button"
-                  color="neutral"
-                  variant="ghost"
-                  :aria-pressed="currentView === 'image'"
-                  class="portal-view-button"
-                  :class="currentView === 'image' ? 'portal-view-active' : 'portal-view-inactive'"
-                  aria-controls="specimen-image-view"
-                  @click="setResultView('image')"
-                >
-                  <svg
-                    class="portal-view-icon"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  ><path :d="mdiImageMultipleOutline" /></svg>
-                  <span>{{ $t('common.image') }}</span>
-                  <span v-if="imageData" class="specimen-view-switch__count">{{ imageData.response.numFound.toLocaleString(locale) }}</span>
-                </UButton>
+                  <UButton
+                    type="button"
+                    color="neutral"
+                    variant="ghost"
+                    :aria-pressed="currentView === 'table'"
+                    class="portal-view-button"
+                    :class="currentView === 'table' ? 'portal-view-active' : 'portal-view-inactive'"
+                    aria-controls="specimen-table-view"
+                    @click="setResultView('table')"
+                  >
+                    <svg
+                      class="portal-view-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    ><path :d="mdiTableLarge" /></svg>
+                    <span>{{ $t('common.table') }}</span>
+                  </UButton>
+                  <UButton
+                    type="button"
+                    color="neutral"
+                    variant="ghost"
+                    :aria-pressed="currentView === 'image'"
+                    class="portal-view-button"
+                    :class="currentView === 'image' ? 'portal-view-active' : 'portal-view-inactive'"
+                    aria-controls="specimen-image-view"
+                    @click="setResultView('image')"
+                  >
+                    <svg
+                      class="portal-view-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    ><path :d="mdiImageMultipleOutline" /></svg>
+                    <span>{{ $t('common.image') }}</span>
+                    <span v-if="imageData" class="specimen-view-switch__count">{{ imageData.response.numFound.toLocaleString(locale) }}</span>
+                  </UButton>
+                </div>
+                <PortalTableTools
+                  v-if="currentView === 'table'"
+                  :headers="headers"
+                  :show-columns="true"
+                  :sort-by="options.sortBy"
+                  :export-func="exportData"
+                  :export-types="['csv']"
+                  @change="handleHeadersChange($event.value)"
+                  @reset="handleHeadersReset(options)"
+                />
               </div>
               <div class="specimen-search__views">
                 <section
@@ -622,13 +659,12 @@ useHead({
                   <DataTableSpecimen
                     modern
                     :show-search="false"
+                    :show-tools="false"
                     :items="data?.response.docs ?? []"
                     :count="data?.response.numFound ?? 0"
                     :headers="headers"
                     :options="options"
                     :is-loading="status === 'pending'"
-                    :export-func="exportData"
-                    :export-types="['csv']"
                     @update="handleDataTableUpdate"
                     @change:headers="handleHeadersChange"
                     @reset:headers="handleHeadersReset(options)"
