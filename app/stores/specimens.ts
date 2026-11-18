@@ -1,5 +1,4 @@
 import type { RouteLocation } from "vue-router";
-import { z } from "zod";
 import type {
   BooleanFilter,
   GeomFilter,
@@ -8,6 +7,7 @@ import type {
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { z } from "zod";
 
 export const useSpecimens = defineStore(
   "specimens",
@@ -178,7 +178,11 @@ export const useSpecimens = defineStore(
         options.value.itemsPerPage = params.itemsPerPage;
       }
 
-      options.value.sortBy = params.sortBy;
+      options.value.sortBy = params.sortBy.length
+        ? params.sortBy
+        : [
+            { key: "id", order: "desc" },
+          ];
 
       query.value = params.q;
 
@@ -268,7 +272,14 @@ export const useSpecimens = defineStore(
   },
   {
     persist: {
-      pick: ["options", "filters", "headers", "query", "imageOptions", "currentView"],
+      pick: [
+        "options",
+        "filters",
+        "headers",
+        "query",
+        "imageOptions",
+        "currentView",
+      ],
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },

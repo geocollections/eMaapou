@@ -2108,7 +2108,7 @@ export const HEADERS_SPECIMEN: Headers = {
     id: {
       title: "specimen.id",
       value: "id",
-      show: false,
+      show: true,
       apiFieldValue: "id",
       sortField: ["id_l"],
       ...narrowColumn,
@@ -2220,8 +2220,8 @@ export const HEADERS_SPECIMEN: Headers = {
     "specimen_number_old",
     "name",
     "locality",
-    "depth",
     "stratigraphy",
+    "depth",
     "lithostratigraphy",
     "original_status",
     "collector",
