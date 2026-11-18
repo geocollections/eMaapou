@@ -532,3 +532,9 @@
   @apply grid gap-1 overflow-y-auto px-2 py-1;
 }
 @utility specimen-map-records__item { @apply grid min-h-11 gap-0.5 rounded-portal-control p-2 hover:bg-portal-selected [&>span:first-child]:font-semibold [&>span:first-child]:text-portal-link [&>span:not(:first-child)]:text-xs [&>span:not(:first-child)]:text-portal-muted; }
+
+.portal-pagination-compact { @apply shrink-0 flex-nowrap gap-2 px-3 py-1.5 text-xs; }
+.portal-pagination-compact .portal-pagination-nav { @apply m-0 w-full justify-between gap-2; }
+.portal-pagination-compact .portal-pagination-arrow { @apply size-8 min-h-0 p-0; }
+.portal-pagination-compact .portal-pagination-page { @apply gap-1.5; }
+.portal-pagination-compact .portal-page-input { @apply h-7 min-h-0 px-1.5 py-1 text-xs; }

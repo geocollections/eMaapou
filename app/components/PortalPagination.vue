@@ -35,7 +35,7 @@ function changeSize(value: number) {
 </script>
 
 <template>
-  <div class="portal-data-table__pagination">
+  <div class="portal-data-table__pagination" :class="{ 'portal-pagination-compact': compact }">
     <label v-if="!compact" class="portal-data-table__page-size">{{ labels.rows }}<USelect
       :model-value="options.itemsPerPage"
       :items="[10, 25, 50, 100, 250, 500, 1000]"
@@ -65,7 +65,7 @@ function changeSize(value: number) {
         :disabled="loading"
         :aria-label="labels.page"
         color="neutral"
-        class="w-14"
+        :class="compact ? 'w-12' : 'w-14'"
         :ui="{ base: 'portal-page-input' }"
         @change="changePage(Number(($event.target as HTMLInputElement).value))"
       /> {{ labels.of }} {{ pageCount.toLocaleString(locale) }}</label>
