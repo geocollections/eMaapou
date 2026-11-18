@@ -2,7 +2,7 @@
 import type { PortalTableProps } from "~/components/PortalDataTable.vue";
 
 defineOptions({ inheritAttrs: false });
-const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, dynamicHeaders: true });
+const props = withDefaults(defineProps<PortalTableProps>(), { showSearch: true, showTools: true, dynamicHeaders: true });
 
 const emit = defineEmits<{ "click:row": [payload: { index: number; id: number }] }>();
 function recordClick(item: any) {
@@ -14,6 +14,42 @@ function recordClick(item: any) {
 }
 const source = useCollectionImage();
 const localePath = useLocalePath();
+const { locale } = useI18n();
+const { $translate } = useNuxtApp();
+function linkPreview(kind: "specimen" | "locality" | "stratigraphy" | "taxon" | "rock", name: string | number) {
+  const labels = locale.value === "et"
+    ? {
+        specimen: "Ava eksemplari detailvaade",
+        locality: "Ava asukoha detailvaade",
+        stratigraphy: "Ava stratigraafia detailvaade",
+        taxon: "Ava takson lehel fossiilid.info (uus vahekaart)",
+        rock: "Ava kivim lehel kivid.info (uus vahekaart)",
+      }
+    : {
+        specimen: "Open specimen details",
+        locality: "Open locality details",
+        stratigraphy: "Open stratigraphy details",
+        taxon: "Open taxon on fossiilid.info (new tab)",
+        rock: "Open rock on kivid.info (new tab)",
+      };
+  return `${labels[kind]}: ${name}`;
+}
+function translated(item: any, field: string) {
+  return $translate({ et: item[field], en: item[`${field}_en`] }) || item.id;
+}
+function nameLinks(item: any) {
+  const links: { kind: "rock" | "taxon"; name: string; to: string }[] = [];
+  if (item.rock_id) {
+    links.push({
+      kind: "rock",
+      name: translated(item, "rock"),
+      to: `https://kivid.info/${item.rock_id}`,
+    });
+  }
+  if (item.taxon_id)
+    links.push({ kind: "taxon", name: item.taxon, to: `https://fossiilid.info/${item.taxon_id}` });
+  return links;
+}
 const showOverlay = ref(false);
 const currentOverlaySpecimen = ref<any>();
 const initIndex = ref(0);
@@ -40,32 +76,51 @@ function handleEnd() {
 <template>
   <PortalDataTable
     v-bind="{ ...$attrs, ...props }"
+    :mobile-cards="modern"
     :item-to="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })"
     @click:row="emit('click:row', { index: $event.index, id: Number($event.id) })"
   >
     <template #item.id="{ item }">
-      {{ item.id }}
+      <UTooltip :text="linkPreview('specimen', item.specimen_full_name || item.id)" :delay-duration="250">
+        <ULink
+          :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
+          :aria-label="linkPreview('specimen', item.specimen_full_name || item.id)"
+          class="specimen-record-link"
+          @click="recordClick(item)"
+        >
+          {{ item.id }}
+        </ULink>
+      </UTooltip>
     </template>
     <template #item.specimen_full_name="{ item }">
-      <NuxtLink
-        class="specimen-record-link"
-        :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
-        @click="recordClick(item)"
-      >{{ item.specimen_full_name }}</NuxtLink>
+      <UTooltip :text="linkPreview('specimen', item.specimen_full_name)" :delay-duration="250">
+        <NuxtLink
+          :aria-label="linkPreview('specimen', item.specimen_full_name)"
+          class="specimen-record-link"
+          :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
+          @click="recordClick(item)"
+        >{{ item.specimen_full_name }}</NuxtLink>
+      </UTooltip>
     </template>
     <template #item.locality="{ item }">
-      <NuxtLink
+      <UTooltip
         v-if="item.locality_id"
-        class="portal-record-link"
-        :to="
-          localePath({
-            name: 'locality-id',
-            params: { id: item.locality_id },
-          })
-        "
+        :text="linkPreview('locality', translated(item, 'locality'))"
+        :delay-duration="250"
       >
-        {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </NuxtLink>
+        <NuxtLink
+          :aria-label="linkPreview('locality', translated(item, 'locality'))"
+          class="portal-record-link"
+          :to="
+            localePath({
+              name: 'locality-id',
+              params: { id: item.locality_id },
+            })
+          "
+        >
+          {{ $translate({ et: item.locality, en: item.locality_en }) }}
+        </NuxtLink>
+      </UTooltip>
       <div v-else>
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </div>
@@ -79,86 +134,118 @@ function handleEnd() {
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <NuxtLink
+      <UTooltip
         v-if="item.stratigraphy_id"
-        class="portal-record-link"
-        :to="
-          localePath({
-            name: 'stratigraphy-id',
-            params: { id: item.stratigraphy_id },
-          })
-        "
+        :text="linkPreview('stratigraphy', translated(item, 'stratigraphy'))"
+        :delay-duration="250"
       >
-        {{
-          $translate({
-            et: item.stratigraphy,
-            en: item.stratigraphy_en,
-          })
-        }}
-      </NuxtLink>
+        <NuxtLink
+          :aria-label="linkPreview('stratigraphy', translated(item, 'stratigraphy'))"
+          class="portal-record-link"
+          :to="
+            localePath({
+              name: 'stratigraphy-id',
+              params: { id: item.stratigraphy_id },
+            })
+          "
+        >
+          {{
+            $translate({
+              et: item.stratigraphy,
+              en: item.stratigraphy_en,
+            })
+          }}
+        </NuxtLink>
+      </UTooltip>
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <NuxtLink
+      <UTooltip
         v-if="item.lithostratigraphy_id"
-        class="portal-record-link"
-        :to="
-          localePath({
-            name: 'stratigraphy-id',
-            params: { id: item.lithostratigraphy_id },
-          })
-        "
+        :text="linkPreview('stratigraphy', translated(item, 'lithostratigraphy'))"
+        :delay-duration="250"
       >
-        {{
-          $translate({
-            et: item.lithostratigraphy,
-            en: item.lithostratigraphy_en,
-          })
-        }}
-      </NuxtLink>
+        <NuxtLink
+          :aria-label="linkPreview('stratigraphy', translated(item, 'lithostratigraphy'))"
+          class="portal-record-link"
+          :to="
+            localePath({
+              name: 'stratigraphy-id',
+              params: { id: item.lithostratigraphy_id },
+            })
+          "
+        >
+          {{
+            $translate({
+              et: item.lithostratigraphy,
+              en: item.lithostratigraphy_en,
+            })
+          }}
+        </NuxtLink>
+      </UTooltip>
     </template>
     <template #item.taxon="{ item }">
-      <BaseLinkExternal
+      <UTooltip
         v-if="item.taxon_id"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
+        :text="linkPreview('taxon', item.taxon)"
+        :delay-duration="250"
       >
-        {{ item.taxon }}
-      </BaseLinkExternal>
+        <ULink
+          :to="`https://fossiilid.info/${item.taxon_id}`"
+          target="_blank"
+          :aria-label="linkPreview('taxon', item.taxon)"
+          class="portal-record-link"
+        >
+          {{ item.taxon }}
+          <UIcon name="i-lucide-arrow-up-right" class="portal-link-icon" />
+        </ULink>
+      </UTooltip>
     </template>
     <template #item.image="{ item }">
       <div class="flex items-center">
-        <ThumbnailImage
+        <UTooltip
           v-if="item.image"
-          class="my-1"
-          :src="
-            source(item.image, 'small')
-          "
-          @click="
-            openOverlay(item)
-          "
-        />
+          :text="locale === 'et' ? 'Vaata eksemplari fotosid' : 'Preview specimen photographs'"
+          :delay-duration="250"
+        >
+          <UButton
+            color="neutral"
+            variant="ghost"
+            class="portal-table-photo-button header-focus"
+            :aria-label="`${locale === 'et' ? 'Vaata fotosid' : 'Preview photographs'}: ${item.specimen_full_name || item.id}`"
+            @click="openOverlay(item)"
+          >
+            <NuxtImg
+              :src="source(item.image, 'small')"
+              :alt="item.specimen_full_name || String(item.id)"
+              width="56"
+              height="36"
+              loading="lazy"
+            />
+          </UButton>
+        </UTooltip>
         <span v-if="item.image_count > 1" class="portal-specimen-subtitle">
           +{{ item.image_count - 1 }}
         </span>
       </div>
     </template>
     <template #item.name="{ item }">
-      <BaseLinkExternal
-        v-if="item.rock_id"
-        @click="$openWindow(`https://kivid.info/${item.rock_id}`)"
-      >
-        {{
-          $translate({
-            et: item.rock,
-            en: item.rock_en,
-          })
-        }}
-      </BaseLinkExternal>
-      <BaseLinkExternal
-        v-if="item.taxon_id"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
-      >
-        {{ item.taxon }}
-      </BaseLinkExternal>
+      <div class="portal-specimen-name-links">
+        <UTooltip
+          v-for="link in nameLinks(item)"
+          :key="link.to"
+          :text="linkPreview(link.kind, link.name)"
+          :delay-duration="250"
+        >
+          <ULink
+            :to="link.to"
+            target="_blank"
+            :aria-label="linkPreview(link.kind, link.name)"
+            class="portal-record-link"
+          >
+            {{ link.name }}<UIcon name="i-lucide-arrow-up-right" class="portal-link-icon" />
+          </ULink>
+        </UTooltip>
+      </div>
     </template>
     <template #item.original_status="{ item }">
       {{
