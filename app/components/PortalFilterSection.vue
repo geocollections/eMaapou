@@ -24,7 +24,7 @@ const emit = defineEmits<{ "update:open": [value: boolean] }>();
         class="portal-filter-count"
       >{{ selectedCount }}</UBadge></span>
     </UButton>
-    <div class="portal-filter-selection">
+    <div v-if="open" class="portal-filter-selection">
       <slot name="selection" />
     </div>
     <template #content>

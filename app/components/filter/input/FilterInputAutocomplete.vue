@@ -152,18 +152,6 @@ watch(open, async (value) => {
     :title="title"
     :selected-count="selectedItems.length"
   >
-    <template #selection>
-      <div v-if="!open && selectedItems.length" class="portal-filter-summary">
-        <PortalFilterChoice
-          v-for="item in orderedSelectedItems"
-          :key="String(item.id)"
-          :label="item.name"
-          :count="item.count"
-          :selected="true"
-          @select="handleRemove(item.id)"
-        />
-      </div>
-    </template>
     <UInput
       v-if="showFilter"
       ref="input"

@@ -49,7 +49,7 @@ describe("filterInputText", () => {
     expect(title.text()).toBe("Title");
   });
 
-  it("should show selected items", () => {
+  it("should show selected items when opened", async () => {
     const wrapper = mount({
       template: "<div><FilterInputText :title=\"title\" v-model=\"modelValue\"/></div>",
     }, {
@@ -65,6 +65,7 @@ describe("filterInputText", () => {
       },
     });
 
+    await wrapper.get(titleSelector).trigger("click");
     const selectedItems = wrapper.findAll("[data-test=\"selected-item\"]");
     const selectedItemsText = selectedItems.map(item => item.text());
     expect(selectedItemsText).toEqual(["item1", "item2"]);
@@ -86,6 +87,7 @@ describe("filterInputText", () => {
       },
     });
 
+    await wrapper.get(titleSelector).trigger("click");
     const selectedItems = wrapper.findAll("[data-test=\"selected-item\"]");
     expect(selectedItems).toHaveLength(2);
 
@@ -114,6 +116,7 @@ describe("filterInputText", () => {
       },
     });
 
+    await wrapper.get(titleSelector).trigger("click");
     const selectedItems = wrapper.findAll("[data-test=\"selected-item\"]");
     const selectedItem = selectedItems[0]!;
     await selectedItem.trigger("click");

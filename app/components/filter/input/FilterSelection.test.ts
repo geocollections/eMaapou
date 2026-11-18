@@ -18,7 +18,8 @@ describe("filter selections", () => {
       },
     });
     const choices = (label: string) => wrapper.findAll(`[role="checkbox"][aria-label="${label}"]`);
-    expect(choices("Estonia")).toHaveLength(1);
+    expect(choices("Estonia")).toHaveLength(0);
+    expect(wrapper.get(".portal-filter-count").text()).toBe("1");
     await wrapper.get("[data-test=\"title\"]").trigger("click");
     await flushPromises();
     expect(choices("Estonia")).toHaveLength(1);
@@ -30,9 +31,11 @@ describe("filter selections", () => {
     expect(choices("Finland")).toHaveLength(1);
     await wrapper.get("[data-test=\"title\"]").trigger("click");
     await flushPromises();
-    expect(choices("Estonia")).toHaveLength(1);
-    expect(choices("Finland")).toHaveLength(1);
+    expect(choices("Estonia")).toHaveLength(0);
+    expect(choices("Finland")).toHaveLength(0);
     expect(wrapper.get("[data-test=\"title\"]").attributes("aria-expanded")).toBe("false");
+    await wrapper.get("[data-test=\"title\"]").trigger("click");
+    await flushPromises();
     await choices("Estonia")[0]!.trigger("click");
     expect(wrapper.emitted("update:modelValue")?.at(-1)).toEqual([
       ["fi"],
@@ -64,14 +67,14 @@ describe("filter selections", () => {
         suggestionFunction: async () => [],
       },
     });
-    expect(wrapper.findAll("[role=\"checkbox\"]")).toHaveLength(1);
+    expect(wrapper.findAll("[role=\"checkbox\"]")).toHaveLength(0);
     await wrapper.get("[data-test=\"title\"]").trigger("click");
     await flushPromises();
     expect(wrapper.findAll("[role=\"checkbox\"]")).toHaveLength(1);
     expect(wrapper.get("[role=\"checkbox\"]").attributes("aria-checked")).toBe("true");
     await wrapper.get("[data-test=\"title\"]").trigger("click");
     await flushPromises();
-    expect(wrapper.findAll("[role=\"checkbox\"]")).toHaveLength(1);
+    expect(wrapper.findAll("[role=\"checkbox\"]")).toHaveLength(0);
     wrapper.unmount();
   });
   it("updates individual selections when removed outside the filter", async () => {
@@ -88,7 +91,9 @@ describe("filter selections", () => {
     });
     await flushPromises();
     expect(country.findAll("[role=\"checkbox\"][aria-label=\"Estonia\"]")).toHaveLength(0);
-    expect(country.findAll("[role=\"checkbox\"][aria-label=\"Finland\"]")).toHaveLength(1);
+    expect(country.get(".portal-filter-count").text()).toBe("1");
+    await country.get("[data-test=\"title\"]").trigger("click");
+    await flushPromises();
     expect(country.emitted("update:modelValue")).toBeUndefined();
     country.unmount();
 
@@ -116,8 +121,10 @@ describe("filter selections", () => {
       modelValue: ["1-109"],
     });
     await flushPromises();
-    expect(stratigraphy.findAll("[role=\"checkbox\"]")).toHaveLength(1);
-    expect(stratigraphy.get("[role=\"checkbox\"]").attributes("aria-label")).toBe("Stage 1");
+    expect(stratigraphy.get(".portal-filter-count").text()).toBe("1");
+    await stratigraphy.get("[data-test=\"title\"]").trigger("click");
+    await flushPromises();
+    expect(stratigraphy.text()).toContain("Stage 1");
     expect(stratigraphy.emitted("update:modelValue")).toBeUndefined();
     stratigraphy.unmount();
   });
