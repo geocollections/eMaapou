@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ resultView: "table" | "image" }>();
+const props = defineProps<{ resultView: "table" | "image" }>();
 
 const emit = defineEmits<{
   update: [];
@@ -10,80 +10,83 @@ const emit = defineEmits<{
 const { locale } = useI18n();
 const specimensStore = useSpecimens();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);
+const suggestionFilters = computed(() => props.resultView === "image"
+  ? [...solrFilters.value, "has_image:true"]
+  : solrFilters.value);
 
 const { suggest: suggestLocality, hydrate: hydrateLocality }
   = useAutocomplete("/specimen", {
     idField: "locality_id_s",
     nameField: { et: "locality", en: "locality_en" },
     filterExclude: "locality",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 const { suggest: suggestCollector, hydrate: hydrateCollector }
   = useAutocomplete("/specimen", {
     idField: "collector_id_s",
     nameField: "collector",
     filterExclude: "collector",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 const { suggest: suggestInstitution, hydrate: hydrateInstitution }
   = useAutocomplete("/specimen", {
     idField: "database_id_s",
     nameField: "acronym",
     filterExclude: "institution",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 const { suggest: suggestCollection, hydrate: hydrateCollection }
   = useAutocomplete("/specimen", {
     idField: "collection_id_s",
     nameField: "collection_number",
     filterExclude: "collection",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 const { suggest: suggestFossilGroup, hydrate: hydrateFossilGroup }
   = useAutocomplete("/specimen", {
     idField: "fossilgroup_id_s",
     nameField: "fossilgroup",
     filterExclude: "fossilGroup",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 const { suggest: suggestCountry, hydrate: hydrateCountry }
   = useAutocomplete("/specimen", {
     idField: "country_id_s",
     nameField: { et: "country", en: "country_en" },
     filterExclude: "country",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 const { suggest: suggestOriginalStatus, hydrate: hydrateOriginalStatus }
   = useAutocomplete("/specimen", {
     idField: "original_status_id_s",
     nameField: { et: "original_status", en: "original_status_en" },
     filterExclude: "originalStatus",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
   });
 
 const { suggest: suggestReference, hydrate: hydrateReference }
   = useAutocompleteReference("/specimen", {
     field: "specimen_references_kws",
     filterExclude: "references",
-    solrParams: { query: solrQuery, filter: solrFilters },
+    solrParams: { query: solrQuery, filter: suggestionFilters },
     containsParser: removeNonAlphanumeric,
   });
 
 const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy, getChildren: getStratigraphyChildren } = useStratigraphyHierarchyFilter("/specimen", {
   filterExclude: "stratigraphy",
-  solrParams: { query: solrQuery, filter: solrFilters },
+  solrParams: { query: solrQuery, filter: suggestionFilters },
   filter: filters.value.stratigraphy,
 });
 
 const { suggest: suggestRock, hydrate: hydrateRock, getChildren: getRockChildren } = useRockHierarchyFilter("/specimen", {
   filterExclude: "rock",
-  solrParams: { query: solrQuery, filter: solrFilters },
+  solrParams: { query: solrQuery, filter: suggestionFilters },
   filter: filters.value.rock,
 });
 
 const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useTaxonHierarchyFilter("/specimen", {
   filterExclude: "taxon",
-  solrParams: { query: solrQuery, filter: solrFilters },
+  solrParams: { query: solrQuery, filter: suggestionFilters },
   filter: filters.value.taxon,
 });
 
@@ -115,6 +118,8 @@ const suggestionRefreshMap = computed(() => {
     taxon: filterTaxon.value?.refreshSuggestions,
   };
 });
+
+watch(() => props.resultView, () => refreshSuggestionFilters(suggestionRefreshMap.value));
 
 function handleReset() {
   emit("reset");

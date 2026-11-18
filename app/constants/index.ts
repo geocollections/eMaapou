@@ -110,7 +110,7 @@ export const SPECIMEN: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [],
+    sortBy: [{ key: "id", order: "desc" }],
   },
 };
 
