@@ -27,7 +27,7 @@ onMounted(() => {
 const copy = computed(() =>
   en.value
     ? {
-        title: "Explore geological data",
+        title: "eMaapõu\nExplore geological data",
         intro:
           "Discover the stories behind rocks, fossils and landscapes. Explore geological collections, research datasets and places through the SARV geoscience data platform. Connect specimens, samples and scientific records to support research, learning and new discoveries.",
         search: "Search all data",
@@ -52,7 +52,7 @@ const copy = computed(() =>
         workbenchText: "The data management environment for SARV.",
       }
     : {
-        title: "Avasta geoloogilisi andmeid.",
+        title: "eMaapõu\nAvasta geoloogilisi andmeid",
         intro:
           "Avasta kivimite, fossiilide ja maastike lugu. Tutvu SARV geoloogiliste kollektsioonide, teadusandmestike ja leiukohtadega. Leia seoseid eksemplaride, proovide ja teaduskirjete vahel, et toetada uurimistööd, õppimist ja uusi avastusi.",
         search: "Otsi kõigist andmetest",
@@ -144,7 +144,7 @@ useSeoMeta({ description: () => copy.value.intro });
     <AppBar />
     <UContainer
       as="main"
-      class="w-full max-w-7xl flex-1 px-4 pt-8 pb-10 sm:px-6 lg:px-8 lg:pt-10 lg:pb-12"
+      class="w-full max-w-7xl px-4 pt-8 pb-4 sm:px-6 lg:px-8 lg:pt-10 lg:pb-6"
     >
       <section
         aria-labelledby="home-title"
@@ -172,7 +172,8 @@ useSeoMeta({ description: () => copy.value.intro });
             id="home-title"
             class="mb-5 max-w-[620px] text-[32px] leading-[1.15] font-bold tracking-[-0.035em] text-portal-heading lg:text-5xl"
           >
-            {{ copy.title }}
+            <span class="block text-[1.2em]">eMaapõu</span>
+            <span class="block">{{ copy.title.split('\n')[1] }}</span>
           </h1>
           <p class="mb-8 max-w-[520px] text-base leading-7 text-portal-text">
             {{ copy.intro }}
