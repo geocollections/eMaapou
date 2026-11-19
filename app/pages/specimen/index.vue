@@ -240,6 +240,7 @@ watch(compactScreen, (compact) => {
   filtersOpen.value = !compact;
 }, { immediate: true });
 const copyStatus = ref("");
+const mapOpen = ref(true);
 const text = computed(() => locale.value === "et"
   ? {
       home: "Avaleht",
@@ -256,6 +257,8 @@ const text = computed(() => locale.value === "et"
       retry: "Proovi uuesti",
       empty: "Tulemusi ei leitud. Muuda otsingut või eemalda filtrid.",
       map: "Filtritele vastavad asukohad",
+      hideMap: "Peida kaart",
+      showMap: "Näita kaarti",
       mapNote: "Kaart näitab kuni 1000 filtritele vastavat eri asukohta. Punktile vajutades saad valida samade koordinaatidega kirjete seast.",
     }
   : {
@@ -273,6 +276,8 @@ const text = computed(() => locale.value === "et"
       retry: "Try again",
       empty: "No results found. Adjust your search or clear the filters.",
       map: "Locations matching your filters",
+      hideMap: "Hide map",
+      showMap: "Show map",
       mapNote: "The map shows up to 1,000 distinct locations matching your filters. Select a point to choose from records at those coordinates.",
     });
 const filterLabels: Record<string, string> = {
@@ -464,8 +469,11 @@ useHead({
           </div>
           <SpecimenIntroCollage :query="appliedSearch.imageQuery" :filters="appliedSearch.imageFilters" />
         </section>
-        <section class="specimen-search__map" :aria-label="text.map">
-          <SpecimenResultsMap
+        <UButton type="button" color="neutral" variant="ghost" class="mb-1 header-focus specimen-search__map-toggle text-portal-link" aria-controls="specimen-results-map" :aria-expanded="mapOpen" @click="mapOpen = !mapOpen">
+          {{ mapOpen ? text.hideMap : text.showMap }}
+        </UButton>
+        <section v-if="mapOpen" id="specimen-results-map" class="specimen-search__map" :aria-label="text.map">
+            <SpecimenResultsMap
             :locations="mapLocations"
             :query="appliedSearch.query"
             :filters="appliedSearch.filters"
@@ -475,8 +483,8 @@ useHead({
             :geometry="specimensStore.filters.geometry.value"
             @retry="refreshMap()"
             @update:geometry="applyMapGeometry"
-          />
-          <p>{{ text.mapNote }}</p>
+            />
+            <p>{{ text.mapNote }}</p>
         </section>
         <div class="specimen-search__layout" :class="filtersOpen ? 'portal-filter-grid' : 'portal-results-grid'">
           <aside
