@@ -309,6 +309,14 @@
 @utility portal-photo-footer { @apply flex flex-wrap items-center justify-between gap-3; }
 @utility portal-photo-image { @apply mx-auto max-h-[82dvh] w-full object-contain; }
 @utility portal-photo-navigation { @apply flex items-center gap-3 text-sm text-portal-muted tabular-nums; }
+@utility portal-photo-preview-dialog { @apply !inset-auto !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !h-auto !max-h-[90dvh] !w-[min(92vw,72rem)] !max-w-none overflow-hidden rounded-portal-card; }
+@utility portal-photo-preview-header { @apply shrink-0 border-b border-portal-border px-4 py-3 sm:px-6; }
+@utility portal-photo-preview-body { @apply min-h-0 overflow-y-auto !p-3 sm:!p-5; }
+@utility portal-photo-preview-footer { @apply flex-wrap justify-between gap-3 border-t border-portal-border px-4 py-3 sm:px-6; }
+@utility portal-photo-preview-content { @apply grid gap-4; }
+@utility portal-photo-preview-image { @apply mx-auto max-h-[min(50dvh,46rem)] w-full bg-portal-subtle object-contain; }
+@utility portal-photo-preview-info { @apply mx-auto w-full max-w-[72rem]; }
+@utility portal-photo-metadata { @apply mt-4 grid gap-4 [&_dt]:text-xs [&_dt]:font-medium [&_dt]:text-portal-muted [&_dd]:mt-1 [&_dd]:break-words [&_dd]:text-sm [&_dd]:text-portal-text; }
 
 @utility portal-full-field { @apply w-full min-w-0; }
 @utility portal-supporting { @apply text-sm text-portal-muted; }
