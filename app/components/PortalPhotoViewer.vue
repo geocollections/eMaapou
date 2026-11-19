@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Image } from "~/components/ImageBar.vue";
 
-const props = withDefaults(defineProps<{ modelValue: boolean; images: Image<any>[]; initialSlide?: number; total?: number }>(), { initialSlide: 0 });
+const props = withDefaults(defineProps<{ modelValue: boolean; images: Image<any>[]; initialSlide?: number; total?: number; largePreview?: boolean }>(), { initialSlide: 0, largePreview: false });
 const emit = defineEmits<{ "update:modelValue": [value: boolean]; "end": [] }>();
 const source = useCollectionImage();
 const { locale } = useI18n();
@@ -38,20 +38,40 @@ onKeyStroke(["ArrowLeft", "ArrowRight"], (event) => {
   <UModal
     :open="modelValue"
     :title="locale === 'et' ? 'Foto eelvaade' : 'Image preview'"
-    :ui="{ content: 'portal-photo-dialog', body: 'portal-photo-body', footer: 'portal-photo-footer' }"
+    :close="true"
+    :ui="largePreview
+      ? { content: 'portal-photo-preview-dialog', header: 'portal-photo-preview-header', body: 'portal-photo-preview-body', footer: 'portal-photo-preview-footer' }
+      : { content: 'portal-photo-dialog', body: 'portal-photo-body', footer: 'portal-photo-footer' }"
     @update:open="emit('update:modelValue', $event)"
   >
     <template #body>
-      <img
-        v-if="current"
-        :src="source(current.filename, 'large')"
-        :alt="String(current.info?.title ?? current.id)"
-        class="portal-photo-image"
-      ><slot
-        name="info"
-        :item="current"
-        :index="index"
-      />
+      <div v-if="largePreview" class="portal-photo-preview-content">
+        <img
+          v-if="current"
+          :src="source(current.filename, 'large')"
+          :alt="String(current.info?.title ?? current.id)"
+          class="portal-photo-preview-image"
+        >
+        <div class="portal-photo-preview-info">
+          <slot
+            name="info"
+            :item="current"
+            :index="index"
+          />
+        </div>
+      </div>
+      <template v-else>
+        <img
+          v-if="current"
+          :src="source(current.filename, 'large')"
+          :alt="String(current.info?.title ?? current.id)"
+          class="portal-photo-image"
+        ><slot
+          name="info"
+          :item="current"
+          :index="index"
+        />
+      </template>
     </template>
     <template #footer>
       <div class="portal-photo-navigation">
