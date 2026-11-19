@@ -14,6 +14,7 @@ let map: L.Map | undefined;
 const container = ref<HTMLElement>();
 const expanded = ref(false);
 const fullscreen = ref(false);
+const wheelZoomActive = ref(false);
 const toolbar = ref<HTMLElement>();
 watch(toolbar, (element) => {
   if (!element)
@@ -36,6 +37,7 @@ const controls = computed(() => locale.value === "et"
   ? {
       records: "Kirjeid",
       locations: "asukohta",
+      activateZoom: "Kaardi hiirerullikuga suumimiseks klõpsa kaardil",
       retry: "Proovi uuesti",
       failed: "Kirjete laadimine ebaõnnestus.",
       mapFailed: "Asukohtade laadimine ebaõnnestus.",
@@ -54,6 +56,7 @@ const controls = computed(() => locale.value === "et"
   : {
       records: "Records",
       locations: "locations",
+      activateZoom: "Click the map to enable scroll-wheel zoom",
       retry: "Try again",
       failed: "Could not load records.",
       mapFailed: "Could not load locations.",
@@ -169,6 +172,17 @@ function locationName(location: MapLocation) {
     ? "Asukoht"
     : "Location");
 }
+function markerRadius(count: number) {
+  if (count <= 10)
+    return 6;
+  if (count <= 100)
+    return 12;
+  return 18;
+}
+function activateWheelZoom() {
+  map?.scrollWheelZoom.enable();
+  wheelZoomActive.value = true;
+}
 function renderMarkers() {
   if (!map || !markers)
     return;
@@ -178,13 +192,11 @@ function renderMarkers() {
   for (const location of props.locations) {
     const { latitude, longitude, count } = location;
     const marker = L.circleMarker([latitude, longitude], {
-      radius: count === 1
-        ? 6
-        : Math.min(18, 7 + Math.log10(count) * 2.3),
+      radius: markerRadius(count),
       color: colors.background,
-      weight: 1.5,
+      weight: 2,
       fillColor: colors.primary,
-      fillOpacity: 0.85,
+      fillOpacity: 0.9,
     });
     const preview = document.createElement("div");
     const title = document.createElement("strong");
@@ -243,6 +255,7 @@ onMounted(async () => {
   map.fullscreenControl?.getContainer()?.setAttribute("hidden", "");
   map.on("enterFullscreen", () => fullscreen.value = true);
   map.on("exitFullscreen", () => fullscreen.value = false);
+  map.on("click", activateWheelZoom);
   L.control.scale({ imperial: false, position: "bottomright" }).addTo(map);
   markers = L.layerGroup().addTo(map);
   popupTarget.value = document.createElement("div");
@@ -385,6 +398,15 @@ onBeforeUnmount(() => map?.remove());
       >
         {{ locations.length.toLocaleString(locale) }} {{ controls.locations }}
       </UBadge>
+      <button
+        v-if="!wheelZoomActive && !selectedLocation"
+        type="button"
+        class="specimen-map-zoom-instruction"
+        :aria-label="controls.activateZoom"
+        @click.stop="activateWheelZoom"
+      >
+        {{ controls.activateZoom }}
+      </button>
       <p
         v-if="loading || error || !locations.length || tileError || locationMessage"
         class="specimen-map-status"
