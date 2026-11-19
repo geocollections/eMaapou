@@ -138,6 +138,7 @@ const {
       limit: imageOptions.value.itemsPerPage,
       offset: getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
       filter: specimenImageSolrFilters.value,
+      fields: "id,image,specimen_id,specimen_full_name,locality,locality_en",
     },
   })),
   watch: false,
