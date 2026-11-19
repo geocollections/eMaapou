@@ -1,160 +1,258 @@
 <script setup lang="ts">
-import type { BreadcrumbItem } from '@nuxt/ui'
+import { mdiChevronRight, mdiHomeOutline, mdiOpenInNew } from "@mdi/js";
+import { SERVICES } from "~/constants";
 
-const otherServices = ref({
-  geocollections: {
-    title: "geocollections.title",
-    description: "geocollections.description",
-    href: "https://geocollections.info",
-  },
-  kirjandus: {
-    title: "kirjandus.title",
-    description: "kirjandus.description",
-    href: "https://kirjandus.geoloogia.info",
-  },
-  gmre: {
-    title: "gmre.title",
-    description: "gmre.description",
-    href: "https://geoloogia.info/geology",
-  },
-  fond: {
-    title: "fond.title",
-    description: "fond.description",
-    href: "https://fond.egt.ee",
-  },
-  fossiilid: {
-    title: "fossiilid.title",
-    description: "fossiilid.description",
-    href: "https://fossiilid.info",
-  },
-  kivid: {
-    title: "kivid.title",
-    description: "kivid.description",
-    href: "https://kivid.info",
-  },
-  stratigraphy: {
-    title: "frontStratigraphy.title",
-    description: "frontStratigraphy.description",
-    href: "https://stratotuup.ut.ee",
-  },
-  geologicalSurvey: {
-    title: "geologicalSurvey.title",
-    description: "geologicalSurvey.description",
-    href: "https://gis.egt.ee/",
-  },
-  maardlad: {
-    title: "maardlad.title",
-    description: "maardlad.description",
-    href: "https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k",
-  },
-  doi: {
-    title: "doi.title",
-    description: "doi.description",
-    href: "https://doi.geocollections.info",
-  },
-  turba: {
-    title: "turba.title",
-    description: "turba.description",
-    href: "https://turba.geoloogia.info",
-  },
-  // Divider
-  geocase: {
-    title: "geocase.title",
-    description: "geocase.description",
-    href: "https://geocase.eu",
-  },
-  eurocore: {
-    title: "eurocore.title",
-    description: "eurocore.description",
-    href: "https://eurocore.rocks",
-  },
-  sarv: {
-    title: "sarv.title",
-    description: "sarv.description",
-    href: "https://edit.geocollections.info",
-  },
+definePageMeta({ layout: false });
+
+const { locale, t } = useI18n();
+const localePath = useLocalePath();
+const en = computed(() => locale.value === "en");
+const homeLabel = computed(() => en.value ? "Home" : "Avaleht");
+const servicesLabel = computed(() => en.value ? "E-Services" : "E-teenused");
+type ServiceId = typeof SERVICES.ids[number];
+
+const groups = computed(() => {
+  const copy: {
+    introduction: string;
+    external: string;
+    browse: string;
+    explore: string;
+    photo: string;
+    groups: {
+      id: string;
+      title: string;
+      description: string;
+      ids: ServiceId[];
+    }[];
+  } = en.value
+    ? {
+        introduction:
+          "Explore specialist geological databases, collections and tools from one place. Each service opens on its own website.",
+        external: "External service",
+        browse: "Open service",
+        explore: "Browse by topic",
+        photo: "Ohesaare cliff on Saaremaa",
+        groups: [
+          {
+            id: "collections",
+            title: "Collections and literature",
+            description: "Geological collections, publications and reference resources.",
+            ids: [
+              "geocollections",
+              "kirjandus",
+              "fossiilid",
+              "kivid",
+              "stratigraphy",
+              "gmre",
+              "geocase",
+            ],
+          },
+          {
+            id: "maps",
+            title: "Maps and geological information",
+            description: "Geological maps, survey information and specialist datasets.",
+            ids: ["geologicalSurvey", "maardlad", "turba"],
+          },
+          {
+            id: "research",
+            title: "Research data and tools",
+            description: "Research archives, data repositories and project tools.",
+            ids: ["fond", "doi", "eurocore", "sarv"],
+          },
+        ],
+      }
+    : {
+        introduction:
+          "Avasta geoloogilisi andmekogusid, kollektsioone ja tööriistu ühest kohast. Iga teenus avaneb oma veebilehel.",
+        external: "Väline teenus",
+        browse: "Ava teenus",
+        explore: "Sirvi teemade kaupa",
+        photo: "Ohesaare pank Saaremaal",
+        groups: [
+          {
+            id: "collections",
+            title: "Kollektsioonid ja kirjandus",
+            description: "Geoloogilised kogud, publikatsioonid ja viiteallikad.",
+            ids: [
+              "geocollections",
+              "kirjandus",
+              "fossiilid",
+              "kivid",
+              "stratigraphy",
+              "gmre",
+              "geocase",
+            ],
+          },
+          {
+            id: "maps",
+            title: "Kaardid ja geoloogiline teave",
+            description: "Geoloogilised kaardid, uuringuteave ja valdkonna andmestikud.",
+            ids: ["geologicalSurvey", "maardlad", "turba"],
+          },
+          {
+            id: "research",
+            title: "Teadusandmed ja tööriistad",
+            description: "Uuringuarhiivid, andmerepositooriumid ja töövahendid.",
+            ids: ["fond", "doi", "eurocore", "sarv"],
+          },
+        ],
+      };
+
+  return {
+    ...copy,
+    groups: copy.groups.map(group => ({
+      ...group,
+      services: group.ids.map(id => SERVICES[id]),
+    })),
+  };
 });
-
-const items = computed<BreadcrumbItem[]>(() => [
-  {
-    label: t('title'),
-    icon: 'i-lucide-home',
-    to: '/'
-  },
-  {
-    label: t('services.title'),
-    to: '/services'
-  }
-])
-const favicons = ref<Record<string, string>>({})
-
-const { t } = useI18n();
-
-// We asynchronously get the favicons when the page loads to show a custom question mark
-// for websites that favicons aren't available/can't load for some god damned reason
-function getFavicon(href: string): Promise<string> {
-  const fallback =
-    'data:image/svg+xml,' +
-    encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="50%" y="50%" dy=".35em" text-anchor="middle" font-size="26" fill="gray">?</text></svg>'
-    )
-
-  return new Promise((resolve) => {
-    const favicon = new URL('/favicon.ico', href).href
-    const image = new Image()
-
-    image.onload = () => resolve(favicon)
-    image.onerror = () => resolve(fallback)
-    image.src = favicon
-  })
-}
-
-
-onMounted(async () => {
-  await Promise.all(
-    Object.values(otherServices.value).map(async ({ href }) => {
-      favicons.value[href] = await getFavicon(href)
-    })
-  )
-})
-
 </script>
+
 <template>
-    <div>
-        <UBreadcrumb :items="items" />
-        <h1 class="mt-12 text-4xl font-bold">{{ t('services.title') }}</h1>
-        <p class="mt-2 mb-24">{{ t('services.sub') }}</p>
-        <div class="grid grid-cols-3 gap-6">
-            <UCard
-            v-for="value in otherServices"
-            :key="value.href"
-            :ui="{ body: 'flex items-start gap-8' }"
+  <div class="flex min-h-screen flex-col bg-portal-background font-sans text-portal-text">
+    <AppBar />
+    <main class="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12">
+      <nav
+        :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
+        class="mb-6 flex items-center gap-2 text-[13px] text-portal-muted"
+      >
+        <ULink
+          :to="localePath('/')"
+          raw
+          class="header-focus inline-flex min-h-6 items-center gap-2 text-portal-text hover:text-portal-link"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-4"
+            aria-hidden="true"
+          >
+            <path :d="mdiHomeOutline" />
+          </svg>
+          {{ homeLabel }}
+        </ULink>
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-4"
+          aria-hidden="true"
+        >
+          <path :d="mdiChevronRight" />
+        </svg>
+        <span aria-current="page">{{ servicesLabel }}</span>
+      </nav>
+
+      <section
+        aria-labelledby="services-title"
+        class="mb-8 grid items-stretch gap-6 md:grid-cols-[1.2fr_1fr] md:gap-8"
+      >
+        <div>
+          <h1
+            id="services-title"
+            class="mb-4 font-sans text-[32px] leading-[1.15] font-bold tracking-[-0.035em] text-portal-heading md:text-4xl"
+          >
+            {{ t("services.title") }}
+          </h1>
+          <p class="max-w-[680px] text-base leading-relaxed">
+            {{ groups.introduction }}
+          </p>
+          <nav class="mt-6" :aria-label="groups.explore">
+            <p class="mb-2 text-sm font-semibold text-portal-heading">
+              {{ groups.explore }}
+            </p>
+            <ul class="flex list-none flex-wrap gap-2 p-0">
+              <li v-for="group in groups.groups" :key="group.id">
+                <a
+                  :href="`#services-${group.id}`"
+                  class="header-focus inline-flex min-h-11 items-center gap-1 rounded-portal-control border border-portal-border bg-portal-background px-3 text-sm font-medium text-portal-link no-underline transition-colors hover:border-portal-border-hover hover:bg-portal-subtle"
+                >
+                  {{ group.title }}
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="size-4 rotate-90"
+                  >
+                    <path :d="mdiChevronRight" />
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <!-- Photo source: https://files.geocollections.info/large/df1971c7-30f0-4cb5-bfc4-0839fe78edc0.jpg -->
+        <img
+          src="https://files.geocollections.info/large/df1971c7-30f0-4cb5-bfc4-0839fe78edc0.jpg"
+          :alt="groups.photo"
+          width="2000"
+          height="1333"
+          class="h-52 w-full rounded-portal-card object-cover md:h-full md:max-h-[360px] md:min-h-64"
+          fetchpriority="high"
+        >
+      </section>
+
+      <div class="space-y-10">
+        <section
+          v-for="group in groups.groups"
+          :id="`services-${group.id}`"
+          :key="group.title"
+          :aria-labelledby="`services-heading-${group.id}`"
+          class="scroll-mt-24"
+        >
+          <div class="mb-4 border-b border-portal-border pb-3 sm:mb-5">
+            <h2
+              :id="`services-heading-${group.id}`"
+              class="mb-2 font-sans text-[22px] leading-snug font-semibold tracking-tight text-portal-heading md:text-2xl"
             >
+              {{ group.title }}
+            </h2>
+            <p class="text-sm leading-relaxed text-portal-text">
+              {{ group.description }}
+            </p>
+          </div>
 
-            <img
-            v-if="favicons[value.href]"
-            :src="favicons[value.href]"
-            :alt="t(value.title)"
-            class="size-8 shrink-0"
-            />
-
-            <div>
-                <h2 class="text-xl font-bold">{{ t(value.title) }}</h2>
-                <p class="text-sm">{{ t(value.description) }}</p>
-                <NuxtLink
-                :to="value.href"
+          <ul class="grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
+            <li v-for="service in group.services" :key="service.href">
+              <a
+                :href="service.href"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center gap-1 mt-3 text-link!"
-                >
-                {{ t('services.link') }}
-                <UIcon
-                    name="i-lucide-arrow-up-right"
-                    class="size-5 text-link!"
-                />
-                </NuxtLink>
-            </div>
-            </UCard>
-        </div>
-    </div>
+                class="group flex h-full min-h-[148px] flex-col rounded-portal-card border border-portal-border bg-portal-background p-5 text-portal-text no-underline transition-colors hover:border-portal-border-hover hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-portal-focus"
+              >
+                <span class="flex items-start justify-between gap-4">
+                  <span class="text-lg leading-snug font-semibold text-portal-heading group-hover:text-portal-link">
+                    {{ t(service.title) }}
+                  </span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="mt-0.5 size-5 shrink-0 text-portal-link"
+                  >
+                    <path :d="mdiOpenInNew" />
+                  </svg>
+                </span>
+                <span class="mt-2 text-sm leading-relaxed text-portal-text">
+                  {{ t(service.description) }}
+                </span>
+                <span class="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-portal-link">
+                  {{ groups.browse }}
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="size-4 transition-transform group-hover:translate-x-0.5"
+                  >
+                    <path :d="mdiChevronRight" />
+                  </svg>
+                  <span class="sr-only">({{ groups.external }})</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+    <AppFooter />
+  </div>
 </template>
