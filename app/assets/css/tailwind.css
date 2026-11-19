@@ -304,10 +304,10 @@
 @utility portal-choice-name { @apply min-w-0 flex-1 break-words; }
 @utility portal-choice-count { @apply shrink-0 text-xs text-portal-muted tabular-nums; }
 @utility portal-filter-pages { @apply flex items-center justify-between gap-2 text-xs text-portal-muted tabular-nums; }
-@utility portal-photo-dialog { @apply max-w-5xl rounded-portal-card bg-portal-background; }
-@utility portal-photo-body { @apply p-4; }
+@utility portal-photo-dialog { @apply w-[min(96vw,90rem)] max-w-[96vw] rounded-portal-card bg-portal-background; }
+@utility portal-photo-body { @apply p-2 sm:p-3; }
 @utility portal-photo-footer { @apply flex flex-wrap items-center justify-between gap-3; }
-@utility portal-photo-image { @apply mx-auto max-h-[65dvh] w-full object-contain; }
+@utility portal-photo-image { @apply mx-auto max-h-[82dvh] w-full object-contain; }
 @utility portal-photo-navigation { @apply flex items-center gap-3 text-sm text-portal-muted tabular-nums; }
 
 @utility portal-full-field { @apply w-full min-w-0; }
@@ -326,6 +326,15 @@
 @utility portal-image-strip-item { @apply shrink-0; }
 @utility portal-image-trigger { @apply rounded-portal-control p-0; }
 @utility portal-image-thumbnail { @apply h-[175px] rounded-portal-control object-contain transition-opacity hover:opacity-80; }
+@utility specimen-detail-images { & .portal-image-thumbnail { @apply h-[240px] sm:h-[320px]; } }
+@utility specimen-detail { @apply mx-auto! max-w-[1440px] space-y-6 px-4 py-6 sm:px-6 lg:px-8; }
+@utility specimen-detail__photos { @apply overflow-hidden rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5; }
+@utility specimen-detail__layout { @apply grid items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)]; }
+@utility specimen-detail__card { @apply min-w-0 overflow-hidden rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5; }
+@utility specimen-detail__section-heading { @apply mb-3 flex items-center justify-between border-b border-portal-border pb-3 [&>h2]:m-0 [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:text-portal-heading; }
+@utility specimen-detail__count { @apply rounded-full bg-portal-subtle px-2.5 py-1 text-xs font-medium tabular-nums text-portal-muted; }
+@utility specimen-detail__table { @apply overflow-hidden rounded-portal-control border border-portal-border; }
+@utility specimen-detail__map-card { @apply space-y-3; }
 @utility portal-record-link { @apply cursor-pointer text-portal-link underline underline-offset-3; }
 @utility portal-link-icon { @apply ml-1 inline-flex size-3.5 align-text-top; }
 @utility portal-detail-map { height: var(--map-height); @apply rounded-portal-card border border-portal-border font-sans; }
