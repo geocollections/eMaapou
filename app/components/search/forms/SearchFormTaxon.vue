@@ -14,7 +14,6 @@ const { filters, query, solrQuery, solrFilters } = storeToRefs(taxaStore);
 const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useTaxonHierarchyFilter("/taxon", {
   filterExclude: "taxon",
   solrParams: { query: solrQuery, filter: solrFilters },
-  filter: filters.value.taxon,
 });
 
 const { suggest: suggestFossilGroup, hydrate: hydrateFossilGroup }

@@ -87,7 +87,6 @@ const { suggest: suggestRock, hydrate: hydrateRock, getChildren: getRockChildren
 const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useTaxonHierarchyFilter("/specimen", {
   filterExclude: "taxon",
   solrParams: { query: solrQuery, filter: suggestionFilters },
-  filter: filters.value.taxon,
 });
 
 interface FilterControl { refreshSuggestions: () => void }

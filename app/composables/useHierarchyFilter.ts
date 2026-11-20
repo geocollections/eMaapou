@@ -297,17 +297,20 @@ export function useTaxonHierarchyFilter(
   {
     filterExclude,
     solrParams,
-    filter,
   }: {
     filterExclude?: string;
     solrParams: {
       query: Ref<string>;
       filter: Ref<(string | { [K: string]: string })[]>;
     };
-    filter: StringIdListFilter;
   },
 ) {
   const { $solrFetch } = useNuxtApp();
+  function normalizeHierarchyPath(value: string) {
+    if (value.endsWith("-"))
+      return value;
+    return `${value}-`;
+  }
 
   async function hydrate(values: string[]) {
     if (values.length < 1)
@@ -323,7 +326,7 @@ export function useTaxonHierarchyFilter(
     const facetQueries = res.response.docs.reduce((prev: { [K: string]: { type: string; q: string } }, doc: any) => {
       prev[doc.id] = {
         type: "query",
-        q: `taxon_hierarchy_descendent_paths:${doc.hierarchy_string}`,
+        q: `taxon_hierarchy_descendent_paths:${doc.hierarchy_string}*`,
       };
       return prev;
     }, {} as { [K: string]: { type: string; q: string } });
@@ -348,8 +351,11 @@ export function useTaxonHierarchyFilter(
   }
 
   async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }): Promise<[TreeNode[], number]> {
-    const depth = value.split("-").length;
+    const depth = value.split("-").filter(Boolean).length;
     const prefix = `${depth}/${value}`;
+    const parentPath = value
+      ? normalizeHierarchyPath(value)
+      : "";
 
     const countRes = await $solrFetch<any>(path, {
       query: {
@@ -379,7 +385,7 @@ export function useTaxonHierarchyFilter(
 
     const values = countRes.facets.categories.buckets.map((bucket: any) => {
       const [_depth, value] = bucket.val.split("/");
-      return value;
+      return normalizeHierarchyPath(value);
     });
     const res = await $solrFetch<any>("/taxon", {
       query: {
@@ -389,30 +395,30 @@ export function useTaxonHierarchyFilter(
       },
     });
 
-    return [countRes.facets.categories.buckets
-      .filter((bucket: any) => {
-        const [_depth, value] = bucket.val.split("/");
-        return res.response.docs.find(
-          (doc: any) => doc.hierarchy_string === value,
-        );
-      })
-      .map((bucket: any) => {
-        const [_depth, value] = bucket.val.split("/");
-        const doc = res.response.docs.find(
-          (doc: any) => doc.hierarchy_string === value,
-        );
-        return {
-          id: doc.id,
-          name: { et: doc.taxon, en: doc.taxon },
-          children: [],
-          selected: filter.value.includes(value),
-          childrenLoaded: false,
-          showChildren: false,
-          value,
-          count: bucket.count,
-          leaf: doc.leaf_node,
-        };
-      }) as TreeNode[], countRes.facets.categories.numBuckets];
+    const nodes: TreeNode[] = [];
+    for (const bucket of countRes.facets.categories.buckets) {
+      const [_depth, bucketPath] = bucket.val.split("/");
+      const hierarchyPath = normalizeHierarchyPath(bucketPath);
+      if (hierarchyPath === parentPath)
+        continue;
+      const doc = res.response.docs.find(
+        (item: any) => item.hierarchy_string === hierarchyPath,
+      );
+      if (!doc)
+        continue;
+      nodes.push({
+        id: doc.id,
+        name: { et: doc.taxon, en: doc.taxon },
+        children: [],
+        childrenLoaded: false,
+        showChildren: false,
+        value: hierarchyPath,
+        count: bucket.count,
+        leaf: doc.leaf_node,
+      });
+    }
+
+    return [nodes, countRes.facets.categories.numBuckets];
   }
 
   async function suggest(
