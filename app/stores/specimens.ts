@@ -80,6 +80,7 @@ export const useSpecimens = defineStore(
         value: [],
         fields: ["taxon_hierarchy_descendent_paths"],
         alphaNumeric: false,
+        lookup: "startswith",
         tag: "taxon",
       } as StringIdListFilter,
       collector: {

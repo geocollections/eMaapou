@@ -87,6 +87,25 @@ describe("useFilter", () => {
     ]);
   });
 
+  it("matches the selected taxon and its descendants", () => {
+    const { filters, solrFilters } = useFilters({
+      taxon: {
+        type: "idList",
+        value: [],
+        fields: ["taxon_hierarchy_descendent_paths"],
+        alphaNumeric: false,
+        lookup: "startswith",
+        tag: "taxon",
+      } as StringIdListFilter,
+    });
+
+    filters.value.taxon.value = ["29-22224-"];
+
+    expect(solrFilters.value).toStrictEqual([
+      { "#taxon": "taxon_hierarchy_descendent_paths:29-22224-*" },
+    ]);
+  });
+
   it("resets solrFilters", () => {
     const { filters, solrFilters, reset } = useFilters(initFilters);
 
