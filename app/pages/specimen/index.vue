@@ -334,7 +334,7 @@ const hierarchyOptions = selectionOptions;
 const hierarchyHydrators = {
   stratigraphy: useStratigraphyHierarchyFilter("/specimen", { solrParams: hierarchyOptions, filter: filters.value.stratigraphy }).hydrate,
   rock: useRockHierarchyFilter("/specimen", { solrParams: hierarchyOptions, filter: filters.value.rock }).hydrate,
-  taxon: useTaxonHierarchyFilter("/specimen", { solrParams: hierarchyOptions, filter: filters.value.taxon }).hydrate,
+  taxon: useTaxonHierarchyFilter("/specimen", { solrParams: hierarchyOptions }).hydrate,
 };
 const nameHydrators = {
   ...labelHydrators,
