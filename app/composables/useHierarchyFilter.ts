@@ -323,7 +323,7 @@ export function useTaxonHierarchyFilter(
     const facetQueries = res.response.docs.reduce((prev: { [K: string]: { type: string; q: string } }, doc: any) => {
       prev[doc.id] = {
         type: "query",
-        q: `taxon_hierarchy_descendent_paths:${doc.hierarchy_string}`,
+        q: `taxon_hierarchy_descendent_paths:${doc.hierarchy_string}*`,
       };
       return prev;
     }, {} as { [K: string]: { type: string; q: string } });
