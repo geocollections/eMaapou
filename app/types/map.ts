@@ -4,6 +4,7 @@ export interface MapMarker {
   text: string;
   longitude: number;
   latitude: number;
+  radius?: number;
   route?: RouteLocationRaw;
 }
 
