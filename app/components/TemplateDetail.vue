@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
 import { mdiChevronDoubleLeft, mdiViewList } from "@mdi/js";
+import { useDisplay } from "vuetify";
 
 const props = withDefaults(defineProps<{
   showSimilar?: boolean;
-}>(), { showSimilar: false });
+  topPadding?: number;
+}>(), { showSimilar: false, topPadding: undefined });
 
 const display = useDisplay();
 const drawer = ref(false);
@@ -18,7 +19,10 @@ const mini = ref(false);
 const drawerActive = ref(props.showSimilar);
 
 const showDrawer = ref(true);
-watch([() => props.showSimilar, () => display.smAndDown.value], ([value, displayValue]) => {
+watch([
+  () => props.showSimilar,
+  () => display.smAndDown.value,
+], ([value, displayValue]) => {
   drawerActive.value = value;
   if (displayValue) {
     showDrawer.value = false;
@@ -29,7 +33,7 @@ watch([() => props.showSimilar, () => display.smAndDown.value], ([value, display
 function closeMobileSearch() {
   showDrawer.value = false;
 }
-const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
+const contentTopPadding = computed(() => props.topPadding ?? (display.mdAndUp.value ? 88 : 48));
 </script>
 
 <template>
@@ -90,7 +94,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
         </div>
       </VNavigationDrawer>
     </ClientOnly>
-    <VMain :style="{ 'padding-top': topPadding }">
+    <VMain :style="{ 'padding-top': contentTopPadding }">
       <div class="fill-height pb-10" style="min-height: 100vh">
         <slot name="title" />
         <slot />
@@ -113,7 +117,6 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
           </VFabTransition>
         </ClientOnly>
       </div>
-      <AppFooter />
     </VMain>
   </div>
 </template>

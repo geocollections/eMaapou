@@ -55,34 +55,39 @@ function geoToLest(north: number, east: number) {
   n = p0 - p * Math.cos(FII) + FN;
   e = p * Math.sin(FII) + FE;
 
-  return [n.toFixed(2), e.toFixed(2)];
+  return [
+    n.toFixed(2),
+    e.toFixed(2),
+  ];
 }
 </script>
 
 <template>
-  <div class="text-right text-no-wrap px-2">
-    <span class="google-map">
-      <a
-        class="text-link text-body-2"
-        :href="`https://www.google.com/maps/?q=${latitude},${longitude}`"
-        :title="`https://www.google.com/maps/?q=${latitude},${longitude}`"
-        target="GoogleMap"
-      >{{ $t("map.google_maps") }}</a>
-    </span>
-    <span> | </span>
-    <span class="xgis2">
-      <a
-        class="text-link text-body-2"
-        :href="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
-          latitude,
-          longitude,
-        )}&moot=20000&tooltip=${tooltip}`"
-        :title="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
-          latitude,
-          longitude,
-        )}&moot=20000&tooltip=${tooltip}`"
-        target="EstonianMap"
-      >{{ $t("map.estonian_geoportal") }}</a>
-    </span>
+  <div class="px-2 text-right whitespace-nowrap">
+    <ULink
+      :to="`https://www.google.com/maps/?q=${latitude},${longitude}`"
+      :title="`https://www.google.com/maps/?q=${latitude},${longitude}`"
+      external
+      target="GoogleMap"
+      class="text-sm text-portal-link underline underline-offset-2 hover:text-portal-primary"
+    >
+      {{ $t("map.google_maps") }}
+    </ULink>
+    <span aria-hidden="true"> | </span>
+    <ULink
+      :to="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
+        latitude,
+        longitude,
+      )}&moot=20000&tooltip=${tooltip}`"
+      :title="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
+        latitude,
+        longitude,
+      )}&moot=20000&tooltip=${tooltip}`"
+      external
+      target="EstonianMap"
+      class="text-sm text-portal-link underline underline-offset-2 hover:text-portal-primary"
+    >
+      {{ $t("map.estonian_geoportal") }}
+    </ULink>
   </div>
 </template>
