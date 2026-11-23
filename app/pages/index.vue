@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { mdiChevronRight, mdiMagnify, mdiOpenInNew } from "@mdi/js";
+import {
+  mdiBug,
+  mdiChevronRight,
+  mdiFlaskOutline,
+  mdiMagnify,
+  mdiMapMarkerRadiusOutline,
+  mdiOpenInNew,
+} from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -12,11 +19,8 @@ const { locale } = useI18n();
 const localePath = useLocalePath();
 const en = computed(() => locale.value === "en");
 const query = ref("");
-// Ohesaare cliff photograph: Gennadi Baranov, CC BY 4.0.
-// Source: https://geoloogia.info/file/30310
-// Licence: https://creativecommons.org/licenses/by/4.0/
-const heroImage =
-  "https://files.geocollections.info/large/6d01a29b-e7b9-4fb0-be00-5565199307a1.jpg";
+const heroImage
+  = "https://files.geocollections.info/large/6d01a29b-e7b9-4fb0-be00-5565199307a1.jpg";
 const photoAvailable = ref(true);
 const heroPhoto = ref<HTMLImageElement | null>(null);
 onMounted(() => {
@@ -81,8 +85,9 @@ const categories = computed(() => [
     title: copy.value.collections,
     description: copy.value.collectionsText,
     route: "specimen",
+    icon: mdiBug,
     links: BROWSE_TAXON_LIST.filter(
-      (item) => item.routeName !== "stratigraphy",
+      item => item.routeName !== "stratigraphy",
     ),
   },
   {
@@ -90,7 +95,8 @@ const categories = computed(() => [
     title: copy.value.research,
     description: copy.value.researchText,
     route: "sample",
-    links: BROWSE_LAB_LIST.filter((item) =>
+    icon: mdiFlaskOutline,
+    links: BROWSE_LAB_LIST.filter(item =>
       ["sample", "analytical-data", "dataset"].includes(item.routeName),
     ),
   },
@@ -99,11 +105,12 @@ const categories = computed(() => [
     title: copy.value.places,
     description: copy.value.placesText,
     route: "locality",
+    icon: mdiMapMarkerRadiusOutline,
     links: [
-      ...BROWSE_GEOLOGY_LIST.filter((item) =>
+      ...BROWSE_GEOLOGY_LIST.filter(item =>
         ["locality", "drillcore"].includes(item.routeName),
       ),
-      ...BROWSE_TAXON_LIST.filter((item) => item.routeName === "stratigraphy"),
+      ...BROWSE_TAXON_LIST.filter(item => item.routeName === "stratigraphy"),
     ],
   },
 ]);
@@ -126,15 +133,21 @@ const featuredServices = computed(() => [
 ]);
 async function search() {
   const value = query.value.trim();
-  if (value)
-    await navigateTo(localePath({ name: "search", query: { q: value } }));
+  if (value) {
+    await navigateTo(localePath({
+      name: "search",
+      query: { q: value },
+    }));
+  }
 }
 useHead(() => ({
   title: en.value
     ? "Geoscience Data Estonia"
     : "Eesti geoloogiliste andmete portaal",
 }));
-useSeoMeta({ description: () => copy.value.intro });
+useSeoMeta({
+  description: () => copy.value.intro,
+});
 </script>
 
 <template>
@@ -164,10 +177,10 @@ useSeoMeta({ description: () => copy.value.intro });
             fetchpriority="high"
             class="h-full w-full object-cover object-[65%_50%] opacity-25 [mask-image:linear-gradient(to_right,transparent_0%,black_100%)] lg:opacity-100 lg:[mask-image:linear-gradient(to_right,transparent_0%,transparent_30%,black_78%)]"
             @error="photoAvailable = false"
-          />
+          >
         </div>
         <div class="relative max-w-[680px] py-8 sm:py-10 lg:py-14">
-          <span aria-hidden="true" class="mb-6 block h-1 w-12 rounded-full bg-portal-primary"></span>
+          <span aria-hidden="true" class="mb-6 block h-1 w-12 rounded-full bg-portal-primary" />
           <h1
             id="home-title"
             class="mb-5 max-w-[620px] text-[32px] leading-[1.15] font-bold tracking-[-0.035em] text-portal-heading lg:text-5xl"
@@ -199,23 +212,24 @@ useSeoMeta({ description: () => copy.value.intro });
                 leading: 'pl-3',
               }"
             >
-              <template #leading
-                ><svg
+              <template #leading>
+                <svg
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
                   class="size-5 text-portal-muted"
                 >
-                  <path :d="mdiMagnify" /></svg
-              ></template>
+                  <path :d="mdiMagnify" /></svg>
+              </template>
             </UInput>
             <UButton
               type="submit"
               color="neutral"
               variant="solid"
               class="header-focus h-11 shrink-0 justify-center rounded-portal-control bg-portal-primary px-5 text-sm font-semibold text-white hover:bg-portal-primary-hover"
-              >{{ copy.submit }}</UButton
             >
+              {{ copy.submit }}
+            </UButton>
           </form>
         </div>
       </section>
@@ -240,8 +254,21 @@ useSeoMeta({ description: () => copy.value.intro });
             <ULink
               raw
               :to="localePath({ name: category.route })"
-              class="header-focus group flex min-h-11 items-center rounded-portal-control text-portal-heading no-underline"
+              class="header-focus group flex min-h-11 items-center gap-3 rounded-portal-control text-portal-heading no-underline"
             >
+              <span
+                class="grid size-11 shrink-0 place-items-center rounded-portal-card bg-portal-mint text-portal-link"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  focusable="false"
+                  class="size-7"
+                >
+                  <path :d="category.icon" />
+                </svg>
+              </span>
               <h3
                 class="text-xl leading-snug font-semibold tracking-tight group-hover:text-portal-link group-hover:underline group-hover:underline-offset-4"
               >
@@ -263,8 +290,9 @@ useSeoMeta({ description: () => copy.value.intro });
                 raw
                 :to="localePath({ name: item.routeName })"
                 class="header-focus inline-flex min-h-11 items-center rounded-portal-control bg-portal-background/80 px-3 text-sm font-medium text-portal-link transition-colors hover:bg-portal-background"
-                >{{ $t(item.label) }}</ULink
               >
+                {{ $t(item.label) }}
+              </ULink>
             </nav>
           </UCard>
         </div>
@@ -302,15 +330,16 @@ useSeoMeta({ description: () => copy.value.intro });
                   color="neutral"
                   variant="ghost"
                   class="header-focus min-h-11 gap-1 rounded-portal-control px-0 text-sm font-medium text-portal-link hover:bg-transparent hover:underline"
-                  >{{ copy.allServices
+                >
+                  {{ copy.allServices
                   }}<svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     aria-hidden="true"
                     class="size-4"
                   >
-                    <path :d="mdiChevronRight" /></svg
-                ></UButton>
+                    <path :d="mdiChevronRight" /></svg>
+                </UButton>
                 <template #content>
                   <nav
                     class="max-h-[min(480px,calc(100dvh-96px))] overflow-y-auto p-5"
@@ -334,20 +363,17 @@ useSeoMeta({ description: () => copy.value.intro });
                           target="_blank"
                           rel="noopener noreferrer"
                           class="header-focus flex min-h-11 items-center gap-2 rounded-portal-control px-2 py-2 text-sm text-portal-link hover:bg-portal-selected"
-                          ><span class="min-w-0 flex-1">{{
+                        >
+                          <span class="min-w-0 flex-1">{{
                             $t(SERVICES[id].title)
-                          }}</span
-                          ><svg
+                          }}</span><svg
                             viewBox="0 0 24 24"
                             fill="currentColor"
                             aria-hidden="true"
                             class="size-4 shrink-0"
                           >
-                            <path :d="mdiOpenInNew" /></svg
-                          ><span class="sr-only"
-                            >({{ copy.external }})</span
-                          ></ULink
-                        >
+                            <path :d="mdiOpenInNew" /></svg><span class="sr-only">({{ copy.external }})</span>
+                        </ULink>
                       </li>
                     </ul>
                   </nav>
@@ -370,7 +396,9 @@ useSeoMeta({ description: () => copy.value.intro });
                   >
                     {{ $t(item.service.title) }}
                   </h3>
-                  <p class="text-sm leading-relaxed">{{ item.description }}</p>
+                  <p class="text-sm leading-relaxed">
+                    {{ item.description }}
+                  </p>
                 </div>
                 <svg
                   viewBox="0 0 24 24"
@@ -378,8 +406,7 @@ useSeoMeta({ description: () => copy.value.intro });
                   aria-hidden="true"
                   class="mt-1 size-4 shrink-0 text-portal-muted"
                 >
-                  <path :d="mdiOpenInNew" /></svg
-                ><span class="sr-only">({{ copy.external }})</span>
+                  <path :d="mdiOpenInNew" /></svg><span class="sr-only">({{ copy.external }})</span>
               </ULink>
             </li>
           </ul>
