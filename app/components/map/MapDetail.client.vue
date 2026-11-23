@@ -186,7 +186,7 @@ onMounted(() => {
 
     const markers = props.markers.map((marker) => {
       const markerInstance = L.circleMarker([marker.latitude, marker.longitude], {
-        radius: 6,
+        radius: marker.radius ?? 6,
         weight: 1.5,
         color: colors.background,
         fillColor: colors.primary,
@@ -230,11 +230,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div :class="height === '100%' ? 'flex h-full min-h-0 flex-col' : undefined">
     <div
       id="map"
       class="portal-detail-map"
-      :class="height === '100%' ? 'absolute' : 'relative'"
+      :class="height === '100%' ? 'relative min-h-0 flex-1' : 'relative'"
       :style="{
         '--map-height': height,
 
