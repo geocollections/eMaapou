@@ -3,7 +3,7 @@ import type { TableColumn } from "@nuxt/ui/components/Table.vue";
 import type { Specimen } from "../[id].vue";
 import { mdiArchive, mdiLayersTriple, mdiMapMarkerOutline } from "@mdi/js";
 import { h } from "vue";
-import { ULink } from "#components";
+import { ULink, UTooltip } from "#components";
 
 const props = defineProps<{
   specimen: Specimen;
@@ -14,7 +14,7 @@ const props = defineProps<{
 const localePath = useLocalePath();
 const { locale } = useI18n();
 const specimenCardUi = {
-  root: "overflow-hidden rounded-md border border-portal-border bg-white shadow-sm ring-0 divide-y-0",
+  root: "overflow-hidden rounded-portal-card border border-portal-border bg-white shadow-sm ring-0 divide-y-0",
   body: "p-0",
 } as const;
 const relatedCardUi = {
@@ -47,6 +47,20 @@ function openImagePreview(image: any, title: string) {
 watch(() => props.images, (images) => {
   activeImage.value = images?.[0] ?? null;
 });
+
+const activeImageIndex = computed(() =>
+  props.images?.findIndex(image => image.id === activeImage.value?.id) ?? -1,
+);
+
+function showRelativeImage(offset: number) {
+  const images = props.images;
+  if (!images?.length)
+    return;
+
+  const currentIndex = activeImageIndex.value >= 0 ? activeImageIndex.value : 0;
+  const nextIndex = (currentIndex + offset + images.length) % images.length;
+  activeImage.value = images[nextIndex];
+}
 
 const dateCollected = computed(() => {
   if (!props.specimen)
@@ -310,13 +324,20 @@ const identificationColumns = computed<TableColumn<IdentificationTableRow>[]>(()
       ? "Taxon"
       : "Takson",
     cell: ({ row }) => row.original.taxonId
-      ? h(ULink, {
-          to: `https://fossiilid.info/${row.original.taxonId}`,
-          external: true,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          class: "font-semibold text-portal-link underline underline-offset-2",
-        }, () => row.original.taxon)
+      ? h(UTooltip, {
+          text: locale.value === "en"
+            ? "Opens Fossiilid.info in a new tab"
+            : "Avab Fossiilid.info veebilehe uuel vahelehel",
+          delayDuration: 250,
+        }, {
+          default: () => h(ULink, {
+            to: `https://fossiilid.info/${row.original.taxonId}`,
+            external: true,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            class: "font-semibold text-portal-link underline underline-offset-2",
+          }, () => row.original.taxon),
+        })
       : h("span", { class: "font-semibold text-portal-link" }, row.original.taxon),
   },
   {
@@ -432,27 +453,54 @@ const mapOverlays = computed(() => {
               {{ locale === "en" ? "Photographs" : "Fotod" }}
             </h2>
           </div>
-          <span class="text-sm tabular-nums text-portal-muted">{{ props.images.length }}</span>
+          <div v-if="props.images.length > 1" class="flex items-center gap-1">
+            <UButton
+              type="button"
+              color="neutral"
+              variant="ghost"
+              square
+              icon="i-lucide-chevron-left"
+              class="!flex !size-9 !min-h-9 !w-9 !items-center !justify-center !rounded-portal-control !bg-transparent !p-0 text-portal-muted hover:bg-portal-subtle hover:text-portal-heading"
+              :aria-label="locale === 'en' ? 'Previous image' : 'Eelmine foto'"
+              @click="showRelativeImage(-1)"
+            />
+            <span class="min-w-12 text-center text-xs tabular-nums text-portal-muted">
+              {{ activeImageIndex + 1 }} / {{ props.images.length }}
+            </span>
+            <UButton
+              type="button"
+              color="neutral"
+              variant="ghost"
+              square
+              icon="i-lucide-chevron-right"
+              class="!flex !size-9 !min-h-9 !w-9 !items-center !justify-center !rounded-portal-control !bg-transparent !p-0 text-portal-muted hover:bg-portal-subtle hover:text-portal-heading"
+              :aria-label="locale === 'en' ? 'Next image' : 'Järgmine foto'"
+              @click="showRelativeImage(1)"
+            />
+          </div>
+          <span v-else class="text-sm tabular-nums text-portal-muted">1</span>
         </div>
         <div class="grid gap-4 p-4 sm:p-5">
-          <UButton
-            type="button"
-            color="neutral"
-            variant="ghost"
-            class="!h-auto min-h-[220px] w-full !rounded-none !p-0 cursor-zoom-in items-center justify-center overflow-hidden bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus sm:min-h-[320px]"
-            :aria-label="locale === 'en' ? 'Open large image preview' : 'Ava suur pildieelvaade'"
-            @click="openImagePreview(activeImage, titleAlt || specimen.number)"
-          >
-            <NuxtImg
-              :src="activeImage.filename"
-              provider="geocollections"
-              :alt="titleAlt || identifiedTaxon || specimen.number"
-              width="900"
-              height="600"
-              fit="contain"
-              class="max-h-[min(55vh,480px)] w-full object-contain"
-            />
-          </UButton>
+          <div class="relative">
+            <UButton
+              type="button"
+              color="neutral"
+              variant="ghost"
+              class="!h-auto min-h-[220px] w-full !rounded-portal-card !p-0 cursor-zoom-in items-center justify-center overflow-hidden bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus sm:min-h-[320px]"
+              :aria-label="locale === 'en' ? 'Open large image preview' : 'Ava suur pildieelvaade'"
+              @click="openImagePreview(activeImage, titleAlt || specimen.number)"
+            >
+              <NuxtImg
+                :src="activeImage.filename"
+                provider="geocollections"
+                :alt="titleAlt || identifiedTaxon || specimen.number"
+                width="900"
+                height="600"
+                fit="contain"
+                class="max-h-[min(55vh,480px)] w-full object-contain"
+              />
+            </UButton>
+          </div>
           <div class="flex min-w-0 flex-wrap items-end justify-between gap-4">
             <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 border-b border-portal-border pb-4 text-sm">
               <dt class="text-portal-muted">
@@ -486,7 +534,7 @@ const mapOverlays = computed(() => {
                 color="neutral"
                 variant="ghost"
                 square
-                class="!h-auto !w-auto aspect-square overflow-hidden !rounded-none !p-0 border bg-portal-subtle transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
+                class="!h-auto !w-auto aspect-square overflow-hidden !rounded-portal-control !p-0 border bg-portal-subtle transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
                 :class="activeImage.id === image.id ? 'border-2 border-portal-primary' : 'border-portal-border hover:border-portal-border-hover'"
                 :aria-label="`${locale === 'en' ? 'Show image' : 'Näita pilti'} ${image.image_number || image.id}`"
                 :aria-pressed="activeImage.id === image.id"
@@ -519,7 +567,7 @@ const mapOverlays = computed(() => {
         v-if="locality"
         as="section"
         :ui="{
-          root: 'flex min-h-0 flex-col overflow-hidden rounded-md border border-portal-border bg-white shadow-sm ring-0 divide-y-0',
+          root: 'flex min-h-0 flex-col overflow-hidden rounded-portal-card border border-portal-border bg-white shadow-sm ring-0 divide-y-0',
           body: 'flex min-h-0 flex-1 flex-col p-0',
         }"
         class="min-w-0"
@@ -547,7 +595,7 @@ const mapOverlays = computed(() => {
         </div>
         <div
           v-if="locality.latitude != null && locality.longitude != null"
-          class="mx-5 mt-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-sm border border-portal-border sm:mx-6"
+          class="mx-5 mt-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-portal-card border border-portal-border sm:mx-6"
           :class="props.images?.length && activeImage ? 'min-h-[220px]' : 'min-h-[340px]'"
         >
           <MapDetail
@@ -745,7 +793,7 @@ const mapOverlays = computed(() => {
         v-if="coordinateRecords.length || coordinateStatus === 'pending' || coordinateError"
         as="section"
         :ui="{
-          root: 'flex min-w-0 flex-col overflow-hidden rounded-md border border-portal-border bg-white shadow-sm ring-0 divide-y-0',
+          root: 'flex min-w-0 flex-col overflow-hidden rounded-portal-card border border-portal-border bg-white shadow-sm ring-0 divide-y-0',
           body: 'flex min-w-0 flex-1 flex-col p-0',
         }"
       >
@@ -780,7 +828,7 @@ const mapOverlays = computed(() => {
           <li
             v-for="record in coordinateRecords"
             :key="record.id"
-            class="flex min-w-0 items-center gap-3 rounded-md border border-portal-border px-3 py-2 transition-colors hover:border-portal-border-hover hover:bg-portal-selected"
+            class="flex min-w-0 items-center gap-3 rounded-portal-control border border-portal-border px-3 py-2 transition-colors hover:border-portal-border-hover hover:bg-portal-selected"
           >
             <div class="min-w-0 flex-1">
               <ULink :to="localePath({ name: 'specimen-id', params: { id: record.id } })" class="text-sm font-semibold text-portal-link underline underline-offset-2 hover:text-portal-primary">
@@ -793,7 +841,7 @@ const mapOverlays = computed(() => {
               color="neutral"
               variant="ghost"
               square
-              class="!h-12 !w-12 shrink-0 overflow-hidden !rounded-md border border-portal-border bg-portal-subtle !p-0 transition-colors hover:border-portal-primary focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
+              class="!h-12 !w-12 shrink-0 overflow-hidden !rounded-portal-card border border-portal-border bg-portal-subtle !p-0 transition-colors hover:border-portal-primary focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
               :aria-label="`${locale === 'en' ? 'Open photo preview for' : 'Ava eksemplari foto'} ${record.specimen_full_name}`"
               @click="openImagePreview(record.preview, record.specimen_full_name)"
             >
@@ -935,7 +983,7 @@ const mapOverlays = computed(() => {
           :ui="relatedCardUi"
           class="group bg-portal-mint/60 transition-[border-color,background-color] hover:border-portal-primary/40 focus-within:border-portal-focus"
         >
-          <div class="grid size-12 shrink-0 place-items-center rounded-md bg-portal-background/80 text-portal-primary" aria-hidden="true">
+          <div class="grid size-12 shrink-0 place-items-center rounded-portal-card bg-portal-background/80 text-portal-primary" aria-hidden="true">
             <svg
               viewBox="0 0 24 24"
               fill="currentColor"
@@ -969,7 +1017,7 @@ const mapOverlays = computed(() => {
             color="neutral"
             variant="ghost"
             square
-            class="!h-12 !w-12 shrink-0 overflow-hidden !rounded-md border border-portal-border bg-white !p-0 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
+            class="!h-12 !w-12 shrink-0 overflow-hidden !rounded-portal-card border border-portal-border bg-white !p-0 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
             :aria-label="locale === 'en' ? 'Open locality photo preview' : 'Ava leiukoha foto eelvaade'"
             @click="openImagePreview(localityPreview, $translate({ et: locality.name, en: locality.name_en }))"
           >
@@ -985,7 +1033,7 @@ const mapOverlays = computed(() => {
           </UButton>
           <div
             v-else
-            class="grid size-12 shrink-0 place-items-center rounded-md bg-portal-background/80 text-portal-primary"
+            class="grid size-12 shrink-0 place-items-center rounded-portal-card bg-portal-background/80 text-portal-primary"
             aria-hidden="true"
           >
             <svg
@@ -1015,7 +1063,7 @@ const mapOverlays = computed(() => {
           :ui="relatedCardUi"
           class="group bg-portal-selected transition-[border-color,background-color] hover:border-portal-primary/40 focus-within:border-portal-focus"
         >
-          <div class="grid size-12 shrink-0 place-items-center rounded-md bg-portal-background/80 text-portal-primary" aria-hidden="true">
+          <div class="grid size-12 shrink-0 place-items-center rounded-portal-card bg-portal-background/80 text-portal-primary" aria-hidden="true">
             <svg
               viewBox="0 0 24 24"
               fill="currentColor"

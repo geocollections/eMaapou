@@ -37,6 +37,7 @@ const currentCenter = ref({
 });
 
 const map = ref<L.Map>();
+let mapResizeObserver: ResizeObserver | undefined;
 
 const baseLayers = {
   "OpenStreetMap": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -225,7 +226,16 @@ onMounted(() => {
       padding: [10, 10],
       maxZoom: 10,
     });
+
+    mapResizeObserver = new ResizeObserver(() => {
+      map.value?.invalidateSize({ pan: false });
+    });
+    mapResizeObserver.observe(map.value.getContainer());
   });
+});
+
+onBeforeUnmount(() => {
+  mapResizeObserver?.disconnect();
 });
 </script>
 
