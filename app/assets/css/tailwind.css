@@ -522,16 +522,16 @@
 @utility specimen-map-expanded { @apply [&_.specimen-results-map]:h-105! min-[600px]:[&_.specimen-results-map]:h-130!; }
 
 @utility specimen-search__results { @apply min-w-0; }
-@utility specimen-search__results-table {
+@utility portal-search-results-matched-height {
   @media (min-width: 700px) {
-    height: var(--specimen-results-height, auto);
+    height: var(--portal-search-results-height, auto);
     @apply flex flex-col [&>.specimen-view-switch]:self-start [&>.specimen-search__show]:self-start;
   }
 }
 @utility specimen-search__views { @apply min-[700px]:min-h-0 min-[700px]:flex-1; }
-@utility specimen-search__table-view {
+@utility portal-search-table-fill {
   @media (min-width: 700px) {
-    @apply h-full [&_.portal-data-table]:flex [&_.portal-data-table]:h-full [&_.portal-data-table]:flex-col [&_.portal-table-scroll]:min-h-0 [&_.portal-table-scroll]:max-h-none [&_.portal-table-scroll]:flex-1;
+    @apply [&_.portal-data-table]:flex [&_.portal-data-table]:h-full [&_.portal-data-table]:min-h-0 [&_.portal-data-table]:flex-col [&_.portal-table-scroll]:min-h-0 [&_.portal-table-scroll]:max-h-none [&_.portal-table-scroll]:flex-1;
   }
 }
 
