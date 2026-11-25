@@ -82,7 +82,6 @@ export function useSpecimenImageFunction() {
       query: {
         q: "*",
         fq: `specimen_id:${item.id} AND specimen_image_attachment:1`,
-        // sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
         rows,
         start: rows * page,
       },

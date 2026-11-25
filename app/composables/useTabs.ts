@@ -40,7 +40,6 @@ export function useTabs() {
           {
             ...tab,
             count,
-            // title: t(tab.title, { number: count }),
             props: props[key as K] ?? {},
           },
         ] as [string, HydratedDynamicTab];
@@ -49,7 +48,6 @@ export function useTabs() {
         key,
         {
           ...tab,
-          // title: t(tab.title),
           props: props[key as K] ?? {},
         },
       ] as [string, StaticTab];

@@ -82,8 +82,6 @@ export function useAutocomplete(
   async function suggest({
     query,
     pagination,
-    // eslint-disable-next-line unused-imports/no-unused-vars
-    values,
   }: {
     query: string;
     pagination: { page: number; perPage: number };
@@ -205,8 +203,6 @@ export function useAutocompleteReference(
   async function suggest({
     query,
     pagination,
-    // eslint-disable-next-line unused-imports/no-unused-vars
-    values,
   }: {
     query: string;
     pagination: { page: number; perPage: number };
@@ -223,7 +219,6 @@ export function useAutocompleteReference(
         "facet.pivot": pivot,
         [`f.${field}.facet.contains`]: parseContains(query),
         [`f.${field}.facet.contains.ignoreCase`]: true,
-        // [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
         "facet.limit": pagination.perPage,
         "facet.sort": "count",
         [`f.${field}.facet.offset`]:

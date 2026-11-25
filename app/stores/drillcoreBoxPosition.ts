@@ -7,15 +7,8 @@ export const useDrillcoreBoxPosition = defineStore(
       page.value = 0;
     }
 
-    // function setPosition(
-    //   newPosition: number,
-    // ) {
-    //   position.value = newPosition;
-    // }
-
     return {
       page,
-      // setPosition,
       $reset,
     };
   },
