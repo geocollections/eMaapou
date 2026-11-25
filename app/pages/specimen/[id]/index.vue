@@ -732,6 +732,7 @@ const mapOverlays = computed(() => {
         class="mx-5 mt-4 sm:mx-6"
       >
         <MapDetail
+          click-to-zoom
           height="clamp(16rem, 42vh, 24rem)"
           :base-layer="mapBaseLayer"
           :overlays="mapOverlays"
