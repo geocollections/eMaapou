@@ -8,6 +8,7 @@ const emit = defineEmits<{
   submit: [];
 }>();
 
+const { locale } = useI18n();
 const taxaStore = useTaxa();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(taxaStore);
 
@@ -52,18 +53,30 @@ function handleSubmit() {
 </script>
 
 <template>
-  <VForm class="pb-10" @submit.prevent="handleSubmit">
-    <SearchFormInput v-model="query" />
-    <SearchActions class="mb-3" @click="handleReset" />
-    <VDivider class="mx-2" />
-    <VExpansionPanels
-      variant="accordion"
-      class="px-2"
-      multiple
+  <form class="portal-filter-form" @submit.prevent="handleSubmit">
+    <UFormField
+      :label="locale === 'et' ? 'Otsi taksoneid' : 'Search taxa'"
+      :description="locale === 'et' ? 'Otsimiseks vajuta Enter.' : 'Press Enter to search.'"
+      class="mb-2 px-1"
+      :ui="{ label: 'text-[13px] text-portal-text', description: 'text-xs text-portal-muted' }"
     >
+      <UInput
+        v-model="query"
+        type="search"
+        :placeholder="locale === 'et' ? 'Taksoni või liigi nimi' : 'Taxon or species name'"
+        color="neutral"
+        class="w-full"
+        :ui="{ base: 'min-h-11 rounded-portal-control ring-portal-border' }"
+      />
+    </UFormField>
+    <p class="portal-filter-hint">
+      {{ locale === 'et' ? 'Filtrivalikud rakenduvad kohe.' : 'Filter selections apply immediately.' }}
+    </p>
+    <USeparator />
+    <div class="portal-filter-list">
       <FilterInputText
         v-model="filters.species.value"
-        :title="$t('filters.taxon')"
+        :title="$t('filters.taxonName')"
         value="species"
         @update:model-value="handleUpdate()"
       />
@@ -76,6 +89,7 @@ function handleSubmit() {
       <FilterInputHierarchy
         ref="filterTaxon"
         v-model="filters.taxon.value"
+        :default-open="true"
         root-value=""
         :title="$t('filters.taxonHierarchy')"
         :hydration-function="hydrateTaxon"
@@ -93,7 +107,20 @@ function handleSubmit() {
         value="fossilGroup"
         @update:model-value="handleUpdate('fossilGroup')"
       />
-    </VExpansionPanels>
-    <VDivider class="mx-2" />
-  </VForm>
+    </div>
+    <div class="portal-filter-actions">
+      <UButton
+        type="button"
+        color="neutral"
+        variant="outline"
+        class="portal-filter-clear"
+        @click="handleReset"
+      >
+        {{ $t('common.resetSearch') }}
+      </UButton>
+      <UButton type="submit" class="portal-filter-submit">
+        {{ $t('common.searchCommand') }}
+      </UButton>
+    </div>
+  </form>
 </template>
