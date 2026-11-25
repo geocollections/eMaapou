@@ -1,11 +1,11 @@
 import type { RouteLocation } from "vue-router";
-import { z } from "zod";
 import type {
   GeomFilter,
   IdListFilter,
   RangeFilter,
   StringIdListFilter,
 } from "~/composables/useFilter";
+import { z } from "zod";
 
 export const useAnalyticalData = defineStore(
   "analyticalData",
@@ -104,7 +104,12 @@ export const useAnalyticalData = defineStore(
       } as IdListFilter,
       parameter: {
         type: "parameter",
-        value: [{ value: [null, null], parameter: null }],
+        value: [
+          {
+            value: [null, null],
+            parameter: null,
+          },
+        ],
         tag: "parameter",
       } as ParameterFilter,
     });
@@ -209,7 +214,12 @@ export const useAnalyticalData = defineStore(
   },
   {
     persist: {
-      pick: ["options", "filters", "headers", "query"],
+      pick: [
+        "options",
+        "filters",
+        "headers",
+        "query",
+      ],
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },

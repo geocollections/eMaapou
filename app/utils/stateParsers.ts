@@ -6,20 +6,26 @@ import { z } from "zod";
 
 export const stringValueParser = z
   .string()
-  .transform(val => (val.length > 0 ? val : undefined))
+  .transform(val => (val.length > 0
+    ? val
+    : undefined))
   .catch("");
 
 export const stringArrayValueParser = z
   .string()
   .array()
-  .transform(val => (val.length > 0 ? uniq(val).join(",") : undefined));
+  .transform(val => (val.length > 0
+    ? uniq(val).join(",")
+    : undefined));
 
 export function idValueParser(separator: string) {
   return z
     .string()
     .array()
     .transform(val =>
-      val.length > 0 ? uniq(val).join(separator) : undefined,
+      val.length > 0
+        ? uniq(val).join(separator)
+        : undefined,
     );
 }
 
@@ -30,8 +36,8 @@ export const dateArrayValueParser = z
   .transform(val =>
     val.length > 0
       ? uniq(val)
-        .map(v => v.join("~"))
-        .join(",")
+          .map(v => v.join("~"))
+          .join(",")
       : undefined,
   );
 
@@ -42,7 +48,9 @@ export const dateValueParser = z
   .length(2)
   .transform((val) => {
     return val.some(v => v !== undefined)
-      ? val.map(v => (v === undefined ? "*" : v)).join("~")
+      ? val.map(v => (v === undefined
+          ? "*"
+          : v)).join("~")
       : undefined;
   },
   );
@@ -54,7 +62,9 @@ export const rangeValueParser = z
   .length(2)
   .transform(val =>
     val.some(v => v !== null)
-      ? val.map(v => (v === null ? "*" : v)).join("-")
+      ? val.map(v => (v === null
+          ? "*"
+          : v)).join("-")
       : undefined,
   );
 
@@ -64,7 +74,9 @@ export const booleanValueParser = z
 
 export const geometryValueParser = (z
   .any() satisfies z.ZodType<GeoJSON.Geometry | null>)
-  .transform(val => (val !== null ? JSON.stringify(val) : undefined));
+  .transform(val => (val !== null
+    ? JSON.stringify(val)
+    : undefined));
 
 export const parameterValueParser = z
   .object({
@@ -79,8 +91,12 @@ export const parameterValueParser = z
       return undefined;
 
     return validValues.map((val) => {
-      const start = isNil(val.value[0]) ? "*" : val.value[0];
-      const end = isNil(val.value[1]) ? "*" : val.value[1];
+      const start = isNil(val.value[0])
+        ? "*"
+        : val.value[0];
+      const end = isNil(val.value[1])
+        ? "*"
+        : val.value[1];
       return `${val.parameter}:${start}-${end}`;
     }).join(",");
   },

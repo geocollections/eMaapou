@@ -15,5 +15,10 @@ export default ({
   const categoryValue = category ?? false;
   const resultsCountValue = resultsCount ?? false;
 
-  window._paq.push(["trackSiteSearch", query, categoryValue, resultsCountValue]);
+  window._paq.push([
+    "trackSiteSearch",
+    query,
+    categoryValue,
+    resultsCountValue,
+  ]);
 };

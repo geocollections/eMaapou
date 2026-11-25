@@ -1,10 +1,10 @@
-import { z } from "zod";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { z } from "zod";
 import { STRATIGRAPHY } from "~/constants";
 
 export const useStratigraphies = defineStore(
@@ -143,7 +143,12 @@ export const useStratigraphies = defineStore(
   },
   {
     persist: {
-      pick: ["options", "filters", "headers", "query"],
+      pick: [
+        "options",
+        "filters",
+        "headers",
+        "query",
+      ],
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },

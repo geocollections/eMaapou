@@ -7,7 +7,12 @@ export function getSolrSort({
   headersMap: { [K: string]: Header };
   locale: "et" | "en";
 }) {
-  return getSortString({ sortBy, headersMap, locale, stringFunc: solrSortString });
+  return getSortString({
+    sortBy,
+    headersMap,
+    locale,
+    stringFunc: solrSortString,
+  });
 }
 export function getGeoloogiaApiSort({
   sortBy,
@@ -18,7 +23,12 @@ export function getGeoloogiaApiSort({
   headersMap: { [K: string]: Header };
   locale: "et" | "en";
 }) {
-  return getSortString({ sortBy, headersMap, locale, stringFunc: geoloogiaSortString });
+  return getSortString({
+    sortBy,
+    headersMap,
+    locale,
+    stringFunc: geoloogiaSortString,
+  });
 }
 
 function getSortString({
@@ -71,7 +81,9 @@ function getSortString({
 function geoloogiaSortString(field: string, order: boolean | "asc" | "desc") {
   if (typeof order === "boolean")
     return `${order ? "" : "-"}${field}`;
-  return `${order === "asc" ? "" : "-"}${field}`;
+  return `${order === "asc"
+    ? ""
+    : "-"}${field}`;
 }
 
 function solrSortString(field: string, order: boolean | "asc" | "desc") {
