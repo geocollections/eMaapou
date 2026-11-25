@@ -4,7 +4,7 @@ import type { Image } from "~/components/ImageBar.vue";
 const props = withDefaults(defineProps<{ modelValue: boolean; images: Image<any>[]; initialSlide?: number; total?: number; largePreview?: boolean }>(), { initialSlide: 0, largePreview: false });
 const emit = defineEmits<{ "update:modelValue": [value: boolean]; "end": [] }>();
 const source = useCollectionImage();
-const { locale } = useI18n();
+const { t } = useI18n();
 const index = ref(props.initialSlide);
 const current = computed(() => props.images[index.value]!);
 const pendingNext = ref(false);
@@ -37,7 +37,7 @@ onKeyStroke(["ArrowLeft", "ArrowRight"], (event) => {
 <template>
   <UModal
     :open="modelValue"
-    :title="locale === 'et' ? 'Foto eelvaade' : 'Image preview'"
+    :title="t('portal.photoViewer.imagePreview')"
     :close="true"
     :ui="largePreview
       ? { content: 'portal-photo-preview-dialog', header: 'portal-photo-preview-header', body: 'portal-photo-preview-body', footer: 'portal-photo-preview-footer' }
@@ -80,14 +80,14 @@ onKeyStroke(["ArrowLeft", "ArrowRight"], (event) => {
           variant="outline"
           icon="i-lucide-chevron-left"
           :disabled="index === 0"
-          :aria-label="locale === 'et' ? 'Eelmine pilt' : 'Previous image'"
+          :aria-label="t('portal.photoViewer.previousImage')"
           @click="index--"
         /><span>{{ index + 1 }} / {{ total ?? images.length }}</span><UButton
           color="neutral"
           variant="outline"
           icon="i-lucide-chevron-right"
           :disabled="index >= images.length - 1 && images.length >= (total ?? images.length)"
-          :aria-label="locale === 'et' ? 'Järgmine pilt' : 'Next image'"
+          :aria-label="t('portal.photoViewer.nextImage')"
           @click="next"
         />
       </div>
@@ -104,7 +104,7 @@ onKeyStroke(["ArrowLeft", "ArrowRight"], (event) => {
           :href="source(current.filename, 'large')"
           target="_blank"
         >
-          {{ locale === 'et' ? 'Laadi foto alla' : 'Download image' }}
+          {{ t('portal.photoViewer.downloadImage') }}
         </UButton>
       </slot>
     </template>

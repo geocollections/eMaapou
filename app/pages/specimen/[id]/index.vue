@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 const localePath = useLocalePath();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const specimenCardUi = {
   root: "overflow-hidden rounded-portal-card border border-portal-border bg-white shadow-sm ring-0 divide-y-0",
   body: "p-0",
@@ -311,25 +311,17 @@ const identificationRows = computed<IdentificationTableRow[]>(() => {
       ? $translate({ et: item.identification_type.value, en: item.identification_type.value_en })
       : "—",
     status: item.is_current
-      ? (locale.value === "en"
-          ? "Current"
-          : "Kehtiv")
-      : (locale.value === "en"
-          ? "Previous"
-          : "Varasem"),
+      ? (t("portal.specimenDetail.current"))
+      : (t("portal.specimenDetail.previous")),
   }));
 });
 const identificationColumns = computed<TableColumn<IdentificationTableRow>[]>(() => [
   {
     accessorKey: "taxon",
-    header: locale.value === "en"
-      ? "Taxon"
-      : "Takson",
+    header: t("portal.specimenDetail.taxon"),
     cell: ({ row }) => row.original.taxonId
       ? h(UTooltip, {
-          text: locale.value === "en"
-            ? "Opens Fossiilid.info in a new tab"
-            : "Avab Fossiilid.info veebilehe uuel vahelehel",
+          text: t("portal.specimenDetail.opensFossiilidInfoInANewTab"),
           delayDuration: 250,
         }, {
           default: () => h(ULink, {
@@ -344,27 +336,19 @@ const identificationColumns = computed<TableColumn<IdentificationTableRow>[]>(()
   },
   {
     accessorKey: "identifiedBy",
-    header: locale.value === "en"
-      ? "Identified by"
-      : "Määranud",
+    header: t("portal.specimenDetail.identifiedBy"),
   },
   {
     accessorKey: "dateIdentified",
-    header: locale.value === "en"
-      ? "Date"
-      : "Kuupäev",
+    header: t("portal.specimenDetail.date"),
   },
   {
     accessorKey: "confidence",
-    header: locale.value === "en"
-      ? "Confidence"
-      : "Kindlus",
+    header: t("portal.specimenDetail.confidence"),
   },
   {
     accessorKey: "status",
-    header: locale.value === "en"
-      ? "Status"
-      : "Olek",
+    header: t("portal.specimenDetail.status"),
   },
 ]);
 const rockIdentificationRows = computed<RockIdentificationTableRow[]>(() => relatedData.value.rockIdentifications.map(item => ({
@@ -379,9 +363,7 @@ const rockIdentificationRows = computed<RockIdentificationTableRow[]>(() => rela
 const rockIdentificationColumns = computed<TableColumn<RockIdentificationTableRow>[]>(() => [
   {
     accessorKey: "rock",
-    header: locale.value === "en"
-      ? "Rock"
-      : "Kivi",
+    header: t("portal.specimenDetail.rock"),
     cell: ({ row }) => row.original.rockId
       ? h(ULink, {
           to: `https://kivid.info/${row.original.rockId}`,
@@ -394,15 +376,11 @@ const rockIdentificationColumns = computed<TableColumn<RockIdentificationTableRo
   },
   {
     accessorKey: "identifiedBy",
-    header: locale.value === "en"
-      ? "Identified by"
-      : "Määranud",
+    header: t("portal.specimenDetail.identifiedBy"),
   },
   {
     accessorKey: "dateIdentified",
-    header: locale.value === "en"
-      ? "Date"
-      : "Kuupäev",
+    header: t("portal.specimenDetail.date"),
   },
 ]);
 const collectorName = computed(() => {
@@ -448,10 +426,10 @@ const mapOverlays = computed(() => {
         <div class="flex items-end justify-between gap-4 border-b border-portal-border bg-portal-mint/60 px-5 py-4 sm:px-6">
           <div>
             <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
-              {{ locale === "en" ? "Collection media" : "Kollektsiooni fotod" }}
+              {{ t('portal.specimenDetail.collectionMedia') }}
             </p>
             <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
-              {{ locale === "en" ? "Photographs" : "Fotod" }}
+              {{ t('portal.specimenDetail.photographs') }}
             </h2>
           </div>
           <div v-if="props.images.length > 1" class="flex items-center gap-1">
@@ -462,7 +440,7 @@ const mapOverlays = computed(() => {
               square
               icon="i-lucide-chevron-left"
               class="flex! size-9! min-h-9! w-9! items-center! justify-center! rounded-portal-control! bg-transparent! p-0! text-portal-muted hover:bg-portal-subtle hover:text-portal-heading"
-              :aria-label="locale === 'en' ? 'Previous image' : 'Eelmine foto'"
+              :aria-label="t('portal.specimenDetail.previousImage')"
               @click="showRelativeImage(-1)"
             />
             <span class="min-w-12 text-center text-xs tabular-nums text-portal-muted">
@@ -475,7 +453,7 @@ const mapOverlays = computed(() => {
               square
               icon="i-lucide-chevron-right"
               class="flex! size-9! min-h-9! w-9! items-center! justify-center! rounded-portal-control! bg-transparent! p-0! text-portal-muted hover:bg-portal-subtle hover:text-portal-heading"
-              :aria-label="locale === 'en' ? 'Next image' : 'Järgmine foto'"
+              :aria-label="t('portal.specimenDetail.nextImage')"
               @click="showRelativeImage(1)"
             />
           </div>
@@ -488,7 +466,7 @@ const mapOverlays = computed(() => {
               color="neutral"
               variant="ghost"
               class="h-auto! min-h-55 w-full rounded-portal-card! p-0! cursor-zoom-in items-center justify-center overflow-hidden bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus sm:min-h-80"
-              :aria-label="locale === 'en' ? 'Open large image preview' : 'Ava suur pildieelvaade'"
+              :aria-label="t('portal.specimenDetail.openLargeImagePreview')"
               @click="openImagePreview(activeImage, titleAlt || specimen.number)"
             >
               <NuxtImg
@@ -505,14 +483,14 @@ const mapOverlays = computed(() => {
           <div class="flex min-w-0 flex-wrap items-end justify-between gap-4">
             <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 border-b border-portal-border pb-4 text-sm">
               <dt class="text-portal-muted">
-                {{ locale === "en" ? "Image no." : "Foto nr." }}
+                {{ t('portal.specimenDetail.imageNo') }}
               </dt>
               <dd class="m-0 text-right text-portal-text">
                 {{ activeImage.image_number || activeImage.id }}
               </dd>
               <template v-if="activeImage.agent || activeImage.author_free">
                 <dt class="text-portal-muted">
-                  {{ locale === "en" ? "Photographer" : "Pildistaja" }}
+                  {{ t('portal.specimenDetail.photographer') }}
                 </dt>
                 <dd class="m-0 text-right text-portal-text">
                   {{ activeImage.agent || activeImage.author_free }}
@@ -520,7 +498,7 @@ const mapOverlays = computed(() => {
               </template>
               <template v-if="activeImage.date_created_free || activeImage.date_created">
                 <dt class="text-portal-muted">
-                  {{ locale === "en" ? "Date" : "Kuupäev" }}
+                  {{ t('portal.specimenDetail.date') }}
                 </dt>
                 <dd class="m-0 text-right text-portal-text">
                   {{ activeImage.date_created_free || $formatDate(activeImage.date_created) }}
@@ -537,7 +515,7 @@ const mapOverlays = computed(() => {
                 square
                 class="h-auto! w-auto! aspect-square overflow-hidden rounded-portal-control! p-0! border bg-portal-subtle transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
                 :class="activeImage.id === image.id ? 'border-2 border-portal-primary' : 'border-portal-border hover:border-portal-border-hover'"
-                :aria-label="`${locale === 'en' ? 'Show image' : 'Näita pilti'} ${image.image_number || image.id}`"
+                :aria-label="t('portal.specimenDetail.showImage', { number: image.image_number || image.id })"
                 :aria-pressed="activeImage.id === image.id"
                 @click="activeImage = image"
               >
@@ -559,18 +537,22 @@ const mapOverlays = computed(() => {
               class="min-h-11 rounded-portal-control border-portal-border px-4 text-sm font-medium text-portal-heading hover:border-portal-border-hover hover:text-portal-link"
               @click="openImagePreview(activeImage, titleAlt || specimen.number)"
             >
-              {{ locale === "en" ? "View larger" : "Vaata suuremalt" }}
+              {{ t('portal.specimenDetail.viewLarger') }}
             </UButton>
           </div>
         </div>
       </UCard>
-      <UCard as="section" :ui="specimenCardUi" class="min-w-0">
+      <UCard
+        as="section"
+        :ui="specimenCardUi"
+        class="min-w-0"
+      >
         <div class="border-b border-portal-border bg-portal-selected px-5 py-4 sm:px-6">
           <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
-            {{ locale === "en" ? "Record details" : "Kirje andmed" }}
+            {{ t('portal.specimenDetail.recordDetails') }}
           </p>
           <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
-            {{ locale === "en" ? "Specimen information" : "Eksemplari info" }}
+            {{ t('portal.specimenDetail.specimenInformation') }}
           </h2>
         </div>
         <dl class="m-0 grid grid-cols-1 px-5 sm:grid-cols-2 sm:gap-x-8 sm:px-6 [&>div]:grid-cols-1 [&>div]:content-start [&>div]:gap-y-0.5 [&>div]:border-b [&>div]:border-portal-border [&>div]:py-3 [&>div>dt]:text-xs [&>div>dt]:leading-[1.4] [&>div>dd]:text-sm [&>div>dd]:leading-normal [&>div>dd]:wrap-anywhere">
@@ -646,7 +628,7 @@ const mapOverlays = computed(() => {
           </div>
           <div v-if="fossil" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
             <dt class="text-portal-muted">
-              {{ locale === "en" ? "Kind" : "Liik" }}
+              {{ t('portal.specimenDetail.kind') }}
             </dt>
             <dd class="m-0 text-portal-text">
               {{ $translate({ et: fossil.value, en: fossil.value_en }) }}
@@ -705,14 +687,19 @@ const mapOverlays = computed(() => {
         </dl>
       </UCard>
     </div>
-    <UCard v-if="locality" as="section" :ui="specimenCardUi" class="mt-5">
+    <UCard
+      v-if="locality"
+      as="section"
+      :ui="specimenCardUi"
+      class="mt-5"
+    >
       <div class="flex items-start justify-between gap-4 border-b border-portal-border bg-portal-subtle px-5 py-4 sm:px-6">
         <div>
           <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
-            {{ locale === "en" ? "Geographic context" : "Geograafiline kontekst" }}
+            {{ t('portal.specimenDetail.geographicContext') }}
           </p>
           <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
-            {{ locale === "en" ? "Locality & geology" : "Leiukoht ja geoloogia" }}
+            {{ t('portal.specimenDetail.localityGeology') }}
           </h2>
         </div>
         <span v-if="locality.country" class="mt-1 text-right text-xs text-portal-muted">
@@ -747,7 +734,7 @@ const mapOverlays = computed(() => {
         />
       </div>
       <p v-else class="mx-5 mt-4 border border-dashed border-portal-border px-4 py-6 text-sm text-portal-muted sm:mx-6">
-        {{ locale === "en" ? "Coordinates are not available for this locality." : "Sellel leiukohal koordinaadid puuduvad." }}
+        {{ t('portal.specimenDetail.coordinatesAreNotAvailableForThisLocality') }}
       </p>
       <dl class="m-0 grid grid-cols-1 px-5 py-3 sm:grid-cols-2 sm:gap-x-8 sm:px-6 [&>div]:grid-cols-1 [&>div]:content-start [&>div]:gap-y-0.5 [&>div]:border-b [&>div]:border-portal-border [&>div]:py-3 [&>div>dt]:text-xs [&>div>dt]:leading-[1.4] [&>div>dd]:text-sm [&>div>dd]:leading-normal">
         <div v-if="stratigraphy" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
@@ -772,7 +759,7 @@ const mapOverlays = computed(() => {
         </div>
         <div v-if="specimen.stratigraphy_text" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 py-2.5 text-sm">
           <dt class="text-portal-muted">
-            {{ locale === "en" ? "Stratigraphy remarks" : "Stratigraafia märkus" }}
+            {{ t('portal.specimenDetail.stratigraphyRemarks') }}
           </dt>
           <dd class="m-0 text-portal-text">
             {{ specimen.stratigraphy_text }}
@@ -788,13 +775,13 @@ const mapOverlays = computed(() => {
       class="mt-8"
     >
       <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
-        {{ locale === "en" ? "Taxon identifications" : "Taksoni määrangud" }}
+        {{ t('portal.specimenDetail.taxonIdentifications') }}
       </h2>
       <UTable
         :data="identificationRows"
         :columns="identificationColumns"
-        :caption="locale === 'en' ? 'Taxon identifications' : 'Taksoni määrangud'"
-        :empty="locale === 'en' ? 'No identifications available.' : 'Määranguid ei leitud.'"
+        :caption="t('portal.specimenDetail.taxonIdentifications')"
+        :empty="t('portal.specimenDetail.noIdentificationsAvailable')"
         class="text-sm"
         :ui="{
           root: 'overflow-x-auto',
@@ -816,13 +803,13 @@ const mapOverlays = computed(() => {
       class="mt-8"
     >
       <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
-        {{ locale === "en" ? "Rock identifications" : "Kivi määrangud" }}
+        {{ t('portal.specimenDetail.rockIdentifications') }}
       </h2>
       <UTable
         :data="rockIdentificationRows"
         :columns="rockIdentificationColumns"
-        :caption="locale === 'en' ? 'Rock identifications' : 'Kivi määrangud'"
-        :empty="locale === 'en' ? 'No rock identifications available.' : 'Kivi määranguid ei leitud.'"
+        :caption="t('portal.specimenDetail.rockIdentifications')"
+        :empty="t('portal.specimenDetail.noRockIdentificationsAvailable')"
         class="text-sm"
         :ui="{
           root: 'overflow-x-auto',
@@ -844,7 +831,7 @@ const mapOverlays = computed(() => {
       class="mt-8"
     >
       <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
-        {{ locale === "en" ? "References" : "Kirjandus" }}
+        {{ t('portal.specimenDetail.references') }}
       </h2>
       <ul class="m-0 grid list-none gap-3 p-4 sm:p-5">
         <li
@@ -874,24 +861,51 @@ const mapOverlays = computed(() => {
           </div>
           <dl class="mt-3 grid gap-x-6 gap-y-2 border-t border-portal-border pt-3 text-sm sm:grid-cols-2">
             <div v-if="item.reference?.journal?.name || item.reference?.journal__journal_name || item.reference?.book">
-              <dt class="text-xs text-portal-muted">{{ locale === 'en' ? 'Publication' : 'Väljaanne' }}</dt>
-              <dd class="m-0 text-portal-text">{{ item.reference.journal?.name || item.reference.journal__journal_name || item.reference.book }}</dd>
+              <dt class="text-xs text-portal-muted">
+                {{ t('portal.specimenDetail.publication') }}
+              </dt>
+              <dd class="m-0 text-portal-text">
+                {{ item.reference.journal?.name || item.reference.journal__journal_name || item.reference.book }}
+              </dd>
             </div>
             <div v-if="item.reference?.volume || item.reference?.issue">
-              <dt class="text-xs text-portal-muted">{{ locale === 'en' ? 'Volume / issue' : 'Köide / number' }}</dt>
-              <dd class="m-0 text-portal-text">{{ [item.reference.volume, item.reference.issue].filter(Boolean).join(' / ') }}</dd>
+              <dt class="text-xs text-portal-muted">
+                {{ t('portal.specimenDetail.volumeIssue') }}
+              </dt>
+              <dd class="m-0 text-portal-text">
+                {{ [item.reference.volume, item.reference.issue].filter(Boolean).join(' / ') }}
+              </dd>
             </div>
             <div v-if="item.reference?.pages">
-              <dt class="text-xs text-portal-muted">{{ locale === 'en' ? 'Pages' : 'Leheküljed' }}</dt>
-              <dd class="m-0 text-portal-text">{{ item.reference.pages }}</dd>
+              <dt class="text-xs text-portal-muted">
+                {{ t('portal.specimenDetail.pages') }}
+              </dt>
+              <dd class="m-0 text-portal-text">
+                {{ item.reference.pages }}
+              </dd>
             </div>
             <div v-if="item.reference?.doi">
-              <dt class="text-xs text-portal-muted">DOI</dt>
-              <dd class="m-0"><BaseLinkExternal @click="$openWindow(`https://doi.org/${item.reference.doi}`)">{{ item.reference.doi }}</BaseLinkExternal></dd>
+              <dt class="text-xs text-portal-muted">
+                DOI
+              </dt>
+              <dd class="m-0">
+                <BaseLinkExternal @click="$openWindow(`https://doi.org/${item.reference.doi}`)">
+                  {{ item.reference.doi }}
+                </BaseLinkExternal>
+              </dd>
             </div>
             <div v-if="item.reference?.pdf">
-              <dt class="text-xs text-portal-muted">PDF</dt>
-              <dd class="m-0"><a :href="item.reference.pdf" target="_blank" rel="noopener noreferrer" class="text-portal-link underline">{{ locale === 'en' ? 'Open full text' : 'Ava täistekst' }}</a></dd>
+              <dt class="text-xs text-portal-muted">
+                PDF
+              </dt>
+              <dd class="m-0">
+                <a
+                  :href="item.reference.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-portal-link underline"
+                >{{ t('portal.specimenDetail.openFullText') }}</a>
+              </dd>
             </div>
           </dl>
         </li>
@@ -902,7 +916,7 @@ const mapOverlays = computed(() => {
       <div class="mb-4 flex items-center gap-3">
         <span aria-hidden="true" class="h-1 w-10 rounded-full bg-portal-primary" />
         <h2 class="m-0 text-[20px] font-semibold tracking-[-0.015em] text-portal-heading">
-          {{ locale === "en" ? "Explore related data" : "Seotud andmed" }}
+          {{ t('portal.specimenDetail.exploreRelatedData') }}
         </h2>
       </div>
       <div class="grid gap-3 md:grid-cols-3">
@@ -923,7 +937,7 @@ const mapOverlays = computed(() => {
           </div>
           <div class="min-w-0 flex-1">
             <p class="m-0 mb-1 text-xs text-portal-muted">
-              {{ locale === "en" ? "Collection" : "Kollektsioon" }}
+              {{ t('portal.specimenDetail.collection') }}
             </p>
             <ULink
               :to="localePath({ name: 'collection-id-specimens', params: { id: collection.id } })"
@@ -947,7 +961,7 @@ const mapOverlays = computed(() => {
             variant="ghost"
             square
             class="h-12! w-12! shrink-0 overflow-hidden rounded-portal-card! border border-portal-border bg-white p-0! focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
-            :aria-label="locale === 'en' ? 'Open locality photo preview' : 'Ava leiukoha foto eelvaade'"
+            :aria-label="t('portal.specimenDetail.openLocalityPhotoPreview')"
             @click="openImagePreview(localityPreview, $translate({ et: locality.name, en: locality.name_en }))"
           >
             <NuxtImg
@@ -975,7 +989,7 @@ const mapOverlays = computed(() => {
           </div>
           <div class="min-w-0 flex-1">
             <p class="m-0 mb-1 text-xs text-portal-muted">
-              {{ locale === "en" ? "Locality" : "Leiukoht" }}
+              {{ t('portal.specimenDetail.locality') }}
             </p>
             <ULink
               :to="localePath({ name: 'locality-id', params: { id: locality.id } })"
@@ -1003,7 +1017,7 @@ const mapOverlays = computed(() => {
           </div>
           <div class="min-w-0 flex-1">
             <p class="m-0 mb-1 text-xs text-portal-muted">
-              {{ locale === "en" ? "Stratigraphy" : "Stratigraafia" }}
+              {{ t('portal.specimenDetail.stratigraphy') }}
             </p>
             <ULink
               :to="localePath({ name: 'stratigraphy-id', params: { id: stratigraphy.id } })"
@@ -1024,30 +1038,91 @@ const mapOverlays = computed(() => {
     >
       <div class="flex flex-wrap items-end justify-between gap-3 border-b border-portal-border bg-portal-mint/60 px-5 py-4 sm:px-6">
         <div>
-          <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">{{ locale === "en" ? "Same locality coordinates" : "Samad leiukoha koordinaadid" }}</p>
-          <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">{{ locale === "en" ? "Other specimen records" : "Teised eksemplarikirjed" }}</h2>
+          <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
+            {{ t('portal.specimenDetail.sameLocalityCoordinates') }}
+          </p>
+          <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
+            {{ t('portal.specimenDetail.otherSpecimenRecords') }}
+          </h2>
         </div>
-        <span class="inline-flex items-center rounded-full bg-portal-subtle px-3 py-1.5 text-xs font-medium tabular-nums text-portal-muted">{{ coordinateRecordCount.toLocaleString(locale) }} {{ locale === "en" ? "records" : "kirjet" }}</span>
+        <span class="inline-flex items-center rounded-full bg-portal-subtle px-3 py-1.5 text-xs font-medium tabular-nums text-portal-muted">{{ coordinateRecordCount.toLocaleString(locale) }} {{ t('portal.common.records') }}</span>
       </div>
-      <p v-if="coordinateStatus === 'pending'" class="m-0 p-5 text-sm text-portal-muted" role="status">{{ locale === "en" ? "Loading nearby records…" : "Samade koordinaatidega kirjete laadimine…" }}</p>
-      <p v-else-if="coordinateError" class="m-0 p-5 text-sm text-portal-error" role="alert">{{ locale === "en" ? "Could not load related specimen records." : "Seotud eksemplarikirjete laadimine ebaõnnestus." }}</p>
+      <p
+        v-if="coordinateStatus === 'pending'"
+        class="m-0 p-5 text-sm text-portal-muted"
+        role="status"
+      >
+        {{ t('portal.specimenDetail.loadingNearbyRecords') }}
+      </p>
+      <p
+        v-else-if="coordinateError"
+        class="m-0 p-5 text-sm text-portal-error"
+        role="alert"
+      >
+        {{ t('portal.specimenDetail.couldNotLoadRelatedSpecimenRecords') }}
+      </p>
       <ul v-else class="m-0 grid max-h-110 grid-cols-1 gap-2 overflow-y-auto p-3 sm:grid-cols-2">
-        <li v-for="record in coordinateRecords" :key="record.id" class="flex min-w-0 items-center gap-3 rounded-portal-control border border-portal-border px-3 py-2 transition-colors hover:border-portal-border-hover hover:bg-portal-selected">
-          <div class="min-w-0 flex-1"><ULink :to="localePath({ name: 'specimen-id', params: { id: record.id } })" class="text-sm font-semibold text-portal-link underline underline-offset-2 hover:text-portal-primary">{{ record.specimen_full_name }}</ULink></div>
-          <UButton v-if="record.preview" type="button" color="neutral" variant="ghost" square class="h-12! w-12! shrink-0 overflow-hidden rounded-portal-card! border border-portal-border bg-portal-subtle p-0! transition-colors hover:border-portal-primary focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus" :aria-label="`${locale === 'en' ? 'Open photo preview for' : 'Ava eksemplari foto'} ${record.specimen_full_name}`" @click="openImagePreview(record.preview, record.specimen_full_name)">
-            <NuxtImg :src="record.preview.filename" provider="geocollections" alt="" width="96" height="96" fit="cover" class="size-full object-cover" />
+        <li
+          v-for="record in coordinateRecords"
+          :key="record.id"
+          class="flex min-w-0 items-center gap-3 rounded-portal-control border border-portal-border px-3 py-2 transition-colors hover:border-portal-border-hover hover:bg-portal-selected"
+        >
+          <div class="min-w-0 flex-1">
+            <ULink :to="localePath({ name: 'specimen-id', params: { id: record.id } })" class="text-sm font-semibold text-portal-link underline underline-offset-2 hover:text-portal-primary">
+              {{ record.specimen_full_name }}
+            </ULink>
+          </div>
+          <UButton
+            v-if="record.preview"
+            type="button"
+            color="neutral"
+            variant="ghost"
+            square
+            class="h-12! w-12! shrink-0 overflow-hidden rounded-portal-card! border border-portal-border bg-portal-subtle p-0! transition-colors hover:border-portal-primary focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
+            :aria-label="t('portal.specimenDetail.openRecordPhoto', { recordName: record.specimen_full_name })"
+            @click="openImagePreview(record.preview, record.specimen_full_name)"
+          >
+            <NuxtImg
+              :src="record.preview.filename"
+              provider="geocollections"
+              alt=""
+              width="96"
+              height="96"
+              fit="cover"
+              class="size-full object-cover"
+            />
           </UButton>
         </li>
       </ul>
       <div v-if="coordinatePageCount > 1" class="flex flex-wrap items-center justify-between gap-3 border-t border-portal-border px-4 py-3 sm:px-5">
-        <span class="text-xs tabular-nums text-portal-muted">{{ locale === "en" ? `Showing ${coordinateFrom}–${coordinateTo} of ${coordinateRecordCount.toLocaleString(locale)} records at these coordinates` : `Kuvatakse ${coordinateFrom}–${coordinateTo} kirjet ${coordinateRecordCount.toLocaleString(locale)} samade koordinaatidega kirjest` }}</span>
+        <span class="text-xs tabular-nums text-portal-muted">{{ t('portal.specimenDetail.coordinateRange', { from: coordinateFrom, to: coordinateTo, count: coordinateRecordCount.toLocaleString(locale) }) }}</span>
         <div class="flex items-center gap-2">
-          <UButton color="neutral" variant="outline" size="sm" :disabled="coordinatePage <= 1 || coordinateStatus === 'pending'" :aria-label="locale === 'en' ? 'Previous page of related records' : 'Seotud kirjete eelmine leht'" @click="setCoordinatePage(coordinatePage - 1)">{{ locale === "en" ? "Previous" : "Eelmine" }}</UButton>
+          <UButton
+            color="neutral"
+            variant="outline"
+            size="sm"
+            :disabled="coordinatePage <= 1 || coordinateStatus === 'pending'"
+            :aria-label="t('portal.specimenDetail.previousPageOfRelatedRecords')"
+            @click="setCoordinatePage(coordinatePage - 1)"
+          >
+            {{ t('portal.common.previous') }}
+          </UButton>
           <span class="min-w-14 text-center text-xs tabular-nums text-portal-muted">{{ coordinatePage }} / {{ coordinatePageCount }}</span>
-          <UButton color="neutral" variant="outline" size="sm" :disabled="coordinatePage >= coordinatePageCount || coordinateStatus === 'pending'" :aria-label="locale === 'en' ? 'Next page of related records' : 'Seotud kirjete järgmine leht'" @click="setCoordinatePage(coordinatePage + 1)">{{ locale === "en" ? "Next" : "Järgmine" }}</UButton>
+          <UButton
+            color="neutral"
+            variant="outline"
+            size="sm"
+            :disabled="coordinatePage >= coordinatePageCount || coordinateStatus === 'pending'"
+            :aria-label="t('portal.specimenDetail.nextPageOfRelatedRecords')"
+            @click="setCoordinatePage(coordinatePage + 1)"
+          >
+            {{ t('portal.common.next') }}
+          </UButton>
         </div>
       </div>
-      <p v-else-if="coordinateRecordCount > 0" class="m-0 border-t border-portal-border px-5 py-3 text-xs leading-normal text-portal-muted">{{ locale === "en" ? `Showing ${coordinateFrom}–${coordinateTo} of ${coordinateRecordCount.toLocaleString(locale)} records at these coordinates.` : `Kuvatakse ${coordinateFrom}–${coordinateTo} kirjet ${coordinateRecordCount.toLocaleString(locale)} samade koordinaatidega kirjest.` }}</p>
+      <p v-else-if="coordinateRecordCount > 0" class="m-0 border-t border-portal-border px-5 py-3 text-xs leading-normal text-portal-muted">
+        {{ t('portal.specimenDetail.coordinateRangeSummary', { from: coordinateFrom, to: coordinateTo, count: coordinateRecordCount.toLocaleString(locale) }) }}
+      </p>
     </UCard>
     <PortalPhotoViewer
       v-if="imagePreviewOpen && previewImages.length"
@@ -1061,10 +1136,10 @@ const mapOverlays = computed(() => {
           {{ item.info.title }}
         </p>
         <p v-if="item.info.author" class="m-0 text-sm text-portal-muted">
-          {{ locale === "en" ? "Photographer" : "Pildistaja" }}: {{ item.info.author }}
+          {{ t('portal.specimenDetail.photographer') }}: {{ item.info.author }}
         </p>
         <p v-if="item.info.date" class="m-0 text-sm text-portal-muted">
-          {{ locale === "en" ? "Date" : "Kuupäev" }}: {{ item.info.date }}
+          {{ t('portal.specimenDetail.date') }}: {{ item.info.date }}
         </p>
       </template>
     </PortalPhotoViewer>
