@@ -958,13 +958,54 @@ const mapOverlays = computed(() => {
       <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
         {{ locale === "en" ? "References" : "Kirjandus" }}
       </h2>
-      <ul class="m-0 list-disc px-9 py-4 text-sm text-portal-text">
+      <ul class="m-0 grid list-none gap-3 p-4 sm:p-5">
         <li
           v-for="item in relatedData.references"
           :key="item.id"
-          class="mb-2 last:mb-0"
+          class="rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5"
         >
-          <span v-if="item.reference">{{ item.reference.reference || item.reference }}</span>
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-0">
+              <BaseLinkExternal
+                v-if="item.reference?.id"
+                class="font-semibold text-portal-link"
+                @click="$openGeokirjandus('reference', item.reference.id)"
+              >
+                {{ item.reference.reference || item.reference.title || item.reference }}
+              </BaseLinkExternal>
+              <p v-else class="m-0 font-semibold text-portal-heading">
+                {{ item.reference?.reference || item.reference?.title || item.reference }}
+              </p>
+              <p v-if="item.reference?.title && item.reference.title !== item.reference.reference" class="mt-1 mb-0 text-sm text-portal-text">
+                {{ item.reference.title }}
+              </p>
+            </div>
+            <span v-if="item.reference?.year" class="shrink-0 rounded-full bg-portal-mint px-3 py-1 text-sm font-medium text-portal-text">
+              {{ item.reference.year }}
+            </span>
+          </div>
+          <dl class="mt-3 grid gap-x-6 gap-y-2 border-t border-portal-border pt-3 text-sm sm:grid-cols-2">
+            <div v-if="item.reference?.journal?.name || item.reference?.journal__journal_name || item.reference?.book">
+              <dt class="text-xs text-portal-muted">{{ locale === 'en' ? 'Publication' : 'Väljaanne' }}</dt>
+              <dd class="m-0 text-portal-text">{{ item.reference.journal?.name || item.reference.journal__journal_name || item.reference.book }}</dd>
+            </div>
+            <div v-if="item.reference?.volume || item.reference?.issue">
+              <dt class="text-xs text-portal-muted">{{ locale === 'en' ? 'Volume / issue' : 'Köide / number' }}</dt>
+              <dd class="m-0 text-portal-text">{{ [item.reference.volume, item.reference.issue].filter(Boolean).join(' / ') }}</dd>
+            </div>
+            <div v-if="item.reference?.pages">
+              <dt class="text-xs text-portal-muted">{{ locale === 'en' ? 'Pages' : 'Leheküljed' }}</dt>
+              <dd class="m-0 text-portal-text">{{ item.reference.pages }}</dd>
+            </div>
+            <div v-if="item.reference?.doi">
+              <dt class="text-xs text-portal-muted">DOI</dt>
+              <dd class="m-0"><BaseLinkExternal @click="$openWindow(`https://doi.org/${item.reference.doi}`)">{{ item.reference.doi }}</BaseLinkExternal></dd>
+            </div>
+            <div v-if="item.reference?.pdf">
+              <dt class="text-xs text-portal-muted">PDF</dt>
+              <dd class="m-0"><a :href="item.reference.pdf" target="_blank" rel="noopener noreferrer" class="text-portal-link underline">{{ locale === 'en' ? 'Open full text' : 'Ava täistekst' }}</a></dd>
+            </div>
+          </dl>
         </li>
       </ul>
     </UCard>
