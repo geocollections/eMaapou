@@ -61,7 +61,7 @@ function handleChange(index: number) {
       :disabled="!internalValue.trim()"
       @click="handleAdd"
     >
-      {{ t('common.add') }}
+      {{ t('filter.add') }}
     </UButton>
   </PortalFilterSection>
 </template>
