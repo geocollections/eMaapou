@@ -59,7 +59,6 @@ const { renderer } = storeToRefs(useSettings());
 const state = reactive({
   option: {},
   defaultOptions: {
-    // title also gets updated in watcher
     title: {
       text: "Chart title",
       left: "center",
@@ -68,7 +67,6 @@ const state = reactive({
         fontSize: display.xs.value ? TITLE_FONT_SIZE_SMALL : TITLE_FONT_SIZE,
       },
     },
-    // grid also gets updated in watcher
     grid: {
       show: true,
       top: GRID_TOP,
@@ -103,7 +101,6 @@ const state = reactive({
         },
       },
     },
-    // dataZoom also gets updated in watcher
     dataZoom: [
       {
         type: "slider",
@@ -121,7 +118,6 @@ const state = reactive({
       },
       {
         type: "inside",
-        // xAxisIndex: [0],
         yAxisIndex: 0,
         filterMode: "filter",
       },
@@ -139,14 +135,11 @@ function buildChartLegend() {
   };
 }
 function buildXAxis() {
-  // First item in data is always DEPTH
   return Object.entries(props.fileData?.CURVES).reduce((prev, curr, currIdx) => {
     if (curr[0] !== "DEPTH") {
       const xAxis = {
-        // Todo: Could we make it toggleable using legend?
         show: true,
         position: "bottom",
-        // Calculates axisLabel offset, adds +25 after every axis
         offset: currIdx - 1 > 0
           ? (currIdx - 1) * 25
           : 0,
@@ -156,24 +149,12 @@ function buildXAxis() {
         nameTextStyle: {
           fontWeight: "bold",
         },
-        // min(value: any) {
-        //   return (value.min - 0.1).toFixed(2) * 1
-        // },
-        // max(value: any) {
-        //   return (value.max + 0.1).toFixed(2) * 1
-        // },
         splitNumber: 2,
         axisLine: {
           show: true,
           symbol: ["none", "arrow"],
           symbolSize: [5, 5],
         },
-        // Todo: Get correct Unit from API (currently metadata omits it)
-        // axisLabel: {
-        //   formatter(value) {
-        //     return `${value} %`
-        //   },
-        // },
       };
       prev.push(xAxis);
     }
@@ -189,7 +170,6 @@ function buildYAxis() {
     nameLocation: "end",
     nameTextStyle: {
       fontWeight: "bold",
-      // fontSize: 14,
       padding: [0, 70, 0, 0],
     },
     nameGap: 10,
@@ -197,18 +177,11 @@ function buildYAxis() {
     axisTick: {
       alignWithLabel: true,
     },
-    // min(value) {
-    //   return (value.min - 0.1).toFixed(2) * 1
-    // },
-    // max(value) {
-    //   return (value.max + 0.1).toFixed(2) * 1
-    // },
     data: props.fileData?.CURVES?.DEPTH,
   };
 }
 
 function buildChartSeries() {
-  // First item in data is always DEPTH
   return Object.entries(props.fileData?.CURVES).reduce((prev, curr, currIdx) => {
     if (curr[0] !== "DEPTH") {
       const series = {
@@ -262,7 +235,6 @@ function updateChartDimensions(isSmallChart: boolean) {
       ...state.defaultOptions.grid,
       left: isSmallChart ? GRID_LEFT_SMALL : GRID_LEFT,
       width: isSmallChart ? GRID_WIDTH_SMALL : GRID_WIDTH,
-      // width: "300px",
     },
     dataZoom: [
       {
@@ -281,7 +253,6 @@ function updateChartDimensions(isSmallChart: boolean) {
       },
       {
         type: "inside",
-        // xAxisIndex: [0],
         yAxisIndex: 0,
         filterMode: "filter",
       },

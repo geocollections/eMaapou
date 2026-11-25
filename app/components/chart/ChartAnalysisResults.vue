@@ -89,8 +89,9 @@ function createSubCharts(data: (typeof props)["data"]) {
                 overflow: "truncate",
               },
               data: group?.map(val => ({
-                // @ts-expect-error - ???
-                value: val.name,
+                value: val && typeof val === "object" && "name" in val
+                  ? val.name
+                  : undefined,
               })),
 
               axisPointer: {

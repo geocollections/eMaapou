@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Locality } from "../[id].vue";
-// @ts-expect-error add types
-import { las2json } from "wellio";
+import wellio from "wellio";
 
 const props = withDefaults(defineProps<{
   localityObject: Locality;
@@ -15,22 +14,13 @@ const { $translate, $solrFetch } = useNuxtApp();
 const route = useRoute();
 
 const { data } = await useLazyAsyncData("data", async () => {
-  let rawLasFileContent;
-  let lasContent: { [K: string]: any } | null = null;
+  let lasContent: ReturnType<typeof wellio.las2json> | null = null;
   if (props.attachment) {
-    const rawLasfileContentResponse = await $fetch<any>(
+    const rawLasFileContent = await $fetch<string>(
       `https://files.geocollections.info/${props.attachment}`,
+      { responseType: "text" },
     );
-
-    rawLasFileContent = await rawLasfileContentResponse.text();
-    rawLasFileContent = las2json(rawLasFileContent);
-    if (
-      typeof rawLasfileContentResponse === "string"
-      && rawLasFileContent.startsWith("Error: ")
-    ) {
-      rawLasFileContent = "";
-    }
-    lasContent = rawLasFileContent;
+    lasContent = wellio.las2json(rawLasFileContent);
   }
 
   const analysisResultsPromise = $solrFetch<SolrResponse & { stats: any; facet_counts: any }>("/analysis_results", {
