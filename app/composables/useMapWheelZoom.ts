@@ -3,10 +3,8 @@ import type { Map } from "leaflet";
 export function useMapWheelZoom() {
   const options = { scrollWheelZoom: false, zoomSnap: 0.1 };
   const active = ref(false);
-  const { locale } = useI18n();
-  const instruction = computed(() => locale.value === "et"
-    ? "Kaardi hiirerullikuga suumimiseks klõpsa kaardil"
-    : "Click the map to enable scroll-wheel zoom");
+  const { t } = useI18n();
+  const instruction = computed(() => t("portal.map.activateWheelZoom"));
 
   function activate(map: Map | undefined) {
     if (!map)
@@ -16,5 +14,10 @@ export function useMapWheelZoom() {
     active.value = true;
   }
 
-  return { options, active, instruction, activate };
+  return {
+    options,
+    active,
+    instruction,
+    activate,
+  };
 }

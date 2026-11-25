@@ -49,6 +49,9 @@ const {
 } = useMapWheelZoom();
 let mapResizeObserver: ResizeObserver | undefined;
 
+const landBoardLink = `<a href="http://www.maaamet.ee/">${t("portal.map.landBoard")}</a>`;
+const sarvLink = "<a href=\"https://geoloogia.info\">SARV</a>";
+
 const baseLayers = {
   "OpenStreetMap": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxNativeZoom: 18,
@@ -65,8 +68,7 @@ const baseLayers = {
   "Estonian satellite": L.tileLayer("https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
     maxNativeZoom: 18,
     maxZoom: 21,
-    attribution:
-          "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
+    attribution: t("portal.map.attributionLandBoard", { link: landBoardLink }),
     tms: true,
     detectRetina: true,
     zIndex: 1,
@@ -74,8 +76,7 @@ const baseLayers = {
   "Estonian map": L.tileLayer("https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
     maxNativeZoom: 18,
     maxZoom: 21,
-    attribution:
-          "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
+    attribution: t("portal.map.attributionLandBoard", { link: landBoardLink }),
     tms: true,
     detectRetina: true,
     zIndex: 1,
@@ -91,8 +92,7 @@ const overlays = {
     maxZoom: 21,
     tms: true,
     detectRetina: true,
-    attribution:
-          "Estonian maps: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+    attribution: t("portal.map.attributionLandBoard", { link: landBoardLink }),
     zIndex: 20,
   }),
   "Estonian bedrock": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
@@ -103,7 +103,7 @@ const overlays = {
     maxZoom: 21,
     tms: true,
     detectRetina: true,
-    attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+    attribution: t("portal.map.attributionGeology", { link: landBoardLink }),
     zIndex: 20,
   }),
   "Estonian basement": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
@@ -114,7 +114,7 @@ const overlays = {
     maxZoom: 21,
     tms: true,
     detectRetina: true,
-    attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+    attribution: t("portal.map.attributionGeology", { link: landBoardLink }),
     zIndex: 20,
   }),
   "Lokaliteedid / Localities": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
@@ -123,7 +123,7 @@ const overlays = {
     transparent: true,
     detectRetina: true,
     updateWhenIdle: true,
-    attribution: "Localities: <a  href='https://geoloogia.info'>SARV</a>",
+    attribution: t("portal.map.attributionLocalities", { link: sarvLink }),
     zIndex: 30,
   }),
   "Puursüdamikud / Drillcores": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
@@ -132,7 +132,7 @@ const overlays = {
     transparent: true,
     detectRetina: true,
     updateWhenIdle: true,
-    attribution: "Drillcores: <a  href='https://geoloogia.info'>SARV</a>",
+    attribution: t("portal.map.attributionDrillcores", { link: sarvLink }),
     zIndex: 40,
   }),
   "Uuringupunktid / Sites": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
@@ -141,7 +141,7 @@ const overlays = {
     transparent: true,
     detectRetina: true,
     updateWhenIdle: true,
-    attribution: "Sites: <a  href='https://geoloogia.info'>SARV</a>",
+    attribution: t("portal.map.attributionSites", { link: sarvLink }),
     zIndex: 50,
   }),
   "Proovid / Samples": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
@@ -150,7 +150,7 @@ const overlays = {
     transparent: true,
     detectRetina: true,
     updateWhenIdle: true,
-    attribution: "Samples: <a  href='https://geoloogia.info'>SARV</a>",
+    attribution: t("portal.map.attributionSamples", { link: sarvLink }),
     zIndex: 60,
   }),
 };
@@ -173,7 +173,9 @@ onMounted(() => {
       center: [58.5, 25.5],
       zoom: 5,
 
-      ...(props.clickToZoom ? wheelZoomOptions : {}),
+      ...(props.clickToZoom
+        ? wheelZoomOptions
+        : {}),
       ...{ gestureHandling: props.gestureHandling && !props.clickToZoom },
       ...{
         gestureHandlingOptions: {
@@ -192,7 +194,20 @@ onMounted(() => {
     if (props.clickToZoom)
       map.value.on("click", () => activateWheelZoom(map.value));
 
-    L.control.layers(baseLayers, overlays).addTo(map.value);
+    L.control.layers({
+      OpenStreetMap: baseLayers.OpenStreetMap,
+      OpenTopoMap: baseLayers.OpenTopoMap,
+      [t("portal.map.layers.estonianSatellite")]: baseLayers["Estonian satellite"],
+      [t("portal.map.layers.estonianMap")]: baseLayers["Estonian map"],
+    }, {
+      [t("portal.map.layers.estonianHybrid")]: overlays["Estonian hybrid"],
+      [t("portal.map.layers.estonianBedrock")]: overlays["Estonian bedrock"],
+      [t("portal.map.layers.estonianBasement")]: overlays["Estonian basement"],
+      [t("portal.map.layers.localities")]: overlays["Lokaliteedid / Localities"],
+      [t("portal.map.layers.drillcores")]: overlays["Puursüdamikud / Drillcores"],
+      [t("portal.map.layers.sites")]: overlays["Uuringupunktid / Sites"],
+      [t("portal.map.layers.samples")]: overlays["Proovid / Samples"],
+    }).addTo(map.value);
 
     const features = [];
 

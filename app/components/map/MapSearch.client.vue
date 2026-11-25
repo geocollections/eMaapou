@@ -6,12 +6,13 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet.fullscreen";
-import 'leaflet.fullscreen/dist/Control.FullScreen.css'
+import "leaflet.fullscreen/dist/Control.FullScreen.css";
 
 const props = defineProps<{ modelValue: Nullable<any> }>();
 const emit = defineEmits<{
-  "update:model-value": [value: any];
+  "update:modelValue": [value: any];
 }>();
+const { t } = useI18n();
 const map = ref<L.Map>();
 const activeGeomanLayer = ref<L.Polygon | L.Circle>();
 const gpsLocation = ref<L.LatLng>();
@@ -54,8 +55,7 @@ function loadMap() {
     fullscreenControl: true,
   });
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors",
+    attribution: t("portal.map.attributionOpenStreetMap", { link: "<a href='https://www.openstreetmap.org/'>OpenStreetMap</a>" }),
   })
     .addTo(map.value);
 
@@ -64,14 +64,18 @@ function loadMap() {
     onAdd(map: any) {
       const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
 
-      // container.innerHTML = "<a href=\"#\" title=\"Show me\" id=\"near-me\" style=\"font-size: 1.5em; color: #333\"><div><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 28 28\"><path d=\"M21,3L3,10.53V11.5L9.84,14.16L12.5,21H13.46L21,3Z\" /></svg></div></a>";
-      container.innerHTML = "<a href=\"#\" title=\"Near Me\" id=\"near-me\" style=\"font-size: 1.5em; color: #333\" class=\"icon-near-me\"></a>";
+      const button = L.DomUtil.create("a", "icon-near-me", container);
+      button.href = "#";
+      button.id = "near-me";
+      button.style.fontSize = "1.5em";
+      button.style.color = "#333";
+      button.title = t("portal.map.nearMe");
       container.onclick = function () {
         if (nearMe.value) {
           nearMe.value = false;
           activeGeomanLayer.value?.remove();
           activeGeomanLayer.value = undefined;
-          emit("update:model-value", null);
+          emit("update:modelValue", null);
           return;
         }
         map.locate({ setView: true });
@@ -102,11 +106,11 @@ function handlePmCreate(
   activeGeomanLayer.value = layer as L.Polygon | L.Circle;
 
   if (layer instanceof L.Polygon) {
-    emit("update:model-value", layer.toGeoJSON());
+    emit("update:modelValue", layer.toGeoJSON());
   }
   else if (layer instanceof L.Circle) {
     emit(
-      "update:model-value",
+      "update:modelValue",
       L.PM.Utils.circleToPolygon(layer).toGeoJSON(),
     );
   }
@@ -124,7 +128,7 @@ function removeCurrentLayer() {
 
   activeGeomanLayer.value.remove();
   activeGeomanLayer.value = undefined;
-  emit("update:model-value", null);
+  emit("update:modelValue", null);
 }
 
 function initLeafletGeoman() {
@@ -162,11 +166,13 @@ function successGeo(...[event]: Parameters<L.LocationEventHandlerFn>) {
 
   activeGeomanLayer.value = circlePolygon;
   emit(
-    "update:model-value",
+    "update:modelValue",
     circlePolygon.toGeoJSON(),
   );
 
-  map.value?.fitBounds(circlePolygon.getBounds(), { padding: [10, 10] });
+  map.value?.fitBounds(circlePolygon.getBounds(), {
+    padding: [10, 10],
+  });
 }
 </script>
 
