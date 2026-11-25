@@ -100,7 +100,6 @@ function handleSortByChange(newSortBy: SortItem[]) {
 
 const handleSearch = debounce(() => {
   const options = { ...props.options, page: 1 };
-  // this.isLoading = true
   emit("update", {
     options,
     search: search.value,
@@ -215,7 +214,6 @@ onMounted(() => {
           </VIcon>
         </VBtn>
       </template>
-      <!-- eslint-disable-next-line vue/no-template-shadow -->
       <template v-if="!onlyTable" #top="{ pageCount }">
         <div id="top">
           <VRow class="pl-3" no-gutters>
@@ -318,7 +316,6 @@ onMounted(() => {
           @click="toggleExpand(internalItem)"
         />
       </template>
-      <!-- @vue-ignore -->
       <template v-for="(_, slotName) in $slots" #[slotName]="context">
         <slot :name="slotName" v-bind="context" />
       </template>
@@ -353,8 +350,6 @@ onMounted(() => {
   }
 
   :deep(th) {
-    // position: sticky;
-    // top: 0px;
     background-color: white;
 
     &.sortable {
@@ -397,7 +392,6 @@ onMounted(() => {
   bottom: 74px;
   right: 0;
   width: 15px;
-  // z-index: 3;
 }
 
 .scroll-left {
@@ -418,6 +412,5 @@ onMounted(() => {
   bottom: 74px;
   left: 0;
   width: 15px;
-  // z-index: 3;
 }
 </style>

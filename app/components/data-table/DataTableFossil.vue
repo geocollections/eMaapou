@@ -1,6 +1,9 @@
+<script setup lang="ts">
+const tableAttrs = useBaseDataTableAttrs();
+</script>
+
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.taxon="{ item }">
       <BaseLinkExternal
         v-if="item.taxon_id"

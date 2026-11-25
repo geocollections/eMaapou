@@ -3,11 +3,12 @@ import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
 import isNil from "lodash/isNil";
 
 const localePath = useLocalePath();
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.name="{ item }">
       <NuxtLink
         v-if="item.locality"

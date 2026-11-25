@@ -16,9 +16,9 @@ const props = withDefaults(
 );
 
 const localePath = useLocalePath();
-const attrs = useAttrs();
+const attrs = useBaseDataTableAttrs();
 const filteredHeaders = computed(() => {
-  return (attrs.headers as Header[]).filter((item: Header) => {
+  return attrs.headers.filter((item: Header) => {
     if (typeof item.value === "string" && item.value.includes("depth"))
       return !props.hideDepth;
     else if (item.value === "locality")
@@ -31,12 +31,10 @@ const filteredHeaders = computed(() => {
 </script>
 
 <template>
-  <!-- @vue-ignore -->
   <BaseDataTable
-    v-bind="$attrs"
+    v-bind="attrs"
     :headers="filteredHeaders"
     :item-to="(item) => localePath({ name: 'analysis-id', params: { id: item.id } })"
-    @click:row="emit('click:row', $event)"
   >
     <template #item.id="{ item }">
       {{ item.id }}

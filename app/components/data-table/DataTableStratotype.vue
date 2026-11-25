@@ -1,10 +1,11 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.stratigraphy="{ item }">
       <NuxtLink
         v-if="item.stratigraphy"
