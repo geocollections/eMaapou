@@ -205,7 +205,7 @@
 }
 
 .header-menu-item {
-  @apply transition-all duration-[350ms];
+  @apply transition-all duration-350;
 }
 
 .header-menu-item.header-menu-item-active {
@@ -301,7 +301,7 @@
 @utility portal-filter-choice { @apply min-w-0 rounded-portal-control px-1 py-1.5 hover:bg-portal-subtle; }
 @utility portal-choice-wrapper { @apply min-w-0 flex-1; }
 @utility portal-choice-label { @apply flex! w-full min-w-0 items-start justify-between gap-2 text-sm; }
-@utility portal-choice-name { @apply min-w-0 flex-1 break-words; }
+@utility portal-choice-name { @apply min-w-0 flex-1 wrap-break-word; }
 @utility portal-choice-count { @apply shrink-0 text-xs text-portal-muted tabular-nums; }
 @utility portal-filter-pages { @apply flex items-center justify-between gap-2 text-xs text-portal-muted tabular-nums; }
 @utility portal-photo-dialog { @apply w-[min(96vw,90rem)] max-w-[96vw] rounded-portal-card bg-portal-background; }
@@ -309,14 +309,14 @@
 @utility portal-photo-footer { @apply flex flex-wrap items-center justify-between gap-3; }
 @utility portal-photo-image { @apply mx-auto max-h-[82dvh] w-full object-contain; }
 @utility portal-photo-navigation { @apply flex items-center gap-3 text-sm text-portal-muted tabular-nums; }
-@utility portal-photo-preview-dialog { @apply !inset-auto !top-1/2 !left-1/2 !-translate-x-1/2 !-translate-y-1/2 !h-auto !max-h-[90dvh] !w-[min(92vw,72rem)] !max-w-none overflow-hidden rounded-portal-card; }
+@utility portal-photo-preview-dialog { @apply inset-auto! top-1/2! left-1/2! -translate-x-1/2! -translate-y-1/2! h-auto! max-h-[90dvh]! w-[min(92vw,72rem)]! max-w-none! overflow-hidden rounded-portal-card; }
 @utility portal-photo-preview-header { @apply shrink-0 border-b border-portal-border px-4 py-3 sm:px-6; }
-@utility portal-photo-preview-body { @apply min-h-0 overflow-y-auto !p-3 sm:!p-5; }
+@utility portal-photo-preview-body { @apply min-h-0 overflow-y-auto p-3! sm:p-5!; }
 @utility portal-photo-preview-footer { @apply flex-wrap justify-between gap-3 border-t border-portal-border px-4 py-3 sm:px-6; }
 @utility portal-photo-preview-content { @apply grid gap-4; }
 @utility portal-photo-preview-image { @apply mx-auto max-h-[min(50dvh,46rem)] w-full bg-portal-subtle object-contain; }
-@utility portal-photo-preview-info { @apply mx-auto w-full max-w-[72rem]; }
-@utility portal-photo-metadata { @apply mt-4 grid gap-4 [&_dt]:text-xs [&_dt]:font-medium [&_dt]:text-portal-muted [&_dd]:mt-1 [&_dd]:break-words [&_dd]:text-sm [&_dd]:text-portal-text; }
+@utility portal-photo-preview-info { @apply mx-auto w-full max-w-6xl; }
+@utility portal-photo-metadata { @apply mt-4 grid gap-4 [&_dt]:text-xs [&_dt]:font-medium [&_dt]:text-portal-muted [&_dd]:mt-1 [&_dd]:wrap-break-word [&_dd]:text-sm [&_dd]:text-portal-text; }
 
 @utility portal-full-field { @apply w-full min-w-0; }
 @utility portal-supporting { @apply text-sm text-portal-muted; }
@@ -326,16 +326,16 @@
 @utility portal-filter-pair { @apply grid min-w-0 grid-cols-2 gap-2; }
 @utility portal-filter-form { @apply grid w-full min-w-0 max-w-full grid-cols-1 gap-2; }
 @utility portal-filter-list { @apply w-full min-w-0 px-1; }
-@utility portal-hierarchy-menu { @apply z-[1400] max-h-80 w-64 overflow-y-auto rounded-portal-card border border-portal-border bg-portal-background; }
+@utility portal-hierarchy-menu { @apply z-1400 max-h-80 w-64 overflow-y-auto rounded-portal-card border border-portal-border bg-portal-background; }
 @utility portal-hierarchy-options { @apply grid gap-1 p-2; }
 @utility portal-hierarchy-option { @apply min-h-10 justify-start whitespace-normal text-left text-sm; }
 
 @utility portal-image-strip { @apply flex items-center gap-3 overflow-x-auto rounded-portal-card border border-portal-border bg-portal-subtle p-2; }
 @utility portal-image-strip-item { @apply shrink-0; }
 @utility portal-image-trigger { @apply rounded-portal-control p-0; }
-@utility portal-image-thumbnail { @apply h-[175px] rounded-portal-control object-contain transition-opacity hover:opacity-80; }
-@utility specimen-detail-images { & .portal-image-thumbnail { @apply h-[240px] sm:h-[320px]; } }
-@utility specimen-detail { @apply mx-auto! max-w-[1440px] space-y-6 px-4 py-6 sm:px-6 lg:px-8; }
+@utility portal-image-thumbnail { @apply h-43.75 rounded-portal-control object-contain transition-opacity hover:opacity-80; }
+@utility specimen-detail-images { & .portal-image-thumbnail { @apply h-60 sm:h-80; } }
+@utility specimen-detail { @apply mx-auto! max-w-360 space-y-6 px-4 py-6 sm:px-6 lg:px-8; }
 @utility specimen-detail__photos { @apply overflow-hidden rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5; }
 @utility specimen-detail__layout { @apply grid items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)]; }
 @utility specimen-detail__card { @apply min-w-0 overflow-hidden rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5; }
@@ -348,7 +348,7 @@
 @utility portal-detail-map { height: var(--map-height); @apply rounded-portal-card border border-portal-border font-sans; }
 @utility portal-flog-chart { @apply min-w-0; }
 @utility portal-chart-toolbar { @apply flex items-center gap-3 bg-portal-background py-2; }
-@utility portal-chart-settings { @apply z-[1400] rounded-portal-card border border-portal-border bg-portal-background shadow-portal-dropdown; }
+@utility portal-chart-settings { @apply z-1400 rounded-portal-card border border-portal-border bg-portal-background shadow-portal-dropdown; }
 @utility portal-chart-settings-body { @apply grid gap-4 p-4; }
 @utility portal-chart-scale { @apply flex items-center gap-2; }
 @utility portal-chart-scroll { @apply overflow-x-auto; }
@@ -367,8 +367,8 @@
 @utility portal-content-margin { @apply m-0; }
 @utility portal-full-width { @apply w-full; }
 @utility portal-horizontal-scroll { @apply overflow-x-auto; }
-@utility portal-file-frame { @apply mx-auto flex max-h-[700px] w-full justify-center rounded-portal-card bg-portal-subtle; }
-@utility portal-file-image { @apply mx-auto max-h-[700px] max-w-full object-contain; }
+@utility portal-file-frame { @apply mx-auto flex max-h-175 w-full justify-center rounded-portal-card bg-portal-subtle; }
+@utility portal-file-image { @apply mx-auto max-h-175 max-w-full object-contain; }
 @utility portal-list-inside { @apply list-inside; }
 @utility portal-notice { @apply mb-2 rounded-portal-card border border-portal-border bg-portal-subtle text-sm; }
 @utility portal-metadata-table { @apply w-full border-collapse text-sm [&_td]:border-b [&_td]:border-portal-border [&_td]:px-3 [&_td]:py-2 [&_td]:align-top; }
@@ -383,31 +383,31 @@
 @utility specimen-gallery { @apply overflow-hidden rounded-portal-card border border-portal-border bg-portal-background; }
 @utility specimen-gallery__intro { @apply flex flex-wrap items-baseline justify-between gap-3 border-b border-portal-border p-4 text-[13px] leading-relaxed text-portal-muted [&>span]:whitespace-nowrap [&>span]:tabular-nums; }
 @utility specimen-gallery__message { @apply p-6 text-portal-muted [&>button]:text-portal-link [&>button]:underline; }
-@utility specimen-gallery__grid { @apply grid max-h-[600px] grid-cols-2 content-start gap-3 overflow-y-auto p-3 outline-portal-focus focus-visible:outline-3 min-[700px]:max-h-[720px] min-[700px]:grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] min-[700px]:gap-4 min-[700px]:p-4; }
+@utility specimen-gallery__grid { @apply grid max-h-150 grid-cols-2 content-start gap-3 overflow-y-auto p-3 outline-portal-focus focus-visible:outline-3 min-[700px]:max-h-180 min-[700px]:grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] min-[700px]:gap-4 min-[700px]:p-4; }
 @utility specimen-gallery__card { @apply min-w-0 overflow-hidden rounded-portal-card border border-portal-border; }
 @utility specimen-gallery__photo { @apply relative flex aspect-4/3 w-full cursor-zoom-in items-center justify-center bg-portal-subtle p-2 whitespace-normal disabled:cursor-default [&>img]:block [&>img]:size-full [&>img]:object-contain; }
-@utility specimen-gallery__enlarge { @apply absolute right-2 bottom-2 size-7 rounded-portal-control border border-portal-border bg-portal-background text-center leading-[26px] text-portal-link; }
+@utility specimen-gallery__enlarge { @apply absolute right-2 bottom-2 size-7 rounded-portal-control border border-portal-border bg-portal-background text-center leading-6.5 text-portal-link; }
 @utility specimen-gallery__caption { @apply p-3 text-[13px] [&>a]:inline-block [&>a]:text-sm [&>a]:font-semibold [&>a]:text-portal-link [&>a]:underline [&>a]:underline-offset-3 [&>p]:mt-1 [&>p]:text-portal-muted; }
 @utility portal-description-text { @apply pt-2 pb-4 pr-2; }
-@utility portal-half-column { @apply flex-none basis-[100.0%] max-w-[100.0%] md:flex-none md:basis-[50.0%] md:max-w-[50.0%]; }
+@utility portal-half-column { @apply flex-none basis-full max-w-full md:flex-none md:basis-1/2 md:max-w-1/2; }
 @utility specimen-record-link { @apply text-portal-link underline underline-offset-3; }
 @utility portal-specimen-subtitle { @apply pl-1 text-portal-muted font-medium; }
 @utility portal-filter-actions { @apply mt-3 flex gap-2 border-t border-portal-border py-3; }
 @utility portal-filter-clear { @apply min-h-11 flex-1 justify-center rounded-portal-control text-portal-heading; }
 @utility portal-filter-submit { @apply min-h-11 flex-1 justify-center rounded-portal-control bg-portal-primary text-white hover:bg-portal-primary-hover; }
-@utility portal-record-primary { @apply sm:flex-none sm:basis-[100.0%] sm:max-w-[100.0%] md:flex-none md:basis-[50.0%] md:max-w-[50.0%] lg:flex-none lg:basis-[58.333333%] lg:max-w-[58.333333%] xl:flex-none xl:basis-[41.666667%] xl:max-w-[41.666667%]; }
+@utility portal-record-primary { @apply sm:flex-none sm:basis-full sm:max-w-full md:flex-none md:basis-1/2 md:max-w-1/2 lg:flex-none lg:basis-7/12 lg:max-w-7/12 xl:flex-none xl:basis-5/12 xl:max-w-5/12; }
 @utility portal-bordered-table { @apply border rounded-portal-card; }
-@utility portal-record-secondary { @apply md:flex-none md:basis-[50.0%] md:max-w-[50.0%] lg:flex-none lg:basis-[41.666667%] lg:max-w-[41.666667%] xl:flex-none xl:basis-[33.333333%] xl:max-w-[33.333333%]; }
+@utility portal-record-secondary { @apply md:flex-none md:basis-1/2 md:max-w-1/2 lg:flex-none lg:basis-5/12 lg:max-w-5/12 xl:flex-none xl:basis-1/3 xl:max-w-1/3; }
 @utility portal-section-title { @apply text-lg font-semibold py-2; }
-@utility portal-column-third { @apply xl:flex-none xl:basis-[33.333333%] xl:max-w-[33.333333%]; }
-@utility portal-column-two-thirds { @apply xl:flex-none xl:basis-[66.666667%] xl:max-w-[66.666667%]; }
+@utility portal-column-third { @apply xl:flex-none xl:basis-1/3 xl:max-w-1/3; }
+@utility portal-column-two-thirds { @apply xl:flex-none xl:basis-2/3 xl:max-w-2/3; }
 @utility portal-thumbnail-row { @apply flex my-2 items-center; }
 @utility portal-clickable-thumbnail { @apply rounded-portal-card cursor-pointer mr-3; }
-@utility portal-record-sidebar { @apply flex-none basis-[100.0%] max-w-[100.0%] xl:flex-none xl:basis-[33.333333%] xl:max-w-[33.333333%]; }
+@utility portal-record-sidebar { @apply flex-none basis-full max-w-full xl:flex-none xl:basis-1/3 xl:max-w-1/3; }
 @utility portal-centered-media { @apply flex justify-center rounded-portal-card bg-portal-subtle; }
 @utility portal-primary-surface { @apply rounded-portal-card  text-portal-primary; }
 @utility portal-responsive-toolbar { @apply justify-center flex flex-col md:justify-between md:flex-row; }
-@utility portal-record-details { @apply flex-none basis-[100.0%] max-w-[100.0%] sm:flex-none sm:basis-[100.0%] sm:max-w-[100.0%] md:flex-none md:basis-[50.0%] md:max-w-[50.0%] lg:flex-none lg:basis-[41.666667%] lg:max-w-[41.666667%] xl:flex-none xl:basis-[41.666667%] xl:max-w-[41.666667%]; }
+@utility portal-record-details { @apply flex-none basis-full max-w-full sm:flex-none sm:basis-full sm:max-w-full md:flex-none md:basis-1/2 md:max-w-1/2 lg:flex-none lg:basis-5/12 lg:max-w-5/12 xl:flex-none xl:basis-5/12 xl:max-w-5/12; }
 @utility portal-spaced-table { @apply border rounded-portal-card mb-2; }
 @utility portal-record-action-spaced { @apply mt-2 mr-2 font-sans normal-case; }
 @utility portal-record-action { @apply mt-2 font-sans normal-case; }
@@ -432,7 +432,7 @@
 @utility portal-empty-card { @apply rounded-portal-card border border-portal-border p-6; }
 @utility portal-outline-button { @apply border border-portal-border; }
 @utility portal-results-count { @apply mb-6 text-sm text-portal-muted tabular-nums; }
-@utility portal-read-more { @apply mt-4 inline-flex min-h-11 items-center text-portal-link [text-decoration-line:underline] underline-offset-4; }
+@utility portal-read-more { @apply mt-4 inline-flex min-h-11 items-center text-portal-link underline underline-offset-4; }
 @utility portal-news-pagination { @apply mt-6 flex flex-col gap-4 border-t border-portal-border pt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between; }
 @utility portal-page-count { @apply text-sm text-portal-muted tabular-nums; }
 @utility portal-pagination-controls { @apply flex items-center justify-between gap-2 sm:justify-end; }
@@ -444,8 +444,8 @@
 @utility specimen-search__main { @apply min-w-0 flex-1; }
 @utility specimen-search__page { @apply mx-auto max-w-[1600px] px-4 pt-6 pb-8 sm:px-6 lg:px-8; }
 @utility specimen-search__breadcrumbs { @apply mb-4 flex flex-wrap items-center gap-4 text-[13px] text-portal-muted; }
-@utility specimen-search__intro { @apply mb-6 grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_320px] lg:grid-cols-[minmax(0,1fr)_520px]; }
-@utility specimen-search__heading { @apply [&>h1]:text-[28px] [&>h1]:leading-tight [&>h1]:font-bold [&>h1]:tracking-[-.035em] [&>h1]:text-portal-heading md:[&>h1]:text-4xl [&>p]:mt-3 [&>p]:max-w-[80ch] [&>p]:text-[15px] [&>p]:leading-relaxed [&>p]:text-portal-muted; }
+@utility specimen-search__intro { @apply relative isolate mb-6 grid items-center gap-6 overflow-hidden rounded-portal-card border border-portal-border bg-portal-mint p-3 sm:p-5 md:grid-cols-[minmax(0,1fr)_320px] md:p-6 lg:grid-cols-[minmax(0,1fr)_520px]; }
+@utility specimen-search__heading { @apply [&>h1]:m-0 [&>h1]:text-[44px] [&>h1]:leading-none [&>h1]:font-black [&>h1]:tracking-[-.06em] [&>h1]:text-portal-heading sm:[&>h1]:text-[52px] md:[&>h1]:text-[60px] lg:[&>h1]:text-[68px] [&>p]:mt-4 [&>p]:mb-0 [&>p]:max-w-[80ch] [&>p]:text-[15px] [&>p]:leading-relaxed [&>p]:text-portal-text; }
 @utility specimen-search__map { @apply mb-6 overflow-hidden rounded-portal-card border border-portal-border [&>p]:bg-portal-subtle [&>p]:px-3 [&>p]:py-2 [&>p]:text-[13px] [&>p]:leading-relaxed [&>p]:text-portal-muted; }
 @utility specimen-search__layout { @apply grid items-start gap-6; }
 @utility specimen-search__filters { @apply min-w-0 rounded-portal-card border border-portal-border bg-portal-background px-3 pt-4; }
@@ -457,7 +457,7 @@
 @utility specimen-search__message { @apply bg-portal-subtle p-4 [&>button]:text-portal-link [&>button]:underline; }
 @utility specimen-view-switch { @apply mb-4 inline-flex items-center gap-1 rounded-portal-control border border-portal-border bg-portal-subtle p-1; }
 @utility portal-view-button { @apply min-h-11 gap-2 rounded-portal-control px-3.5 py-2 text-sm; }
-@utility portal-view-icon { @apply size-[18px] shrink-0 fill-current; }
+@utility portal-view-icon { @apply size-4.5 shrink-0 fill-current; }
 @utility specimen-view-switch__count { @apply rounded-portal-control bg-portal-background px-1.5 py-0.5 text-xs text-portal-muted tabular-nums; }
 @utility portal-data-table { @apply overflow-hidden rounded-portal-card border border-portal-border bg-portal-background; }
 @utility portal-sort-button { @apply -ml-2 min-h-9 gap-1 rounded-portal-control px-2 text-[13px] font-semibold text-portal-heading; }
@@ -471,10 +471,10 @@
 @utility portal-table-tool { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-portal-control border border-portal-border bg-portal-background px-3 py-2 text-sm font-medium text-portal-heading shadow-none hover:bg-portal-subtle disabled:opacity-50; }
 @utility portal-table-popover__body { @apply grid gap-4 p-5 [&>h3]:text-base [&>h3]:font-semibold [&>h3]:text-portal-heading; }
 @utility portal-table-field { @apply grid gap-1.5 text-[13px] [&>input]:min-h-10 [&>input]:rounded-portal-control [&>input]:border [&>input]:border-portal-border [&>input]:px-3 [&>select]:min-h-10 [&>select]:rounded-portal-control [&>select]:border [&>select]:border-portal-border [&>select]:px-3; }
-@utility portal-table-column-list { @apply grid max-h-[280px] gap-3 overflow-y-auto; }
+@utility portal-table-column-list { @apply grid max-h-70 gap-3 overflow-y-auto; }
 @utility portal-table-reset { @apply min-h-10 cursor-pointer text-left text-portal-link underline; }
 @utility portal-table-download { @apply min-h-11 justify-center rounded-portal-control bg-portal-primary text-white hover:bg-portal-primary-hover disabled:opacity-50; }
-@utility specimen-intro-collage { @apply grid h-40 w-full max-w-[420px] grid-cols-3 grid-rows-2 gap-1 overflow-hidden rounded-portal-card border border-portal-border bg-portal-background justify-self-start md:h-44 md:justify-self-end lg:h-48 lg:max-w-[520px] lg:grid-cols-5; }
+@utility specimen-intro-collage { @apply grid h-40 w-full max-w-105 grid-cols-3 grid-rows-2 gap-1 overflow-hidden rounded-portal-card border border-portal-border bg-portal-background justify-self-start md:h-44 md:justify-self-end lg:h-48 lg:max-w-130 lg:grid-cols-5; }
 @utility portal-collage-link {
   @apply relative flex min-h-0 items-center justify-center overflow-hidden bg-portal-subtle focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-portal-focus;
   &:nth-child(n+7) { @apply hidden; }
@@ -485,13 +485,13 @@
 @utility portal-collage-message { @apply col-span-full row-span-full grid place-items-center bg-portal-subtle p-4 text-center text-sm text-portal-muted; }
 @utility portal-collage-image { @apply size-full object-cover transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none; }
 @utility specimen-map-wrap { @apply relative [&_.leaflet-bar]:overflow-hidden [&_.leaflet-bar]:rounded-portal-control [&_.leaflet-popup-content-wrapper]:rounded-portal-card; }
-@utility specimen-map-controls { @apply absolute top-2.5 left-2.5 z-[800] grid gap-0 rounded-portal-control border border-portal-border bg-portal-background p-1 shadow-portal-dropdown; }
-@utility specimen-results-map { @apply relative z-0 h-[280px] rounded-portal-card min-[600px]:h-[340px]; }
-@utility specimen-map-status { @apply absolute right-3 bottom-8 left-3 z-[800] rounded-portal-control bg-portal-background p-2 text-[13px] text-portal-text; }
+@utility specimen-map-controls { @apply absolute top-2.5 left-2.5 z-800 grid gap-0 rounded-portal-control border border-portal-border bg-portal-background p-1 shadow-portal-dropdown; }
+@utility specimen-results-map { @apply relative z-0 h-70 rounded-portal-card min-[600px]:h-85; }
+@utility specimen-map-status { @apply absolute right-3 bottom-8 left-3 z-800 rounded-portal-control bg-portal-background p-2 text-[13px] text-portal-text; }
 @utility portal-selected-image { @apply border-portal-primary opacity-60; }
 
-@utility portal-table-scroll { @apply max-h-[440px] min-[700px]:max-h-[520px]; }
-@utility portal-table-base { @apply w-full min-w-[680px]; }
+@utility portal-table-scroll { @apply max-h-110 min-[700px]:max-h-130; }
+@utility portal-table-base { @apply w-full min-w-170; }
 @utility portal-table-head { @apply bg-portal-subtle; }
 @utility portal-table-body { @apply divide-y divide-portal-border; }
 @utility portal-table-row { @apply hover:bg-portal-selected; }
@@ -502,7 +502,7 @@
 @utility portal-view-active { @apply bg-portal-mint text-portal-link; }
 @utility portal-view-inactive { @apply text-portal-muted; }
 
-@utility portal-table-popover { @apply [--ui-primary:var(--color-primary)] z-[1300] w-[min(340px,calc(100vw-24px))] rounded-portal-card border border-portal-border bg-portal-background font-sans text-sm leading-relaxed text-portal-text shadow-portal-dropdown; }
+@utility portal-table-popover { @apply [--ui-primary:var(--color-primary)] z-1300 w-[min(340px,calc(100vw-24px))] rounded-portal-card border border-portal-border bg-portal-background font-sans text-sm leading-relaxed text-portal-text shadow-portal-dropdown; }
 
 @utility portal-field-control { @apply min-h-11 rounded-portal-control ring-portal-border; }
 
@@ -519,7 +519,7 @@
 
 @utility portal-filter-chip-close { @apply size-3.5 shrink-0; }
 
-@utility specimen-map-expanded { @apply [&_.specimen-results-map]:h-[420px]! min-[600px]:[&_.specimen-results-map]:h-[520px]!; }
+@utility specimen-map-expanded { @apply [&_.specimen-results-map]:h-105! min-[600px]:[&_.specimen-results-map]:h-130!; }
 
 @utility specimen-search__results { @apply min-w-0; }
 @utility specimen-search__results-table {
@@ -550,14 +550,14 @@
 @utility specimen-map-records__arrow { @apply size-3.5 shrink-0 text-portal-link; }
 
 @utility portal-map-icon { @apply size-8 min-h-0 justify-center rounded-portal-control p-0; }
-@utility specimen-map-count { @apply pointer-events-none absolute top-3 right-3 z-[800] rounded-portal-control border border-portal-border bg-portal-background! text-portal-heading!; }
-@utility specimen-map-zoom-instruction { @apply absolute top-1/2 left-1/2 z-[700] w-max max-w-[calc(100%-5rem)] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-portal-control border border-portal-border bg-portal-background/95 px-3 py-2 text-center text-sm text-portal-heading shadow-portal-dropdown hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus; }
+@utility specimen-map-count { @apply pointer-events-none absolute top-3 right-3 z-800 rounded-portal-control border border-portal-border bg-portal-background! text-portal-heading!; }
+@utility specimen-map-zoom-instruction { @apply absolute top-1/2 left-1/2 z-700 w-max max-w-[calc(100%-5rem)] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-portal-control border border-portal-border bg-portal-background/95 px-3 py-2 text-center text-sm text-portal-heading shadow-portal-dropdown hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus; }
 
 @utility portal-range-error { @apply mt-2 text-sm text-error; }
 @utility portal-record-cards { @apply hidden; @media (max-width: 700px) { @apply grid gap-3 p-3; } }
 @utility portal-table-desktop { @media (max-width: 700px) { @apply hidden; } }
 @utility portal-record-card { @apply min-w-0 rounded-portal-control border border-portal-border bg-portal-background p-3; }
-@utility portal-record-field { @apply grid min-w-0 grid-cols-[5rem_minmax(0,1fr)] gap-3 py-1.5 text-sm; & dt { @apply text-portal-muted; } & dd { @apply min-w-0 break-words; } }
+@utility portal-record-field { @apply grid min-w-0 grid-cols-[5rem_minmax(0,1fr)] gap-3 py-1.5 text-sm; & dt { @apply text-portal-muted; } & dd { @apply min-w-0 wrap-break-word; } }
 @utility specimen-image-explanation { @apply mb-3 text-sm text-portal-muted; }
 .specimen-map-point-tooltip { @apply max-w-[min(240px,calc(100vw-96px))] rounded-portal-control border-portal-border bg-portal-background px-3 py-2 text-sm leading-5 text-portal-text shadow-portal-dropdown; }
 .specimen-map-point-tooltip strong { @apply block text-sm leading-5 whitespace-normal; }
@@ -567,7 +567,7 @@
 @utility portal-table-record-action { @apply min-h-9 gap-2 whitespace-nowrap rounded-portal-control px-3 no-underline!; }
 @utility portal-table-photo-button { @apply min-h-0 rounded-portal-control p-0.5; & img { @apply h-9 w-14 rounded-portal-control object-cover; } }
 @utility portal-record-card-action { @apply mb-3 w-full justify-between rounded-portal-control; }
-.portal-data-table-linked .portal-table-row[data-selectable="true"] { @apply cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-portal-link; }
+.portal-data-table-linked .portal-table-row[data-selectable="true"] { @apply cursor-pointer transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-portal-link; }
 .portal-data-table-linked .portal-record-card { @apply cursor-pointer transition-colors hover:border-portal-link; }
 
 @utility portal-specimen-name-links { @apply flex flex-wrap items-center gap-x-3 gap-y-1; }
