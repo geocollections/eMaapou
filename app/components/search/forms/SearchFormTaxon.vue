@@ -8,7 +8,7 @@ const emit = defineEmits<{
   submit: [];
 }>();
 
-const { locale } = useI18n();
+const { t } = useI18n();
 const taxaStore = useTaxa();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(taxaStore);
 
@@ -55,22 +55,22 @@ function handleSubmit() {
 <template>
   <form class="portal-filter-form" @submit.prevent="handleSubmit">
     <UFormField
-      :label="locale === 'et' ? 'Otsi taksoneid' : 'Search taxa'"
-      :description="locale === 'et' ? 'Otsimiseks vajuta Enter.' : 'Press Enter to search.'"
+      :label="t('portal.taxonSearchForm.searchTaxa')"
+      :description="t('portal.common.searchWithEnter')"
       class="mb-2 px-1"
       :ui="{ label: 'text-[13px] text-portal-text', description: 'text-xs text-portal-muted' }"
     >
       <UInput
         v-model="query"
         type="search"
-        :placeholder="locale === 'et' ? 'Taksoni või liigi nimi' : 'Taxon or species name'"
+        :placeholder="t('portal.taxonSearchForm.taxonOrSpeciesName')"
         color="neutral"
         class="w-full"
         :ui="{ base: 'min-h-11 rounded-portal-control ring-portal-border' }"
       />
     </UFormField>
     <p class="portal-filter-hint">
-      {{ locale === 'et' ? 'Filtrivalikud rakenduvad kohe.' : 'Filter selections apply immediately.' }}
+      {{ t('portal.common.filtersApplyImmediately') }}
     </p>
     <USeparator />
     <div class="portal-filter-list">
