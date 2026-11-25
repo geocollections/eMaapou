@@ -104,7 +104,7 @@ watch(() => route.fullPath, () => {
 </script>
 
 <template>
-  <header class="sticky top-0 z-[1100] shrink-0 border-b border-portal-border bg-portal-background font-sans text-sm font-medium text-portal-heading">
+  <header class="sticky top-0 z-1100 shrink-0 border-b border-portal-border bg-portal-background font-sans text-sm font-medium text-portal-heading">
     <div class="mx-auto flex h-16 w-full max-w-[1600px] items-center gap-3 px-4 min-[420px]:px-4 min-[700px]:gap-2 min-[960px]:h-18 min-[960px]:gap-3 min-[960px]:px-6 xl:gap-6 xl:px-8">
       <ULink
         :to="localePath('/')"
@@ -119,7 +119,7 @@ watch(() => route.fullPath, () => {
           height="36"
           class="h-7 w-auto shrink-0 min-[700px]:h-8 min-[960px]:h-9"
         ><span class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]">eMaapõu</span></span>
-        <span class="hidden max-w-[130px] border-l border-portal-border pl-3 text-[11px] leading-snug xl:block">{{ copy.subtitle }}</span>
+        <span class="hidden max-w-32.5 border-l border-portal-border pl-3 text-[11px] leading-snug xl:block">{{ copy.subtitle }}</span>
       </ULink>
       <UPopover
         :open="openMenu === 'browse'"
@@ -130,7 +130,7 @@ watch(() => route.fullPath, () => {
         <UButton
           color="neutral"
           variant="ghost"
-          class="header-control order-last size-11 shrink-0 justify-center gap-2 p-0 min-[700px]:order-none min-[700px]:h-auto min-[700px]:w-auto min-[700px]:bg-portal-mint min-[700px]:px-4 min-[700px]:text-sm min-[700px]:hover:bg-portal-selected"
+          class="header-control order-last size-11 shrink-0 justify-center gap-2 p-0 min-[700px]:order-0 min-[700px]:h-auto min-[700px]:w-auto min-[700px]:bg-portal-mint min-[700px]:px-4 min-[700px]:text-sm min-[700px]:hover:bg-portal-selected"
           :aria-label="en ? 'Menu' : 'Menüü'"
         >
           <span class="hidden min-[700px]:inline">{{ copy.browse }}</span>
@@ -145,7 +145,7 @@ watch(() => route.fullPath, () => {
             fill="currentColor"
             aria-hidden="true"
             focusable="false"
-            class="hidden size-[18px] transition-transform shrink-0 min-[700px]:block"
+            class="hidden size-4.5 transition-transform shrink-0 min-[700px]:block"
             :class="{ 'rotate-180': openMenu === 'browse' }"
           ><path :d="mdiChevronDown" /></svg>
         </UButton>
@@ -245,7 +245,7 @@ watch(() => route.fullPath, () => {
         </template>
       </UPopover>
       <form
-        class="hidden min-w-[130px] flex-1 min-[700px]:block"
+        class="hidden min-w-32.5 flex-1 min-[700px]:block"
         role="search"
         @submit.prevent="search"
       >

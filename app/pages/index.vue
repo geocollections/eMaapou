@@ -175,20 +175,20 @@ useSeoMeta({
             width="2000"
             height="1333"
             fetchpriority="high"
-            class="h-full w-full object-cover object-[65%_50%] opacity-25 [mask-image:linear-gradient(to_right,transparent_0%,black_100%)] lg:opacity-100 lg:[mask-image:linear-gradient(to_right,transparent_0%,transparent_30%,black_78%)]"
+            class="h-full w-full object-cover object-[65%_50%] opacity-25 mask-[linear-gradient(to_right,transparent_0%,black_100%)] lg:opacity-100 lg:mask-[linear-gradient(to_right,transparent_0%,transparent_30%,black_78%)]"
             @error="photoAvailable = false"
           >
         </div>
-        <div class="relative max-w-[680px] py-8 sm:py-10 lg:py-14">
+        <div class="relative max-w-170 py-8 sm:py-10 lg:py-14">
           <span aria-hidden="true" class="mb-6 block h-1 w-12 rounded-full bg-portal-primary" />
           <h1
             id="home-title"
-            class="mb-5 max-w-[620px] text-[32px] leading-[1.15] font-bold tracking-[-0.035em] text-portal-heading lg:text-5xl"
+            class="mb-5 max-w-155 text-[32px] leading-[1.15] font-bold tracking-[-0.035em] text-portal-heading lg:text-5xl"
           >
             <span class="block text-[1.2em]">eMaapõu</span>
             <span class="block">{{ copy.title.split('\n')[1] }}</span>
           </h1>
-          <p class="mb-8 max-w-[520px] text-base leading-7 text-portal-text">
+          <p class="mb-8 max-w-130 text-base leading-7 text-portal-text">
             {{ copy.intro }}
           </p>
           <form
