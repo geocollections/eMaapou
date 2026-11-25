@@ -2,6 +2,9 @@
   "name": "nuxt-app",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
   "scripts": {
     "build": "nuxt build",
     "typecheck": "nuxt typecheck",
@@ -71,8 +74,5 @@
   },
   "overrides": {
     "sharp": "0.33.4"
-  },
-  "engines": {
-    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
   }
 }
