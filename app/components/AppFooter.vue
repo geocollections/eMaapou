@@ -7,67 +7,51 @@ import {
   SERVICES,
 } from "~/constants";
 
-const { locale, t } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
-const copy = computed(() =>
-  locale.value === "en"
-    ? {
-        subtitle: "Geoscience Data Estonia",
-        collections: "Data collections",
-        research: "Research & places",
-        services: "External services",
-        about: "About the portal",
-        policies: "Data & source code",
-        portal: "About the portal",
-        news: "News",
-        search: "Search all data",
-        api: "SARV API",
-        source: "Source code",
-        partners: "Partners & infrastructure",
-        privacyTitle: "Privacy & analytics",
-        reuseTitle: "Using the data",
-        licence:
-          "Unless otherwise indicated, portal materials are generally available under the CC BY-SA 3.0 licence. Check each record’s source and licence before reuse.",
-        licenceLink: "Read the licence",
-        external: "External website",
-      }
-    : {
-        subtitle: "Eesti geoloogiliste andmete portaal",
-        collections: "Andmekogud",
-        research: "Teadusandmed ja paigad",
-        services: "Välised teenused",
-        about: "Portaalist",
-        policies: "Andmed ja lähtekood",
-        portal: "Portaalist",
-        news: "Uudised",
-        search: "Otsi kõigist andmetest",
-        api: "SARVe API",
-        source: "Lähtekood",
-        partners: "Partnerid ja taristu",
-        privacyTitle: "Privaatsus ja analüütika",
-        reuseTitle: "Andmete kasutamine",
-        licence:
-          "Kui pole märgitud teisiti, on portaali materjalid üldjuhul kasutatavad CC BY-SA 3.0 litsentsi alusel. Enne taaskasutust kontrolli kirje allikat ja litsentsi.",
-        licenceLink: "Loe litsentsi",
-        external: "Väline veebileht",
-      },
-);
+const copy = computed(() => ({
+  subtitle: t("portal.footer.subtitle"),
+  collections: t("portal.footer.collections"),
+  research: t("portal.footer.research"),
+  services: t("portal.footer.services"),
+  about: t("portal.footer.about"),
+  policies: t("portal.footer.policies"),
+  portal: t("portal.footer.about"),
+  news: t("portal.footer.news"),
+  search: t("portal.common.searchAll"),
+  api: t("portal.footer.api"),
+  source: t("portal.footer.source"),
+  partners: t("portal.footer.partners"),
+  privacyTitle: t("portal.footer.privacyTitle"),
+  reuseTitle: t("portal.footer.reuseTitle"),
+  licence: t("portal.footer.licence"),
+  licenceLink: t("portal.footer.licenceLink"),
+  external: t("portal.footer.external"),
+}));
 
-type FooterLink = { label: string; to: string; external?: boolean };
-const dataLink = (item: { routeName: string; label: string }): FooterLink => ({
-  label: t(item.label),
-  to: localePath({ name: item.routeName }),
-});
+interface FooterLink { label: string; to: string; external?: boolean }
+function dataLink(item: { routeName: string; label: string }): FooterLink {
+  return {
+    label: t(item.label),
+    to: localePath({ name: item.routeName }),
+  };
+}
 const groups = computed(() => [
   {
     id: "collections",
     title: copy.value.collections,
-    links: [...BROWSE_TAXON_LIST, ...BROWSE_LAB_LIST.slice(0, 1)].map(dataLink),
+    links: [
+      ...BROWSE_TAXON_LIST,
+      ...BROWSE_LAB_LIST.slice(0, 1),
+    ].map(dataLink),
   },
   {
     id: "research",
     title: copy.value.research,
-    links: [...BROWSE_LAB_LIST.slice(1), ...BROWSE_GEOLOGY_LIST].map(dataLink),
+    links: [
+      ...BROWSE_LAB_LIST.slice(1),
+      ...BROWSE_GEOLOGY_LIST,
+    ].map(dataLink),
   },
   {
     id: "services",
@@ -82,7 +66,7 @@ const groups = computed(() => [
         "geocollections",
         "sarv",
       ] as const
-    ).map((id) => ({
+    ).map(id => ({
       label: t(SERVICES[id].title),
       to: SERVICES[id].href,
       external: true,
@@ -92,9 +76,18 @@ const groups = computed(() => [
     id: "about",
     title: copy.value.about,
     links: [
-      { label: copy.value.portal, to: localePath({ name: "about" }) },
-      { label: copy.value.news, to: localePath({ name: "news" }) },
-      { label: copy.value.search, to: localePath({ name: "search" }) },
+      {
+        label: copy.value.portal,
+        to: localePath({ name: "about" }),
+      },
+      {
+        label: copy.value.news,
+        to: localePath({ name: "news" }),
+      },
+      {
+        label: copy.value.search,
+        to: localePath({ name: "search" }),
+      },
     ],
   },
   {
@@ -171,13 +164,18 @@ const partners = [
             raw
             :to="localePath('/')"
             class="header-focus inline-flex items-center gap-1.5 min-[700px]:gap-2 rounded-portal-control text-portal-heading no-underline"
-            aria-label="eMaapõu"
+            :aria-label="t('portal.site.brand')"
           >
-            <img src="/logos/emaapou-icon.svg" alt="" width="32" height="36" class="h-7 w-auto shrink-0 min-[700px]:h-8 min-[960px]:h-9" />
+            <img
+              src="/logos/emaapou-icon.svg"
+              alt=""
+              width="32"
+              height="36"
+              class="h-7 w-auto shrink-0 min-[700px]:h-8 min-[960px]:h-9"
+            >
             <span
               class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]"
-              >eMaapõu</span
-            >
+            >{{ t('portal.site.brand') }}</span>
           </ULink>
           <p class="mt-3 max-w-52 text-sm leading-relaxed text-portal-muted">
             {{ copy.subtitle }}
@@ -218,9 +216,10 @@ const partners = [
                   >
                     <path :d="mdiOpenInNew" />
                   </svg>
-                  <span v-if="link.external" class="sr-only"
-                    >({{ copy.external }})</span
-                  >
+                  <span
+                    v-if="link.external"
+                    class="sr-only"
+                  >({{ copy.external }})</span>
                 </ULink>
               </li>
             </ul>
@@ -256,7 +255,7 @@ const partners = [
                 :height="partner.height"
                 class="h-9 w-auto max-w-32 object-contain"
                 loading="lazy"
-              />
+              >
             </ULink>
           </li>
         </ul>
@@ -275,14 +274,19 @@ const partners = [
           >
             {{ copy.privacyTitle }}
           </h2>
-          <I18nT keypath="privacyNotice" scope="global" tag="p"
-            ><ULink
+          <I18nT
+            keypath="privacyNotice"
+            scope="global"
+            tag="p"
+          >
+            <ULink
               raw
               href="https://matomo.org"
               class="header-focus text-portal-mint underline underline-offset-2"
-              >Matomo</ULink
-            ></I18nT
-          >
+            >
+              Matomo
+            </ULink>
+          </I18nT>
         </section>
         <section
           id="footer-reuse"
@@ -301,8 +305,9 @@ const partners = [
               raw
               href="https://creativecommons.org/licenses/by-sa/3.0/"
               class="header-focus text-portal-mint underline underline-offset-2"
-              >{{ copy.licenceLink }}</ULink
             >
+              {{ copy.licenceLink }}
+            </ULink>
           </p>
         </section>
       </UContainer>

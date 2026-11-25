@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineProps<{ color?: string }>();
-const { locales, locale } = useI18n();
+const { locales, locale, t } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
 const items = computed(() => locales.value.map(item => ({
-  label: item.name ?? item.code.toUpperCase(),
+  label: t(`portal.language.${item.code}`),
   to: switchLocalePath(item.code),
   active: item.code === locale.value,
 })));

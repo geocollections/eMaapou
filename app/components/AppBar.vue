@@ -2,49 +2,29 @@
 import { mdiBug, mdiChevronDown, mdiChevronRight, mdiFlaskOutline, mdiMagnify, mdiMapMarkerRadiusOutline, mdiMenu, mdiOpenInNew } from "@mdi/js";
 import { BROWSE_GEOLOGY_LIST, BROWSE_LAB_LIST, BROWSE_TAXON_LIST, SERVICES } from "~/constants";
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 const query = ref("");
 const route = useRoute();
-const en = computed(() => locale.value === "en");
-const copy = computed(() => en.value
-  ? {
-      subtitle: "Geoscience Data Estonia",
-      browse: "Browse data",
-      search: "Search all data",
-      services: "E-services",
-      login: "Log in",
-      about: "About",
-      help: "Help",
-      collections: "Collections",
-      collectionsText: "Physical and digital collections of geological material.",
-      research: "Research data",
-      researchText: "Research material, analytical results and derived datasets.",
-      places: "Places & geology",
-      placesText: "Geographical information and geological context.",
-      external: "Services open on their own websites.",
-      helpText: "Search across geological data or browse a category to find specimens, samples, places and research results.",
-      more: "About this portal",
-    }
-  : {
-      subtitle: "Eesti geoloogiliste andmete portaal",
-      browse: "Sirvi andmeid",
-      search: "Otsi kõigist andmetest",
-      services: "E-teenused",
-      login: "Logi sisse",
-      about: "Tutvustus",
-      help: "Abi",
-      collections: "Kollektsioonid",
-      collectionsText: "Geoloogilise materjali füüsilised ja digitaalsed kollektsioonid.",
-      research: "Teadusandmed",
-      researchText: "Uurimismaterjal, analüüside tulemused ja andmestikud.",
-      places: "Paigad ja geoloogia",
-      placesText: "Geograafiline teave ja geoloogiline kontekst.",
-      external: "Teenused avanevad eraldi veebilehtedel.",
-      helpText: "Otsi geoloogilisi andmeid või vali andmerühm, et leida eksemplare, proove, leiukohti ja teadustulemusi.",
-      more: "Portaalist lähemalt",
-    });
+const copy = computed(() => ({
+  subtitle: t("portal.navigation.subtitle"),
+  browse: t("portal.navigation.browse"),
+  search: t("portal.common.searchAll"),
+  services: t("portal.navigation.services"),
+  login: t("portal.navigation.login"),
+  about: t("portal.navigation.about"),
+  help: t("portal.navigation.help"),
+  collections: t("portal.navigation.collections"),
+  collectionsText: t("portal.navigation.collectionsText"),
+  research: t("portal.navigation.research"),
+  researchText: t("portal.navigation.researchText"),
+  places: t("portal.navigation.places"),
+  placesText: t("portal.navigation.placesText"),
+  external: t("portal.navigation.external"),
+  helpText: t("portal.navigation.helpText"),
+  more: t("portal.navigation.more"),
+}));
 const groups = computed(() => [
   {
     title: copy.value.collections,
@@ -110,7 +90,7 @@ watch(() => route.fullPath, () => {
         :to="localePath('/')"
         raw
         class="header-focus flex shrink-0 items-center gap-3 text-portal-heading no-underline"
-        aria-label="eMaapõu"
+        :aria-label="t('portal.site.brand')"
       >
         <span class="inline-flex items-center gap-1.5 min-[700px]:gap-2"><img
           src="/logos/emaapou-icon.svg"
@@ -118,7 +98,7 @@ watch(() => route.fullPath, () => {
           width="32"
           height="36"
           class="h-7 w-auto shrink-0 min-[700px]:h-8 min-[960px]:h-9"
-        ><span class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]">eMaapõu</span></span>
+        ><span class="text-xl font-bold tracking-[-1.2px] min-[380px]:text-[22px] min-[700px]:text-2xl min-[960px]:text-[28px]">{{ t('portal.site.brand') }}</span></span>
         <span class="hidden max-w-32.5 border-l border-portal-border pl-3 text-[11px] leading-snug xl:block">{{ copy.subtitle }}</span>
       </ULink>
       <UPopover
@@ -131,7 +111,7 @@ watch(() => route.fullPath, () => {
           color="neutral"
           variant="ghost"
           class="header-control order-last size-11 shrink-0 justify-center gap-2 p-0 min-[700px]:order-0 min-[700px]:h-auto min-[700px]:w-auto min-[700px]:bg-portal-mint min-[700px]:px-4 min-[700px]:text-sm min-[700px]:hover:bg-portal-selected"
-          :aria-label="en ? 'Menu' : 'Menüü'"
+          :aria-label="t('portal.navigation.menu')"
         >
           <span class="hidden min-[700px]:inline">{{ copy.browse }}</span>
           <svg
@@ -199,7 +179,7 @@ watch(() => route.fullPath, () => {
               >
                 {{ copy.about }}
               </UButton>
-              <div class="mt-3 flex gap-2" :aria-label="en ? 'Language' : 'Keel'">
+              <div class="mt-3 flex gap-2" :aria-label="t('portal.common.language')">
                 <UButton
                   v-for="language in ['en', 'et'] as const"
                   :key="language"
@@ -213,7 +193,7 @@ watch(() => route.fullPath, () => {
                   :aria-current="locale === language ? 'true' : undefined"
                   @click="openMenu = null"
                 >
-                  {{ language === 'en' ? 'English' : 'Eesti' }}
+                  {{ t(`portal.language.${language}`) }}
                 </UButton>
               </div>
             </section>
@@ -311,7 +291,7 @@ watch(() => route.fullPath, () => {
         ><path :d="mdiOpenInNew" /></svg>
         <span class="sr-only">({{ copy.external }})</span>
       </UButton>
-      <nav class="hidden items-center gap-1 min-[700px]:flex" :aria-label="en ? 'Main navigation' : 'Põhinavigatsioon'">
+      <nav class="hidden items-center gap-1 min-[700px]:flex" :aria-label="t('portal.navigation.mainNavigation')">
         <UButton
           color="neutral"
           variant="ghost"
@@ -341,7 +321,7 @@ watch(() => route.fullPath, () => {
         variant="ghost"
         class="header-control hidden shrink-0 gap-2 min-[960px]:inline-flex"
       >
-        SARV Workbench
+        {{ t('portal.site.workbench') }}
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
@@ -350,7 +330,7 @@ watch(() => route.fullPath, () => {
         ><path :d="mdiOpenInNew" /></svg>
         <span class="sr-only">({{ copy.external }})</span>
       </UButton>
-      <nav class="hidden shrink-0 items-center border-portal-border min-[700px]:flex min-[700px]:gap-1 min-[700px]:border-l min-[700px]:pl-2 min-[960px]:pl-3" :aria-label="en ? 'Language' : 'Keel'">
+      <nav class="hidden shrink-0 items-center border-portal-border min-[700px]:flex min-[700px]:gap-1 min-[700px]:border-l min-[700px]:pl-2 min-[960px]:pl-3" :aria-label="t('portal.common.language')">
         <UButton
           v-for="language in ['en', 'et'] as const"
           :key="language"
@@ -359,7 +339,7 @@ watch(() => route.fullPath, () => {
           :to="switchLocalePath(language)"
           :locale="false"
           :lang="language"
-          :aria-label="language === 'en' ? 'English' : 'Eesti'"
+          :aria-label="t(`portal.language.${language}`)"
           :aria-current="locale === language ? 'true' : undefined"
           :active="false"
           class="header-control min-w-9 px-2 text-[13px] min-[700px]:min-w-11"

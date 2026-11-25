@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { mdiCheck } from "@mdi/js";
 import type { LocaleObject } from "@nuxtjs/i18n";
+import { mdiCheck } from "@mdi/js";
 
-const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
+const { locales, t } = useI18n();
+const availableLocales = locales as ComputedRef<LocaleObject[]>;
 
 const switchLocalePath = useSwitchLocalePath();
 </script>
@@ -24,7 +25,7 @@ const switchLocalePath = useSwitchLocalePath();
           start
           color="accent"
         />
-        <span class="align-self-center montserrat">{{ locale.name }}</span>
+        <span class="align-self-center montserrat">{{ t(`portal.language.${locale.code}`) }}</span>
       </VListItemTitle>
     </VListItem>
   </VList>
