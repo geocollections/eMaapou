@@ -1,7 +1,7 @@
+import type { Headers } from "#imports";
 // @vitest-environment nuxt
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, expect, it } from "vitest";
-import type { Headers } from "#imports";
 
 const testHeaders = {
   byIds: {
@@ -112,7 +112,13 @@ describe("useHeaders", () => {
     const { headers, handleHeadersReset, handleHeadersChange } = useHeaders(testHeaders);
 
     handleHeadersChange("foo");
-    handleHeadersReset({ sortBy: [{ key: "baz", order: "asc" }], page: 1, itemsPerPage: 25 });
+    handleHeadersReset({
+      sortBy: [
+        { key: "baz", order: "asc" },
+      ],
+      page: 1,
+      itemsPerPage: 25,
+    });
 
     expect(headers.value[0]!.show).toBe(true);
     expect(headers.value[1]!.show).toBe(true);

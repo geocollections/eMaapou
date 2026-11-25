@@ -94,7 +94,9 @@ export const IMAGE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [{ key: "id", order: "desc" }],
+    sortBy: [
+      { key: "id", order: "desc" },
+    ],
   },
 };
 
@@ -110,7 +112,9 @@ export const SPECIMEN: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [{ key: "id", order: "desc" }],
+    sortBy: [
+      { key: "id", order: "desc" },
+    ],
   },
 };
 
@@ -134,7 +138,9 @@ export const STRATIGRAPHY_REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [{ key: "year", order: "desc" }],
+    sortBy: [
+      { key: "year", order: "desc" },
+    ],
   },
 };
 

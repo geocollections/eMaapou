@@ -8,8 +8,8 @@ export default defineNuxtRouteMiddleware((to, _from) => {
 
   const isExitingDetailView
     = searchPosition.value > -1
-    && !toBaseName?.startsWith(page.value?.name as string)
-    && !to.params.id;
+      && !toBaseName?.startsWith(page.value?.name as string)
+      && !to.params.id;
   if (isExitingDetailView)
     $reset();
 });

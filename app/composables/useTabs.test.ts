@@ -37,7 +37,11 @@ describe("useTabs", () => {
 
     const { hydrateTabs } = useTabs();
 
-    const hydratedTabs = await hydrateTabs(tabs, { props: { test: { foo: "bar" } } });
+    const hydratedTabs = await hydrateTabs(tabs, {
+      props: {
+        test: { foo: "bar" },
+      },
+    });
 
     expect(hydratedTabs.test.props).toStrictEqual({ foo: "bar" });
   });

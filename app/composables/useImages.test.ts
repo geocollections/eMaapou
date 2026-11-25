@@ -61,7 +61,13 @@ describe("useImages", () => {
     vi.useFakeTimers();
     const imageFunc: ImageFunc<{ test: string }> = vi.fn(async (_args) => {
       await new Promise(res => setTimeout(res, 200));
-      return { images: [{ test: "test" }], total: 10, hasNext: true };
+      return {
+        images: [
+          { test: "test" },
+        ],
+        total: 10,
+        hasNext: true,
+      };
     });
     const { nextImages } = useImages(imageFunc);
 
@@ -77,25 +83,46 @@ describe("useImages", () => {
     let i = 0;
     const imageFunc: ImageFunc<{ test: string }> = async (_args) => {
       i++;
-      return { images: [{ test: `test${i}` }], total: 10, hasNext: true };
+      return {
+        images: [
+          { test: `test${i}` },
+        ],
+        total: 10,
+        hasNext: true,
+      };
     };
     const { images, nextImages } = useImages(imageFunc);
     expect(images.value).toStrictEqual([]);
     await nextImages({ id: 1 });
-    expect(images.value).toStrictEqual([{ test: "test1" }]);
+    expect(images.value).toStrictEqual([
+      { test: "test1" },
+    ]);
     await nextImages({ id: 1 });
-    expect(images.value).toStrictEqual([{ test: "test1" }, { test: "test2" }]);
+    expect(images.value).toStrictEqual([
+      { test: "test1" },
+      { test: "test2" },
+    ]);
   });
 
   it("images are not appended when finished", async () => {
     const imageFunc: ImageFunc<{ test: string }> = async (_args) => {
-      return { images: [{ test: "test" }], total: 10, hasNext: false };
+      return {
+        images: [
+          { test: "test" },
+        ],
+        total: 10,
+        hasNext: false,
+      };
     };
     const { images, nextImages } = useImages(imageFunc);
     expect(images.value).toStrictEqual([]);
     await nextImages({ id: 1 });
-    expect(images.value).toStrictEqual([{ test: "test" }]);
+    expect(images.value).toStrictEqual([
+      { test: "test" },
+    ]);
     await nextImages({ id: 1 });
-    expect(images.value).toStrictEqual([{ test: "test" }]);
+    expect(images.value).toStrictEqual([
+      { test: "test" },
+    ]);
   });
 });
