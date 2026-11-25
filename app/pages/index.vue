@@ -15,9 +15,8 @@ import {
 } from "~/constants";
 
 definePageMeta({ layout: false });
-const { locale } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
-const en = computed(() => locale.value === "en");
 const query = ref("");
 const heroImage
   = "https://files.geocollections.info/large/6d01a29b-e7b9-4fb0-be00-5565199307a1.jpg";
@@ -28,57 +27,27 @@ onMounted(() => {
   if (heroPhoto.value?.complete && !heroPhoto.value.naturalWidth)
     photoAvailable.value = false;
 });
-const copy = computed(() =>
-  en.value
-    ? {
-        title: "eMaapõu\nExplore geological data",
-        intro:
-          "Discover the stories behind rocks, fossils and landscapes. Explore geological collections, research datasets and places through the SARV geoscience data platform. Connect specimens, samples and scientific records to support research, learning and new discoveries.",
-        search: "Search all data",
-        placeholder: "Search specimens, samples, stratigraphy, localities…",
-        submit: "Search",
-        browse: "Browse data by category",
-        collections: "Collections",
-        collectionsText: "Physical collections and their documentation.",
-        research: "Research data",
-        researchText: "Samples, analyses and research datasets.",
-        places: "Places & geology",
-        placesText:
-          "Geographical information, drillcores and stratigraphic units.",
-        services: "E-services",
-        allServices: "All e-services",
-        external: "External website",
-        externalNote:
-          "Specialist databases and tools open on their own websites.",
-        repositoryText:
-          "Published geoscience datasets and their supporting files.",
-        literatureText: "Find publications about Estonia’s geology.",
-        workbenchText: "The data management environment for SARV.",
-      }
-    : {
-        title: "eMaapõu\nAvasta geoloogilisi andmeid",
-        intro:
-          "Avasta kivimite, fossiilide ja maastike lugu. Tutvu SARV geoloogiliste kollektsioonide, teadusandmestike ja leiukohtadega. Leia seoseid eksemplaride, proovide ja teaduskirjete vahel, et toetada uurimistööd, õppimist ja uusi avastusi.",
-        search: "Otsi kõigist andmetest",
-        placeholder: "Otsi eksemplare, proove, stratigraafiat, leiukohti…",
-        submit: "Otsi",
-        browse: "Sirvi andmeid kategooria järgi",
-        collections: "Kollektsioonid",
-        collectionsText: "Füüsilised kogud ja nende dokumentatsioon.",
-        research: "Teadusandmed",
-        researchText: "Proovid, analüüside tulemused ja teadusandmestikud.",
-        places: "Paigad ja geoloogia",
-        placesText: "Leiukohad, puursüdamikud ja stratigraafilised üksused.",
-        services: "E-teenused",
-        allServices: "Kõik e-teenused",
-        external: "Väline veebileht",
-        externalNote:
-          "Erialased andmebaasid ja töövahendid avanevad eraldi veebilehtedel.",
-        repositoryText: "Avaldatud geoloogilised andmestikud ja nende failid.",
-        literatureText: "Leia Eesti geoloogiat käsitlevaid publikatsioone.",
-        workbenchText: "Maapõue infosüsteemi SARV andmehalduse töölaud.",
-      },
-);
+const copy = computed(() => ({
+  title: t("portal.home.title"),
+  intro: t("portal.home.intro"),
+  search: t("portal.common.searchAll"),
+  placeholder: t("portal.home.placeholder"),
+  submit: t("portal.home.submit"),
+  browse: t("portal.home.browse"),
+  collections: t("portal.home.collections"),
+  collectionsText: t("portal.home.collectionsText"),
+  research: t("portal.home.research"),
+  researchText: t("portal.home.researchText"),
+  places: t("portal.home.places"),
+  placesText: t("portal.home.placesText"),
+  services: t("portal.home.services"),
+  allServices: t("portal.home.allServices"),
+  external: t("portal.home.external"),
+  externalNote: t("portal.home.externalNote"),
+  repositoryText: t("portal.home.repositoryText"),
+  literatureText: t("portal.home.literatureText"),
+  workbenchText: t("portal.home.workbenchText"),
+}));
 const categories = computed(() => [
   {
     id: "collections",
@@ -141,9 +110,7 @@ async function search() {
   }
 }
 useHead(() => ({
-  title: en.value
-    ? "Geoscience Data Estonia"
-    : "Eesti geoloogiliste andmete portaal",
+  title: t("portal.home.geoscienceDataEstonia"),
 }));
 useSeoMeta({
   description: () => copy.value.intro,
@@ -185,7 +152,7 @@ useSeoMeta({
             id="home-title"
             class="mb-5 max-w-155 text-[32px] leading-[1.15] font-bold tracking-[-0.035em] text-portal-heading lg:text-5xl"
           >
-            <span class="block text-[1.2em]">eMaapõu</span>
+            <span class="block text-[1.2em]">{{ t('portal.site.brand') }}</span>
             <span class="block">{{ copy.title.split('\n')[1] }}</span>
           </h1>
           <p class="mb-8 max-w-130 text-base leading-7 text-portal-text">
