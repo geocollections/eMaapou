@@ -9,7 +9,7 @@ const props = defineProps<{
   filters?: { q?: string; field?: string };
   headingTag?: "h2" | "h3";
 }>();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const localePath = useLocalePath();
 const en = computed(() => locale.value === "en");
 const title = computed(
@@ -17,7 +17,7 @@ const title = computed(
     (en.value
       ? props.article.title_en || props.article.title_et
       : props.article.title_et || props.article.title_en)
-    || (en.value ? "Untitled news" : "Pealkirjata uudis"),
+    || (t("portal.newsArticle.untitled")),
 );
 const titleLanguage = computed(() =>
   en.value && props.article.title_en
@@ -96,7 +96,7 @@ const date = computed(() => {
         <div
           class="mt-4 flex min-h-11 w-fit items-center gap-2 text-sm font-semibold text-portal-link underline underline-offset-4"
         >
-          {{ en ? "Read article" : "Loe uudist" }}
+          {{ t('portal.newsArticle.readArticle') }}
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"

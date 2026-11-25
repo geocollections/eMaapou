@@ -12,65 +12,34 @@ definePageMeta({ layout: false });
 const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const en = computed(() => locale.value === "en");
-const copy = computed(() =>
-  en.value
-    ? {
-        home: "Home",
-        title: "News",
-        intro: "Updates from the portal and the world of geology.",
-        articles: "articles",
-        loading: "Loading news…",
-        error: "News could not be loaded. Please try again.",
-        retry: "Try again",
-        empty: "No news to display.",
-        first: "Back to the first page",
-        pagination: "News pages",
-        previous: "Previous",
-        next: "Next",
-        page: "Page",
-        keyword: "Keyword",
-        placeholder: "Enter a keyword…",
-        searchIn: "Search in",
-        inTitle: "Titles",
-        inContent: "Article text",
-        search: "Search news",
-        clear: "Clear filters",
-        remove: "Remove filter",
-        titleFilter: "Title",
-        contentFilter: "Text",
-        noMatches:
-          "No news matches these filters. Try another keyword or clear the filters.",
-      }
-    : {
-        home: "Avaleht",
-        title: "Uudised",
-        intro: "Uuendused portaalist ja uudised geoloogia valdkonnast.",
-        articles: "uudist",
-        loading: "Laadin uudiseid…",
-        error: "Uudiste laadimine ebaõnnestus. Palun proovi uuesti.",
-        retry: "Proovi uuesti",
-        empty: "Uudiseid ei ole kuvada.",
-        first: "Tagasi esimesele lehele",
-        pagination: "Uudiste leheküljed",
-        previous: "Eelmine",
-        next: "Järgmine",
-        page: "Leht",
-        keyword: "Märksõna",
-        placeholder: "Sisesta märksõna…",
-        searchIn: "Otsi",
-        inTitle: "Pealkirjast",
-        inContent: "Uudise tekstist",
-        search: "Otsi uudiseid",
-        clear: "Tühjenda filtrid",
-        remove: "Eemalda filter",
-        titleFilter: "Pealkiri",
-        contentFilter: "Tekst",
-        noMatches:
-          "Filtritele vastavaid uudiseid ei leitud. Proovi teist märksõna või tühjenda filtrid.",
-      },
-);
+const copy = computed(() => ({
+  home: t("portal.common.home"),
+  title: t("portal.newsSearch.title"),
+  intro: t("portal.newsSearch.intro"),
+  articles: t("portal.newsSearch.articles"),
+  loading: t("portal.newsSearch.loading"),
+  error: t("portal.newsSearch.error"),
+  retry: t("portal.common.retry"),
+  empty: t("portal.newsSearch.empty"),
+  first: t("portal.newsSearch.first"),
+  pagination: t("portal.newsSearch.pagination"),
+  previous: t("portal.common.previous"),
+  next: t("portal.common.next"),
+  page: t("portal.newsSearch.page"),
+  keyword: t("portal.newsSearch.keyword"),
+  placeholder: t("portal.newsSearch.placeholder"),
+  searchIn: t("portal.newsSearch.searchIn"),
+  inTitle: t("portal.newsSearch.inTitle"),
+  inContent: t("portal.newsSearch.inContent"),
+  search: t("portal.newsSearch.search"),
+  clear: t("portal.newsSearch.clear"),
+  remove: t("portal.common.removeFilter"),
+  titleFilter: t("portal.newsSearch.titleFilter"),
+  contentFilter: t("portal.newsSearch.contentFilter"),
+  noMatches: t("portal.newsSearch.noMatches"),
+}));
 const perPage = 5;
 const page = computed(() => {
   const value = Number(route.query.page);
@@ -150,9 +119,7 @@ const { data, status, error, refresh } = await useApiFetch<
 const articles = computed(() => data.value?.results || []);
 const articleLabel = computed(() =>
   data.value?.count === 1
-    ? en.value
-      ? "article"
-      : "uudis"
+    ? t("portal.newsSearch.article")
     : copy.value.articles,
 );
 const pageCount = computed(() =>
@@ -203,7 +170,7 @@ useHead(() => ({ title: copy.value.title }));
       class="portal-news-container"
     >
       <nav
-        :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
+        :aria-label="t('portal.common.breadcrumb')"
         class="portal-breadcrumbs"
       >
         <ULink
@@ -457,7 +424,7 @@ useHead(() => ({ title: copy.value.title }));
                     v-if="item.type === 'page'"
                     color="neutral"
                     variant="ghost"
-                    :aria-label="`${en ? 'Page' : 'Lehekülg'} ${item.value}`"
+                    :aria-label="t('portal.newsSearch.pagePage', { page: item.value })"
                     :aria-current="page === item.value ? 'page' : undefined"
                     class="portal-page-number header-focus"
                     :class="
