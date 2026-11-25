@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { mdiSquareEditOutline } from "@mdi/js";
+
 definePageMeta({ layout: "detail" });
 
 const route = useRoute();
 const localePath = useLocalePath();
 const { t, locale } = useI18n();
-const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
+const { $solrFetch, $translate, $apiFetch, $openEdit } = useNuxtApp();
 const specimensStore = useSpecimens();
 const { getQueryParams } = specimensStore;
 
@@ -234,7 +236,7 @@ useSeoMeta({
   <TemplateDetail :show-similar="false" :top-padding="0">
     <template #title>
       <div class="border-b border-portal-border bg-portal-background">
-        <div class="mx-auto w-full max-w-[1440px] px-4 pt-5 pb-8 sm:px-6 lg:px-10">
+        <div class="mx-auto w-full max-w-360 px-4 pt-5 pb-8 sm:px-6 lg:px-10">
           <nav class="mb-5 flex flex-wrap items-center gap-2 text-[13px] text-portal-muted" :aria-label="locale === 'en' ? 'Breadcrumb' : 'Asukoht saidil'">
             <ULink :to="localePath('/')" class="text-portal-link no-underline hover:underline">
               {{ locale === "en" ? "Home" : "Avaleht" }}
@@ -251,11 +253,22 @@ useSeoMeta({
               <h1 class="m-0 text-[34px] leading-[1.1] font-semibold tracking-[-0.035em] text-portal-heading sm:text-[44px]">
                 <span class="align-baseline tracking-normal text-portal-link">{{ $t("common.specimen") }}</span>&nbsp;<span>{{ title }}</span>
               </h1>
-              <div v-if="(isRock && titleAlt) || (isTaxon && titleAlt)" class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-[15px] text-portal-muted">
+              <div v-if="(isRock && titleAlt) || (isTaxon && titleAlt)" class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-[30px] leading-tight text-portal-muted sm:text-[40px]">
                 <span v-if="isRock && titleAlt" class="font-medium text-portal-heading">{{ titleAlt }}</span>
                 <span v-if="isTaxon && titleAlt" class="font-medium text-portal-heading">{{ data.specimenAlt?.taxon }}</span>
               </div>
             </div>
+            <UButton
+              size="lg"
+              color="neutral"
+              variant="outline"
+              :ui="{ base: 'border-portal-border bg-portal-background text-portal-link hover:bg-portal-mint' }"
+              class="relative min-w-[180px] shrink-0 justify-center rounded-full px-6 py-3 text-center font-semibold transition-colors"
+              @click="$openEdit('specimen', route.params.id as string)"
+            >
+              <svg viewBox="0 0 24 24" class="absolute left-4 size-5" aria-hidden="true"><path :d="mdiSquareEditOutline" fill="currentColor" /></svg>
+              <span class="block w-full text-center">{{ $t("common.linkToEdit") }}</span>
+            </UButton>
           </div>
         </div>
       </div>
