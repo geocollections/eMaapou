@@ -244,7 +244,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
           <div
             v-if="content"
             :lang="contentLanguage"
-            class="text-base leading-relaxed break-words [&_a]:text-portal-link [&_a]:underline [&_a]:underline-offset-4 [&_a:focus-visible]:outline-3 [&_a:focus-visible]:outline-offset-3 [&_a:focus-visible]:outline-portal-focus [&_blockquote]:my-6 [&_blockquote]:border-l-2 [&_blockquote]:border-portal-border [&_blockquote]:pl-5 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-portal-heading [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-portal-heading [&_img]:my-6 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-portal-card [&_li]:mb-2 [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_table]:my-6 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_td]:border [&_td]:border-portal-border [&_td]:p-3 [&_th]:border [&_th]:border-portal-border [&_th]:bg-portal-subtle [&_th]:p-3 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6"
+            class="text-base leading-relaxed wrap-break-word [&_a]:text-portal-link [&_a]:underline [&_a]:underline-offset-4 [&_a:focus-visible]:outline-3 [&_a:focus-visible]:outline-offset-3 [&_a:focus-visible]:outline-portal-focus [&_blockquote]:my-6 [&_blockquote]:border-l-2 [&_blockquote]:border-portal-border [&_blockquote]:pl-5 [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-portal-heading [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-portal-heading [&_img]:my-6 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-portal-card [&_li]:mb-2 [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-5 [&_table]:my-6 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_td]:border [&_td]:border-portal-border [&_td]:p-3 [&_th]:border [&_th]:border-portal-border [&_th]:bg-portal-subtle [&_th]:p-3 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6"
             v-html="content"
           />
           <p v-else class="leading-relaxed text-portal-muted">
@@ -266,7 +266,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
             <ULink
               raw
               :to="backTo"
-              class="header-focus inline-flex min-h-11 items-center text-sm font-medium text-portal-link [text-decoration-line:underline] underline-offset-4"
+              class="header-focus inline-flex min-h-11 items-center text-sm font-medium text-portal-link underline underline-offset-4"
               >{{ copy.all }}</ULink
             >
           </div>

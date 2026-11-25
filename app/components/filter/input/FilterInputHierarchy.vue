@@ -25,6 +25,7 @@ const props = defineProps<{
   title: string;
   modelValue: string[];
   rootValue: string;
+  defaultOpen?: boolean;
   hydrationFunction: (values: string[]) => Promise<SelectedItem[]>;
   getChildren: (value: string, { page, perPage }: { page: number; perPage: number }) => Promise<[TreeNode[], number]>;
   suggestionFunction: (query: string, { page, perPage }: { page: number; perPage: number }) => Promise<Suggestion[]>;
@@ -53,7 +54,12 @@ function translateName(name: string | { et: string; en: string }): string {
 const numBucketsMap = ref<{ [key: string]: number }>({});
 const paginationMap = ref<{ [key: string]: number }>({});
 
-const { data: tree, refresh: refreshTree } = await useAsyncData<TreeNode[]>(
+const {
+  data: tree,
+  refresh: refreshTree,
+  status: treeStatus,
+  error: treeError,
+} = await useAsyncData<TreeNode[]>(
   `tree-${id}`,
   async () => {
     const res = await props.getChildren(props.rootValue, { page: 1, perPage: 15 });
@@ -230,7 +236,7 @@ function handleListEnd(isIntersecting: boolean) {
   refreshAutocomplete();
 }
 
-const open = ref(false);
+const open = ref(props.defaultOpen ?? false);
 const visibleValues = computed(() => {
   const values = new Set<string>();
   function visit(nodes: TreeNode[]) {
@@ -253,7 +259,7 @@ watch(open, async (value) => {
     return;
   await refreshTree();
   isFirstOpen.value = false;
-});
+}, { immediate: true });
 </script>
 
 <template>
@@ -280,7 +286,30 @@ watch(open, async (value) => {
       @select="handleAdd"
       @end="handleListEnd"
     />
-    <p v-if="!tree?.length" class="portal-supporting">
+    <p
+      v-if="treeStatus === 'pending'"
+      role="status"
+      class="portal-supporting"
+    >
+      {{ t('loading') }}
+    </p>
+    <div
+      v-else-if="treeError"
+      role="alert"
+      class="portal-supporting"
+    >
+      <p>{{ t('loadError') }}</p>
+      <UButton
+        type="button"
+        color="neutral"
+        variant="ghost"
+        class="text-portal-link underline"
+        @click="refreshTree()"
+      >
+        {{ t('retry') }}
+      </UButton>
+    </div>
+    <p v-else-if="!tree?.length" class="portal-supporting">
       {{ t('noOptions') }}
     </p>
     <ul v-else class="portal-filter-tree">
@@ -300,7 +329,13 @@ watch(open, async (value) => {
 
 <i18n lang="yaml">
 et:
+  loading: Laadin hierarhiat...
+  loadError: Hierarhia laadimine ebaõnnestus.
+  retry: Proovi uuesti
   noOptions: Valikud puuduvad
 en:
+  loading: Loading hierarchy...
+  loadError: Could not load the hierarchy.
+  retry: Try again
   noOptions: No options available
 </i18n>

@@ -311,7 +311,7 @@ useHead(() => ({ title: copy.value.title }));
             class="portal-filter-chip header-focus"
             @click="clearFilters"
           >
-            <span class="min-w-0 break-words">{{
+            <span class="min-w-0 wrap-break-word">{{
               searchField === "content"
                 ? copy.contentFilter
                 : copy.titleFilter

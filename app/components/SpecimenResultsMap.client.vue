@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { MapLocation } from "~/types/map";
 import L from "leaflet";
+import { useMapWheelZoom } from "~/composables/useMapWheelZoom";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
@@ -14,7 +15,12 @@ let map: L.Map | undefined;
 const container = ref<HTMLElement>();
 const expanded = ref(false);
 const fullscreen = ref(false);
-const wheelZoomActive = ref(false);
+const {
+  options: wheelZoomOptions,
+  active: wheelZoomActive,
+  instruction: wheelZoomInstruction,
+  activate: activateWheelZoom,
+} = useMapWheelZoom();
 const toolbar = ref<HTMLElement>();
 watch(toolbar, (element) => {
   if (!element)
@@ -37,7 +43,6 @@ const controls = computed(() => locale.value === "et"
   ? {
       records: "Kirjeid",
       locations: "asukohta",
-      activateZoom: "Kaardi hiirerullikuga suumimiseks klõpsa kaardil",
       retry: "Proovi uuesti",
       failed: "Kirjete laadimine ebaõnnestus.",
       mapFailed: "Asukohtade laadimine ebaõnnestus.",
@@ -56,7 +61,6 @@ const controls = computed(() => locale.value === "et"
   : {
       records: "Records",
       locations: "locations",
-      activateZoom: "Click the map to enable scroll-wheel zoom",
       retry: "Try again",
       failed: "Could not load records.",
       mapFailed: "Could not load locations.",
@@ -179,10 +183,6 @@ function markerRadius(count: number) {
     return 12;
   return 18;
 }
-function activateWheelZoom() {
-  map?.scrollWheelZoom.enable();
-  wheelZoomActive.value = true;
-}
 function renderMarkers() {
   if (!map || !markers)
     return;
@@ -244,8 +244,7 @@ onMounted(async () => {
   map = L.map(container.value, {
     center: [58.5, 20],
     zoom: 5,
-    zoomSnap: 0.1,
-    scrollWheelZoom: false,
+    ...wheelZoomOptions,
     fullscreenControl: true,
     zoomControl: false,
   });
@@ -255,7 +254,7 @@ onMounted(async () => {
   map.fullscreenControl?.getContainer()?.setAttribute("hidden", "");
   map.on("enterFullscreen", () => fullscreen.value = true);
   map.on("exitFullscreen", () => fullscreen.value = false);
-  map.on("click", activateWheelZoom);
+  map.on("click", () => activateWheelZoom(map));
   L.control.scale({ imperial: false, position: "bottomright" }).addTo(map);
   markers = L.layerGroup().addTo(map);
   popupTarget.value = document.createElement("div");
@@ -402,10 +401,9 @@ onBeforeUnmount(() => map?.remove());
         v-if="!wheelZoomActive && !selectedLocation"
         type="button"
         class="specimen-map-zoom-instruction"
-        :aria-label="controls.activateZoom"
-        @click.stop="activateWheelZoom"
+        @click.stop="activateWheelZoom(map)"
       >
-        {{ controls.activateZoom }}
+        {{ wheelZoomInstruction }}
       </button>
       <p
         v-if="loading || error || !locations.length || tileError || locationMessage"

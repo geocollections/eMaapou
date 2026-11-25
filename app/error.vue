@@ -98,7 +98,7 @@ function search() {
           class="overflow-hidden rounded-portal-card border border-portal-border bg-portal-background shadow-[0_24px_64px_-40px_rgba(16,33,58,0.4)]"
         >
           <div class="grid md:grid-cols-[0.85fr_1.15fr]">
-            <div class="relative flex min-h-64 flex-col justify-center overflow-hidden bg-portal-mint/60 px-7 py-9 sm:px-10 md:min-h-[440px]">
+            <div class="relative flex min-h-64 flex-col justify-center overflow-hidden bg-portal-mint/60 px-7 py-9 sm:px-10 md:min-h-110">
               <div aria-hidden="true" class="pointer-events-none absolute -right-24 -bottom-28 size-80 rounded-full border border-portal-primary/15">
                 <div class="absolute inset-7 rounded-full border border-portal-primary/15">
                   <div class="absolute inset-7 rounded-full border border-portal-primary/15" />
@@ -155,7 +155,7 @@ function search() {
                     color="primary"
                     square
                     icon="i-lucide-search"
-                    class="!flex !size-11 !min-h-11 !w-11 !shrink-0 !items-center !justify-center rounded-portal-control bg-portal-primary !p-0 text-white hover:bg-portal-primary-hover"
+                    class="flex! size-11! min-h-11! w-11! shrink-0! items-center! justify-center! rounded-portal-control bg-portal-primary p-0! text-white hover:bg-portal-primary-hover"
                     :aria-label="searchLabel"
                   />
                 </div>

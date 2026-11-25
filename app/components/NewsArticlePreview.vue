@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { decodeHTML } from "entities";
-import { mdiArrowRight } from "@mdi/js";
 import type { NewsArticle } from "~/types/api";
+import { mdiArrowRight } from "@mdi/js";
+import { decodeHTML } from "entities";
 
 const props = defineProps<{
   article: NewsArticle;
@@ -16,8 +16,8 @@ const title = computed(
   () =>
     (en.value
       ? props.article.title_en || props.article.title_et
-      : props.article.title_et || props.article.title_en) ||
-    (en.value ? "Untitled news" : "Pealkirjata uudis"),
+      : props.article.title_et || props.article.title_en)
+    || (en.value ? "Untitled news" : "Pealkirjata uudis"),
 );
 const titleLanguage = computed(() =>
   en.value && props.article.title_en
@@ -35,15 +35,20 @@ const preview = computed(() => {
   const plain = decodeHTML((content.value || "").replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim();
-  if (plain.length <= 260) return plain;
+  if (plain.length <= 260)
+    return plain;
   const cut = plain.slice(0, 260);
   const boundary = cut.lastIndexOf(" ");
-  return `${cut.slice(0, boundary > 180 ? boundary : 260)}…`;
+  return `${cut.slice(0, boundary > 180
+    ? boundary
+    : 260)}…`;
 });
 const date = computed(() => {
-  if (!props.article.date_published) return null;
+  if (!props.article.date_published)
+    return null;
   const value = new Date(props.article.date_published);
-  if (Number.isNaN(value.getTime())) return null;
+  if (Number.isNaN(value.getTime()))
+    return null;
   return new Intl.DateTimeFormat(en.value ? "en-GB" : "et-EE", {
     day: "numeric",
     month: "long",
@@ -89,7 +94,7 @@ const date = computed(() => {
           {{ preview }}
         </p>
         <div
-          class="mt-4 flex min-h-11 w-fit items-center gap-2 text-sm font-semibold text-portal-link [text-decoration-line:underline] underline-offset-4"
+          class="mt-4 flex min-h-11 w-fit items-center gap-2 text-sm font-semibold text-portal-link underline underline-offset-4"
         >
           {{ en ? "Read article" : "Loe uudist" }}
           <svg

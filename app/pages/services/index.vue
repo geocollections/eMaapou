@@ -153,7 +153,7 @@ const groups = computed(() => {
           >
             {{ t("services.title") }}
           </h1>
-          <p class="max-w-[680px] text-base leading-relaxed">
+          <p class="max-w-170 text-base leading-relaxed">
             {{ groups.introduction }}
           </p>
           <nav class="mt-6" :aria-label="groups.explore">
@@ -186,7 +186,7 @@ const groups = computed(() => {
           :alt="groups.photo"
           width="2000"
           height="1333"
-          class="h-52 w-full rounded-portal-card object-cover md:h-full md:max-h-[360px] md:min-h-64"
+          class="h-52 w-full rounded-portal-card object-cover md:h-full md:max-h-90 md:min-h-64"
           fetchpriority="high"
         >
       </section>
@@ -217,7 +217,7 @@ const groups = computed(() => {
                 :href="service.href"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="group flex h-full min-h-[148px] flex-col rounded-portal-card border border-portal-border bg-portal-background p-5 text-portal-text no-underline transition-colors hover:border-portal-border-hover hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-portal-focus"
+                class="group flex h-full min-h-37 flex-col rounded-portal-card border border-portal-border bg-portal-background p-5 text-portal-text no-underline transition-colors hover:border-portal-border-hover hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-portal-focus"
               >
                 <span class="flex items-start justify-between gap-4">
                   <span class="text-lg leading-snug font-semibold text-portal-heading group-hover:text-portal-link">

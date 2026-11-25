@@ -470,11 +470,24 @@ useHead({
           </div>
           <SpecimenIntroCollage :query="appliedSearch.imageQuery" :filters="appliedSearch.imageFilters" />
         </section>
-        <UButton type="button" color="neutral" variant="ghost" class="mb-1 header-focus specimen-search__map-toggle text-portal-link" aria-controls="specimen-results-map" :aria-expanded="mapOpen" @click="mapOpen = !mapOpen">
+        <UButton
+          type="button"
+          color="neutral"
+          variant="ghost"
+          class="mb-1 header-focus specimen-search__map-toggle text-portal-link"
+          aria-controls="specimen-results-map"
+          :aria-expanded="mapOpen"
+          @click="mapOpen = !mapOpen"
+        >
           {{ mapOpen ? text.hideMap : text.showMap }}
         </UButton>
-        <section v-if="mapOpen" id="specimen-results-map" class="specimen-search__map" :aria-label="text.map">
-            <SpecimenResultsMap
+        <section
+          v-if="mapOpen"
+          id="specimen-results-map"
+          class="specimen-search__map"
+          :aria-label="text.map"
+        >
+          <SpecimenResultsMap
             :locations="mapLocations"
             :query="appliedSearch.query"
             :filters="appliedSearch.filters"
@@ -484,8 +497,8 @@ useHead({
             :geometry="specimensStore.filters.geometry.value"
             @retry="refreshMap()"
             @update:geometry="applyMapGeometry"
-            />
-            <p>{{ text.mapNote }}</p>
+          />
+          <p>{{ text.mapNote }}</p>
         </section>
         <div class="specimen-search__layout" :class="filtersOpen ? 'portal-filter-grid' : 'portal-results-grid'">
           <aside
@@ -517,9 +530,9 @@ useHead({
           </aside>
           <section
             class="specimen-search__results"
-            :class="{ 'specimen-search__results-table': currentView === 'table' }"
+            :class="{ 'portal-search-results-matched-height': currentView === 'table' }"
             :aria-label="text.results"
-            :style="defaultFilterHeight ? { '--specimen-results-height': `${defaultFilterHeight}px` } : undefined"
+            :style="defaultFilterHeight ? { '--portal-search-results-height': `${defaultFilterHeight}px` } : undefined"
           >
             <UButton
               v-if="!filtersOpen"
@@ -660,7 +673,7 @@ useHead({
                 <section
                   v-show="currentView === 'table'"
                   id="specimen-table-view"
-                  class="specimen-search__table-view"
+                  class="h-full portal-search-table-fill"
                   value="table"
                   role="region"
                   :aria-label="$t('common.table')"

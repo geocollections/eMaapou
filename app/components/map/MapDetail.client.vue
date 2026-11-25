@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { GeoJsonObject } from "geojson";
 import L from "leaflet";
+import { useMapWheelZoom } from "~/composables/useMapWheelZoom";
 import "leaflet/dist/leaflet.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
@@ -16,6 +17,7 @@ const props = withDefaults(defineProps<{
   baseLayer?: MapBaseLayer;
   overlays?: MapOverlay[];
   gestureHandling?: boolean;
+  clickToZoom?: boolean;
   showLinks?: boolean;
   markers?: MapMarker[];
   geojson?: GeoJsonObject;
@@ -25,6 +27,7 @@ const props = withDefaults(defineProps<{
   baseLayer: "OpenStreetMap",
   overlays: () => [],
   ...{ gestureHandling: true },
+  clickToZoom: false,
   showLinks: true,
   markers: () => [],
 });
@@ -36,7 +39,14 @@ const currentCenter = ref({
   lng: props.center.longitude,
 });
 
-const map = ref<L.Map>();
+const container = useTemplateRef<HTMLDivElement>("container");
+const map = shallowRef<L.Map>();
+const {
+  options: wheelZoomOptions,
+  active: wheelZoomActive,
+  instruction: wheelZoomInstruction,
+  activate: activateWheelZoom,
+} = useMapWheelZoom();
 let mapResizeObserver: ResizeObserver | undefined;
 
 const baseLayers = {
@@ -157,13 +167,14 @@ const mapLayers = computed(() => {
 
 onMounted(() => {
   nextTick(() => {
-    if (map.value)
+    if (!container.value || map.value)
       return;
-    map.value = L.map("map", {
+    map.value = L.map(container.value, {
       center: [58.5, 25.5],
       zoom: 5,
 
-      ...{ gestureHandling: props.gestureHandling },
+      ...(props.clickToZoom ? wheelZoomOptions : {}),
+      ...{ gestureHandling: props.gestureHandling && !props.clickToZoom },
       ...{
         gestureHandlingOptions: {
           text: {
@@ -177,6 +188,9 @@ onMounted(() => {
       layers: mapLayers.value,
       fullscreenControl: true,
     });
+
+    if (props.clickToZoom)
+      map.value.on("click", () => activateWheelZoom(map.value));
 
     L.control.layers(baseLayers, overlays).addTo(map.value);
 
@@ -236,20 +250,30 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   mapResizeObserver?.disconnect();
+  map.value?.remove();
 });
 </script>
 
 <template>
   <div :class="height === '100%' ? 'flex h-full min-h-0 flex-col' : undefined">
     <div
-      id="map"
+      ref="container"
       class="portal-detail-map"
       :class="height === '100%' ? 'relative min-h-0 flex-1' : 'relative'"
       :style="{
         '--map-height': height,
 
       }"
-    />
+    >
+      <button
+        v-if="clickToZoom && !wheelZoomActive"
+        type="button"
+        class="specimen-map-zoom-instruction"
+        @click.stop="activateWheelZoom(map)"
+      >
+        {{ wheelZoomInstruction }}
+      </button>
+    </div>
     <MapLinks
       v-if="showLinks"
       :latitude="currentCenter.lat"
