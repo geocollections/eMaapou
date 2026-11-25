@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiOpenInNew, mdiChevronRight, mdiHomeOutline } from "@mdi/js";
+import { mdiChevronRight, mdiHomeOutline, mdiOpenInNew } from "@mdi/js";
 import { SERVICES } from "~/constants";
 
 definePageMeta({ layout: false });
@@ -155,7 +155,9 @@ const providers = computed(() => [
   },
 ]);
 useHead(() => ({ title: text.value.title }));
-useSeoMeta({ description: () => text.value.intro });
+useSeoMeta({
+  description: () => text.value.intro,
+});
 </script>
 
 <template>
@@ -172,23 +174,22 @@ useSeoMeta({ description: () => text.value.intro });
           :to="localePath('/')"
           raw
           class="header-focus inline-flex min-h-6 items-center gap-2 text-portal-text hover:text-portal-link"
-          ><svg
+        >
+          <svg
             viewBox="0 0 24 24"
             fill="currentColor"
             class="size-4"
             aria-hidden="true"
           >
-            <path :d="mdiHomeOutline" /></svg
-          >{{ text.home }}</ULink
-        >
+            <path :d="mdiHomeOutline" /></svg>{{ text.home }}
+        </ULink>
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
           class="size-4"
           aria-hidden="true"
         >
-          <path :d="mdiChevronRight" /></svg
-        ><span aria-current="page">{{ text.about }}</span>
+          <path :d="mdiChevronRight" /></svg><span aria-current="page">{{ text.about }}</span>
       </nav>
       <section
         aria-labelledby="about-title"
@@ -206,7 +207,7 @@ useSeoMeta({ description: () => text.value.intro });
           >
             {{ text.subtitle }}
           </p>
-          <div class="max-w-[680px] space-y-4 text-base leading-relaxed">
+          <div class="max-w-170 space-y-4 text-base leading-relaxed">
             <p>{{ text.intro }}</p>
             <p>{{ text.dataDescription }}</p>
             <p>{{ text.searchDescription }}</p>
@@ -220,9 +221,9 @@ useSeoMeta({ description: () => text.value.intro });
           :alt="text.photo"
           width="3320"
           height="2136"
-          class="h-52 w-full rounded-portal-card object-cover md:h-full md:max-h-[360px] md:min-h-64"
+          class="h-52 w-full rounded-portal-card object-cover md:h-full md:max-h-90 md:min-h-64"
           fetchpriority="high"
-        />
+        >
       </section>
       <section aria-labelledby="explore-title" class="mb-10 lg:mb-12">
         <h2
@@ -240,20 +241,20 @@ useSeoMeta({ description: () => text.value.intro });
             class="about-card group bg-portal-subtle md:min-h-40 md:flex-col md:p-6"
           >
             <div class="flex min-w-0 flex-1 flex-col">
-              <h3 class="about-card-title tracking-tight">{{ group.title }}</h3>
+              <h3 class="about-card-title tracking-tight">
+                {{ group.title }}
+              </h3>
               <p class="mb-4 flex-1 text-sm leading-relaxed">
                 {{ group.description }}
               </p>
-              <span class="about-card-action"
-                >{{ group.action
-                }}<svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="size-4"
-                  aria-hidden="true"
-                >
-                  <path :d="mdiChevronRight" /></svg
-              ></span>
+              <span class="about-card-action">{{ group.action
+              }}<svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-4"
+                aria-hidden="true"
+              >
+                <path :d="mdiChevronRight" /></svg></span>
             </div>
           </ULink>
         </div>
@@ -265,7 +266,7 @@ useSeoMeta({ description: () => text.value.intro });
         >
           {{ text.sarv }}
         </h2>
-        <p class="mb-8 max-w-[840px] text-base leading-relaxed">
+        <p class="mb-8 max-w-210 text-base leading-relaxed">
           {{ text.sarvText }}
         </p>
         <div class="grid gap-8 lg:grid-cols-[1.7fr_1fr] lg:gap-10">
@@ -290,16 +291,14 @@ useSeoMeta({ description: () => text.value.intro });
                   >
                     {{ institution.title }}
                   </h4>
-                  <span class="about-card-action"
-                    >{{ text.institutionAction
-                    }}<svg
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      class="size-4"
-                      aria-hidden="true"
-                    >
-                      <path :d="mdiChevronRight" /></svg
-                  ></span>
+                  <span class="about-card-action">{{ text.institutionAction
+                  }}<svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="size-4"
+                    aria-hidden="true"
+                  >
+                    <path :d="mdiChevronRight" /></svg></span>
                 </div>
               </ULink>
             </div>
@@ -333,16 +332,14 @@ useSeoMeta({ description: () => text.value.intro });
                   >
                     {{ provider.title }}
                   </h4>
-                  <span class="about-card-action"
-                    >{{ text.website
-                    }}<svg
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      class="size-4"
-                      aria-hidden="true"
-                    >
-                      <path :d="mdiOpenInNew" /></svg
-                  ></span>
+                  <span class="about-card-action">{{ text.website
+                  }}<svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="size-4"
+                    aria-hidden="true"
+                  >
+                    <path :d="mdiOpenInNew" /></svg></span>
                 </div>
               </ULink>
             </div>
@@ -363,19 +360,22 @@ useSeoMeta({ description: () => text.value.intro });
             class="about-card group bg-portal-subtle"
           >
             <div>
-              <h3 class="about-card-title tracking-tight">{{ text.browse }}</h3>
-              <p class="mb-2 text-sm leading-relaxed">{{ text.browseText }}</p>
-              <span class="about-card-action"
-                >{{ text.browseAction
-                }}<svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="size-4"
-                  aria-hidden="true"
-                >
-                  <path :d="mdiChevronRight" /></svg
-              ></span></div
-          ></ULink>
+              <h3 class="about-card-title tracking-tight">
+                {{ text.browse }}
+              </h3>
+              <p class="mb-2 text-sm leading-relaxed">
+                {{ text.browseText }}
+              </p>
+              <span class="about-card-action">{{ text.browseAction
+              }}<svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-4"
+                aria-hidden="true"
+              >
+                <path :d="mdiChevronRight" /></svg></span>
+            </div>
+          </ULink>
           <UPopover
             :content="{ align: 'end', collisionPadding: 16 }"
             :ui="{
@@ -386,25 +386,26 @@ useSeoMeta({ description: () => text.value.intro });
               color="neutral"
               variant="ghost"
               class="about-card group w-full bg-portal-subtle items-start justify-start p-5 text-left font-normal"
-              ><span
-                ><span class="about-card-title block">{{ text.services }}</span
-                ><span class="mb-2 block text-sm leading-relaxed">{{
-                  text.servicesText
-                }}</span
-                ><span class="about-card-action"
-                  >{{ text.servicesAction
-                  }}<svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="size-4"
-                    aria-hidden="true"
-                  >
-                    <path :d="mdiChevronRight" /></svg></span></span
-            ></UButton>
-            <template #content
-              ><div class="max-h-[65dvh] overflow-y-auto p-6">
-                <h3 class="header-menu-heading">{{ text.services }}</h3>
-                <p class="header-menu-description">{{ text.externalNote }}</p>
+            >
+              <span><span class="about-card-title block">{{ text.services }}</span><span class="mb-2 block text-sm leading-relaxed">{{
+                text.servicesText
+              }}</span><span class="about-card-action">{{ text.servicesAction
+              }}<svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-4"
+                aria-hidden="true"
+              >
+                <path :d="mdiChevronRight" /></svg></span></span>
+            </UButton>
+            <template #content>
+              <div class="max-h-[65dvh] overflow-y-auto p-6">
+                <h3 class="header-menu-heading">
+                  {{ text.services }}
+                </h3>
+                <p class="header-menu-description">
+                  {{ text.externalNote }}
+                </p>
                 <div class="grid sm:grid-cols-2">
                   <UButton
                     v-for="id in SERVICES.ids"
@@ -415,17 +416,19 @@ useSeoMeta({ description: () => text.value.intro });
                     variant="ghost"
                     color="neutral"
                     class="header-menu-link"
-                    >{{ $t(SERVICES[id].title)
+                  >
+                    {{ $t(SERVICES[id].title)
                     }}<svg
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       class="size-4 shrink-0"
                       aria-hidden="true"
                     >
-                      <path :d="mdiOpenInNew" /></svg
-                  ></UButton>
-                </div></div
-            ></template>
+                      <path :d="mdiOpenInNew" /></svg>
+                  </UButton>
+                </div>
+              </div>
+            </template>
           </UPopover>
         </div>
       </section>
