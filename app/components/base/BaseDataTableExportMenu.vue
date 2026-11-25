@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiFileExportOutline } from "@mdi/js";
 import type { ExportSelection, ExportType } from "~/composables/useExport";
+import { mdiFileExportOutline } from "@mdi/js";
 
 interface ExportButton {
   value: ExportType;
@@ -10,9 +10,11 @@ interface ExportButton {
 const props = withDefaults(defineProps<{
   exportFunc: ExportFunc;
   types?: ExportType[];
-}>(), { types: () => ["csv", "xlsx"] });
+}>(), {
+  types: () => ["csv", "xlsx"],
+});
 
-const { t } = useI18n({ useScope: "local" });
+const { t } = useI18n();
 
 const selection = ref<ExportSelection>("page");
 const exportType = ref<ExportType>("csv");
@@ -40,7 +42,7 @@ function handleExport() {
 
 <template>
   <VBtn
-    aria-label="export table"
+    :aria-label="t('portal.tableExport.exportTable')"
     variant="text"
     class="mr-1"
     :icon="true"
@@ -67,7 +69,7 @@ function handleExport() {
       >
         <VCard class="pa-2">
           <div class="text-subtitle-2">
-            {{ t("exportType") }}
+            {{ t("portal.tableExport.exportType") }}
           </div>
           <VBtnToggle
             v-model="exportType"
@@ -85,8 +87,8 @@ function handleExport() {
           </VBtnToggle>
           <VSelect
             v-model="selection"
-            :items="[{ title: t('currentPage'), value: 'page' }, { title: t('allResults'), value: 'all' }]"
-            :label="t('selection')"
+            :items="[{ title: t('portal.tableExport.currentPage'), value: 'page' }, { title: t('portal.tableExport.allResults'), value: 'all' }]"
+            :label="t('portal.tableExport.selection')"
             density="compact"
             variant="outlined"
             hide-details
@@ -97,7 +99,7 @@ function handleExport() {
             density="compact"
             hide-details
             variant="outlined"
-            :label="t('filename')"
+            :label="t('portal.tableExport.filename')"
             :suffix="`.${exportType}`"
           />
           <div class="text-right">
@@ -110,7 +112,7 @@ function handleExport() {
               <VIcon start>
                 {{ mdiFileExportOutline }}
               </VIcon>
-              {{ t("export") }}
+              {{ t("portal.tableExport.export") }}
             </VBtn>
           </div>
 
@@ -132,20 +134,3 @@ function handleExport() {
     </ClientOnly>
   </VBtn>
 </template>
-
-<i18n lang="yaml">
-et:
-  export: "Ekspordi"
-  filename: "Failinimi"
-  selection: "Valik"
-  currentPage: "Praeguse lehe tulemused"
-  allResults: "Kõik tulemused"
-  exportType: "Ekspordi tüüp"
-en:
-  export: "Export"
-  filename: "Filename"
-  selection: "Selection"
-  currentPage: "Current page results"
-  allResults: "All results"
-  exportType: "Export type"
-</i18n>

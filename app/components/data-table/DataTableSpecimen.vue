@@ -14,25 +14,10 @@ function recordClick(item: any) {
 }
 const source = useCollectionImage();
 const localePath = useLocalePath();
-const { locale } = useI18n();
+const { t } = useI18n();
 const { $translate } = useNuxtApp();
 function linkPreview(kind: "specimen" | "locality" | "stratigraphy" | "taxon" | "rock", name: string | number) {
-  const labels = locale.value === "et"
-    ? {
-        specimen: "Ava eksemplari detailvaade",
-        locality: "Ava asukoha detailvaade",
-        stratigraphy: "Ava stratigraafia detailvaade",
-        taxon: "Ava takson lehel fossiilid.info (uus vahekaart)",
-        rock: "Ava kivim lehel kivid.info (uus vahekaart)",
-      }
-    : {
-        specimen: "Open specimen details",
-        locality: "Open locality details",
-        stratigraphy: "Open stratigraphy details",
-        taxon: "Open taxon on fossiilid.info (new tab)",
-        rock: "Open rock on kivid.info (new tab)",
-      };
-  return `${labels[kind]}: ${name}`;
+  return t(`portal.specimenTable.${kind}`, { name });
 }
 function translated(item: any, field: string) {
   return $translate({ et: item[field], en: item[`${field}_en`] }) || item.id;
@@ -204,14 +189,14 @@ function handleEnd() {
       <div class="flex items-center">
         <UTooltip
           v-if="item.image"
-          :text="locale === 'et' ? 'Vaata eksemplari fotosid' : 'Preview specimen photographs'"
+          :text="t('portal.specimenTable.previewSpecimenPhotographs')"
           :delay-duration="250"
         >
           <UButton
             color="neutral"
             variant="ghost"
             class="portal-table-photo-button header-focus"
-            :aria-label="`${locale === 'et' ? 'Vaata fotosid' : 'Preview photographs'}: ${item.specimen_full_name || item.id}`"
+            :aria-label="t('portal.specimenTable.previewPhotographsRecordname', { recordName: item.specimen_full_name || item.id })"
             @click="openOverlay(item)"
           >
             <NuxtImg

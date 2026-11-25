@@ -11,7 +11,7 @@ watchDebounced(search, () => emit("update", {
   search: search.value,
 }), { debounce: 400 });
 const slots = useSlots();
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const { $formatDate } = useNuxtApp();
 const cellSlots = computed(() => Object.keys(slots).filter(name => name.startsWith("item.")));
 const columns = computed<TableColumn<any>[]>(() => {
@@ -41,11 +41,8 @@ const primaryHeaders = computed(() => cardHeaders.value.filter(header => [
 ].includes(header.value)));
 const detailHeaders = computed(() => cardHeaders.value.filter(header => !primaryHeaders.value.includes(header)));
 const rowNavigation = computed(() => props.modern && !!props.itemTo);
-const openRecordLabel = computed(() => locale.value === "et"
-  ? "Ava detailvaade"
-  : "Open record details");
 function recordLabel(item: any) {
-  return `${openRecordLabel.value}: ${item.specimen_full_name || item.id}`;
+  return t("portal.dataTable.openNamedRecord", { name: item.specimen_full_name || item.id });
 }
 function recordClick(item: any, index: number) {
   emit("click:row", {
@@ -113,7 +110,7 @@ function sortBy(key: string) {
     </div>
     <p v-if="rowNavigation" class="portal-table-navigation-hint">
       <UIcon name="i-lucide-mouse-pointer-2" />
-      {{ locale === 'et' ? 'Klõpsa real, et avada detailvaade. Rea lingid avavad vastava seotud lehe.' : 'Click a row to open its details. Links within a row open the related page.' }}
+      {{ t('portal.dataTable.clickARowToOpenItsDetails') }}
     </p>
     <div
       v-if="mobileCards"
@@ -136,7 +133,7 @@ function sortBy(key: string) {
           class="portal-record-card-action"
           @click="recordClick(item, index)"
         >
-          {{ openRecordLabel }}
+          {{ t('portal.dataTable.openRecordDetails') }}
         </UButton>
         <dl>
           <div
@@ -162,7 +159,7 @@ function sortBy(key: string) {
             variant="ghost"
             trailing-icon="i-lucide-chevron-down"
           >
-            {{ locale === 'et' ? 'Lisateave' : 'Details' }}
+            {{ t('portal.dataTable.details') }}
           </UButton>
           <template #content>
             <dl>
@@ -187,7 +184,7 @@ function sortBy(key: string) {
         </UCollapsible>
       </article>
       <p v-if="!items.length">
-        {{ isLoading ? (locale === 'et' ? 'Laadin…' : 'Loading…') : t('table.noData') }}
+        {{ isLoading ? (t('portal.dataTable.loading')) : t('table.noData') }}
       </p>
     </div>
     <UTable
@@ -242,7 +239,7 @@ function sortBy(key: string) {
             class="portal-table-record-action header-focus"
             @click="recordClick(row.original, row.index)"
           >
-            {{ modern ? (locale === 'et' ? 'Ava' : 'View') : '' }}
+            {{ modern ? (t('portal.dataTable.view')) : '' }}
           </UButton>
         </UTooltip>
       </template>
@@ -252,7 +249,7 @@ function sortBy(key: string) {
           color="neutral"
           variant="ghost"
           :icon="row.getIsExpanded() ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
-          :aria-label="locale === 'et' ? 'Näita kirje andmeid' : 'Show record details'"
+          :aria-label="t('portal.dataTable.showRecordDetails')"
           @click="row.toggleExpanded()"
         />
       </template>

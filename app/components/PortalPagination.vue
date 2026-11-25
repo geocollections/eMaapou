@@ -1,24 +1,19 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{ options: DataTableOptions; count: number; loading?: boolean; images?: boolean; compact?: boolean }>(), { loading: false, images: false });
 const emit = defineEmits<{ update: [options: DataTableOptions] }>();
-const { locale } = useI18n();
-const labels = computed(() => locale.value === "et"
-  ? {
-      rows: props.images ? "Pilte lehel" : "Ridu lehel",
-      previous: "Eelmine leht",
-      next: "Järgmine leht",
-      page: "Lehekülg",
-      of: "/",
-      records: props.images ? "pilti" : "kirjet",
-    }
-  : {
-      rows: props.images ? "Images per page" : "Rows per page",
-      previous: "Previous page",
-      next: "Next page",
-      page: "Page",
-      of: "of",
-      records: props.images ? "images" : "records",
-    });
+const { locale, t } = useI18n();
+const labels = computed(() => ({
+  rows: props.images
+    ? t("portal.pagination.rowsImages")
+    : t("portal.pagination.rows"),
+  previous: t("portal.common.previousPage"),
+  next: t("portal.common.nextPage"),
+  page: t("portal.common.page"),
+  of: t("portal.pagination.of"),
+  records: props.images
+    ? t("portal.common.images")
+    : t("portal.common.records"),
+}));
 const pageCount = computed(() => Math.max(1, Math.ceil(props.count / props.options.itemsPerPage)));
 function changePage(page: number) {
   if (!Number.isInteger(page) || page < 1 || page > pageCount.value || props.loading)
