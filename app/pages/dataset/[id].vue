@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiDatabaseOutline } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
+import { mdiDatabaseOutline } from "@mdi/js";
 
 const { $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();
@@ -233,7 +233,10 @@ const { data } = await useAsyncData("dataset", async () => {
 
   const parameterHeaders = {
     byIds: parameters.reduce((prev: { [key: string]: any }, parameter: any) => {
-      return { ...prev, [parameter.value]: { ...parameter, show: true } };
+      return {
+        ...prev,
+        [parameter.value]: { ...parameter, show: true },
+      };
     }, {} as { [key: string]: any }),
     allIds: parameterValues,
   };
