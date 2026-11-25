@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { ExportFunc, ExportType } from "~/composables/useExport";
 import { mdiChevronDown, mdiChevronUp, mdiEye, mdiEyeArrowRight, mdiMagnify } from "@mdi/js";
 import debounce from "lodash/debounce";
 import isEqual from "lodash/isEqual";
-import type { ExportFunc, ExportType } from "~/composables/useExport";
 
 const props = withDefaults(defineProps<
   {
@@ -108,7 +108,6 @@ const handleSearch = debounce(() => {
 }, 400);
 
 function handleHeadersChange(e: any) {
-  // eslint-disable-next-line vue/custom-event-name-casing -- event name is correct, do not know why eslint is complaining
   emit("change:headers", e.value);
 }
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
+import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 
 const { $solrFetch, $apiFetch, $translate } = useNuxtApp();
 const { t } = useI18n();

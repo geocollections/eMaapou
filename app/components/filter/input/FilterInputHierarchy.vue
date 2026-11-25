@@ -40,7 +40,7 @@ defineExpose({
 });
 
 const id = useId();
-const { locale, t } = useI18n({ useScope: "local" });
+const { locale, t } = useI18n();
 
 function translateName(name: string | { et: string; en: string }): string {
   if (typeof name === "string")
@@ -291,14 +291,14 @@ watch(open, async (value) => {
       role="status"
       class="portal-supporting"
     >
-      {{ t('loading') }}
+      {{ t('portal.hierarchyFilter.loading') }}
     </p>
     <div
       v-else-if="treeError"
       role="alert"
       class="portal-supporting"
     >
-      <p>{{ t('loadError') }}</p>
+      <p>{{ t('portal.hierarchyFilter.loadError') }}</p>
       <UButton
         type="button"
         color="neutral"
@@ -306,11 +306,11 @@ watch(open, async (value) => {
         class="text-portal-link underline"
         @click="refreshTree()"
       >
-        {{ t('retry') }}
+        {{ t('portal.common.retry') }}
       </UButton>
     </div>
     <p v-else-if="!tree?.length" class="portal-supporting">
-      {{ t('noOptions') }}
+      {{ t('portal.hierarchyFilter.noOptions') }}
     </p>
     <ul v-else class="portal-filter-tree">
       <TreeItem
@@ -326,16 +326,3 @@ watch(open, async (value) => {
     </ul>
   </PortalFilterSection>
 </template>
-
-<i18n lang="yaml">
-et:
-  loading: Laadin hierarhiat...
-  loadError: Hierarhia laadimine ebaõnnestus.
-  retry: Proovi uuesti
-  noOptions: Valikud puuduvad
-en:
-  loading: Loading hierarchy...
-  loadError: Could not load the hierarchy.
-  retry: Try again
-  noOptions: No options available
-</i18n>

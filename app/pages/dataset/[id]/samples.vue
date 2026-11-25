@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-  parameterHeaders: {
+  parameterHeaders?: {
     byIds: Record<string, any>;
     allIds: string[];
   };
@@ -12,8 +12,14 @@ const props = withDefaults(defineProps<{
 });
 const allHeaders = computed(() => {
   return {
-    byIds: { ...HEADERS_SAMPLE_DATA.byIds, ...props.parameterHeaders.byIds },
-    allIds: [...HEADERS_SAMPLE_DATA.allIds, ...props.parameterHeaders.allIds],
+    byIds: {
+      ...HEADERS_SAMPLE_DATA.byIds,
+      ...props.parameterHeaders.byIds,
+    },
+    allIds: [
+      ...HEADERS_SAMPLE_DATA.allIds,
+      ...props.parameterHeaders.allIds,
+    ],
   };
 });
 

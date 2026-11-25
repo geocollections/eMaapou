@@ -10,18 +10,25 @@ export default withNuxt(
     },
   }, {
     rules: {
-      "vue/component-name-in-template-casing": ["error", "PascalCase", {
-        registeredComponentsOnly: false,
-        ignores: ["/^swiper-/"],
-      }],
-      "vue/max-attributes-per-line": ["error", {
-        singleline: {
-          max: 2,
+      "vue/component-name-in-template-casing": [
+        "error",
+        "PascalCase",
+        {
+          registeredComponentsOnly: false,
+          ignores: ["/^swiper-/"],
         },
-        multiline: {
-          max: 1,
+      ],
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          singleline: {
+            max: 2,
+          },
+          multiline: {
+            max: 1,
+          },
         },
-      }],
+      ],
       "vue/valid-v-slot": [
         "error",
         {

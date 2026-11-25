@@ -5,7 +5,7 @@ definePageMeta({ layout: "detail" });
 
 const route = useRoute();
 const localePath = useLocalePath();
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const { $solrFetch, $translate, $apiFetch, $openEdit } = useNuxtApp();
 const specimensStore = useSpecimens();
 const { getQueryParams } = specimensStore;
@@ -237,9 +237,9 @@ useSeoMeta({
     <template #title>
       <div class="border-b border-portal-border bg-portal-background">
         <div class="mx-auto w-full max-w-360 px-4 pt-5 pb-8 sm:px-6 lg:px-10">
-          <nav class="mb-5 flex flex-wrap items-center gap-2 text-[13px] text-portal-muted" :aria-label="locale === 'en' ? 'Breadcrumb' : 'Asukoht saidil'">
+          <nav class="mb-5 flex flex-wrap items-center gap-2 text-[13px] text-portal-muted" :aria-label="t('portal.specimenDetail.breadcrumb')">
             <ULink :to="localePath('/')" class="text-portal-link no-underline hover:underline">
-              {{ locale === "en" ? "Home" : "Avaleht" }}
+              {{ t('portal.common.home') }}
             </ULink>
             <span aria-hidden="true">/</span>
             <ULink :to="localePath({ path: '/specimen', query: getQueryParams() })" class="text-portal-link no-underline hover:underline">
@@ -266,7 +266,11 @@ useSeoMeta({
               class="relative min-w-[180px] shrink-0 justify-center rounded-full px-6 py-3 text-center font-semibold transition-colors"
               @click="$openEdit('specimen', route.params.id as string)"
             >
-              <svg viewBox="0 0 24 24" class="absolute left-4 size-5" aria-hidden="true"><path :d="mdiSquareEditOutline" fill="currentColor" /></svg>
+              <svg
+                viewBox="0 0 24 24"
+                class="absolute left-4 size-5"
+                aria-hidden="true"
+              ><path :d="mdiSquareEditOutline" fill="currentColor" /></svg>
               <span class="block w-full text-center">{{ $t("common.linkToEdit") }}</span>
             </UButton>
           </div>

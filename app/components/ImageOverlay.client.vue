@@ -14,7 +14,7 @@ withDefaults(defineProps<
 });
 
 const emit = defineEmits<{
-  "update:model-value": [value: boolean];
+  "update:modelValue": [value: boolean];
   "end": [];
 }>();
 
@@ -39,7 +39,7 @@ defineExpose({
     eager
     content-class="w-100 h-100"
     opacity="0.85"
-    @update:model-value="emit('update:model-value', !modelValue)"
+    @update:model-value="emit('update:modelValue', !modelValue)"
   >
     <VBtn
       position="absolute"
@@ -49,7 +49,7 @@ defineExpose({
       variant="plain"
       :rounded="0"
       icon
-      @click="emit('update:model-value', !modelValue)"
+      @click="emit('update:modelValue', !modelValue)"
     >
       <VIcon>{{ mdiClose }}</VIcon>
     </VBtn>
@@ -59,7 +59,7 @@ defineExpose({
       :total="total"
       :initial-slide="initialSlide"
       @end="handleReachEnd"
-      @close="emit('update:model-value', !modelValue)"
+      @close="emit('update:modelValue', !modelValue)"
     >
       <template #info="{ item }">
         <slot name="overlayInfo" :item="item" />

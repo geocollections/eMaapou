@@ -7,7 +7,7 @@ const emit = defineEmits<{
   submit: [];
 }>();
 
-const { locale } = useI18n();
+const { t } = useI18n();
 const specimensStore = useSpecimens();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);
 const suggestionFilters = computed(() => props.resultView === "image"
@@ -147,15 +147,15 @@ function handleHasImageUpdate(value: boolean) {
 <template>
   <form class="portal-filter-form" @submit.prevent="handleSubmit">
     <UFormField
-      :label="locale === 'et' ? 'Otsi eksemplare' : 'Search specimens'"
-      :description="locale === 'et' ? 'Otsimiseks vajuta Enter.' : 'Press Enter to search.'"
+      :label="t('portal.specimenSearchForm.searchSpecimens')"
+      :description="t('portal.common.searchWithEnter')"
       class="mb-2 px-1"
       :ui="{ label: 'text-[13px] text-portal-text', description: 'text-xs text-portal-muted' }"
     >
       <UInput
         v-model="query"
         type="search"
-        :placeholder="locale === 'et' ? 'Nimi või katalooginumber' : 'Name or catalogue number'"
+        :placeholder="t('portal.specimenSearchForm.nameOrCatalogueNumber')"
         color="neutral"
         class="w-full"
         :ui="{ base: 'min-h-11 rounded-portal-control ring-portal-border' }"
@@ -175,7 +175,7 @@ function handleHasImageUpdate(value: boolean) {
       @update:model-value="handleUpdate()"
     />
     <p class="portal-filter-hint">
-      {{ locale === 'et' ? 'Filtrivalikud rakenduvad kohe.' : 'Filter selections apply immediately.' }}
+      {{ t('portal.common.filtersApplyImmediately') }}
     </p>
     <USeparator />
     <div class="portal-filter-list">

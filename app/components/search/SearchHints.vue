@@ -5,7 +5,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  "update:model-value": [value: boolean];
+  "update:modelValue": [value: boolean];
 }>();
 </script>
 
@@ -18,7 +18,7 @@ const emit = defineEmits<{
     content-class="mt-2 elevation-3"
     :open-on-focus="true"
     max-width="650"
-    @update:model-value="emit('update:model-value', $event)"
+    @update:model-value="emit('update:modelValue', $event)"
   >
     <VCard elevation="0">
       <VCardText class="pa-3">

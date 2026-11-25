@@ -10,30 +10,18 @@ interface HomeNews {
   text_en: string | null;
   date_published: string | null;
 }
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const localePath = useLocalePath();
 const en = computed(() => locale.value === "en");
-const copy = computed(() =>
-  en.value
-    ? {
-        title: "News",
-        all: "All news",
-        loading: "Loading news…",
-        empty: "No news to display.",
-        error: "News could not be loaded.",
-        retry: "Try again",
-        untitled: "Untitled news",
-      }
-    : {
-        title: "Uudised",
-        all: "Kõik uudised",
-        loading: "Laadin uudiseid…",
-        empty: "Uudiseid ei ole kuvada.",
-        error: "Uudiste laadimine ebaõnnestus.",
-        retry: "Proovi uuesti",
-        untitled: "Pealkirjata uudis",
-      },
-);
+const copy = computed(() => ({
+  title: t("portal.homeNews.title"),
+  all: t("portal.homeNews.all"),
+  loading: t("portal.homeNews.loading"),
+  empty: t("portal.homeNews.empty"),
+  error: t("portal.homeNews.error"),
+  retry: t("portal.common.retry"),
+  untitled: t("portal.homeNews.untitled"),
+}));
 const { data, status, error, refresh } = await useApiFetch<
   GeoloogiaListResponse<HomeNews>
 >("/web-news/", {

@@ -3,11 +3,16 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 import { createI18n } from "vue-i18n";
 import FilterInputHierarchy from "~/components/filter/input/FilterInputHierarchy.vue";
+import en from "~/i18n/en.json";
+import et from "~/i18n/et.json";
 
 const titleSelector = "[data-test=\"title\"]";
 
 describe("filterInputHierarchy", () => {
   const i18n = createI18n({
+    legacy: false,
+    locale: "en",
+    messages: { en, et },
   });
   enableAutoUnmount(afterEach);
 

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <V-App class="flex min-h-dvh flex-col">
+  <VApp class="flex min-h-dvh flex-col">
     <AppBar />
 
     <main class="flex-1 m-16">
@@ -11,5 +11,5 @@
     </main>
 
     <AppFooter />
-  </V-App>
+  </VApp>
 </template>

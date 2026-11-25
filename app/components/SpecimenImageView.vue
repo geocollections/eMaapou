@@ -3,46 +3,26 @@ const props = withDefaults(defineProps<{ items: any[]; count: number; options: D
 const emit = defineEmits<{ "update": [payload: { options: DataTableOptions }]; "retry": []; "click:record": [payload: { index: number; id: number }] }>();
 const localePath = useLocalePath();
 const source = useCollectionImage();
-const { locale } = useI18n();
-const labels = computed(() => locale.value === "et"
-  ? {
-      title: "Eksemplaride pildid",
-      preview: "Ava foto",
-      record: "Vaata eksemplari",
-      specimen: "Eksemplar",
-      imageNumber: "Foto number",
-      author: "Autor / pildistaja",
-      date: "Pildistamise aeg",
-      metadataLoading: "Laadin foto andmeid…",
-      metadataError: "Foto andmete laadimine ebaõnnestus.",
-      locality: "Leiukoht",
-      imageId: "Foto ID",
-      loading: "Laadin pilte…",
-      empty: "Pilte ei leitud. Muuda otsingut või eemalda filtrid.",
-      failed: "Piltide laadimine ebaõnnestus.",
-      retry: "Proovi uuesti",
-      unavailable: "Pilti ei saanud laadida.",
-      note: "Ava foto suuremalt või vali katalooginumber eksemplari andmete vaatamiseks.",
-    }
-  : {
-      title: "Specimen images",
-      preview: "Enlarge image",
-      record: "View specimen",
-      specimen: "Specimen",
-      imageNumber: "Image number",
-      author: "Author / photographer",
-      date: "Image date",
-      metadataLoading: "Loading photograph details…",
-      metadataError: "Could not load photograph details.",
-      locality: "Locality",
-      imageId: "Image ID",
-      loading: "Loading images…",
-      empty: "No images found. Adjust your search or clear the filters.",
-      failed: "Could not load images.",
-      retry: "Try again",
-      unavailable: "Image could not be loaded.",
-      note: "Enlarge a photograph or select its catalogue number to view the specimen record.",
-    });
+const { locale, t } = useI18n();
+const labels = computed(() => ({
+  title: t("portal.specimenGallery.title"),
+  preview: t("portal.specimenGallery.preview"),
+  record: t("portal.specimenGallery.record"),
+  specimen: t("portal.specimenGallery.specimen"),
+  imageNumber: t("portal.specimenGallery.imageNumber"),
+  author: t("portal.specimenGallery.author"),
+  date: t("portal.specimenGallery.date"),
+  metadataLoading: t("portal.specimenGallery.metadataLoading"),
+  metadataError: t("portal.specimenGallery.metadataError"),
+  locality: t("portal.specimenGallery.locality"),
+  imageId: t("portal.specimenGallery.imageId"),
+  loading: t("portal.specimenGallery.loading"),
+  empty: t("portal.specimenGallery.empty"),
+  failed: t("portal.specimenGallery.failed"),
+  retry: t("portal.common.retry"),
+  unavailable: t("portal.specimenGallery.unavailable"),
+  note: t("portal.specimenGallery.note"),
+}));
 const galleryItems = computed(() => props.items.filter(item => item.image));
 const failedImages = ref(new Set<string>());
 const showOverlay = ref(false);
@@ -128,7 +108,7 @@ watch(() => props.items, () => {
     :aria-busy="loading"
   >
     <div class="specimen-gallery__intro">
-      <p>{{ labels.note }}</p><span>{{ count.toLocaleString(locale) }} {{ locale === 'et' ? 'pilti' : 'images' }}</span>
+      <p>{{ labels.note }}</p><span>{{ count.toLocaleString(locale) }} {{ t('portal.common.images') }}</span>
     </div>
     <div
       v-if="error"
@@ -292,7 +272,7 @@ watch(() => props.items, () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {{ locale === "et" ? "Laadi foto alla" : "Download photograph" }}
+            {{ t('portal.specimenGallery.downloadPhotograph') }}
           </UButton>
         </div>
       </template>

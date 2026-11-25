@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { mdiFamilyTree } from "@mdi/js";
 import { FIELDS_SOLR_TAXON } from "~/constants";
 
 definePageMeta({ layout: false });
@@ -82,12 +81,8 @@ const { hydrate: hydrateFossilGroup } = useAutocomplete("/taxon", {
   solrParams: { query: solrQuery, filter: solrFilters },
 });
 const filterLabels = computed(() => ({
-  species: locale.value === "et"
-    ? "Liigi nimi"
-    : "Species",
-  author: locale.value === "et"
-    ? "Autor"
-    : "Author",
+  species: t("portal.taxonSearch.species"),
+  author: t("portal.taxonSearch.author"),
   taxon: t("filters.taxonHierarchy"),
   fossilGroup: t("filters.fossilGroup"),
 }));
@@ -155,9 +150,7 @@ const activeFilters = computed(() => Object.entries(route.query)
       key,
       rawValue,
       label: key === "q"
-        ? (locale.value === "et"
-            ? "Otsing"
-            : "Search")
+        ? (t("portal.common.search"))
         : filterLabels.value[key as keyof typeof filterLabels.value],
       value: key === "q" || key === "species" || key === "author"
         ? rawValue
@@ -180,35 +173,20 @@ function removeFilter(key: string, value: string) {
   router.push({ query });
 }
 
-const text = computed(() => locale.value === "et"
-  ? {
-      home: "Avaleht",
-      intro: "Taksonid on organismide teaduslikud rühmad, näiteks liigid, perekonnad ja sugukonnad. Need moodustavad hierarhia, mis kirjeldab organismide omavahelisi sugulussuhteid. Siin saad sirvida ka taksonite autoreid ja fossiilirühmi.",
-      filters: "Filtrid",
-      active: "Aktiivsed filtrid",
-      clear: "Eemalda kõik",
-      remove: "Eemalda filter",
-      results: "Otsingutulemused",
-      failed: "Taksonite laadimine ebaõnnestus.",
-      retry: "Proovi uuesti",
-      empty: "Tulemusi ei leitud. Muuda otsingut või eemalda filtrid.",
-      hintTitle: "Taksonoomiline hierarhia",
-      hintDescription: "Avasta liikide ja fossiilirühmade vahelisi seoseid.",
-    }
-  : {
-      home: "Home",
-      intro: "Taxa are scientific groups of organisms, such as species, genera and families. They form a hierarchy that describes how organisms are related. Browse taxon authors and fossil groups here.",
-      filters: "Filters",
-      active: "Active filters",
-      clear: "Clear all",
-      remove: "Remove filter",
-      results: "Search results",
-      failed: "Could not load taxa.",
-      retry: "Try again",
-      empty: "No results found. Adjust your search or clear the filters.",
-      hintTitle: "Taxonomic hierarchy",
-      hintDescription: "Explore relationships between species and fossil groups.",
-    });
+const text = computed(() => ({
+  home: t("portal.common.home"),
+  intro: t("portal.taxonSearch.intro"),
+  filters: t("portal.common.filters"),
+  active: t("portal.common.activeFilters"),
+  clear: t("portal.common.clearAll"),
+  remove: t("portal.common.removeFilter"),
+  results: t("portal.common.searchResults"),
+  failed: t("portal.taxonSearch.failed"),
+  retry: t("portal.common.retry"),
+  empty: t("portal.common.noResults"),
+  hintTitle: t("portal.taxonSearch.hintTitle"),
+  hintDescription: t("portal.taxonSearch.hintDescription"),
+}));
 
 const filtersOpen = ref(true);
 const filterPanel = ref<HTMLElement>();
@@ -249,7 +227,7 @@ useHead({
       class="mx-auto w-full max-w-[1600px] px-4 pt-6 pb-8 sm:px-6 lg:px-8"
       style="--color-text: #1F2937; --color-text-muted: #475569"
     >
-      <nav class="mb-4 flex flex-wrap items-center gap-3 text-[13px] text-portal-muted" aria-label="Breadcrumb">
+      <nav class="mb-4 flex flex-wrap items-center gap-3 text-[13px] text-portal-muted" :aria-label="t('portal.common.breadcrumb')">
         <NuxtLink :to="localePath('/')" class="text-portal-link underline-offset-2 hover:underline">
           {{ text.home }}
         </NuxtLink>
@@ -272,20 +250,82 @@ useHead({
           </p>
         </div>
         <div class="relative hidden h-40 items-center justify-center md:flex" aria-hidden="true">
-          <svg viewBox="0 0 340 170" class="h-full w-full overflow-visible" fill="none">
-            <circle cx="170" cy="88" r="72" class="fill-portal-link/[.035]" />
-            <circle cx="170" cy="88" r="59" class="stroke-portal-link/10" stroke-width="1" stroke-dasharray="2 6" />
+          <svg
+            viewBox="0 0 340 170"
+            class="h-full w-full overflow-visible"
+            fill="none"
+          >
+            <circle
+              cx="170"
+              cy="88"
+              r="72"
+              class="fill-portal-link/[.035]"
+            />
+            <circle
+              cx="170"
+              cy="88"
+              r="59"
+              class="stroke-portal-link/10"
+              stroke-width="1"
+              stroke-dasharray="2 6"
+            />
             <!-- A branching tree with leaf shaped species markers -->
-            <path d="M171 154c-3-19-2-35 0-49 2-13-4-20-15-29M171 121c10-13 22-19 38-24 13-4 18-12 18-25M168 137c-12-7-25-11-39-13-12-2-19-9-21-20M172 105c2-13 10-22 20-29 8-6 10-14 7-24" class="stroke-portal-link/55" stroke-width="3" stroke-linecap="round" />
-            <path d="M169 151c-8 4-14 7-22 8m22-8 10 9m-42-37-10-9m10 9-12 5m122-50 9-11m-9 11 13 2m-40 4 1-15m-1 15 13-4m-71 1-12-8m12 8 2-13" class="stroke-portal-link/35" stroke-width="1.5" stroke-linecap="round" />
+            <path
+              d="M171 154c-3-19-2-35 0-49 2-13-4-20-15-29M171 121c10-13 22-19 38-24 13-4 18-12 18-25M168 137c-12-7-25-11-39-13-12-2-19-9-21-20M172 105c2-13 10-22 20-29 8-6 10-14 7-24"
+              class="stroke-portal-link/55"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <path
+              d="M169 151c-8 4-14 7-22 8m22-8 10 9m-42-37-10-9m10 9-12 5m122-50 9-11m-9 11 13 2m-40 4 1-15m-1 15 13-4m-71 1-12-8m12 8 2-13"
+              class="stroke-portal-link/35"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
             <path d="M157 77c-13-1-19-8-18-18 11 1 18 7 18 18Zm0 0c-3-12 1-21 11-25 4 10 0 19-11 25Zm62 5c-10-8-11-17-5-25 9 7 11 15 5 25Zm-109 20c-11 3-19-1-22-10 10-4 18 0 22 10Zm74-47c-2-11 3-19 13-21 3 11-2 18-13 21Zm-4 92c-4-11 0-19 9-23 5 10 2 18-9 23Zm-50-23c-8-9-7-18 1-24 8 8 8 16-1 24Zm119-47c-1-10 5-17 14-18 2 10-3 17-14 18Z" class="fill-portal-link/25" />
-            <circle cx="171" cy="105" r="5" class="fill-portal-background stroke-portal-link/65" stroke-width="2" />
-            <circle cx="138" cy="59" r="3" class="fill-portal-link/65" />
-            <circle cx="227" cy="72" r="3" class="fill-portal-link/65" />
-            <circle cx="108" cy="97" r="3" class="fill-portal-link/65" />
-            <circle cx="198" cy="52" r="3" class="fill-portal-link/65" />
-            <circle cx="213" cy="151" r="2" class="fill-portal-link/30" />
-            <circle cx="93" cy="46" r="2" class="fill-portal-link/25" />
+            <circle
+              cx="171"
+              cy="105"
+              r="5"
+              class="fill-portal-background stroke-portal-link/65"
+              stroke-width="2"
+            />
+            <circle
+              cx="138"
+              cy="59"
+              r="3"
+              class="fill-portal-link/65"
+            />
+            <circle
+              cx="227"
+              cy="72"
+              r="3"
+              class="fill-portal-link/65"
+            />
+            <circle
+              cx="108"
+              cy="97"
+              r="3"
+              class="fill-portal-link/65"
+            />
+            <circle
+              cx="198"
+              cy="52"
+              r="3"
+              class="fill-portal-link/65"
+            />
+            <circle
+              cx="213"
+              cy="151"
+              r="2"
+              class="fill-portal-link/30"
+            />
+            <circle
+              cx="93"
+              cy="46"
+              r="2"
+              class="fill-portal-link/25"
+            />
           </svg>
         </div>
       </section>

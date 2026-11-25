@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiLayersTriple } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
+import { mdiLayersTriple } from "@mdi/js";
 
 const route = useRoute();
 const localePath = useLocalePath();
@@ -212,7 +212,11 @@ const { data } = await useAsyncData("stratigraphy", async () => {
   });
 
   const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { stratigraphy }, sample: { stratigraphy }, specimen: { stratigraphy } },
+    props: {
+      general: { stratigraphy },
+      sample: { stratigraphy },
+      specimen: { stratigraphy },
+    },
     ctx: { stratigraphy },
   });
 

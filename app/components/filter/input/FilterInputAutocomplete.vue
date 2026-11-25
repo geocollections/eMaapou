@@ -33,7 +33,7 @@ defineExpose({
   refreshSuggestions,
 });
 
-const { t } = useI18n({ useScope: "local" });
+const { t } = useI18n();
 
 const query = ref("");
 const queryDebounced = refDebounced(query, 200);
@@ -168,7 +168,7 @@ watch(open, async (value) => {
       role="status"
       class="portal-supporting"
     >
-      {{ t('loading') }}
+      {{ t('portal.autocompleteFilter.loading') }}
     </p>
     <UButton
       v-else-if="status === 'error'"
@@ -177,10 +177,10 @@ watch(open, async (value) => {
       icon="i-lucide-refresh-cw"
       @click="refresh()"
     >
-      {{ t('retry') }}
+      {{ t('portal.autocompleteFilter.retry') }}
     </UButton>
     <p v-else-if="status === 'success' && !choices.length" class="portal-supporting">
-      {{ t('noOptions') }}
+      {{ t('portal.autocompleteFilter.noOptions') }}
     </p>
     <PortalFilterChoice
       v-for="item in choices"
@@ -201,14 +201,3 @@ watch(open, async (value) => {
     />
   </PortalFilterSection>
 </template>
-
-<i18n lang="yaml">
-et:
-  noOptions: Valikuid ei leitud
-  loading: Laadin valikuid…
-  retry: Laadimine ebaõnnestus. Proovi uuesti
-en:
-  noOptions: No matching options
-  loading: Loading options…
-  retry: Could not load options. Try again
-</i18n>

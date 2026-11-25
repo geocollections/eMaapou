@@ -1,4 +1,3 @@
-import { z } from "zod";
 import type { RouteLocation } from "vue-router";
 import type {
   GeomFilter,
@@ -7,6 +6,7 @@ import type {
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { z } from "zod";
 
 export const useLocalities = defineStore(
   "localities",
@@ -134,7 +134,12 @@ export const useLocalities = defineStore(
   },
   {
     persist: {
-      pick: ["options", "filters", "headers", "query"],
+      pick: [
+        "options",
+        "filters",
+        "headers",
+        "query",
+      ],
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },

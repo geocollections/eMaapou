@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{ search: string; items: any[] }>();
 const emit = defineEmits<{ "update:search": [value: string]; "select": [item: any]; "end": [value: boolean] }>();
-const { locale } = useI18n();
+const { t } = useI18n();
 const { $translate } = useNuxtApp();
 const input = ref();
 const open = ref(false);
@@ -23,8 +23,8 @@ defineExpose({ focus });
         ref="input"
         type="text"
         :model-value="search"
-        :aria-label="locale === 'et' ? 'Otsi hierarhiast' : 'Search hierarchy'"
-        :placeholder="locale === 'et' ? 'Otsi' : 'Search'"
+        :aria-label="t('portal.hierarchyFilter.searchHierarchy')"
+        :placeholder="t('portal.hierarchyFilter.search')"
         trailing-icon="i-lucide-chevron-down"
         class="portal-full-field"
         @update:model-value="emit('update:search', String($event ?? ''))"
@@ -47,7 +47,7 @@ defineExpose({ focus });
           variant="link"
           @click="emit('end', true)"
         >
-          {{ locale === 'et' ? 'Näita rohkem' : 'Load more' }}
+          {{ t('portal.common.loadMore') }}
         </UButton>
       </div>
     </template>

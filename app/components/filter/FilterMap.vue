@@ -3,10 +3,13 @@ const props = withDefaults(defineProps<{
   modelValue: any | null;
   items?: any[];
   useCustomMarkers?: boolean;
-}>(), { items: () => [] as any[], useCustomMarkers: false });
+}>(), {
+  items: () => [] as any[],
+  useCustomMarkers: false,
+});
 
 const emit = defineEmits<{
-  "update:model-value": [value: any | null];
+  "update:modelValue": [value: any | null];
 }>();
 
 const show = ref(false);
@@ -15,7 +18,7 @@ function handleOpen() {
   show.value = !show.value;
 }
 function handleRemove() {
-  emit("update:model-value", null);
+  emit("update:modelValue", null);
 }
 const valueString = computed(() => {
   return `${props.modelValue?.geometry.type} ${props.modelValue?.geometry.coordinates}`;
@@ -60,7 +63,7 @@ const valueString = computed(() => {
       <div class="pa-0">
         <MapSearch
           :model-value="modelValue"
-          @update:model-value="$emit('update:model-value', $event)"
+          @update:model-value="$emit('update:modelValue', $event)"
         />
       </div>
     </VExpansionPanelText>

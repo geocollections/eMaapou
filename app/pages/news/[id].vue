@@ -1,54 +1,41 @@
 <script setup lang="ts">
-import { mdiArrowLeft, mdiChevronRight, mdiHomeOutline } from "@mdi/js";
 import type { NewsArticle } from "~/types/api";
+import { mdiArrowLeft, mdiChevronRight, mdiHomeOutline } from "@mdi/js";
 
 definePageMeta({ layout: false });
 const route = useRoute();
 const localePath = useLocalePath();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const en = computed(() => locale.value === "en");
-const copy = computed(() =>
-  en.value
-    ? {
-        home: "Home",
-        news: "News",
-        back: "Back to news",
-        other: "More news",
-        all: "View all news",
-        loading: "Loading article…",
-        error: "The article could not be loaded. Please try again.",
-        missing: "Article not found",
-        missingText:
-          "This news article is unavailable. Browse the news list for other articles.",
-        noContent: "The article text is not available.",
-        retry: "Try again",
-        untitled: "Untitled news",
-      }
-    : {
-        home: "Avaleht",
-        news: "Uudised",
-        back: "Tagasi uudiste juurde",
-        other: "Veel uudiseid",
-        all: "Vaata kõiki uudiseid",
-        loading: "Laadin uudist…",
-        error: "Uudise laadimine ebaõnnestus. Palun proovi uuesti.",
-        missing: "Uudist ei leitud",
-        missingText:
-          "See uudis ei ole kättesaadav. Teiste uudiste lugemiseks ava uudiste loend.",
-        noContent: "Uudise tekst ei ole saadaval.",
-        retry: "Proovi uuesti",
-        untitled: "Pealkirjata uudis",
-      },
-);
+const copy = computed(() => ({
+  home: t("portal.common.home"),
+  news: t("portal.newsArticle.news"),
+  back: t("portal.newsArticle.back"),
+  other: t("portal.newsArticle.other"),
+  all: t("portal.newsArticle.all"),
+  loading: t("portal.newsArticle.loading"),
+  error: t("portal.newsArticle.error"),
+  missing: t("portal.newsArticle.missing"),
+  missingText: t("portal.newsArticle.missingText"),
+  noContent: t("portal.newsArticle.noContent"),
+  retry: t("portal.common.retry"),
+  untitled: t("portal.newsArticle.untitled"),
+}));
 const returnPage = computed(() => {
   const value = Number(route.query.page);
-  return Number.isSafeInteger(value) && value > 1 ? value : undefined;
+  return Number.isSafeInteger(value) && value > 1
+    ? value
+    : undefined;
 });
 const returnFilters = computed(() => {
-  const keyword = typeof route.query.q === "string" ? route.query.q.trim() : "";
+  const keyword = typeof route.query.q === "string"
+    ? route.query.q.trim()
+    : "";
   return {
     q: keyword || undefined,
-    field: keyword && route.query.field === "content" ? "content" : undefined,
+    field: keyword && route.query.field === "content"
+      ? "content"
+      : undefined,
   };
 });
 const backTo = computed(() =>
@@ -56,7 +43,9 @@ const backTo = computed(() =>
     name: "news",
     query: {
       ...returnFilters.value,
-      ...(returnPage.value ? { page: returnPage.value } : {}),
+      ...(returnPage.value
+        ? { page: returnPage.value }
+        : {}),
     },
   }),
 );
@@ -71,8 +60,8 @@ const {
 });
 const missing = computed(
   () =>
-    error.value?.statusCode === 404 ||
-    (!news.value && !error.value && status.value === "success"),
+    error.value?.statusCode === 404
+    || (!news.value && !error.value && status.value === "success"),
 );
 const title = computed(() =>
   missing.value
@@ -87,13 +76,18 @@ const content = computed(() =>
     : news.value?.text_et || news.value?.text_en,
 );
 const contentLanguage = computed(() =>
-  en.value && news.value?.text_en ? "en" : news.value?.text_et ? "et" : "en",
+  en.value && news.value?.text_en
+    ? "en"
+    : news.value?.text_et ? "et" : "en",
 );
 const titleLanguage = computed(() =>
-  en.value && news.value?.title_en ? "en" : news.value?.title_et ? "et" : "en",
+  en.value && news.value?.title_en
+    ? "en"
+    : news.value?.title_et ? "et" : "en",
 );
 const date = computed(() => {
-  if (!news.value?.date_published) return null;
+  if (!news.value?.date_published)
+    return null;
   const value = new Date(news.value.date_published);
   return Number.isNaN(value.getTime())
     ? null
@@ -113,7 +107,7 @@ const { data: otherNewsList } = await useApiFetch<
 });
 const otherNews = computed(() =>
   (otherNewsList.value?.results || [])
-    .filter((article) => article.id !== Number(route.params.id))
+    .filter(article => article.id !== Number(route.params.id))
     .slice(0, 3),
 );
 useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
@@ -131,22 +125,22 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
       class="w-full max-w-3xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
     >
       <nav
-        :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
+        :aria-label="t('portal.common.breadcrumb')"
         class="mb-5 flex min-w-0 items-center gap-2 text-[13px] text-portal-muted"
       >
         <ULink
           raw
           :to="localePath('/')"
           class="header-focus inline-flex min-h-6 shrink-0 items-center gap-2 text-portal-text hover:text-portal-link"
-          ><svg
+        >
+          <svg
             viewBox="0 0 24 24"
             fill="currentColor"
             aria-hidden="true"
             class="size-4"
           >
-            <path :d="mdiHomeOutline" /></svg
-          >{{ copy.home }}</ULink
-        >
+            <path :d="mdiHomeOutline" /></svg>{{ copy.home }}
+        </ULink>
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
@@ -159,8 +153,9 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
           raw
           :to="backTo"
           class="header-focus shrink-0 text-portal-text hover:text-portal-link"
-          >{{ copy.news }}</ULink
         >
+          {{ copy.news }}
+        </ULink>
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
@@ -175,18 +170,21 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
         raw
         :to="backTo"
         class="header-focus mb-6 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-portal-link hover:underline"
-        ><svg
+      >
+        <svg
           viewBox="0 0 24 24"
           fill="currentColor"
           aria-hidden="true"
           class="size-4"
         >
-          <path :d="mdiArrowLeft" /></svg
-        >{{ copy.back }}</ULink
+          <path :d="mdiArrowLeft" /></svg>{{ copy.back }}
+      </ULink>
+      <div
+        v-if="status === 'pending'"
+        role="status"
+        class="space-y-5 py-4"
       >
-      <div v-if="status === 'pending'" role="status" class="space-y-5 py-4">
-        <span class="sr-only">{{ copy.loading }}</span
-        ><USkeleton class="h-10 w-3/4 bg-portal-subtle" /><USkeleton
+        <span class="sr-only">{{ copy.loading }}</span><USkeleton class="h-10 w-3/4 bg-portal-subtle" /><USkeleton
           class="h-5 w-32 bg-portal-subtle"
         /><USkeleton
           v-for="line in 5"
@@ -198,14 +196,17 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
         <h1 class="mb-4 text-[28px] font-bold text-portal-heading md:text-4xl">
           {{ copy.missing }}
         </h1>
-        <p class="mb-4 leading-relaxed">{{ copy.missingText }}</p>
+        <p class="mb-4 leading-relaxed">
+          {{ copy.missingText }}
+        </p>
         <UButton
           :to="backTo"
           color="neutral"
           variant="outline"
           class="header-control border border-portal-border"
-          >{{ copy.all }}</UButton
         >
+          {{ copy.all }}
+        </UButton>
       </section>
       <div
         v-else-if="error"
@@ -215,14 +216,17 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
         <h1 class="mb-4 text-2xl font-semibold text-portal-heading">
           {{ copy.news }}
         </h1>
-        <p class="mb-4">{{ copy.error }}</p>
+        <p class="mb-4">
+          {{ copy.error }}
+        </p>
         <UButton
           color="neutral"
           variant="outline"
           class="header-control border border-portal-border"
           @click="refresh()"
-          >{{ copy.retry }}</UButton
         >
+          {{ copy.retry }}
+        </UButton>
       </div>
       <template v-else-if="news">
         <article aria-labelledby="news-title" class="w-full">
@@ -238,8 +242,7 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
               v-if="date"
               :datetime="news.date_published || undefined"
               class="text-sm text-portal-muted tabular-nums"
-              >{{ date }}</time
-            >
+            >{{ date }}</time>
           </header>
           <div
             v-if="content"
@@ -267,8 +270,9 @@ useHead(() => ({ title: `${title.value} | ${copy.value.news}` }));
               raw
               :to="backTo"
               class="header-focus inline-flex min-h-11 items-center text-sm font-medium text-portal-link underline underline-offset-4"
-              >{{ copy.all }}</ULink
             >
+              {{ copy.all }}
+            </ULink>
           </div>
           <NewsArticlePreview
             v-for="article in otherNews"

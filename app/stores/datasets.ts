@@ -1,9 +1,9 @@
-import { z } from "zod";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { z } from "zod";
 
 export const useDatasets = defineStore(
   "datasets",
@@ -138,7 +138,12 @@ export const useDatasets = defineStore(
   },
   {
     persist: {
-      pick: ["options", "filters", "headers", "query"],
+      pick: [
+        "options",
+        "filters",
+        "headers",
+        "query",
+      ],
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },

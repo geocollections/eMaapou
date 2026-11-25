@@ -1,4 +1,3 @@
-import { z } from "zod";
 import type { RouteLocation } from "vue-router";
 import type {
   BooleanFilter,
@@ -8,6 +7,7 @@ import type {
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
+import { z } from "zod";
 
 export const useSamples = defineStore(
   "samples",
@@ -180,7 +180,12 @@ export const useSamples = defineStore(
   },
   {
     persist: {
-      pick: ["options", "filters", "headers", "query"],
+      pick: [
+        "options",
+        "filters",
+        "headers",
+        "query",
+      ],
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
   },

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiEyedropper } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
+import { mdiEyedropper } from "@mdi/js";
 
 const { $apiFetch } = useNuxtApp();
 const route = useRoute();
@@ -137,7 +137,9 @@ const { data } = await useAsyncData("preparation", async () => {
   });
 
   const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { preparation } },
+    props: {
+      general: { preparation },
+    },
   });
 
   return {

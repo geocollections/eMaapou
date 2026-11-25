@@ -3,7 +3,7 @@ import type { ExportFunc, ExportType } from "~/composables/useExport";
 
 const props = defineProps<{ showColumns?: boolean; headers: Header[]; sortBy: SortItem[]; exportFunc?: ExportFunc; exportTypes?: ExportType[] }>();
 const emit = defineEmits<{ change: [header: Header]; reset: [] }>();
-const { locale } = useI18n();
+const { t } = useI18n();
 const menu = ref<"columns" | "export" | null>(null);
 function setMenu(value: "columns" | "export", open: boolean) {
   if (open)
@@ -16,37 +16,21 @@ const format = ref<ExportType>("csv");
 const selection = ref<"page" | "all">("page");
 const busy = ref(false);
 const message = ref("");
-const copy = computed(() => locale.value === "et"
-  ? {
-      columns: "Veerud",
-      export: "Ekspordi tulemused",
-      find: "Leia veerg",
-      reset: "Taasta vaikeveerud",
-      scope: "Eksporditavad kirjed",
-      page: "Praegune tulemuste leht",
-      all: "Kõik filtreeritud tulemused (kuni 10 000)",
-      format: "Failivorming",
-      download: "Laadi alla",
-      downloading: "Koostan faili…",
-      failed: "Eksport ebaõnnestus. Proovi uuesti.",
-      locked: "Selle veeru peal on sortimine. Eemalda esmalt sortimine.",
-      done: "Fail on allalaadimiseks valmis.",
-    }
-  : {
-      columns: "Columns",
-      export: "Export results",
-      find: "Find a column",
-      reset: "Reset columns",
-      scope: "Records to export",
-      page: "Current results page",
-      all: "All filtered results (up to 10,000)",
-      format: "File format",
-      download: "Download",
-      downloading: "Preparing file…",
-      failed: "Export failed. Please try again.",
-      locked: "This column is used for sorting. Remove its sorting first.",
-      done: "File prepared for download.",
-    });
+const copy = computed(() => ({
+  columns: t("portal.tableTools.columns"),
+  export: t("portal.tableTools.export"),
+  find: t("portal.tableTools.find"),
+  reset: t("portal.tableTools.reset"),
+  scope: t("portal.tableTools.scope"),
+  page: t("portal.tableTools.page"),
+  all: t("portal.tableTools.all"),
+  format: t("portal.tableTools.format"),
+  download: t("portal.tableTools.download"),
+  downloading: t("portal.tableTools.downloading"),
+  failed: t("portal.tableTools.failed"),
+  locked: t("portal.tableTools.locked"),
+  done: t("portal.tableTools.done"),
+}));
 const columns = computed(() => props.headers.filter(h => h.title.toLocaleLowerCase().includes(search.value.toLocaleLowerCase())));
 function locked(header: Header) {
   return props.sortBy.some(sort => sort.key === header.value || header.children?.some(child => sort.key === child.value));

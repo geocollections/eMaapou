@@ -14,7 +14,7 @@ executors:
       IMAGE_NAME: geocollections/geoloogia
     docker:
       - image: cimg/node:22.23
-  
+
 jobs:
   test:
     executor: docker-publisher

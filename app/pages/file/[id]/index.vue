@@ -172,7 +172,7 @@ const mapOverlays = computed(() => {
           <source
             :src="externalUrl(`files.geocollections.info/${file.filename}`)"
           >
-          Your browser does not support the audio element.
+          {{ $t('portal.file.audioNotSupported') }}
           <PortalIcon :path="mdiFileMusicOutline" />
         </audio>
 
@@ -180,7 +180,7 @@ const mapOverlays = computed(() => {
           <source
             :src="externalUrl(`files.geocollections.info/${file.filename}`)"
           >
-          Your browser does not support the video element.
+          {{ $t('portal.file.videoNotSupported') }}
           <PortalIcon :path="mdiFileVideoOutline" />
         </video>
 

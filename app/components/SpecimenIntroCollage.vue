@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{ query: string; filters: (string | Record<string, string>)[] }>();
-const { locale } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
 const source = useCollectionImage();
 const { data, status, refresh } = await useSolrFetch<SolrResponse>("/specimen_image", {
@@ -35,7 +35,7 @@ const images = computed(() => {
   <figure
     class="specimen-intro-collage"
     :aria-busy="status === 'pending'"
-    :aria-label="locale === 'et' ? 'Pildid geoloogilistest kogudest' : 'Images from the geological collections'"
+    :aria-label="t('portal.specimenCollage.imagesFromTheGeologicalCollections')"
   >
     <template v-if="status === 'pending'">
       <USkeleton
@@ -49,7 +49,7 @@ const images = computed(() => {
         v-for="item in images"
         :key="item.id"
         :to="localePath({ name: 'specimen-id', params: { id: item.specimen_id } })"
-        :aria-label="`${locale === 'et' ? 'Vaata eksemplari' : 'View specimen'} ${item.specimen_full_name || item.specimen_id}`"
+        :aria-label="t('portal.specimenCollage.viewSpecimenRecordname', { recordName: item.specimen_full_name || item.specimen_id })"
         class="portal-collage-link"
         :title="item.specimen_full_name || String(item.specimen_id)"
       >
@@ -72,9 +72,9 @@ const images = computed(() => {
         icon="i-lucide-refresh-cw"
         @click="refresh()"
       >
-        {{ locale === 'et' ? 'Proovi pilte uuesti laadida' : 'Retry loading images' }}
+        {{ t('portal.specimenCollage.retryLoadingImages') }}
       </UButton>
-      <span v-else>{{ locale === 'et' ? 'Valitud filtritega pilte ei leitud.' : 'No images match the selected filters.' }}</span>
+      <span v-else>{{ t('portal.specimenCollage.noImagesMatchTheSelectedFilters') }}</span>
     </figcaption>
   </figure>
 </template>

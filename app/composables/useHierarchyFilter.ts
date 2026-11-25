@@ -97,23 +97,26 @@ export function useStratigraphyHierarchyFilter(
       },
     });
 
-    return [countRes.facets.categories.buckets.map((bucket: any) => {
-      const [_depth, value] = bucket.val.split("/");
-      const doc = res.response.docs.find(
-        (doc: any) => doc.hierarchy_string === value,
-      );
-      return {
-        id: doc.id,
-        name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
-        children: [],
-        selected: filter.value.includes(value),
-        childrenLoaded: false,
-        showChildren: false,
-        value,
-        count: bucket.count,
-        leaf: doc.leaf_node,
-      };
-    }) as TreeNode[], countRes.facets.categories.numBuckets];
+    return [
+      countRes.facets.categories.buckets.map((bucket: any) => {
+        const [_depth, value] = bucket.val.split("/");
+        const doc = res.response.docs.find(
+          (doc: any) => doc.hierarchy_string === value,
+        );
+        return {
+          id: doc.id,
+          name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+          children: [],
+          selected: filter.value.includes(value),
+          childrenLoaded: false,
+          showChildren: false,
+          value,
+          count: bucket.count,
+          leaf: doc.leaf_node,
+        };
+      }) as TreeNode[],
+      countRes.facets.categories.numBuckets,
+    ];
   }
 
   const { locale } = useI18n();
@@ -122,8 +125,12 @@ export function useStratigraphyHierarchyFilter(
     query: string,
     pagination: { page: number; perPage: number },
   ) {
-    const searchField = locale.value === "et" ? "stratigraphy" : "stratigraphy_en";
-    const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+    const searchField = locale.value === "et"
+      ? "stratigraphy"
+      : "stratigraphy_en";
+    const queryStr = query.length < 1
+      ? "*"
+      : `${searchField}:*${query}*`;
     const res = await $solrFetch<any>("/stratigraphy", {
       query: {
         q: queryStr,
@@ -203,7 +210,9 @@ export function useRockHierarchyFilter(
   }
   async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }): Promise<[TreeNode[], number]> {
     const depth = value.split("-").length;
-    const prefix = value.length < 1 ? "0/" : `${depth}/${value}`;
+    const prefix = value.length < 1
+      ? "0/"
+      : `${depth}/${value}`;
 
     const countRes = await $solrFetch<any>(path, {
       query: {
@@ -243,31 +252,38 @@ export function useRockHierarchyFilter(
       },
     });
 
-    return [countRes.facets.categories.buckets.map((bucket: any) => {
-      const [_depth, value] = bucket.val.split("/");
-      const doc = res.response.docs.find((doc: any) =>
-        doc.hierarchy_strings.includes(value),
-      );
-      return {
-        id: doc.id,
-        name: { et: doc.name, en: doc.name_en },
-        children: [],
-        selected: filter.value.includes(value),
-        childrenLoaded: false,
-        showChildren: false,
-        value,
-        count: bucket.count,
-        leaf: doc.leaf_node,
-      };
-    }), countRes.facets.categories.numBuckets];
+    return [
+      countRes.facets.categories.buckets.map((bucket: any) => {
+        const [_depth, value] = bucket.val.split("/");
+        const doc = res.response.docs.find((doc: any) =>
+          doc.hierarchy_strings.includes(value),
+        );
+        return {
+          id: doc.id,
+          name: { et: doc.name, en: doc.name_en },
+          children: [],
+          selected: filter.value.includes(value),
+          childrenLoaded: false,
+          showChildren: false,
+          value,
+          count: bucket.count,
+          leaf: doc.leaf_node,
+        };
+      }),
+      countRes.facets.categories.numBuckets,
+    ];
   }
 
   async function suggest(
     query: string,
     pagination: { page: number; perPage: number },
   ) {
-    const searchField = locale.value === "et" ? "name" : "name_en";
-    const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+    const searchField = locale.value === "et"
+      ? "name"
+      : "name_en";
+    const queryStr = query.length < 1
+      ? "*"
+      : `${searchField}:*${query}*`;
     const res = await $solrFetch<any>("/rock", {
       query: {
         q: queryStr,
@@ -426,7 +442,9 @@ export function useTaxonHierarchyFilter(
     pagination: { page: number; perPage: number },
   ) {
     const searchField = "taxon";
-    const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+    const queryStr = query.length < 1
+      ? "*"
+      : `${searchField}:*${query}*`;
     const res = await $solrFetch<any>("/taxon", {
       query: {
         q: queryStr,

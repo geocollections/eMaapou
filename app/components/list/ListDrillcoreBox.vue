@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { mdiMagnify } from "@mdi/js";
 import type { DataTableOptions } from "~/constants";
 import type { DrillcoreBox } from "~/pages/drillcore/[id]/boxes.vue";
+import { mdiMagnify } from "@mdi/js";
 
 const props = withDefaults(
   defineProps<{

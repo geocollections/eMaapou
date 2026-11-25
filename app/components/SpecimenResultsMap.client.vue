@@ -10,7 +10,7 @@ import "leaflet.fullscreen/dist/Control.FullScreen.css";
 
 const props = defineProps<{ locations: MapLocation[]; query: string; filters: (string | Record<string, string>)[]; label: string; loading?: boolean; error?: boolean; geometry?: any | null }>();
 const emit = defineEmits<{ "update:geometry": [geometry: any | null]; "retry": [] }>();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 let map: L.Map | undefined;
 const container = ref<HTMLElement>();
 const expanded = ref(false);
@@ -39,43 +39,24 @@ const draftGeometry = ref<any | null>(null);
 const locationMessage = ref("");
 const locating = ref(false);
 let areaLayer: L.Layer | undefined;
-const controls = computed(() => locale.value === "et"
-  ? {
-      records: "Kirjeid",
-      locations: "asukohta",
-      retry: "Proovi uuesti",
-      failed: "Kirjete laadimine ebaõnnestus.",
-      mapFailed: "Asukohtade laadimine ebaõnnestus.",
-      expand: "Suurenda kaarti",
-      collapse: "Vähenda kaarti",
-      rectangle: "Vali ristkülik",
-      polygon: "Joonista ala",
-      near: "Minust 5 km raadiuses",
-      zoomIn: "Suumi sisse",
-      zoomOut: "Suumi välja",
-      fullscreen: "Täisekraan",
-      clear: "Eemalda ala",
-      instruction: "Joonistatud ala rakendub kohe. Kaardi liigutamine otsingut ei muuda.",
-      denied: "Asukohta ei saanud määrata. Vali ala kaardil käsitsi.",
-    }
-  : {
-      records: "Records",
-      locations: "locations",
-      retry: "Try again",
-      failed: "Could not load records.",
-      mapFailed: "Could not load locations.",
-      expand: "Expand map",
-      collapse: "Collapse map",
-      rectangle: "Select rectangle",
-      polygon: "Draw area",
-      near: "Within 5 km of me",
-      zoomIn: "Zoom in",
-      zoomOut: "Zoom out",
-      fullscreen: "Fullscreen",
-      clear: "Clear area",
-      instruction: "Draw an area to filter immediately. Moving the map does not change the search.",
-      denied: "Could not determine your location. Select an area on the map instead.",
-    });
+const controls = computed(() => ({
+  records: t("portal.specimenMap.records"),
+  locations: t("portal.specimenMap.locations"),
+  retry: t("portal.common.retry"),
+  failed: t("portal.specimenMap.failed"),
+  mapFailed: t("portal.specimenMap.mapFailed"),
+  expand: t("portal.specimenMap.expand"),
+  collapse: t("portal.specimenMap.collapse"),
+  rectangle: t("portal.specimenMap.rectangle"),
+  polygon: t("portal.specimenMap.polygon"),
+  near: t("portal.specimenMap.near"),
+  zoomIn: t("portal.specimenMap.zoomIn"),
+  zoomOut: t("portal.specimenMap.zoomOut"),
+  fullscreen: t("portal.specimenMap.fullscreen"),
+  clear: t("portal.specimenMap.clear"),
+  instruction: t("portal.specimenMap.instruction"),
+  denied: t("portal.specimenMap.denied"),
+}));
 function drawArea(shape: "Rectangle" | "Polygon") {
   map?.pm.disableDraw();
   map?.pm.enableDraw(shape, {
@@ -172,9 +153,7 @@ watch([pointStatus, mapHeight], async () => {
 function locationName(location: MapLocation) {
   return (locale.value === "et"
     ? location.name
-    : location.nameEn || location.name) || (locale.value === "et"
-    ? "Asukoht"
-    : "Location");
+    : location.nameEn || location.name) || (t("portal.specimenMap.location"));
 }
 function markerRadius(count: number) {
   if (count <= 10)
@@ -410,7 +389,7 @@ onBeforeUnmount(() => map?.remove());
         class="specimen-map-status"
         role="status"
       >
-        {{ loading ? (locale === 'et' ? 'Asukohtade laadimine…' : 'Loading locations…') : error ? controls.mapFailed : tileError ? (locale === 'et' ? 'Aluskaardi laadimine ebaõnnestus.' : 'Could not load the basemap.') : locationMessage || (locale === 'et' ? 'Valitud filtritega koordinaatidega kirjeid ei leitud.' : 'No records with coordinates match your filters.') }}
+        {{ loading ? (t('portal.specimenMap.loadingLocations')) : error ? controls.mapFailed : tileError ? (t('portal.specimenMap.couldNotLoadTheBasemap')) : locationMessage || (t('portal.specimenMap.noRecordsWithCoordinatesMatchYourFilters')) }}
         <UButton
           v-if="error"
           color="neutral"
@@ -436,7 +415,7 @@ onBeforeUnmount(() => map?.remove());
         </header>
         <div class="specimen-map-records__list">
           <p v-if="pointStatus === 'pending'" role="status">
-            {{ locale === 'et' ? 'Laadin kirjeid…' : 'Loading records…' }}
+            {{ t('portal.specimenMap.loadingRecords') }}
           </p>
           <div v-else-if="pointStatus === 'error'" role="alert">
             <p>{{ controls.failed }}</p>

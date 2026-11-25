@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import type { HydratedTab } from "~/composables/useTabs";
+import { mdiChevronDown } from "@mdi/js";
 
 const props = defineProps<{
   tabs: HydratedTab[];

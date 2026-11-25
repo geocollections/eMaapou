@@ -1,15 +1,18 @@
 <script setup lang="ts">
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 
 useHead({
   titleTemplate: (title) => {
     if (!title)
-      return locale.value === "et" ? "eMaapõu" : "Geocollections";
+      return t("title");
 
-    return locale.value === "et" ? `${title} | eMaapõu` : `${title} | Geocollections`;
+    return t("portal.site.titleTemplate", {
+      title,
+      site: t("title"),
+    });
   },
   htmlAttrs: {
-    lang: locale.value,
+    lang: locale,
   },
   link: [
     {
@@ -22,7 +25,7 @@ useHead({
 
 const img = useImage();
 useSeoMeta({
-  description: "Web portal for geoscience data from Estonia. Provides direct search capabilities to SARV information system and links to other data sources",
+  description: () => t("portal.site.description"),
   ogImage: img("logos/emaapou_short.png"),
   ogImageWidth: 200,
   ogImageHeight: 200,

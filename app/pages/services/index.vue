@@ -4,11 +4,10 @@ import { SERVICES } from "~/constants";
 
 definePageMeta({ layout: false });
 
-const { locale, t } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
-const en = computed(() => locale.value === "en");
-const homeLabel = computed(() => en.value ? "Home" : "Avaleht");
-const servicesLabel = computed(() => en.value ? "E-Services" : "E-teenused");
+const homeLabel = computed(() => t("portal.common.home"));
+const servicesLabel = computed(() => t("portal.services.eServices"));
 type ServiceId = typeof SERVICES.ids[number];
 
 const groups = computed(() => {
@@ -24,79 +23,41 @@ const groups = computed(() => {
       description: string;
       ids: ServiceId[];
     }[];
-  } = en.value
-    ? {
-        introduction:
-          "Explore specialist geological databases, collections and tools from one place. Each service opens on its own website.",
-        external: "External service",
-        browse: "Open service",
-        explore: "Browse by topic",
-        photo: "Ohesaare cliff on Saaremaa",
-        groups: [
-          {
-            id: "collections",
-            title: "Collections and literature",
-            description: "Geological collections, publications and reference resources.",
-            ids: [
-              "geocollections",
-              "kirjandus",
-              "fossiilid",
-              "kivid",
-              "stratigraphy",
-              "gmre",
-              "geocase",
-            ],
-          },
-          {
-            id: "maps",
-            title: "Maps and geological information",
-            description: "Geological maps, survey information and specialist datasets.",
-            ids: ["geologicalSurvey", "maardlad", "turba"],
-          },
-          {
-            id: "research",
-            title: "Research data and tools",
-            description: "Research archives, data repositories and project tools.",
-            ids: ["fond", "doi", "eurocore", "sarv"],
-          },
+  } = {
+    introduction: t("portal.services.introduction"),
+    external: t("portal.services.external"),
+    browse: t("portal.services.browse"),
+    explore: t("portal.services.explore"),
+    photo: t("portal.services.photo"),
+    groups: [
+      {
+        id: "collections",
+        title: t("portal.services.groups.collections.title"),
+        description: t("portal.services.groups.collections.description"),
+        ids: [
+          "geocollections",
+          "kirjandus",
+          "fossiilid",
+          "kivid",
+          "stratigraphy",
+          "gmre",
+          "geocase",
         ],
-      }
-    : {
-        introduction:
-          "Avasta geoloogilisi andmekogusid, kollektsioone ja tööriistu ühest kohast. Iga teenus avaneb oma veebilehel.",
-        external: "Väline teenus",
-        browse: "Ava teenus",
-        explore: "Sirvi teemade kaupa",
-        photo: "Ohesaare pank Saaremaal",
-        groups: [
-          {
-            id: "collections",
-            title: "Kollektsioonid ja kirjandus",
-            description: "Geoloogilised kogud, publikatsioonid ja viiteallikad.",
-            ids: [
-              "geocollections",
-              "kirjandus",
-              "fossiilid",
-              "kivid",
-              "stratigraphy",
-              "gmre",
-              "geocase",
-            ],
-          },
-          {
-            id: "maps",
-            title: "Kaardid ja geoloogiline teave",
-            description: "Geoloogilised kaardid, uuringuteave ja valdkonna andmestikud.",
-            ids: ["geologicalSurvey", "maardlad", "turba"],
-          },
-          {
-            id: "research",
-            title: "Teadusandmed ja tööriistad",
-            description: "Uuringuarhiivid, andmerepositooriumid ja töövahendid.",
-            ids: ["fond", "doi", "eurocore", "sarv"],
-          },
-        ],
-      };
+      },
+      {
+        id: "maps",
+        title: t("portal.services.groups.maps.title"),
+        description: t("portal.services.groups.maps.description"),
+        ids: ["geologicalSurvey", "maardlad", "turba"],
+      },
+      {
+        id: "research",
+        title: t("portal.services.groups.research.title"),
+        description: t("portal.services.groups.research.description"),
+        ids: ["fond", "doi", "eurocore", "sarv"],
+      },
+    ],
+  };
 
   return {
     ...copy,
@@ -113,7 +74,7 @@ const groups = computed(() => {
     <AppBar />
     <main class="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12">
       <nav
-        :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
+        :aria-label="t('portal.common.breadcrumb')"
         class="mb-6 flex items-center gap-2 text-[13px] text-portal-muted"
       >
         <ULink
@@ -180,7 +141,6 @@ const groups = computed(() => {
             </ul>
           </nav>
         </div>
-        <!-- Photo source: https://files.geocollections.info/large/df1971c7-30f0-4cb5-bfc4-0839fe78edc0.jpg -->
         <img
           src="https://files.geocollections.info/large/df1971c7-30f0-4cb5-bfc4-0839fe78edc0.jpg"
           :alt="groups.photo"

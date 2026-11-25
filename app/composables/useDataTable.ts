@@ -1,6 +1,6 @@
-import { z } from "zod";
 import type { LocationQueryRaw, RouteLocation } from "vue-router";
 import type { DataTableOptions, Headers, SortItem } from "~/constants";
+import { z } from "zod";
 
 export function useDataTable({ initOptions, initHeaders, initQuery = ref(""), overrideInternalSearch = false }: { initOptions: DataTableOptions; initHeaders: Headers; initQuery?: Ref<string>; overrideInternalSearch?: boolean }) {
   const options = ref(initOptions);
@@ -50,12 +50,19 @@ export function useDataTable({ initOptions, initHeaders, initQuery = ref(""), ov
 
   const stateToQueryParamsSchema = z.object({
     q: stringValueParser,
-    page: z.number().transform(val => (val > 1 ? val.toString() : undefined)),
+    page: z.number().transform(val => (val > 1
+      ? val.toString()
+      : undefined)),
     itemsPerPage: z
       .number()
-      .transform(val => (val !== 25 ? val.toString() : undefined)),
+      .transform(val => (val !== 25
+        ? val.toString()
+        : undefined)),
     sortBy: z
-      .object({ key: z.string(), order: z.string().optional() })
+      .object({
+        key: z.string(),
+        order: z.string().optional(),
+      })
       .array()
       .transform((val) => {
         return val.length > 0
@@ -71,7 +78,9 @@ export function useDataTable({ initOptions, initHeaders, initQuery = ref(""), ov
   });
 
   const solrQuery = computed(() => {
-    return query.value.length > 0 ? query.value : "*";
+    return query.value.length > 0
+      ? query.value
+      : "*";
   });
 
   function handleUpdate(tableState: { options: DataTableOptions; search: string }) {
@@ -101,7 +110,9 @@ export function useDataTable({ initOptions, initHeaders, initQuery = ref(""), ov
 
   const router = useRouter();
   function setQueryParamsFromState() {
-    router.push({ query: getQueryParams() as LocationQueryRaw });
+    router.push({
+      query: getQueryParams() as LocationQueryRaw,
+    });
   }
 
   function setStateFromQueryParams(route: RouteLocation) {
@@ -180,12 +191,19 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
 
   const stateToQueryParamsSchema = z.object({
     q: stringValueParser,
-    page: z.number().transform(val => (val > 1 ? val.toString() : undefined)),
+    page: z.number().transform(val => (val > 1
+      ? val.toString()
+      : undefined)),
     itemsPerPage: z
       .number()
-      .transform(val => (val !== 25 ? val.toString() : undefined)),
+      .transform(val => (val !== 25
+        ? val.toString()
+        : undefined)),
     sortBy: z
-      .object({ key: z.string(), order: z.string().optional() })
+      .object({
+        key: z.string(),
+        order: z.string().optional(),
+      })
       .array()
       .transform((val) => {
         return val.length > 0
@@ -228,7 +246,9 @@ export function useDataTableGeoloogiaApi({ initOptions, initHeaders }: { initOpt
 
   const router = useRouter();
   function setQueryParamsFromState() {
-    router.push({ query: getQueryParams() as LocationQueryRaw });
+    router.push({
+      query: getQueryParams() as LocationQueryRaw,
+    });
   }
 
   function setStateFromQueryParams(route: RouteLocation) {

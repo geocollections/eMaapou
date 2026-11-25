@@ -17,10 +17,6 @@ const props = withDefaults(defineProps<{
   selectPageId?: string;
 }>(), {
   pageCount: 0,
-  itemsPerPageText: "Items per page",
-  pageSelectText: `Page 0 / 0`,
-  goToText: "Go to page",
-  goToButtonText: "Go",
   selectPageId: "page-select-btn",
   itemsPerPageOptions: () => [],
 });
@@ -124,7 +120,7 @@ function pageLimitRule(value: number) {
         variant="text"
         class="text-no-wrap text-caption"
       >
-        {{ pageSelectText }}
+        {{ pageSelectText ?? $t('portal.pagination.pageNumber', { current: options.page, count: pageCount }) }}
         <ClientOnly>
           <VMenu
             activator="parent"
@@ -135,7 +131,7 @@ function pageLimitRule(value: number) {
           >
             <VCard class="px-2 py-2 d-flex align-center">
               <div class="mr-2 text-no-wrap text-caption">
-                {{ goToText }}
+                {{ goToText ?? $t('common.goTo') }}
               </div>
               <VTextField
                 ref="goToField"
@@ -156,7 +152,7 @@ function pageLimitRule(value: number) {
                 variant="text"
                 @click="selectPage"
               >
-                {{ goToButtonText }}
+                {{ goToButtonText ?? $t('common.goToBtn') }}
                 <VIcon size="small">
                   {{ mdiChevronRight }}
                 </VIcon>

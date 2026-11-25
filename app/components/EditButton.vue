@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { mdiSquareEditOutline } from "@mdi/js";
 
-type EditModules =
-  "analysis" |
-  "area" |
-  "attachment" |
-  "collection" |
-  "dataset" |
-  "drillcore" |
-  "drillcore_box" |
-  "locality" |
-  "preparation" |
-  "sample" |
-  "site" |
-  "specimen" |
-  "stratigraphy";
+type EditModules
+  = "analysis"
+    | "area"
+    | "attachment"
+    | "collection"
+    | "dataset"
+    | "drillcore"
+    | "drillcore_box"
+    | "locality"
+    | "preparation"
+    | "sample"
+    | "site"
+    | "specimen"
+    | "stratigraphy";
 
 const props = defineProps<{ module: EditModules; id: string }>();
 

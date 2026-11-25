@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { BarChart } from "echarts/charts";
-import {
-  GridComponent,
-  type GridComponentOption,
-  TooltipComponent,
-} from "echarts/components";
-import { type ComposeOption, use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import VChart from "vue-echarts";
+import type { GridComponentOption } from "echarts/components";
+import type { ComposeOption } from "echarts/core";
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
 } from "echarts/types/dist/echarts.js";
 import type { BarSeriesOption, TooltipOption } from "echarts/types/dist/shared.js";
+import { BarChart } from "echarts/charts";
+import {
+  GridComponent,
+
+  TooltipComponent,
+} from "echarts/components";
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import VChart from "vue-echarts";
 
 type ECOption = ComposeOption<
   | TooltipOption
@@ -27,7 +29,12 @@ const props = defineProps<{
   };
 }>();
 
-use([CanvasRenderer, BarChart, GridComponent, TooltipComponent]);
+use([
+  CanvasRenderer,
+  BarChart,
+  GridComponent,
+  TooltipComponent,
+]);
 
 const chart = ref<typeof VChart>();
 const initOptions = computed(() => {

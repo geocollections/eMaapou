@@ -242,45 +242,25 @@ watch(compactScreen, (compact) => {
 }, { immediate: true });
 const copyStatus = ref("");
 const mapOpen = ref(true);
-const text = computed(() => locale.value === "et"
-  ? {
-      home: "Avaleht",
-      intro: "Eksemplarid on geoloogilistes kogudes säilitatavad füüsilised objektid, näiteks fossiilid, kivimid ja mineraalid. Siit leiad nende kataloogikirjed, määrangud ja leiukohad ning olemasolu korral stratigraafilise teabe ja fotod.",
-      filters: "Filtrid",
-      active: "Aktiivsed filtrid",
-      clear: "Eemalda kõik",
-      remove: "Eemalda filter",
-      results: "Otsingutulemused",
-      copy: "Kopeeri otsingulink",
-      copied: "Link kopeeritud",
-      copyError: "Lingi kopeerimine ebaõnnestus",
-      failed: "Andmete laadimine ebaõnnestus.",
-      retry: "Proovi uuesti",
-      empty: "Tulemusi ei leitud. Muuda otsingut või eemalda filtrid.",
-      map: "Filtritele vastavad asukohad",
-      hideMap: "Peida kaart",
-      showMap: "Näita kaarti",
-      mapNote: "Kaart näitab kuni 1000 filtritele vastavat eri asukohta. Punktile vajutades saad valida samade koordinaatidega kirjete seast.",
-    }
-  : {
-      home: "Home",
-      intro: "Specimens are physical objects preserved in geological collections, such as fossils, rocks and minerals. Explore their catalogue records, identifications and collection localities, with stratigraphic information and photographs where available.",
-      filters: "Filters",
-      active: "Active filters",
-      clear: "Clear all",
-      remove: "Remove filter",
-      results: "Search results",
-      copy: "Copy search link",
-      copied: "Link copied",
-      copyError: "Could not copy the link",
-      failed: "Could not load results.",
-      retry: "Try again",
-      empty: "No results found. Adjust your search or clear the filters.",
-      map: "Locations matching your filters",
-      hideMap: "Hide map",
-      showMap: "Show map",
-      mapNote: "The map shows up to 1,000 distinct locations matching your filters. Select a point to choose from records at those coordinates.",
-    });
+const text = computed(() => ({
+  home: t("portal.common.home"),
+  intro: t("portal.specimenSearch.intro"),
+  filters: t("portal.common.filters"),
+  active: t("portal.common.activeFilters"),
+  clear: t("portal.common.clearAll"),
+  remove: t("portal.common.removeFilter"),
+  results: t("portal.common.searchResults"),
+  copy: t("portal.specimenSearch.copy"),
+  copied: t("portal.specimenSearch.copied"),
+  copyError: t("portal.specimenSearch.copyError"),
+  failed: t("portal.specimenSearch.failed"),
+  retry: t("portal.common.retry"),
+  empty: t("portal.common.noResults"),
+  map: t("portal.specimenSearch.map"),
+  hideMap: t("portal.specimenSearch.hideMap"),
+  showMap: t("portal.specimenSearch.showMap"),
+  mapNote: t("portal.specimenSearch.mapNote"),
+}));
 const filterLabels: Record<string, string> = {
   number: "number",
   locality: "locality",
@@ -404,9 +384,7 @@ const activeFilters = computed(() => Object.entries(route.query)
       rawValue,
       count: resolvedFilterCounts.value[key]?.[rawValue],
       label: key === "q"
-        ? (locale.value === "et"
-            ? "Otsing"
-            : "Search")
+        ? (t("portal.common.search"))
         : t(`filters.${filterLabels[key]}`),
       value: ["geometry", "hasImage", "hasCoordinates"].includes(key)
         ? ""
@@ -458,7 +436,7 @@ useHead({
     <AppBar />
     <main class="specimen-search__main">
       <div class="specimen-search__page">
-        <nav class="specimen-search__breadcrumbs" aria-label="Breadcrumb">
+        <nav class="specimen-search__breadcrumbs" :aria-label="t('portal.common.breadcrumb')">
           <NuxtLink :to="localePath('/')">{{ text.home }}</NuxtLink>
           <span aria-hidden="true">›</span><span>{{ $t('specimen.pageTitle') }}</span>
         </nav>
@@ -592,7 +570,7 @@ useHead({
               class="specimen-image-explanation"
               role="status"
             >
-              {{ locale === 'et' ? 'Pildivaade on valitud. Tulemuste arv näitab fotosid, mitte eksemplare: ühel eksemplaril võib olla mitu fotot ning piltideta kirjeid siin ei kuvata.' : 'Images selected. The result count shows photographs rather than specimens: a specimen can have multiple photographs, and records without images are excluded.' }}
+              {{ t('portal.specimenSearch.imagesSelectedTheResultCountShowsPhotographs') }}
             </p>
             <div
               v-if="error"
@@ -620,7 +598,7 @@ useHead({
                 <div
                   class="specimen-view-switch"
                   role="group"
-                  :aria-label="locale === 'et' ? 'Tulemuste vaade' : 'Results view'"
+                  :aria-label="t('portal.specimenSearch.resultsView')"
                 >
                   <UButton
                     type="button"

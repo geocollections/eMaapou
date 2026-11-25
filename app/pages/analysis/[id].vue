@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiImageFilterHdr, mdiTestTube } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
+import { mdiImageFilterHdr, mdiTestTube } from "@mdi/js";
 
 const { $solrFetch, $translate, $apiFetch } = useNuxtApp();
 const { t } = useI18n();

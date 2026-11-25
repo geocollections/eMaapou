@@ -3,95 +3,43 @@ import { mdiChevronRight, mdiHomeOutline, mdiOpenInNew } from "@mdi/js";
 import { SERVICES } from "~/constants";
 
 definePageMeta({ layout: false });
-const { locale } = useI18n();
+const { t } = useI18n();
 const localePath = useLocalePath();
-const en = computed(() => locale.value === "en");
-const text = computed(() =>
-  en.value
-    ? {
-        home: "Home",
-        about: "About",
-        title: "About eMaapõu",
-        subtitle: "A window into geological information.",
-        intro:
-          "eMaapõu provides direct access to geological data hosted in the SARV geoscience data platform, together with links to external resources and applications.",
-        dataDescription:
-          "Explore geological collections, fossil specimens, rock samples, drillcores, localities, analytical data and photographs. The portal brings these records together with links to specialist databases and publications.",
-        searchDescription:
-          "Use the global search to get started, or browse a data group to explore a particular topic. Detailed searches let you refine your query, view records on a map, browse images and export data.",
-        photo: "Sandstone cliffs at Kallaste beside Lake Peipus",
-        explore: "Explore geological information",
-        collections: "Collections",
-        collectionsText:
-          "Physical and digital collections of geological material.",
-        collectionsAction: "Open collections",
-        research: "Research data",
-        researchText:
-          "Research material, analytical results and derived datasets.",
-        researchAction: "Open research data",
-        places: "Places & stratigraphy",
-        placesText: "Geographical information and stratigraphic context.",
-        placesAction: "Open places & stratigraphy",
-        sarv: "The SARV data platform",
-        sarvText:
-          "SARV is the geoscience data platform behind eMaapõu. Research institutions and museums use it to document, manage and share their collections and research data. The institutions below hold and maintain their own collections; eMaapõu provides a common way to discover their records.",
-        institutions: "Institutions using SARV",
-        institutionAction: "Open institution",
-        providers: "Other geological information providers",
-        providersNote: "External resources",
-        website: "Open website",
-        resources: "Data collections and external services",
-        browse: "Browse data collections",
-        browseText: "Search records within the portal.",
-        browseAction: "Browse collections",
-        services: "Explore e-services",
-        servicesText:
-          "Open specialist databases and applications on other websites.",
-        servicesAction: "Open e-services",
-        externalNote: "External services open on their own websites.",
-      }
-    : {
-        home: "Avaleht",
-        about: "Tutvustus",
-        title: "eMaapõust",
-        subtitle: "Aken geoloogiliste andmete juurde.",
-        intro:
-          "eMaapõu annab ligipääsu maapõue infosüsteemis SARV talletatud geoloogilistele andmetele ning koondab viiteid välistele andmekogudele ja rakendustele.",
-        dataDescription:
-          "Portaalist leiad geoloogilised kollektsioonid, fossiilid, kivimiproovid, puursüdamikud, leiukohad, analüüsiandmed ja fotod. Nendega koos on kättesaadavad viited erialastele andmebaasidele ja geoloogia-alastele publikatsioonidele.",
-        searchDescription:
-          "Alusta üldotsingust või vali sirvimismenüüst huvipakkuv andmerühm. Täpsemas otsingus saad päringut piiritleda, vaadata kirjeid kaardil, sirvida pilte ja eksportida andmeid.",
-        photo: "Kallaste liivakivipaljand Peipsi järve kaldal",
-        explore: "Avasta geoloogilisi andmeid",
-        collections: "Kollektsioonid",
-        collectionsText:
-          "Geoloogilise materjali füüsilised ja digitaalsed kollektsioonid.",
-        collectionsAction: "Ava kollektsioonid",
-        research: "Teadusandmed",
-        researchText: "Uurimismaterjal, analüüside tulemused ja andmestikud.",
-        researchAction: "Ava teadusandmed",
-        places: "Paigad ja stratigraafia",
-        placesText: "Geograafiline teave ja stratigraafiline kontekst.",
-        placesAction: "Ava paigad ja stratigraafia",
-        sarv: "Maapõue infosüsteem SARV",
-        sarvText:
-          "SARV on eMaapõu aluseks olev maapõue infosüsteem, mida teadusasutused ja muuseumid kasutavad kollektsioonide ja teadusandmete kirjeldamiseks, haldamiseks ning jagamiseks. Allpool loetletud asutused hoiavad ja täiendavad oma kogusid; eMaapõu pakub ühist võimalust nende andmete leidmiseks.",
-        institutions: "SARVe kasutavad asutused",
-        institutionAction: "Ava asutus",
-        providers: "Teised geoloogiliste andmete pakkujad",
-        providersNote: "Välised allikad",
-        website: "Ava veebileht",
-        resources: "Andmekogud ja välised teenused",
-        browse: "Sirvi andmekogusid",
-        browseText: "Otsi kirjeid eMaapõu portaalist.",
-        browseAction: "Sirvi kollektsioone",
-        services: "Avasta e-teenuseid",
-        servicesText:
-          "Erialased andmebaasid ja rakendused teistel veebilehtedel.",
-        servicesAction: "Ava e-teenused",
-        externalNote: "Välised teenused avanevad eraldi veebilehtedel.",
-      },
-);
+const text = computed(() => ({
+  home: t("portal.common.home"),
+  about: t("portal.about.about"),
+  title: t("portal.about.title"),
+  subtitle: t("portal.about.subtitle"),
+  intro: t("portal.about.intro"),
+  dataDescription: t("portal.about.dataDescription"),
+  searchDescription: t("portal.about.searchDescription"),
+  photo: t("portal.about.photo"),
+  explore: t("portal.about.explore"),
+  collections: t("portal.about.collections"),
+  collectionsText: t("portal.about.collectionsText"),
+  collectionsAction: t("portal.about.collectionsAction"),
+  research: t("portal.about.research"),
+  researchText: t("portal.about.researchText"),
+  researchAction: t("portal.about.researchAction"),
+  places: t("portal.about.places"),
+  placesText: t("portal.about.placesText"),
+  placesAction: t("portal.about.placesAction"),
+  sarv: t("portal.about.sarv"),
+  sarvText: t("portal.about.sarvText"),
+  institutions: t("portal.about.institutions"),
+  institutionAction: t("portal.about.institutionAction"),
+  providers: t("portal.about.providers"),
+  providersNote: t("portal.about.providersNote"),
+  website: t("portal.about.website"),
+  resources: t("portal.about.resources"),
+  browse: t("portal.about.browse"),
+  browseText: t("portal.about.browseText"),
+  browseAction: t("portal.about.browseAction"),
+  services: t("portal.about.services"),
+  servicesText: t("portal.about.servicesText"),
+  servicesAction: t("portal.about.servicesAction"),
+  externalNote: t("portal.about.externalNote"),
+}));
 const groups = computed(() => [
   {
     title: text.value.collections,
@@ -114,43 +62,33 @@ const groups = computed(() => [
 ]);
 const institutions = computed(() => [
   {
-    title: en.value
-      ? "TalTech Department of Geology"
-      : "TalTechi geoloogia instituut",
+    title: t("portal.about.taltechDepartmentOfGeology"),
     path: "/institution/git",
   },
   {
-    title: en.value
-      ? "University of Tartu Natural History Museum"
-      : "Tartu Ülikooli loodusmuuseum",
+    title: t("portal.about.universityOfTartuNaturalHistoryMuseum"),
     path: "/institution/tug",
   },
   {
-    title: en.value
-      ? "University of Tartu Department of Geology"
-      : "Tartu Ülikooli geoloogia osakond",
+    title: t("portal.about.universityOfTartuDepartmentOfGeology"),
     path: "/institution/tugo",
   },
   {
-    title: en.value
-      ? "Estonian Museum of Natural History"
-      : "Eesti Loodusmuuseum",
+    title: t("portal.about.estonianMuseumOfNaturalHistory"),
     path: "/institution/elm",
   },
 ]);
 const providers = computed(() => [
   {
-    title: en.value
-      ? "Geological Survey of Estonia"
-      : "Eesti Geoloogiateenistus",
+    title: t("portal.about.geologicalSurveyOfEstonia"),
     href: "https://egt.ee",
   },
   {
-    title: en.value ? "Estonian Land Board" : "Maa-amet",
+    title: t("portal.about.estonianLandBoard"),
     href: "https://maaamet.ee",
   },
   {
-    title: en.value ? "Environmental Board" : "Keskkonnaamet",
+    title: t("portal.about.environmentalBoard"),
     href: "https://keskkonnaamet.ee",
   },
 ]);
@@ -167,7 +105,7 @@ useSeoMeta({
       class="mx-auto w-full max-w-7xl flex-1 px-4 pt-6 pb-10 sm:px-6 lg:px-8 lg:pb-12"
     >
       <nav
-        :aria-label="en ? 'Breadcrumb' : 'Asukoharada'"
+        :aria-label="t('portal.common.breadcrumb')"
         class="mb-6 flex items-center gap-2 text-[13px] text-portal-muted"
       >
         <ULink

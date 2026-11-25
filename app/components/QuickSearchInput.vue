@@ -8,14 +8,19 @@ const route = useRoute();
 const router = useRouter();
 
 const searchRouteName = computed(() => {
-  return route.name?.toString().includes("search") ? route.name?.toString().split("__")[0] : "search";
+  return route.name?.toString().includes("search")
+    ? route.name?.toString().split("__")[0]
+    : "search";
 });
 
 function handleClick() {
   if (query.value.length < 1)
     return;
 
-  router.push(localePath({ name: searchRouteName.value, query: { q: query.value } }));
+  router.push(localePath({
+    name: searchRouteName.value,
+    query: { q: query.value },
+  }));
 }
 </script>
 

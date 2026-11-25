@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { FilterInputAutocomplete } from "#components";
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits<{
   update: [];
@@ -33,7 +33,10 @@ async function suggestParameter({
   const pivot = `{!ex=analysedParameter}parameter_index_list`;
   const filters
     = query.length > 0
-      ? [...(solrFilters.value ?? []), `parameter_list:*${query}*`]
+      ? [
+          ...(solrFilters.value ?? []),
+          `parameter_list:*${query}*`,
+        ]
       : solrFilters.value ?? [];
 
   const res = await $solrFetch<any>("/dataset", {
@@ -56,7 +59,9 @@ async function suggestParameter({
     (item: any) => item.value,
   );
 
-  const filter = ids.length > 0 ? `parameter_index:(${ids.join(" OR ")})` : undefined;
+  const filter = ids.length > 0
+    ? `parameter_index:(${ids.join(" OR ")})`
+    : undefined;
   const nameRes = await $solrFetch<any>("/analysis_parameter", {
     query: {
       json: {
@@ -97,7 +102,9 @@ async function hydrateParameter(values: string[]) {
     },
   });
 
-  const filter = values.length > 0 ? `parameter_index:(${values.join(" OR ")})` : undefined;
+  const filter = values.length > 0
+    ? `parameter_index:(${values.join(" OR ")})`
+    : undefined;
 
   const nameRes = await $solrFetch<any>("/analysis_parameter", {
     query: {

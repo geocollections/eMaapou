@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
 import { mdiChevronDoubleLeft, mdiMagnify } from "@mdi/js";
+import { useDisplay } from "vuetify";
 
 const drawer = ref(false);
 

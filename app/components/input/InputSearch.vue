@@ -25,14 +25,16 @@ const props = withDefaults(defineProps<
   rounded: 0,
 });
 const emit = defineEmits<{
-  "update:model-value": [value: string];
+  "update:modelValue": [value: string];
   "enter": [event: any];
   "focus": [event: any];
   "blur": [event: any];
 }>();
 const searchInput = ref();
 const inputStyle = computed(() => ({
-  maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : "inherit",
+  maxWidth: props.maxWidth > 0
+    ? `${props.maxWidth}px`
+    : "inherit",
   width: "100%",
 }));
 </script>
@@ -55,7 +57,7 @@ const inputStyle = computed(() => ({
       :class="inputClass"
       :autofocus="autofocus"
       v-bind="{ ...$attrs }"
-      @update:model-value="emit('update:model-value', $event)"
+      @update:model-value="emit('update:modelValue', $event)"
       @keyup.enter="emit('enter', $event)"
       @focus="emit('focus', $event)"
       @blur="emit('blur', $event)"
