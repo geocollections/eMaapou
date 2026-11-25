@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import round from "lodash/round";
 import type { Header } from "~/constants";
+import round from "lodash/round";
 
 const props = withDefaults(
   defineProps<{

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
 import { LineChart } from "echarts/charts";
 import {
   AxisPointerComponent,
@@ -13,6 +12,7 @@ import {
 import { use } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 import VChart from "vue-echarts";
+import { useDisplay } from "vuetify";
 import {
   DATAZOOM_Y_SLIDER_LEFT,
   DATAZOOM_Y_SLIDER_LEFT_SMALL,
@@ -92,7 +92,14 @@ const state = reactive({
         dataView: {},
         dataZoom: {},
         brush: {
-          type: ["rect", "polygon", "lineX", "lineY", "keep", "clear"],
+          type: [
+            "rect",
+            "polygon",
+            "lineX",
+            "lineY",
+            "keep",
+            "clear",
+          ],
         },
       },
     },
@@ -140,7 +147,9 @@ function buildXAxis() {
         show: true,
         position: "bottom",
         // Calculates axisLabel offset, adds +25 after every axis
-        offset: currIdx - 1 > 0 ? (currIdx - 1) * 25 : 0,
+        offset: currIdx - 1 > 0
+          ? (currIdx - 1) * 25
+          : 0,
         type: "value",
         name: curr[0],
         nameLocation: "end",

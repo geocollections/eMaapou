@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { mdiMinus, mdiPlus } from "@mdi/js";
 </script>
 
 <template>
