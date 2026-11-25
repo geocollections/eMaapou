@@ -257,12 +257,12 @@ useSeoMeta({
   description: data.value?.site?.description,
   ogImage: data.value?.images[0]?.filename
     ? img(
-      `${data.value?.images[0]?.filename}`,
-      { size: "medium" },
-      {
-        provider: "geocollections",
-      },
-    )
+        `${data.value?.images[0]?.filename}`,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+      )
     : undefined,
 });
 </script>

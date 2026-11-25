@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { DataTableOptions } from "~/constants";
 import { mdiMapMarkerOutline } from "@mdi/js";
-import { type DataTableOptions, FIELDS_SOLR_SITE } from "~/constants";
+import { FIELDS_SOLR_SITE } from "~/constants";
 
 const sitesStore = useSites();
 const {
@@ -57,7 +58,9 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() });
+  router.push({
+    query: getQueryParams(),
+  });
 }
 
 async function handleUpdate() {
@@ -78,7 +81,10 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
 
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
-    { name: "site-id", params: { id } },
+    {
+      name: "site-id",
+      params: { id },
+    },
     index + getOffset(options.value.page, options.value.itemsPerPage),
     "site",
   );

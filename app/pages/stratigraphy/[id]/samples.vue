@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { FIELDS_SOLR_SAMPLE } from "~/constants";
 import type { Stratigraphy } from "../[id].vue";
+import { FIELDS_SOLR_SAMPLE } from "~/constants";
 
 const props = defineProps<{
   stratigraphy: Stratigraphy;

@@ -43,7 +43,9 @@ const {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() as LocationQueryRaw });
+  router.push({
+    query: getQueryParams() as LocationQueryRaw,
+  });
 }
 
 async function handleUpdate() {
@@ -70,7 +72,10 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
 
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
-    { name: "area-id", params: { id } },
+    {
+      name: "area-id",
+      params: { id },
+    },
     index + getOffset(options.value.page, options.value.itemsPerPage),
     "area",
   );

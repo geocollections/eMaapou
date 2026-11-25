@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiScrewMachineFlatTop } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
+import { mdiScrewMachineFlatTop } from "@mdi/js";
 
 const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const route = useRoute();

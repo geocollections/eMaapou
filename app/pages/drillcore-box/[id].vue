@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiArchive } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
+import { mdiArchive } from "@mdi/js";
 
 const { $translate, $solrFetch, $apiFetch } = useNuxtApp();
 const { t } = useI18n();
@@ -247,18 +247,22 @@ const img = useImage();
 useSeoMeta({
   ogImage: data.value?.activeImage
     ? img(
-      data.value?.activeImage?.uuid_filename,
-      { size: "medium" },
-      {
-        provider: "geocollections",
-      },
-    )
+        data.value?.activeImage?.uuid_filename,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+      )
     : undefined,
 });
 
 function buildDepthString(depthStart: number, depthEnd: number) {
-  const depthStartString = depthStart ? `${depthStart}` : "...";
-  const depthEndString = depthEnd ? `${depthEnd}` : "...";
+  const depthStartString = depthStart
+    ? `${depthStart}`
+    : "...";
+  const depthEndString = depthEnd
+    ? `${depthEnd}`
+    : "...";
   return `${depthStartString} - ${depthEndString} (m)`;
 }
 </script>

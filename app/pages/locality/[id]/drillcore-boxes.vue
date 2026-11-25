@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
 import type { DrillcoreBox } from "~/pages/drillcore/[id]/boxes.vue";
+import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
 
 const props = defineProps<{
   drillcore: number;

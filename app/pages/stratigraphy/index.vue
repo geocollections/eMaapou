@@ -48,7 +48,9 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() });
+  router.push({
+    query: getQueryParams(),
+  });
 }
 
 async function handleUpdate() {
@@ -75,7 +77,10 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
 
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
-    { name: "stratigraphy-id", params: { id } },
+    {
+      name: "stratigraphy-id",
+      params: { id },
+    },
     index + getOffset(options.value.page, options.value.itemsPerPage),
   );
 }
