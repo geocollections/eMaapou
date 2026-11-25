@@ -1,14 +1,31 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui/components/Table.vue";
-import type { Specimen } from "../[id].vue";
+import type {
+  CatalogueValue,
+  Specimen,
+  SpecimenAgent,
+  SpecimenAnalysis,
+  SpecimenAttachmentLink,
+  SpecimenChild,
+  SpecimenFile,
+  SpecimenIndexEntry,
+  SpecimenPhoto,
+  SpecimenPublication,
+  SpecimenReference,
+  SpecimenRock,
+  SpecimenTaxon,
+} from "~/types/specimen";
 import { mdiArchive, mdiLayersTriple, mdiMapMarkerOutline } from "@mdi/js";
 import { h } from "vue";
 import { ULink, UTooltip } from "#components";
+import { fetchCataloguePages } from "~/utils/fetchCataloguePages";
 
 const props = defineProps<{
   specimen: Specimen;
-  specimenAlt?: Record<string, any> | null;
-  images?: any[];
+  specimenAlt?: Nullable<SpecimenIndexEntry>;
+  images: SpecimenPhoto[];
+  otherFiles: SpecimenFile[];
+  hasSupplementaryError?: boolean;
 }>();
 
 const localePath = useLocalePath();
@@ -31,14 +48,21 @@ const previewImage = ref<{
 const previewImages = computed(() => previewImage.value
   ? [previewImage.value]
   : []);
-function openImagePreview(image: any, title: string) {
+function openImagePreview(
+  image: SpecimenPhoto & {
+    image_author?: string;
+    image_date?: string;
+    author?: SpecimenAgent;
+  },
+  title: string | null | undefined,
+) {
   previewImage.value = {
     id: Number(image.id),
     filename: image.filename,
     info: {
-      title,
-      author: image.image_author || image.agent || image.author_free || image.author?.name,
-      date: image.image_date || image.date_created_free || image.date_created,
+      title: title || String(image.id),
+      author: image.image_author || image.agent || image.author_free || agentName(image.author) || undefined,
+      date: image.image_date || image.date_created_free || image.date_created || undefined,
     },
   };
   imagePreviewOpen.value = true;
@@ -61,26 +85,341 @@ function showRelativeImage(offset: number) {
     ? activeImageIndex.value
     : 0;
   const nextIndex = (currentIndex + offset + images.length) % images.length;
-  activeImage.value = images[nextIndex];
+  activeImage.value = images[nextIndex] ?? null;
 }
 
-const dateCollected = computed(() => {
-  if (!props.specimen)
-    return "";
-  return props.specimen.date_collected ?? props.specimen.date_collected_text;
-});
 const collection = computed(() => props.specimen.collection);
-const type = computed(() => props.specimen.type);
 const classification = computed(() => props.specimen.classification);
-const locality = computed(() => props.specimen.locality);
+const locality = computed(() => props.specimen.locality_is_private ? null : props.specimen.locality);
 const stratigraphy = computed(() => props.specimen.stratigraphy);
 const lithostratigraphy = computed(() => props.specimen.lithostratigraphy);
-const database = computed(() => props.specimen.database);
-const sample = computed(() => props.specimen.sample);
-const parent = computed(() => props.specimen.parent);
-const originalStatus = computed(() => props.specimen.original_status);
-const fossil = computed(() => props.specimen.fossil);
-const { $apiFetch, $solrFetch, $translate } = useNuxtApp();
+const { $apiFetch, $solrFetch, $translate, $formatDate, $openGeokirjandus } = useNuxtApp();
+
+interface DetailField {
+  label: string;
+  value?: string | number | null;
+  to?: string | null;
+  external?: boolean;
+}
+
+function webLink(value?: Nullable<string>) {
+  return value && /^https?:\/\//i.test(value)
+    ? value
+    : undefined;
+}
+
+function visibleFields(fields: DetailField[]) {
+  return fields.filter(({ value }) => value != null && String(value).trim() !== "");
+}
+
+function localized(et?: Nullable<string>, en?: Nullable<string>) {
+  return $translate({ et, en }) || et || en;
+}
+
+function catalogueValue(entry: Nullable<CatalogueValue>) {
+  return localized(entry?.value, entry?.value_en);
+}
+
+function agentName(agent?: Nullable<SpecimenAgent>) {
+  return agent?.name || [agent?.forename, agent?.surname].filter(Boolean).join(" ");
+}
+
+function formatDate(date?: Nullable<string>) {
+  return date
+    ? $formatDate(date)
+    : null;
+}
+
+const specimenFields = computed(() => {
+  const { specimen, specimenAlt } = props;
+  const collector = agentName(specimen.collector);
+  const collectedDate = formatDate(specimen.date_collected);
+  const sample = specimen.sample;
+
+  return visibleFields([
+    {
+      label: t("specimen.id"),
+      value: specimen.id,
+    },
+    {
+      label: t("specimen.number"),
+      value: specimen.number,
+    },
+    {
+      label: t("specimen.collectionNr"),
+      value: specimen.collection?.number,
+      to: specimen.collection && localePath({
+        name: "collection-id",
+        params: { id: specimen.collection.id },
+      }),
+    },
+    {
+      label: t("portal.specimenDetail.collectionName"),
+      value: localized(specimen.collection?.name, specimen.collection?.name_en),
+    },
+    {
+      label: t("specimen.oldNumber"),
+      value: specimen.old_number,
+    },
+    {
+      label: t("portal.specimenDetail.fieldNumber"),
+      value: specimen.number_field,
+    },
+    {
+      label: t("specimen.parent"),
+      value: specimen.parent?.number || specimen.parent?.id,
+      to: specimen.parent && localePath({
+        name: "specimen-id",
+        params: { id: specimen.parent.id },
+      }),
+    },
+    {
+      label: t("specimen.sample"),
+      value: sample?.number || specimen.sample_number || sample?.id,
+      to: sample && localePath({
+        name: "sample-id",
+        params: { id: sample.id },
+      }),
+    },
+    {
+      label: t("portal.specimenDetail.recordedSampleNumber"),
+      value: sample?.number && sample.number !== specimen.sample_number
+        ? specimen.sample_number
+        : null,
+    },
+    {
+      label: t("specimen.type"),
+      value: catalogueValue(specimen.type),
+    },
+    {
+      label: t("portal.specimenDetail.subtype"),
+      value: catalogueValue(specimen.subtype),
+    },
+    {
+      label: t("portal.specimenDetail.kind"),
+      value: catalogueValue(specimen.kind),
+    },
+    {
+      label: t("portal.specimenDetail.materialCategory"),
+      value: catalogueValue(specimen.fossil),
+    },
+    {
+      label: t("specimen.group"),
+      value: localized(classification.value?.name, classification.value?.name_en),
+    },
+    {
+      label: t("specimen.fossilGroup"),
+      value: specimenAlt?.fossilgroup,
+    },
+    {
+      label: t("specimen.part"),
+      value: specimen.part,
+    },
+    {
+      label: t("portal.specimenDetail.numberOfPieces"),
+      value: specimen.number_pieces,
+    },
+    {
+      label: t("specimen.originalStatus"),
+      value: catalogueValue(specimen.original_status),
+    },
+    {
+      label: t("portal.specimenDetail.status"),
+      value: catalogueValue(specimen.status),
+    },
+    {
+      label: t("portal.specimenDetail.presence"),
+      value: catalogueValue(specimen.presence),
+    },
+    {
+      label: t("storage.storage"),
+      value: specimen.storage?.name,
+    },
+    {
+      label: t("portal.specimenDetail.accessionNumber"),
+      value: specimen.accession?.number,
+    },
+    {
+      label: t("portal.specimenDetail.deaccessionNumber"),
+      value: specimen.deaccession?.number,
+    },
+    {
+      label: t("specimen.depth"),
+      value: specimen.depth,
+    },
+    {
+      label: t("specimen.depthInterval"),
+      value: specimen.depth_interval,
+    },
+    {
+      label: t("specimen.collector"),
+      value: collector || specimen.collector_text,
+    },
+    {
+      label: t("portal.specimenDetail.recordedCollector"),
+      value: collector && collector !== specimen.collector_text
+        ? specimen.collector_text
+        : null,
+    },
+    {
+      label: t("specimen.dateCollected"),
+      value: collectedDate || specimen.date_collected_text,
+    },
+    {
+      label: t("portal.specimenDetail.recordedCollectionDate"),
+      value: collectedDate && collectedDate !== specimen.date_collected_text
+        ? specimen.date_collected_text
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.collectingRemarks"),
+      value: specimen.remarks_collecting,
+    },
+    {
+      label: t("specimen.remarks"),
+      value: specimen.remarks,
+    },
+    {
+      label: t("portal.specimenDetail.tags"),
+      value: specimen.tags,
+    },
+    {
+      label: t("specimen.institution"),
+      value: localized(specimen.database?.name, specimen.database?.name_en),
+      to: webLink(specimen.database?.url),
+      external: true,
+    },
+    {
+      label: t("locality.dateAdded"),
+      value: formatDate(specimen.date_added),
+    },
+    {
+      label: t("locality.dateChanged"),
+      value: formatDate(specimen.date_changed),
+    },
+  ]);
+});
+
+function fileLabel(file: SpecimenFile) {
+  return localized(file.title, file.title_en) || file.original_filename || file.filename || String(file.id);
+}
+
+function fileFields(file: SpecimenFile) {
+  return visibleFields([
+    {
+      label: t("file.title"),
+      value: localized(file.title, file.title_en),
+    },
+    {
+      label: t("file.filename"),
+      value: file.original_filename,
+    },
+    {
+      label: t("portal.specimenDetail.imageNo"),
+      value: file.image_number,
+    },
+    {
+      label: t("attachment.author"),
+      value: file.agent || file.author_free,
+    },
+    {
+      label: t("portal.specimenDetail.date"),
+      value: file.date_created_free || formatDate(file.date_created),
+    },
+    {
+      label: t("portal.specimenDetail.description"),
+      value: localized(file.description, file.description_en),
+    },
+    {
+      label: t("portal.specimenDetail.resolution"),
+      value: file.image_width && file.image_height
+        ? `${[file.image_width, file.image_height].join(" × ")} px`
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.scaleBar"),
+      value: file.image_scalebar,
+    },
+    {
+      label: t("portal.specimenDetail.device"),
+      value: file.device_txt,
+    },
+    {
+      label: t("file.licence"),
+      value: file.licence,
+    },
+    {
+      label: t("portal.specimenDetail.fileFormat"),
+      value: file.format_value,
+    },
+    {
+      label: t("portal.specimenDetail.fileSize"),
+      value: file.size_mb != null
+        ? t("portal.specimenDetail.sizeInMegabytes", { size: file.size_mb })
+        : null,
+    },
+    {
+      label: t("specimen.remarks"),
+      value: file.remarks,
+    },
+  ]);
+}
+
+type PhotoLicence = Pick<NonNullable<SpecimenAttachmentLink["attachment"]>, "id" | "licence">;
+
+const { data: photoLicence } = useAsyncData(
+  () => `specimen-photo-licence-${activeImage.value?.id ?? "empty"}`,
+  async (): Promise<PhotoLicence> => {
+    const photo = activeImage.value;
+    if (!photo || photo.licence)
+      return { id: photo?.id ?? 0, licence: null };
+
+    return $apiFetch<PhotoLicence>(`/attachments/${photo.id}/`, {
+      query: { expand: "licence", fields: "id,licence.name,licence.name_en" },
+    });
+  },
+  { server: false, lazy: true },
+);
+
+const activeImageFields = computed(() => {
+  const photo = activeImage.value;
+  if (!photo)
+    return [];
+
+  const licence = Number(photoLicence.value?.id) === Number(photo.id)
+    ? photoLicence.value?.licence
+    : null;
+
+  return fileFields({ ...photo, licence: localized(licence?.name, licence?.name_en) || photo.licence });
+});
+
+const geographyFields = computed(() => visibleFields([
+  {
+    label: t("portal.specimenDetail.recordedLocality"),
+    value: props.specimen.locality_is_private ? null : props.specimen.locality_text,
+  },
+  {
+    label: t("specimen.stratigraphy"),
+    value: localized(stratigraphy.value?.name, stratigraphy.value?.name_en),
+    to: stratigraphy.value && localePath({
+      name: "stratigraphy-id",
+      params: { id: stratigraphy.value.id },
+    }),
+  },
+  {
+    label: t("specimen.lithostratigraphy"),
+    value: localized(lithostratigraphy.value?.name, lithostratigraphy.value?.name_en),
+    to: lithostratigraphy.value && localePath({
+      name: "stratigraphy-id",
+      params: { id: lithostratigraphy.value.id },
+    }),
+  },
+  {
+    label: t("portal.specimenDetail.stratigraphyRemarks"),
+    value: props.specimen.stratigraphy_text,
+  },
+]));
+
 const route = useRoute();
 const router = useRouter();
 const { data: localityPreview } = await useAsyncData(
@@ -115,56 +454,150 @@ const initialCoordinatePage = Number(route.query.coordinatePage);
 const coordinatePage = ref(Number.isInteger(initialCoordinatePage) && initialCoordinatePage > 0
   ? initialCoordinatePage
   : 1);
-const { data: relatedData } = await useAsyncData(
+const specimenPath = `/specimens/${props.specimen.id}/`;
+
+async function getRelated<T>(path: string, query: Record<string, string | number>) {
+  try {
+    const items = await fetchCataloguePages(offset => $apiFetch<GeoloogiaListResponse<T>>(path, {
+      query: { ...query, limit: 100, offset },
+    }));
+    return { items, failed: false };
+  }
+  catch (error) {
+    console.error("Could not load specimen relations.", path, error);
+    return { items: [] as T[], failed: true };
+  }
+}
+
+const emptyRelation = { items: [], failed: false };
+const { data: relatedData, refresh: refreshRelated } = await useAsyncData(
   `specimen-related-${props.specimen.id}`,
   async () => {
-    const [identifications, rockIdentifications, references] = await Promise.all([
-      $apiFetch<GeoloogiaListResponse>(`/specimens/${props.specimen.id}/specimen-taxa/`, {
-        query: { limit: 50, expand: "taxon,agent,reference,identification_type" },
-      }).catch(() => ({
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      })),
-      $apiFetch<GeoloogiaListResponse>(`/specimens/${props.specimen.id}/specimen-rocks/`, {
-        query: { limit: 50, expand: "rock,agent,reference,type" },
-      }).catch(() => ({
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      })),
-      $apiFetch<GeoloogiaListResponse>(`/specimens/${props.specimen.id}/specimen-references/`, {
-        query: { limit: 50, expand: "reference", ordering: "-reference__year" },
-      }).catch(() => ({
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      })),
+    const [identifications, rockIdentifications, references, children, analyses] = await Promise.all([
+      getRelated<SpecimenTaxon>(`${specimenPath}specimen-taxa/`, {
+        expand: "taxon,agent,reference,identification_type",
+        fields: "id,is_current,name,date_identified,taxon.id,taxon.name,taxon.full_name,agent.name,agent.forename,agent.surname,reference.id,reference.reference,reference.title,identification_type.value,identification_type.value_en",
+        ordering: "id",
+      }),
+      getRelated<SpecimenRock>(`${specimenPath}specimen-rocks/`, {
+        expand: "rock,agent,reference,type",
+        fields: "id,is_current,name,name_en,date_identified,remarks,rock.id,rock.name,rock.name_en,agent.name,agent.forename,agent.surname,reference.id,reference.reference,reference.title,type.value,type.value_en",
+        ordering: "id",
+      }),
+      getRelated<SpecimenReference>(`${specimenPath}specimen-references/`, {
+        expand: "reference,reference.journal",
+        fields: [
+          "id",
+          "pages",
+          "figures",
+          "remarks",
+          ...[
+            "id",
+            "reference",
+            "title",
+            "title_original",
+            "title_translated",
+            "author",
+            "author_original",
+            "year",
+            "journal.name",
+            "journal_text",
+            "journal_additional",
+            "book",
+            "book_original",
+            "book_translated",
+            "book_editor",
+            "publisher",
+            "publisher_place",
+            "volume",
+            "number",
+            "pages",
+            "figures",
+            "doi",
+            "isbn",
+            "issn",
+            "abstract",
+            "author_keywords",
+            "location_text",
+            "url",
+            "pdf",
+          ].map(field => `reference.${field}`),
+        ].join(","),
+        ordering: "-reference__year,id",
+      }),
+      getRelated<SpecimenChild>("/specimens/", {
+        parent: props.specimen.id,
+        expand: "database",
+        fields: "id,number,database.acronym",
+        ordering: "id",
+      }),
+      getRelated<SpecimenAnalysis>(`${specimenPath}analyses/`, {
+        expand: "analysis_method,analyst",
+        fields: "id,analysis_method.name,analysis_method.name_en,analyst.name",
+        ordering: "id",
+      }),
     ]);
 
     return {
-      identifications: identifications.results ?? [],
-      identificationsCount: identifications.count ?? 0,
-      rockIdentifications: rockIdentifications.results ?? [],
-      rockIdentificationsCount: rockIdentifications.count ?? 0,
-      references: references.results ?? [],
-      referencesCount: references.count ?? 0,
+      identifications,
+      rockIdentifications,
+      references,
+      children,
+      analyses,
     };
   },
   {
     default: () => ({
-      identifications: [],
-      identificationsCount: 0,
-      rockIdentifications: [],
-      rockIdentificationsCount: 0,
-      references: [],
-      referencesCount: 0,
+      identifications: emptyRelation,
+      rockIdentifications: emptyRelation,
+      references: emptyRelation,
+      children: emptyRelation,
+      analyses: emptyRelation,
     }),
   },
 );
+
+const hasSupplementaryError = computed(() =>
+  props.hasSupplementaryError || Object.values(relatedData.value).some(result => result.failed),
+);
+
+async function retrySupplementaryData() {
+  await Promise.all([
+    refreshNuxtData(`specimen-${route.params.id}`),
+    refreshRelated(),
+  ]);
+}
+
+const linkedRecordSections = computed(() => [
+  {
+    heading: t("portal.specimenDetail.childSpecimens"),
+    records: relatedData.value.children.items.map(record => ({
+      id: record.id,
+      label: [record.database?.acronym, record.number].filter(Boolean).join(" ") || String(record.id),
+      details: "",
+      to: localePath({
+        name: "specimen-id",
+        params: { id: record.id },
+      }),
+    })),
+  },
+  {
+    heading: t("portal.specimenDetail.relatedAnalyses"),
+    records: relatedData.value.analyses.items.map(record => ({
+      id: record.id,
+      label: t("portal.specimenDetail.analysisRecord", { id: record.id }),
+      details: [
+        localized(record.analysis_method?.name, record.analysis_method?.name_en),
+        agentName(record.analyst),
+      ].filter(Boolean).join(" · "),
+      to: localePath({
+        name: "analysis-id",
+        params: { id: record.id },
+      }),
+    })),
+  },
+].filter(section => section.records.length));
+
 const {
   data: coordinateData,
   status: coordinateStatus,
@@ -172,7 +605,7 @@ const {
 } = await useAsyncData(
   `specimen-coordinate-records-${props.specimen.id}`,
   async () => {
-    const { latitude, longitude } = props.specimen.locality ?? {};
+    const { latitude, longitude } = locality.value ?? {};
     if (latitude == null || longitude == null)
       return { records: [], count: 0 };
 
@@ -183,11 +616,12 @@ const {
           `latitude:${latitude}`,
           `longitude:${longitude}`,
           `-id:${props.specimen.id}`,
+          "-is_private:1",
         ],
         rows: coordinatePageSize,
         start: (coordinatePage.value - 1) * coordinatePageSize,
         sort: "specimen_full_name asc",
-        fields: "id,specimen_full_name",
+        fl: "id,specimen_full_name",
       },
     });
     const records = response.response.docs;
@@ -203,7 +637,8 @@ const {
             q: imageQuery,
             rows: 100,
             sort: "id asc",
-            fields: "id,specimen_id,filename,image_author,image_date",
+            fq: "-is_private:1",
+            fl: "id,specimen_id,filename,image_author,image_date",
           },
         });
         for (const image of imageResponse.response.docs) {
@@ -262,140 +697,274 @@ watch(coordinatePageCount, (pageCount) => {
   if (pageCount > 0 && coordinatePage.value > pageCount)
     setCoordinatePage(pageCount);
 });
-const identifiedTaxon = computed(() => {
-  if (props.specimenAlt?.taxon)
-    return props.specimenAlt.taxon;
-  return locale.value === "en"
-    ? classification.value?.name_en
-    : classification.value?.name;
-});
+const identifiedTaxon = computed(() => props.specimenAlt?.taxon_full || props.specimenAlt?.taxon);
+const identifiedRock = computed(() => localized(props.specimenAlt?.rock, props.specimenAlt?.rock_en));
+const titleAlt = computed(() => props.specimenAlt?.rock_txt?.[0] || identifiedRock.value || identifiedTaxon.value);
+
 interface IdentificationTableRow {
   id: string | number;
-  taxon: string;
-  taxonId: number | string | null | undefined;
-  identifiedBy: string;
-  dateIdentified: string;
-  confidence: string;
-  status: string;
+  subject: string;
+  subjectId?: number;
+  name?: Nullable<string>;
+  secondaryName?: Nullable<string>;
+  identifiedBy?: string;
+  dateIdentified?: Nullable<string>;
+  type?: Nullable<string>;
+  status?: string;
+  reference?: Nullable<SpecimenPublication>;
+  remarks?: Nullable<string>;
 }
-interface RockIdentificationTableRow {
-  id: string | number;
-  rock: string;
-  rockId: number | string | undefined;
-  identifiedBy: string;
-  dateIdentified: string;
+
+function identificationStatus(current: Nullable<boolean>) {
+  return current == null
+    ? undefined
+    : t(current ? "portal.specimenDetail.current" : "portal.specimenDetail.previous");
 }
+
 const identificationRows = computed<IdentificationTableRow[]>(() => {
-  const items = relatedData.value.identifications;
-  if (!items.length && classification.value) {
+  const items = relatedData.value.identifications.items;
+  if (!items.length && identifiedTaxon.value) {
     return [
       {
-        id: "classification",
-        taxon: identifiedTaxon.value || "—",
-        taxonId: null,
-        identifiedBy: "—",
-        dateIdentified: "—",
-        confidence: "—",
-        status: "—",
+        id: "indexed-taxon",
+        subject: identifiedTaxon.value,
+        subjectId: props.specimenAlt?.taxon_id,
       },
     ];
   }
 
-  return items.map(item => ({
-    id: item.id,
-    taxon: item.taxon?.name || "—",
-    taxonId: item.taxon?.id,
-    identifiedBy: item.agent?.name || "—",
-    dateIdentified: item.date_identified || "—",
-    confidence: item.identification_type
-      ? $translate({ et: item.identification_type.value, en: item.identification_type.value_en })
-      : "—",
-    status: item.is_current
-      ? (t("portal.specimenDetail.current"))
-      : (t("portal.specimenDetail.previous")),
-  }));
+  return items.map((item) => {
+    const subject = item.taxon?.full_name || item.taxon?.name || item.name || "—";
+    return {
+      id: item.id,
+      subject,
+      subjectId: item.taxon?.id,
+      name: item.name !== subject
+        ? item.name
+        : null,
+      identifiedBy: agentName(item.agent),
+      dateIdentified: item.date_identified_free || formatDate(item.date_identified),
+      type: catalogueValue(item.identification_type),
+      status: identificationStatus(item.is_current),
+      reference: item.reference,
+      remarks: item.remarks,
+    };
+  });
 });
-const identificationColumns = computed<TableColumn<IdentificationTableRow>[]>(() => [
-  {
-    accessorKey: "taxon",
-    header: t("portal.specimenDetail.taxon"),
-    cell: ({ row }) => row.original.taxonId
-      ? h(UTooltip, {
-          text: t("portal.specimenDetail.opensFossiilidInfoInANewTab"),
-          delayDuration: 250,
-        }, {
-          default: () => h(ULink, {
-            to: `https://fossiilid.info/${row.original.taxonId}`,
-            external: true,
-            target: "_blank",
-            rel: "noopener noreferrer",
-            class: "font-semibold text-portal-link underline underline-offset-2",
-          }, () => row.original.taxon),
-        })
-      : h("span", { class: "font-semibold text-portal-link" }, row.original.taxon),
-  },
-  {
-    accessorKey: "identifiedBy",
-    header: t("portal.specimenDetail.identifiedBy"),
-  },
-  {
-    accessorKey: "dateIdentified",
-    header: t("portal.specimenDetail.date"),
-  },
-  {
-    accessorKey: "confidence",
-    header: t("portal.specimenDetail.confidence"),
-  },
-  {
-    accessorKey: "status",
-    header: t("portal.specimenDetail.status"),
-  },
-]);
-const rockIdentificationRows = computed<RockIdentificationTableRow[]>(() => relatedData.value.rockIdentifications.map(item => ({
-  id: item.id,
-  rock: item.rock
-    ? $translate({ et: item.rock.name, en: item.rock.name_en })
-    : "—",
-  rockId: item.rock?.id,
-  identifiedBy: item.agent?.name || "—",
-  dateIdentified: item.date_identified || item.date_identified_free || "—",
-})));
-const rockIdentificationColumns = computed<TableColumn<RockIdentificationTableRow>[]>(() => [
-  {
-    accessorKey: "rock",
-    header: t("portal.specimenDetail.rock"),
-    cell: ({ row }) => row.original.rockId
-      ? h(ULink, {
-          to: `https://kivid.info/${row.original.rockId}`,
-          external: true,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          class: "text-portal-link underline underline-offset-2",
-        }, () => row.original.rock)
-      : row.original.rock,
-  },
-  {
-    accessorKey: "identifiedBy",
-    header: t("portal.specimenDetail.identifiedBy"),
-  },
-  {
-    accessorKey: "dateIdentified",
-    header: t("portal.specimenDetail.date"),
-  },
-]);
-const collectorName = computed(() => {
-  const collector = props.specimen.collector;
-  if (!collector)
-    return null;
-  if (collector.name)
-    return collector.name;
-  return [collector.forename, collector.surname].filter(Boolean).join(" ");
+
+const rockIdentificationRows = computed<IdentificationTableRow[]>(() => {
+  const items = relatedData.value.rockIdentifications.items;
+  if (!items.length && identifiedRock.value) {
+    return [
+      {
+        id: "indexed-rock",
+        subject: identifiedRock.value,
+        subjectId: props.specimenAlt?.rock_id,
+        name: props.specimenAlt?.rock_txt?.[0] !== identifiedRock.value
+          ? props.specimenAlt?.rock_txt?.[0]
+          : null,
+      },
+    ];
+  }
+
+  return items.map((item) => {
+    const name = localized(item.name, item.name_en);
+    const otherName = locale.value === "en"
+      ? item.name
+      : item.name_en;
+    const subject = localized(item.rock?.name, item.rock?.name_en) || name || "—";
+    return {
+      id: item.id,
+      subject,
+      subjectId: item.rock?.id,
+      name: name !== subject
+        ? name
+        : null,
+      secondaryName: otherName !== name && otherName !== subject
+        ? otherName
+        : null,
+      identifiedBy: agentName(item.agent),
+      dateIdentified: item.date_identified_free || formatDate(item.date_identified),
+      type: catalogueValue(item.type),
+      status: identificationStatus(item.is_current),
+      reference: item.reference,
+      remarks: item.remarks,
+    };
+  });
 });
-const titleAlt = computed(() => {
-  if (props.specimenAlt?.rock)
-    return props.specimenAlt.rock_txt?.[0] || props.specimenAlt.rock;
-  return props.specimenAlt?.taxon || identifiedTaxon.value;
-});
+
+function identificationColumnsFor(rows: IdentificationTableRow[], kind: "taxon" | "rock"): TableColumn<IdentificationTableRow>[] {
+  const columns: TableColumn<IdentificationTableRow>[] = [
+    {
+      accessorKey: "subject",
+      header: t(`portal.specimenDetail.${kind}`),
+      cell: ({ row }) => {
+        const { subject, subjectId, name, secondaryName } = row.original;
+        const link = subjectId
+          ? h(ULink, {
+              to: `https://${kind === "taxon"
+                ? "fossiilid.info"
+                : "kivid.info"}/${subjectId}`,
+              external: true,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              class: "font-semibold text-portal-link underline underline-offset-2",
+            }, () => subject)
+          : subject;
+        return h("div", { class: "whitespace-normal min-w-28" }, [
+          typeof link !== "string" && kind === "taxon"
+            ? h(UTooltip, {
+                text: t("portal.specimenDetail.opensFossiilidInfoInANewTab"),
+                delayDuration: 250,
+              }, {
+                default: () => link,
+              })
+            : link,
+          ...[name, secondaryName].filter((label): label is string => !!label).map(label => h("div", { class: "text-xs text-portal-muted" }, label)),
+        ]);
+      },
+    },
+  ];
+
+  for (const [key, label] of [
+    ["identifiedBy", "portal.specimenDetail.identifiedBy"],
+    ["dateIdentified", "portal.specimenDetail.date"],
+    ["type", "portal.specimenDetail.identificationType"],
+    ["status", "portal.specimenDetail.status"],
+    ["remarks", "specimen.remarks"],
+  ] as const) {
+    if (rows.some(row => row[key])) {
+      columns.push({
+        accessorKey: key,
+        header: t(label),
+        cell: ({ row }) => row.original[key] || "—",
+      });
+    }
+  }
+
+  if (rows.some(row => row.reference)) {
+    columns.push({
+      accessorKey: "reference",
+      header: t("specimenIdentification.reference"),
+      cell: ({ row }) => {
+        const publication = row.original.reference;
+        return publication
+          ? h("button", {
+              type: "button",
+              class: "cursor-pointer whitespace-normal text-left text-portal-link underline",
+              onClick: () => $openGeokirjandus("reference", String(publication.id)),
+            }, publication.reference || publication.title || String(publication.id))
+          : "—";
+      },
+    });
+  }
+  return columns;
+}
+
+const identificationColumns = computed(() => identificationColumnsFor(identificationRows.value, "taxon"));
+const rockIdentificationColumns = computed(() => identificationColumnsFor(rockIdentificationRows.value, "rock"));
+
+function referenceFields(item: SpecimenReference) {
+  const publication = item.reference;
+  const journal = typeof publication?.journal === "object"
+    ? publication.journal?.name
+    : null;
+  const issue = publication?.number || publication?.issue;
+  return visibleFields([
+    {
+      label: t("attachment.author"),
+      value: publication?.author,
+    },
+    {
+      label: t("portal.specimenDetail.originalAuthor"),
+      value: publication?.author_original !== publication?.author
+        ? publication?.author_original
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.originalTitle"),
+      value: publication?.title_original !== publication?.title
+        ? publication?.title_original
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.translatedTitle"),
+      value: publication?.title_translated !== publication?.title
+        ? publication?.title_translated
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.publication"),
+      value: journal || publication?.journal_text,
+    },
+    {
+      label: t("portal.specimenDetail.bookTitle"),
+      value: publication?.book,
+    },
+    {
+      label: t("portal.specimenDetail.additionalJournal"),
+      value: publication?.journal_additional,
+    },
+    {
+      label: t("portal.specimenDetail.originalBook"),
+      value: publication?.book_original !== publication?.book
+        ? publication?.book_original
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.translatedBook"),
+      value: publication?.book_translated !== publication?.book
+        ? publication?.book_translated
+        : null,
+    },
+    {
+      label: t("portal.specimenDetail.editor"),
+      value: publication?.book_editor,
+    },
+    {
+      label: t("portal.specimenDetail.publisher"),
+      value: [publication?.publisher, publication?.publisher_place].filter(Boolean).join(", "),
+    },
+    {
+      label: t("portal.specimenDetail.volumeIssue"),
+      value: [publication?.volume, issue].filter(Boolean).join(" / "),
+    },
+    {
+      label: t("portal.specimenDetail.pages"),
+      value: publication?.pages,
+    },
+    {
+      label: t("portal.specimenDetail.figures"),
+      value: publication?.figures,
+    },
+    {
+      label: t("portal.specimenDetail.citedPages"),
+      value: item.pages,
+    },
+    {
+      label: t("portal.specimenDetail.citedFigures"),
+      value: item.figures,
+    },
+    {
+      label: t("specimenReference.remarks"),
+      value: item.remarks,
+    },
+    { label: "ISBN", value: publication?.isbn },
+    { label: "ISSN", value: publication?.issn },
+    {
+      label: t("portal.specimenDetail.abstract"),
+      value: publication?.abstract,
+    },
+    {
+      label: t("portal.specimenDetail.tags"),
+      value: publication?.author_keywords,
+    },
+    {
+      label: t("portal.specimenDetail.referenceLocation"),
+      value: publication?.location_text,
+    },
+  ]);
+}
 
 const mapBaseLayer = computed(() => {
   if (locality.value?.country?.iso_3166_1_alpha_2 === "EE")
@@ -413,6 +982,21 @@ const mapOverlays = computed(() => {
 
 <template>
   <div class="mx-auto w-full max-w-360 px-4 pb-16 pt-8 sm:px-6 lg:px-10 lg:pt-10">
+    <div
+      v-if="hasSupplementaryError"
+      class="mb-5 flex flex-wrap items-center gap-3 rounded-portal-card border border-portal-border px-5 py-3 text-sm"
+      role="status"
+    >
+      {{ t('portal.specimenDetail.supplementaryLoadError') }}
+      <UButton
+        color="neutral"
+        variant="outline"
+        size="sm"
+        @click="retrySupplementaryData"
+      >
+        {{ t('portal.common.retry') }}
+      </UButton>
+    </div>
     <div
       class="grid grid-cols-1 items-start gap-5"
       :class="{ 'lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]': props.images?.length && activeImage }"
@@ -472,7 +1056,7 @@ const mapOverlays = computed(() => {
               <NuxtImg
                 :src="activeImage.filename"
                 provider="geocollections"
-                :alt="titleAlt || identifiedTaxon || specimen.number"
+                :alt="titleAlt || identifiedTaxon || specimen.number || undefined"
                 width="900"
                 height="600"
                 fit="contain"
@@ -481,31 +1065,22 @@ const mapOverlays = computed(() => {
             </UButton>
           </div>
           <div class="flex min-w-0 flex-wrap items-end justify-between gap-4">
-            <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 border-b border-portal-border pb-4 text-sm">
-              <dt class="text-portal-muted">
-                {{ t('portal.specimenDetail.imageNo') }}
-              </dt>
-              <dd class="m-0 text-right text-portal-text">
-                {{ activeImage.image_number || activeImage.id }}
-              </dd>
-              <template v-if="activeImage.agent || activeImage.author_free">
-                <dt class="text-portal-muted">
-                  {{ t('portal.specimenDetail.photographer') }}
-                </dt>
-                <dd class="m-0 text-right text-portal-text">
-                  {{ activeImage.agent || activeImage.author_free }}
-                </dd>
-              </template>
-              <template v-if="activeImage.date_created_free || activeImage.date_created">
-                <dt class="text-portal-muted">
-                  {{ t('portal.specimenDetail.date') }}
-                </dt>
-                <dd class="m-0 text-right text-portal-text">
-                  {{ activeImage.date_created_free || $formatDate(activeImage.date_created) }}
-                </dd>
-              </template>
-            </dl>
-            <div v-if="props.images.length > 1" class="grid max-h-24 grid-cols-6 gap-2 overflow-x-auto overflow-y-hidden">
+            <div class="min-w-0">
+              <ULink :to="localePath({ name: 'file-id', params: { id: activeImage.id } })" class="font-semibold text-portal-link underline underline-offset-2">
+                {{ fileLabel(activeImage) }}
+              </ULink>
+              <dl class="m-0 mt-2 grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[auto_minmax(0,1fr)]">
+                <template v-for="field in activeImageFields" :key="field.label">
+                  <dt class="text-portal-muted">
+                    {{ field.label }}
+                  </dt>
+                  <dd class="m-0 whitespace-pre-line wrap-anywhere text-portal-text">
+                    {{ field.value }}
+                  </dd>
+                </template>
+              </dl>
+            </div>
+            <div v-if="props.images.length > 1" class="flex max-w-full gap-2 overflow-x-auto p-1">
               <UButton
                 v-for="image in props.images"
                 :key="image.id"
@@ -513,7 +1088,7 @@ const mapOverlays = computed(() => {
                 color="neutral"
                 variant="ghost"
                 square
-                class="h-auto! w-auto! aspect-square overflow-hidden rounded-portal-control! p-0! border bg-portal-subtle transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
+                class="size-14! shrink-0 overflow-hidden rounded-portal-control! p-0! border bg-portal-subtle transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
                 :class="activeImage.id === image.id ? 'border-2 border-portal-primary' : 'border-portal-border hover:border-portal-border-hover'"
                 :aria-label="t('portal.specimenDetail.showImage', { number: image.image_number || image.id })"
                 :aria-pressed="activeImage.id === image.id"
@@ -526,6 +1101,7 @@ const mapOverlays = computed(() => {
                   width="180"
                   height="180"
                   fit="cover"
+                  loading="lazy"
                   class="size-full object-cover"
                 />
               </UButton>
@@ -542,153 +1118,75 @@ const mapOverlays = computed(() => {
           </div>
         </div>
       </UCard>
-      <UCard
-        as="section"
-        :ui="specimenCardUi"
-        class="min-w-0"
-      >
-        <div class="border-b border-portal-border bg-portal-selected px-5 py-4 sm:px-6">
-          <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
-            {{ t('portal.specimenDetail.recordDetails') }}
-          </p>
-          <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
-            {{ t('portal.specimenDetail.specimenInformation') }}
+      <div class="flex min-w-0 flex-col gap-5">
+        <UCard
+          as="section"
+          :ui="specimenCardUi"
+          class="min-w-0"
+        >
+          <div class="border-b border-portal-border bg-portal-selected px-5 py-4 sm:px-6">
+            <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
+              {{ t('portal.specimenDetail.recordDetails') }}
+            </p>
+            <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
+              {{ t('portal.specimenDetail.specimenInformation') }}
+            </h2>
+          </div>
+          <dl class="m-0 grid grid-cols-1 px-5 sm:grid-cols-2 sm:gap-x-8 sm:px-6">
+            <div
+              v-for="field in specimenFields"
+              :key="field.label"
+              class="min-w-0 border-b border-portal-border py-3 last:border-b-0"
+            >
+              <dt class="text-xs text-portal-muted">
+                {{ field.label }}
+              </dt>
+              <dd class="m-0 whitespace-pre-line wrap-anywhere text-sm text-portal-text">
+                <ULink
+                  v-if="field.to"
+                  :to="field.to"
+                  :external="field.external"
+                  class="text-portal-link underline underline-offset-2"
+                >
+                  {{ field.value }}
+                </ULink>
+                <template v-else>
+                  {{ field.value }}
+                </template>
+              </dd>
+            </div>
+          </dl>
+        </UCard>
+        <UCard
+          v-if="identificationRows.length"
+          as="section"
+          :ui="specimenCardUi"
+        >
+          <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
+            {{ t('portal.specimenDetail.taxonIdentifications') }}
           </h2>
-        </div>
-        <dl class="m-0 grid grid-cols-1 px-5 sm:grid-cols-2 sm:gap-x-8 sm:px-6 [&>div]:grid-cols-1 [&>div]:content-start [&>div]:gap-y-0.5 [&>div]:border-b [&>div]:border-portal-border [&>div]:py-3 [&>div>dt]:text-xs [&>div>dt]:leading-[1.4] [&>div>dd]:text-sm [&>div>dd]:leading-normal [&>div>dd]:wrap-anywhere">
-          <div v-if="collection" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm last:border-b-0">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.collectionNr") }}
-            </dt>
-            <dd class="m-0 text-portal-link">
-              <ULink :to="localePath({ name: 'collection-id', params: { id: collection.id } })" class="font-semibold underline underline-offset-2">
-                {{ collection.number }}
-              </ULink>
-            </dd>
-          </div>
-          <div class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm last:border-b-0">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.number") }}
-            </dt>
-            <dd class="m-0 font-medium text-portal-text">
-              {{ specimen.number }}
-            </dd>
-          </div>
-          <div v-if="parent" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.parent") }}
-            </dt>
-            <dd class="m-0">
-              <ULink :to="localePath({ name: 'specimen-id', params: { id: parent.id } })" class="text-portal-link underline underline-offset-2">
-                {{ parent.number }}
-              </ULink>
-            </dd>
-          </div>
-          <div v-if="sample" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.sample") }}
-            </dt>
-            <dd class="m-0">
-              <ULink :to="localePath({ name: 'sample-id', params: { id: sample.id } })" class="text-portal-link underline underline-offset-2">
-                {{ sample.number }}
-              </ULink>
-            </dd>
-          </div>
-          <div v-if="specimen.old_number" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.oldNumber") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ specimen.old_number }}
-            </dd>
-          </div>
-          <div v-if="type" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.type") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ $translate({ et: type.value, en: type.value_en }) }}
-            </dd>
-          </div>
-          <div v-if="specimen.part" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.part") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ specimen.part }}
-            </dd>
-          </div>
-          <div v-if="originalStatus" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.originalStatus") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ $translate({ et: originalStatus.value, en: originalStatus.value_en }) }}
-            </dd>
-          </div>
-          <div v-if="fossil" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ t('portal.specimenDetail.kind') }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ $translate({ et: fossil.value, en: fossil.value_en }) }}
-            </dd>
-          </div>
-          <div v-if="classification" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.group") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ $translate({ et: classification.name, en: classification.name_en }) }}
-            </dd>
-          </div>
-          <div v-if="specimen.depth !== null" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.depth") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ specimen.depth }}
-            </dd>
-          </div>
-          <div v-if="specimen.remarks" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.remarks") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ specimen.remarks }}
-            </dd>
-          </div>
-          <div v-if="dateCollected" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.dateCollected") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ dateCollected }}
-            </dd>
-          </div>
-          <div v-if="collectorName" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.collector") }}
-            </dt>
-            <dd class="m-0 text-portal-text">
-              {{ collectorName }}
-            </dd>
-          </div>
-          <div v-if="database" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 py-2.5 text-sm">
-            <dt class="text-portal-muted">
-              {{ $t("specimen.institution") }}
-            </dt>
-            <dd class="m-0">
-              <ULink :to="database.url" class="text-portal-link underline underline-offset-2">
-                {{ $translate({ et: database.name, en: database.name_en }) }}
-              </ULink>
-            </dd>
-          </div>
-        </dl>
-      </UCard>
+          <UTable
+            :data="identificationRows"
+            :columns="identificationColumns"
+            :caption="t('portal.specimenDetail.taxonIdentifications')"
+            :empty="t('portal.specimenDetail.noIdentificationsAvailable')"
+            class="text-sm"
+            :ui="{
+              root: 'overflow-x-auto',
+              base: 'min-w-full',
+              thead: 'bg-portal-subtle text-left text-portal-muted',
+              tbody: 'divide-y divide-portal-border',
+              tr: 'transition-colors hover:bg-portal-subtle',
+              th: 'px-4 py-3 text-left font-medium text-portal-muted',
+              td: 'px-4 py-3 text-portal-text',
+              empty: 'px-4 py-6 text-center text-sm text-portal-muted',
+            }"
+          />
+        </UCard>
+      </div>
     </div>
     <UCard
-      v-if="locality"
+      v-if="locality || specimen.locality_is_private || geographyFields.length"
       as="section"
       :ui="specimenCardUi"
       class="mt-5"
@@ -702,11 +1200,11 @@ const mapOverlays = computed(() => {
             {{ t('portal.specimenDetail.localityGeology') }}
           </h2>
         </div>
-        <span v-if="locality.country" class="mt-1 text-right text-xs text-portal-muted">
+        <span v-if="locality?.country" class="mt-1 text-right text-xs text-portal-muted">
           {{ $translate({ et: locality.country.name, en: locality.country.name_en }) }}
         </span>
       </div>
-      <div class="flex items-center justify-between gap-4 px-5 pt-4 sm:px-6">
+      <div v-if="locality" class="flex items-center justify-between gap-4 px-5 pt-4 sm:px-6">
         <ULink :to="localePath({ name: 'locality-id', params: { id: locality.id } })" class="text-sm font-semibold text-portal-link underline underline-offset-2">
           {{ $translate({ et: locality.name, en: locality.name_en }) }}
         </ULink>
@@ -715,7 +1213,7 @@ const mapOverlays = computed(() => {
         </span>
       </div>
       <div
-        v-if="locality.latitude != null && locality.longitude != null"
+        v-if="locality?.latitude != null && locality.longitude != null"
         class="mx-5 mt-4 sm:mx-6"
       >
         <MapDetail
@@ -728,76 +1226,46 @@ const mapOverlays = computed(() => {
             latitude: locality.latitude,
             longitude: locality.longitude,
             radius: 10,
-            text: $translate({ et: locality.name, en: locality.name_en }),
+            text: localized(locality.name, locality.name_en) || String(locality.id),
             route: localePath({ name: 'locality-id', params: { id: locality.id } }),
           }]"
         />
       </div>
-      <p v-else class="mx-5 mt-4 border border-dashed border-portal-border px-4 py-6 text-sm text-portal-muted sm:mx-6">
-        {{ t('portal.specimenDetail.coordinatesAreNotAvailableForThisLocality') }}
+      <p v-else-if="specimen.locality_is_private || locality" class="mx-5 mt-4 border border-dashed border-portal-border px-4 py-6 text-sm text-portal-muted sm:mx-6">
+        <template v-if="specimen.locality_is_private">
+          {{ t('portal.specimenDetail.privateLocality') }}
+        </template>
+        <template v-else>
+          {{ t('portal.specimenDetail.coordinatesAreNotAvailableForThisLocality') }}
+        </template>
       </p>
-      <dl class="m-0 grid grid-cols-1 px-5 py-3 sm:grid-cols-2 sm:gap-x-8 sm:px-6 [&>div]:grid-cols-1 [&>div]:content-start [&>div]:gap-y-0.5 [&>div]:border-b [&>div]:border-portal-border [&>div]:py-3 [&>div>dt]:text-xs [&>div>dt]:leading-[1.4] [&>div>dd]:text-sm [&>div>dd]:leading-normal">
-        <div v-if="stratigraphy" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-          <dt class="text-portal-muted">
-            {{ $t("specimen.stratigraphy") }}
+      <dl v-if="geographyFields.length" class="m-0 grid grid-cols-1 px-5 py-3 sm:grid-cols-2 sm:gap-x-8 sm:px-6">
+        <div
+          v-for="field in geographyFields"
+          :key="field.label"
+          class="min-w-0 border-b border-portal-border py-3"
+        >
+          <dt class="text-xs text-portal-muted">
+            {{ field.label }}
           </dt>
-          <dd class="m-0">
-            <ULink :to="localePath({ name: 'stratigraphy-id', params: { id: stratigraphy.id } })" class="text-portal-link underline underline-offset-2">
-              {{ $translate({ et: stratigraphy.name, en: stratigraphy.name_en }) }}
+          <dd class="m-0 whitespace-pre-line wrap-anywhere text-sm text-portal-text">
+            <ULink
+              v-if="field.to"
+              :to="field.to"
+              class="text-portal-link underline underline-offset-2"
+            >
+              {{ field.value }}
             </ULink>
-          </dd>
-        </div>
-        <div v-if="lithostratigraphy" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 border-b border-portal-border py-2.5 text-sm">
-          <dt class="text-portal-muted">
-            {{ $t("specimen.lithostratigraphy") }}
-          </dt>
-          <dd class="m-0">
-            <ULink :to="localePath({ name: 'stratigraphy-id', params: { id: lithostratigraphy.id } })" class="text-portal-link underline underline-offset-2">
-              {{ $translate({ et: lithostratigraphy.name, en: lithostratigraphy.name_en }) }}
-            </ULink>
-          </dd>
-        </div>
-        <div v-if="specimen.stratigraphy_text" class="grid grid-cols-[160px_minmax(0,1fr)] gap-3 py-2.5 text-sm">
-          <dt class="text-portal-muted">
-            {{ t('portal.specimenDetail.stratigraphyRemarks') }}
-          </dt>
-          <dd class="m-0 text-portal-text">
-            {{ specimen.stratigraphy_text }}
+            <template v-else>
+              {{ field.value }}
+            </template>
           </dd>
         </div>
       </dl>
     </UCard>
 
     <UCard
-      v-if="relatedData.identificationsCount || classification"
-      as="section"
-      :ui="specimenCardUi"
-      class="mt-8"
-    >
-      <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
-        {{ t('portal.specimenDetail.taxonIdentifications') }}
-      </h2>
-      <UTable
-        :data="identificationRows"
-        :columns="identificationColumns"
-        :caption="t('portal.specimenDetail.taxonIdentifications')"
-        :empty="t('portal.specimenDetail.noIdentificationsAvailable')"
-        class="text-sm"
-        :ui="{
-          root: 'overflow-x-auto',
-          base: 'min-w-full',
-          thead: 'bg-portal-subtle text-left text-portal-muted',
-          tbody: 'divide-y divide-portal-border',
-          tr: 'transition-colors hover:bg-portal-subtle',
-          th: 'px-4 py-3 text-left font-medium text-portal-muted',
-          td: 'px-4 py-3 text-portal-text',
-          empty: 'px-4 py-6 text-center text-sm text-portal-muted',
-        }"
-      />
-    </UCard>
-
-    <UCard
-      v-if="relatedData.rockIdentificationsCount"
+      v-if="rockIdentificationRows.length"
       as="section"
       :ui="specimenCardUi"
       class="mt-8"
@@ -822,94 +1290,6 @@ const mapOverlays = computed(() => {
           empty: 'px-4 py-6 text-center text-sm text-portal-muted',
         }"
       />
-    </UCard>
-
-    <UCard
-      v-if="relatedData.referencesCount"
-      as="section"
-      :ui="specimenCardUi"
-      class="mt-8"
-    >
-      <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
-        {{ t('portal.specimenDetail.references') }}
-      </h2>
-      <ul class="m-0 grid list-none gap-3 p-4 sm:p-5">
-        <li
-          v-for="item in relatedData.references"
-          :key="item.id"
-          class="rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5"
-        >
-          <div class="flex flex-wrap items-start justify-between gap-3">
-            <div class="min-w-0">
-              <BaseLinkExternal
-                v-if="item.reference?.id"
-                class="font-semibold text-portal-link"
-                @click="$openGeokirjandus('reference', item.reference.id)"
-              >
-                {{ item.reference.reference || item.reference.title || item.reference }}
-              </BaseLinkExternal>
-              <p v-else class="m-0 font-semibold text-portal-heading">
-                {{ item.reference?.reference || item.reference?.title || item.reference }}
-              </p>
-              <p v-if="item.reference?.title && item.reference.title !== item.reference.reference" class="mt-1 mb-0 text-sm text-portal-text">
-                {{ item.reference.title }}
-              </p>
-            </div>
-            <span v-if="item.reference?.year" class="shrink-0 rounded-full bg-portal-mint px-3 py-1 text-sm font-medium text-portal-text">
-              {{ item.reference.year }}
-            </span>
-          </div>
-          <dl class="mt-3 grid gap-x-6 gap-y-2 border-t border-portal-border pt-3 text-sm sm:grid-cols-2">
-            <div v-if="item.reference?.journal?.name || item.reference?.journal__journal_name || item.reference?.book">
-              <dt class="text-xs text-portal-muted">
-                {{ t('portal.specimenDetail.publication') }}
-              </dt>
-              <dd class="m-0 text-portal-text">
-                {{ item.reference.journal?.name || item.reference.journal__journal_name || item.reference.book }}
-              </dd>
-            </div>
-            <div v-if="item.reference?.volume || item.reference?.issue">
-              <dt class="text-xs text-portal-muted">
-                {{ t('portal.specimenDetail.volumeIssue') }}
-              </dt>
-              <dd class="m-0 text-portal-text">
-                {{ [item.reference.volume, item.reference.issue].filter(Boolean).join(' / ') }}
-              </dd>
-            </div>
-            <div v-if="item.reference?.pages">
-              <dt class="text-xs text-portal-muted">
-                {{ t('portal.specimenDetail.pages') }}
-              </dt>
-              <dd class="m-0 text-portal-text">
-                {{ item.reference.pages }}
-              </dd>
-            </div>
-            <div v-if="item.reference?.doi">
-              <dt class="text-xs text-portal-muted">
-                DOI
-              </dt>
-              <dd class="m-0">
-                <BaseLinkExternal @click="$openWindow(`https://doi.org/${item.reference.doi}`)">
-                  {{ item.reference.doi }}
-                </BaseLinkExternal>
-              </dd>
-            </div>
-            <div v-if="item.reference?.pdf">
-              <dt class="text-xs text-portal-muted">
-                PDF
-              </dt>
-              <dd class="m-0">
-                <a
-                  :href="item.reference.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-portal-link underline"
-                >{{ t('portal.specimenDetail.openFullText') }}</a>
-              </dd>
-            </div>
-          </dl>
-        </li>
-      </ul>
     </UCard>
 
     <section v-if="collection || locality || stratigraphy" class="mt-10">
@@ -1030,6 +1410,161 @@ const mapOverlays = computed(() => {
         </UCard>
       </div>
     </section>
+
+    <UCard
+      v-if="relatedData.references.items.length"
+      as="section"
+      :ui="specimenCardUi"
+      class="mt-8"
+    >
+      <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
+        {{ t('portal.specimenDetail.references') }}
+      </h2>
+      <ul class="m-0 grid list-none gap-3 p-4 sm:p-5">
+        <li
+          v-for="item in relatedData.references.items"
+          :key="item.id"
+          class="rounded-portal-card border border-portal-border bg-portal-background p-4 sm:p-5"
+        >
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-0">
+              <BaseLinkExternal
+                v-if="item.reference?.id"
+                class="font-semibold text-portal-link"
+                @click="$openGeokirjandus('reference', String(item.reference.id))"
+              >
+                {{ item.reference.reference || item.reference.title || item.reference.id }}
+              </BaseLinkExternal>
+              <p v-else class="m-0 font-semibold text-portal-heading">
+                {{ item.reference?.reference || item.reference?.title || item.reference?.id }}
+              </p>
+              <p v-if="item.reference?.title && item.reference.title !== item.reference.reference" class="mt-1 mb-0 text-sm text-portal-text">
+                {{ item.reference.title }}
+              </p>
+            </div>
+            <span v-if="item.reference?.year" class="shrink-0 rounded-full bg-portal-mint px-3 py-1 text-sm font-medium text-portal-text">
+              {{ item.reference.year }}
+            </span>
+          </div>
+          <dl class="mt-3 grid gap-x-6 gap-y-2 border-t border-portal-border pt-3 text-sm sm:grid-cols-2">
+            <div
+              v-for="field in referenceFields(item)"
+              :key="field.label"
+              class="min-w-0"
+            >
+              <dt class="text-xs text-portal-muted">
+                {{ field.label }}
+              </dt>
+              <dd class="m-0 whitespace-pre-line wrap-anywhere text-portal-text">
+                {{ field.value }}
+              </dd>
+            </div>
+            <div v-if="webLink(item.reference?.url)">
+              <dt class="text-xs text-portal-muted">
+                {{ t('portal.specimenDetail.referenceWebsite') }}
+              </dt>
+              <dd class="m-0 wrap-anywhere">
+                <ULink
+                  :to="webLink(item.reference?.url)"
+                  external
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-portal-link underline underline-offset-2"
+                >
+                  {{ item.reference?.url }}
+                </ULink>
+              </dd>
+            </div>
+            <div v-if="item.reference?.doi">
+              <dt class="text-xs text-portal-muted">
+                DOI
+              </dt>
+              <dd class="m-0">
+                <BaseLinkExternal @click="$openWindow(`https://doi.org/${item.reference.doi}`)">
+                  {{ item.reference.doi }}
+                </BaseLinkExternal>
+              </dd>
+            </div>
+            <div v-if="webLink(item.reference?.pdf)">
+              <dt class="text-xs text-portal-muted">
+                PDF
+              </dt>
+              <dd class="m-0">
+                <a
+                  :href="webLink(item.reference?.pdf)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-portal-link underline"
+                >{{ t('portal.specimenDetail.openFullText') }}</a>
+              </dd>
+            </div>
+          </dl>
+        </li>
+      </ul>
+    </UCard>
+
+    <UCard
+      v-if="otherFiles.length"
+      as="section"
+      :ui="specimenCardUi"
+      class="mt-8"
+    >
+      <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
+        {{ t('portal.specimenDetail.relatedFiles') }}
+      </h2>
+      <ul class="m-0 list-none divide-y divide-portal-border px-5">
+        <li
+          v-for="file in otherFiles"
+          :key="file.id"
+          class="py-4"
+        >
+          <ULink :to="localePath({ name: 'file-id', params: { id: file.id } })" class="font-semibold wrap-anywhere text-portal-link underline underline-offset-2">
+            {{ fileLabel(file) }}
+          </ULink>
+          <dl class="m-0 mt-2 grid gap-3 text-sm sm:grid-cols-2">
+            <div
+              v-for="field in fileFields(file)"
+              :key="field.label"
+              class="min-w-0"
+            >
+              <dt class="text-xs text-portal-muted">
+                {{ field.label }}
+              </dt>
+              <dd class="m-0 whitespace-pre-line wrap-anywhere text-portal-text">
+                {{ field.value }}
+              </dd>
+            </div>
+          </dl>
+        </li>
+      </ul>
+    </UCard>
+
+    <UCard
+      v-for="section in linkedRecordSections"
+      :key="section.heading"
+      as="section"
+      :ui="specimenCardUi"
+      class="mt-8"
+    >
+      <h2 class="m-0 border-b border-portal-border px-5 py-4 text-[18px] font-semibold text-portal-heading">
+        {{ section.heading }}
+      </h2>
+      <ul class="m-0 list-none divide-y divide-portal-border px-5">
+        <li
+          v-for="record in section.records"
+          :key="record.id"
+          class="py-3 text-sm"
+        >
+          <ULink :to="record.to" class="font-semibold text-portal-link underline underline-offset-2">
+            {{ record.label }}
+          </ULink>
+          <p v-if="record.details" class="my-1 text-portal-muted">
+            {{ record.details }}
+          </p>
+        </li>
+      </ul>
+    </UCard>
+
     <UCard
       v-if="coordinateRecords.length || coordinateStatus === 'pending' || coordinateError"
       as="section"
