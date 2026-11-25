@@ -58,7 +58,6 @@ const articles = computed(() =>
           image = url.href;
       }
       catch {
-        /* Omit images with invalid URLs. */
       }
     }
     let date: string | undefined;

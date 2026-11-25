@@ -97,11 +97,6 @@ function handleAdd() {
   ];
 }
 function handleRemove(i: number) {
-  // if (internalValue.value.length <= 1) {
-  //   internalValue.value = [{ parameter: null, value: [null, null] }];
-  //   emit("update:modelValue", internalValue.value);
-  //   return;
-  // }
   const cloneItems = cloneDeep(internalValue.value);
   cloneItems.splice(i, 1);
   internalValue.value = cloneItems;
@@ -138,7 +133,7 @@ const isAddActive = computed(() => {
     return false;
 
   return !internalValue.value.some((v) => {
-    return isNull(v.parameter); // || (isNull(v.value[0]) && isNull(v.value[1]))
+    return isNull(v.parameter);
   });
 });
 

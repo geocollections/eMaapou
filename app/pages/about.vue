@@ -151,9 +151,6 @@ useSeoMeta({
             <p>{{ text.searchDescription }}</p>
           </div>
         </div>
-        <!-- Kallaste cliff, Gennadi Baranov, CC BY 4.0.
-             Source: https://geoloogia.info/en/file/25899
-             Licence: https://creativecommons.org/licenses/by/4.0/ -->
         <img
           src="https://files.geocollections.info/large/6198cc14-5312-4fb4-8e4c-1b9820d6cd46.jpg"
           :alt="text.photo"

@@ -14,7 +14,6 @@ $heading-font: "Montserrat", sans-serif;
 .layout-leave-to {
   opacity: 0;
 }
-// Usage: @include transition(color 1s, background-color 1s, border-color 1s);
 @mixin transition($x...) {
   -webkit-transition: $x;
   -moz-transition: $x;
@@ -46,7 +45,6 @@ $heading-font: "Montserrat", sans-serif;
 }
 
 .text-link {
-  // @extend .underline;
   @include transition(color 200ms ease);
 
   cursor: pointer;
@@ -66,16 +64,8 @@ $heading-font: "Montserrat", sans-serif;
     }
   }
 
-  // &:visited {
-  //   color: map-get($map: $purple, $key: "base") !important;
-  //   text-decoration: underline;
-  //   .v-icon {
-  //     color: map-get($map: $purple, $key: "base") !important;
-  //   }
-  // }
 }
 .text-link-visit {
-  // @extend .underline;
   @include transition(color 200ms ease);
   cursor: pointer;
   display: inline-block;
@@ -104,13 +94,11 @@ $heading-font: "Montserrat", sans-serif;
 }
 
 .text-link-footer {
-  // @extend .underline;
   @include transition(color 200ms ease);
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
   color: white !important;
-  /* color: var(--v-primary-lighten1) !important;*/
   font-size: 13px;
   .v-icon {
     color: white !important;
@@ -118,7 +106,6 @@ $heading-font: "Montserrat", sans-serif;
   }
 
   &:hover {
-    /*color: var(--v-primary-lighten3) !important;*/
     color: white !important;
     text-decoration: underline;
     .v-icon {
@@ -129,7 +116,6 @@ $heading-font: "Montserrat", sans-serif;
 }
 
 .text-link-grey {
-  // @extend .underline;
 
   text-decoration: none;
   color: map-get($map: $grey, $key: "darken-1") !important;
@@ -143,7 +129,6 @@ $heading-font: "Montserrat", sans-serif;
 }
 
 .menu-link {
-  // @extend .underline;
   text-decoration: none;
 
   color: map-get($map: $grey, $key: "darken-2") !important;
@@ -191,22 +176,11 @@ $heading-font: "Montserrat", sans-serif;
   @include transition(all 350ms ease);
 
   &.header-menu-item-active {
-    // border-left: 4px solid var(--v-primary-darken2);
 
     background-color: rgba(9, 98, 124, 0.12) !important;
   }
 
-  // &:hover {
-  //   border-left: 4px solid var(--v-primary-base);
-  //   div {
-  //     @include transition(all 350ms ease);
-  //     color: var(--v-primary-base);
-  //   }
-  // }
 
-  // div {
-  //   font-weight: 400;
-  // }
 }
 
 .drillcore-box__card {
@@ -252,17 +226,13 @@ $heading-font: "Montserrat", sans-serif;
   border-color: var(--v-primary-darken2) !important;
 }
 
-// NOTE: vue2-leaflet-draw-toolbar style fixes / overrides
-// Fixes margin issue
 .leaflet-draw-toolbar.leaflet-control-toolbar {
   margin-top: 0 !important;
 }
-// Overrides vuetify list padding style
 .leaflet-draw-toolbar {
   padding-left: 0 !important;
 }
 
-// Fixes color picker li elements
 .leaflet-draw-toolbar {
   .leaflet-toolbar-1 {
     .leaflet-toolbar-icon {
@@ -273,7 +243,6 @@ $heading-font: "Montserrat", sans-serif;
     }
   }
 
-  // Sets eyedropper icon
   .fa-fill-drip::before {
     content: "\F020A";
   }

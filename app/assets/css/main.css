@@ -172,7 +172,6 @@
   border-color: var(--ui-primary) !important;
 }
 
-/* Leaflet overrides */
 .leaflet-draw-toolbar.leaflet-control-toolbar {
   margin-top: 0 !important;
 }

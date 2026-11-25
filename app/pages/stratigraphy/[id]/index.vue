@@ -216,7 +216,6 @@ const mapOverlays = computed(() => {
             :value="stratigraphy.index_html"
           >
             <template #value="{ value }">
-              <!-- eslint-disable-next-line vue/no-v-html -->
               <div v-html="value" />
             </template>
           </TableRow>
@@ -226,7 +225,6 @@ const mapOverlays = computed(() => {
             :value="stratigraphy.index_additional_html"
           >
             <template #value="{ value }">
-              <!-- eslint-disable-next-line vue/no-v-html -->
               <div v-html="value" />
             </template>
           </TableRow>

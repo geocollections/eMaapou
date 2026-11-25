@@ -1,7 +1,6 @@
 <script setup lang="ts" generic="T">
 import type { Image } from "./ImageBar.vue";
 import { mdiFileDownloadOutline, mdiInformationOutline } from "@mdi/js";
-// import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
 
 const props = withDefaults(defineProps<
@@ -18,7 +17,6 @@ const emit = defineEmits<{
 }>();
 const img = useImage();
 const localePath = useLocalePath();
-// register Swiper custom elements
 register();
 
 const swiper = ref();
@@ -236,7 +234,6 @@ defineExpose({
 </template>
 
 <style scoped>
-/* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
