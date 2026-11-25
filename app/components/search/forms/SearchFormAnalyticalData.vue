@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits<{
   update: [];
@@ -171,7 +171,9 @@ async function suggestParameters({
 }): Promise<Suggestion[]> {
   const nameField = "parameter";
 
-  const queryValue = query.trim() === "" ? "*" : `${nameField}:*${query}*`;
+  const queryValue = query.trim() === ""
+    ? "*"
+    : `${nameField}:*${query}*`;
 
   const res = await $solrFetch<SolrResponse>("/analysis_parameter", {
     query: {

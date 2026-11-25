@@ -1,11 +1,11 @@
 <script setup lang="ts" generic="T extends { id: number }">
+import type { RouteLocationRaw } from "vue-router";
 import {
   mdiArrowLeft,
   mdiCheck,
   mdiChevronLeft,
   mdiChevronRight,
 } from "@mdi/js";
-import type { RouteLocationRaw } from "vue-router";
 
 const props = withDefaults(
   defineProps<{
