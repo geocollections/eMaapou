@@ -49,6 +49,103 @@ describe("filterInputHierarchy", () => {
     expect(title.text()).toBe("Title");
   });
 
+  it("should open and load the hierarchy when defaultOpen is enabled", async () => {
+    const wrapper = mount({
+      template: `
+        <Suspense>
+          <FilterInputHierarchy
+            v-model="modelValue"
+            :title="title"
+            :root-value="rootValue"
+            :default-open="true"
+            :hydration-function="hydrationFunction"
+            :get-children="getChildren"
+            :suggestion-function="suggestionFunction"
+          />
+        </Suspense>
+      `,
+    }, {
+      components: { FilterInputHierarchy },
+      data() {
+        return {
+          title: "Title",
+          modelValue: [],
+          rootValue: "",
+          hydrationFunction: async () => [],
+          getChildren: async (): Promise<[TreeNode[], number]> => ([
+            [
+              {
+                id: 1,
+                name: "item1",
+                leaf: true,
+                children: [],
+                childrenLoaded: false,
+                showChildren: false,
+                count: 1,
+                value: "item1",
+              },
+            ],
+            1,
+          ]),
+          suggestionFunction: async () => [],
+        };
+      },
+      global: {
+        plugins: [i18n],
+      },
+    });
+
+    await flushPromises();
+
+    expect(wrapper.get("[data-test=\"tree-item\"]").text()).toContain("item1");
+  });
+
+  it("should show a loading state before reporting an empty hierarchy", async () => {
+    let resolveChildren!: (value: [TreeNode[], number]) => void;
+    const childrenPromise = new Promise<[TreeNode[], number]>((resolve) => {
+      resolveChildren = resolve;
+    });
+    const wrapper = mount({
+      template: `
+        <Suspense>
+          <FilterInputHierarchy
+            v-model="modelValue"
+            :title="title"
+            :root-value="rootValue"
+            :default-open="true"
+            :hydration-function="hydrationFunction"
+            :get-children="getChildren"
+            :suggestion-function="suggestionFunction"
+          />
+        </Suspense>
+      `,
+    }, {
+      components: { FilterInputHierarchy },
+      data() {
+        return {
+          title: "Title",
+          modelValue: [],
+          rootValue: "",
+          hydrationFunction: async () => [],
+          getChildren: () => childrenPromise,
+          suggestionFunction: async () => [],
+        };
+      },
+      global: {
+        plugins: [i18n],
+      },
+    });
+
+    await flushPromises();
+    expect(wrapper.text()).toContain("Loading hierarchy...");
+    expect(wrapper.text()).not.toContain("No options available");
+
+    resolveChildren([[], 0]);
+    await flushPromises();
+
+    expect(wrapper.text()).toContain("No options available");
+  });
+
   it("should show hierarchy root", async () => {
     const wrapper = mount({
       template: `
