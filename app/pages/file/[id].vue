@@ -198,7 +198,9 @@ const { data } = await useAsyncData("data", async () => {
   });
 
   const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { file } },
+    props: {
+      general: { file },
+    },
   });
 
   return {
@@ -255,12 +257,12 @@ const img = useImage();
 useSeoMeta({
   ogImage: isImage.value
     ? img(
-      `${file.value?.filename}`,
-      { size: "medium" },
-      {
-        provider: "geocollections",
-      },
-    )
+        `${file.value?.filename}`,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+      )
     : null,
   ogVideo: isVideo.value
     ? `https://files.geocollections.info/${file.value?.filename}`

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { mdiImageFilterHdr, mdiRuler } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
+import { mdiImageFilterHdr, mdiRuler } from "@mdi/js";
 
 const route = useRoute();
 const { $solrFetch, $apiFetch } = useNuxtApp();
@@ -286,7 +286,10 @@ const { data } = await useAsyncData("sample", async () => {
   });
 
   const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { sample }, graphs: { sampleObject: sample } },
+    props: {
+      general: { sample },
+      graphs: { sampleObject: sample },
+    },
   });
 
   return {

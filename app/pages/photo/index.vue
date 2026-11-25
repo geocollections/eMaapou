@@ -56,7 +56,11 @@ watch(() => route.fullPath, async (toPath, fromPath) => {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: { ...getQueryParams() } });
+  router.push({
+    query: {
+      ...getQueryParams(),
+    },
+  });
 }
 
 watch(currentView, () => {

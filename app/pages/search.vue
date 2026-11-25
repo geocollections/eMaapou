@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Tab } from "~/composables/useTabs";
 import { mdiMagnify } from "@mdi/js";
 import orderBy from "lodash/orderBy";
-import type { Tab } from "~/composables/useTabs";
 
 const { $solrFetch } = useNuxtApp();
 
@@ -187,7 +187,9 @@ const { data, refresh: fetch } = await useAsyncData("quickSearch", async () => {
   return {
     tabs: orderedTabs,
   };
-}, { default: () => ({ tabs: [] }) });
+}, {
+  default: () => ({ tabs: [] }),
+});
 
 const localeRoute = useLocaleRoute();
 const router = useRouter();
