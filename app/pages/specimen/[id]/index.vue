@@ -647,7 +647,7 @@ const mapOverlays = computed(() => {
         </dl>
       </UCard>
     </div>
-    <div class="grid items-start gap-5 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+    <div class="grid items-start gap-5">
       <UCard as="section" :ui="specimenCardUi">
         <div class="border-b border-portal-border bg-portal-selected px-5 py-4 sm:px-6">
           <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
@@ -787,109 +787,6 @@ const mapOverlays = computed(() => {
             </dd>
           </div>
         </dl>
-      </UCard>
-
-      <UCard
-        v-if="coordinateRecords.length || coordinateStatus === 'pending' || coordinateError"
-        as="section"
-        :ui="{
-          root: 'flex min-w-0 flex-col overflow-hidden rounded-portal-card border border-portal-border bg-white shadow-sm ring-0 divide-y-0',
-          body: 'flex min-w-0 flex-1 flex-col p-0',
-        }"
-      >
-        <div class="flex flex-wrap items-end justify-between gap-3 border-b border-portal-border bg-portal-mint/60 px-5 py-4 sm:px-6">
-          <div>
-            <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">
-              {{ locale === "en" ? "Same locality coordinates" : "Samad leiukoha koordinaadid" }}
-            </p>
-            <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">
-              {{ locale === "en" ? "Other specimen records" : "Teised eksemplarikirjed" }}
-            </h2>
-          </div>
-          <span class="inline-flex items-center rounded-full bg-portal-subtle px-3 py-1.5 text-xs font-medium tabular-nums text-portal-muted">
-            {{ coordinateRecordCount.toLocaleString(locale) }} {{ locale === "en" ? "records" : "kirjet" }}
-          </span>
-        </div>
-        <p
-          v-if="coordinateStatus === 'pending'"
-          class="m-0 p-5 text-sm text-portal-muted"
-          role="status"
-        >
-          {{ locale === "en" ? "Loading nearby records…" : "Samade koordinaatidega kirjete laadimine…" }}
-        </p>
-        <p
-          v-else-if="coordinateError"
-          class="m-0 p-5 text-sm text-portal-error"
-          role="alert"
-        >
-          {{ locale === "en" ? "Could not load related specimen records." : "Seotud eksemplarikirjete laadimine ebaõnnestus." }}
-        </p>
-        <ul v-else class="m-0 grid max-h-[440px] grid-cols-1 gap-2 overflow-y-auto p-3 sm:grid-cols-2">
-          <li
-            v-for="record in coordinateRecords"
-            :key="record.id"
-            class="flex min-w-0 items-center gap-3 rounded-portal-control border border-portal-border px-3 py-2 transition-colors hover:border-portal-border-hover hover:bg-portal-selected"
-          >
-            <div class="min-w-0 flex-1">
-              <ULink :to="localePath({ name: 'specimen-id', params: { id: record.id } })" class="text-sm font-semibold text-portal-link underline underline-offset-2 hover:text-portal-primary">
-                {{ record.specimen_full_name }}
-              </ULink>
-            </div>
-            <UButton
-              v-if="record.preview"
-              type="button"
-              color="neutral"
-              variant="ghost"
-              square
-              class="!h-12 !w-12 shrink-0 overflow-hidden !rounded-portal-card border border-portal-border bg-portal-subtle !p-0 transition-colors hover:border-portal-primary focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus"
-              :aria-label="`${locale === 'en' ? 'Open photo preview for' : 'Ava eksemplari foto'} ${record.specimen_full_name}`"
-              @click="openImagePreview(record.preview, record.specimen_full_name)"
-            >
-              <NuxtImg
-                :src="record.preview.filename"
-                provider="geocollections"
-                alt=""
-                width="96"
-                height="96"
-                fit="cover"
-                class="size-full object-cover"
-              />
-            </UButton>
-          </li>
-        </ul>
-        <div v-if="coordinatePageCount > 1" class="flex flex-wrap items-center justify-between gap-3 border-t border-portal-border px-4 py-3 sm:px-5">
-          <span class="text-xs tabular-nums text-portal-muted">
-            {{ locale === "en" ? `Showing ${coordinateFrom}–${coordinateTo} of ${coordinateRecordCount.toLocaleString(locale)} records at these coordinates` : `Kuvatakse ${coordinateFrom}–${coordinateTo} kirjet ${coordinateRecordCount.toLocaleString(locale)} samade koordinaatidega kirjest` }}
-          </span>
-          <div class="flex items-center gap-2">
-            <UButton
-              color="neutral"
-              variant="outline"
-              size="sm"
-              :disabled="coordinatePage <= 1 || coordinateStatus === 'pending'"
-              :aria-label="locale === 'en' ? 'Previous page of related records' : 'Seotud kirjete eelmine leht'"
-              @click="setCoordinatePage(coordinatePage - 1)"
-            >
-              {{ locale === "en" ? "Previous" : "Eelmine" }}
-            </UButton>
-            <span class="min-w-14 text-center text-xs tabular-nums text-portal-muted">
-              {{ coordinatePage }} / {{ coordinatePageCount }}
-            </span>
-            <UButton
-              color="neutral"
-              variant="outline"
-              size="sm"
-              :disabled="coordinatePage >= coordinatePageCount || coordinateStatus === 'pending'"
-              :aria-label="locale === 'en' ? 'Next page of related records' : 'Seotud kirjete järgmine leht'"
-              @click="setCoordinatePage(coordinatePage + 1)"
-            >
-              {{ locale === "en" ? "Next" : "Järgmine" }}
-            </UButton>
-          </div>
-        </div>
-        <p v-else-if="coordinateRecordCount > 0" class="m-0 border-t border-portal-border px-5 py-3 text-xs leading-normal text-portal-muted">
-          {{ locale === "en" ? `Showing ${coordinateFrom}–${coordinateTo} of ${coordinateRecordCount.toLocaleString(locale)} records at these coordinates.` : `Kuvatakse ${coordinateFrom}–${coordinateTo} kirjet ${coordinateRecordCount.toLocaleString(locale)} samade koordinaatidega kirjest.` }}
-        </p>
       </UCard>
     </div>
 
@@ -1128,6 +1025,39 @@ const mapOverlays = computed(() => {
         </UCard>
       </div>
     </section>
+    <UCard
+      v-if="coordinateRecords.length || coordinateStatus === 'pending' || coordinateError"
+      as="section"
+      class="mt-8 overflow-hidden rounded-portal-card border border-portal-border bg-white shadow-sm"
+      :ui="{ body: 'p-0' }"
+    >
+      <div class="flex flex-wrap items-end justify-between gap-3 border-b border-portal-border bg-portal-mint/60 px-5 py-4 sm:px-6">
+        <div>
+          <p class="mb-1 text-[11px] font-semibold tracking-[0.12em] text-portal-muted uppercase">{{ locale === "en" ? "Same locality coordinates" : "Samad leiukoha koordinaadid" }}</p>
+          <h2 class="m-0 text-[19px] font-semibold tracking-[-0.015em] text-portal-heading">{{ locale === "en" ? "Other specimen records" : "Teised eksemplarikirjed" }}</h2>
+        </div>
+        <span class="inline-flex items-center rounded-full bg-portal-subtle px-3 py-1.5 text-xs font-medium tabular-nums text-portal-muted">{{ coordinateRecordCount.toLocaleString(locale) }} {{ locale === "en" ? "records" : "kirjet" }}</span>
+      </div>
+      <p v-if="coordinateStatus === 'pending'" class="m-0 p-5 text-sm text-portal-muted" role="status">{{ locale === "en" ? "Loading nearby records…" : "Samade koordinaatidega kirjete laadimine…" }}</p>
+      <p v-else-if="coordinateError" class="m-0 p-5 text-sm text-portal-error" role="alert">{{ locale === "en" ? "Could not load related specimen records." : "Seotud eksemplarikirjete laadimine ebaõnnestus." }}</p>
+      <ul v-else class="m-0 grid max-h-110 grid-cols-1 gap-2 overflow-y-auto p-3 sm:grid-cols-2">
+        <li v-for="record in coordinateRecords" :key="record.id" class="flex min-w-0 items-center gap-3 rounded-portal-control border border-portal-border px-3 py-2 transition-colors hover:border-portal-border-hover hover:bg-portal-selected">
+          <div class="min-w-0 flex-1"><ULink :to="localePath({ name: 'specimen-id', params: { id: record.id } })" class="text-sm font-semibold text-portal-link underline underline-offset-2 hover:text-portal-primary">{{ record.specimen_full_name }}</ULink></div>
+          <UButton v-if="record.preview" type="button" color="neutral" variant="ghost" square class="h-12! w-12! shrink-0 overflow-hidden rounded-portal-card! border border-portal-border bg-portal-subtle p-0! transition-colors hover:border-portal-primary focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus" :aria-label="`${locale === 'en' ? 'Open photo preview for' : 'Ava eksemplari foto'} ${record.specimen_full_name}`" @click="openImagePreview(record.preview, record.specimen_full_name)">
+            <NuxtImg :src="record.preview.filename" provider="geocollections" alt="" width="96" height="96" fit="cover" class="size-full object-cover" />
+          </UButton>
+        </li>
+      </ul>
+      <div v-if="coordinatePageCount > 1" class="flex flex-wrap items-center justify-between gap-3 border-t border-portal-border px-4 py-3 sm:px-5">
+        <span class="text-xs tabular-nums text-portal-muted">{{ locale === "en" ? `Showing ${coordinateFrom}–${coordinateTo} of ${coordinateRecordCount.toLocaleString(locale)} records at these coordinates` : `Kuvatakse ${coordinateFrom}–${coordinateTo} kirjet ${coordinateRecordCount.toLocaleString(locale)} samade koordinaatidega kirjest` }}</span>
+        <div class="flex items-center gap-2">
+          <UButton color="neutral" variant="outline" size="sm" :disabled="coordinatePage <= 1 || coordinateStatus === 'pending'" :aria-label="locale === 'en' ? 'Previous page of related records' : 'Seotud kirjete eelmine leht'" @click="setCoordinatePage(coordinatePage - 1)">{{ locale === "en" ? "Previous" : "Eelmine" }}</UButton>
+          <span class="min-w-14 text-center text-xs tabular-nums text-portal-muted">{{ coordinatePage }} / {{ coordinatePageCount }}</span>
+          <UButton color="neutral" variant="outline" size="sm" :disabled="coordinatePage >= coordinatePageCount || coordinateStatus === 'pending'" :aria-label="locale === 'en' ? 'Next page of related records' : 'Seotud kirjete järgmine leht'" @click="setCoordinatePage(coordinatePage + 1)">{{ locale === "en" ? "Next" : "Järgmine" }}</UButton>
+        </div>
+      </div>
+      <p v-else-if="coordinateRecordCount > 0" class="m-0 border-t border-portal-border px-5 py-3 text-xs leading-normal text-portal-muted">{{ locale === "en" ? `Showing ${coordinateFrom}–${coordinateTo} of ${coordinateRecordCount.toLocaleString(locale)} records at these coordinates.` : `Kuvatakse ${coordinateFrom}–${coordinateTo} kirjet ${coordinateRecordCount.toLocaleString(locale)} samade koordinaatidega kirjest.` }}</p>
+    </UCard>
     <PortalPhotoViewer
       v-if="imagePreviewOpen && previewImages.length"
       v-model="imagePreviewOpen"
