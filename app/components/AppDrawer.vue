@@ -151,7 +151,6 @@ const routes = [
 .more-menu .section-title {
   font-size: 13px;
   font-weight: 500;
-  /* letter-spacing: 1.5px; */
   margin-top: 24px;
   text-transform: uppercase;
 }

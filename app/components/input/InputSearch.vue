@@ -84,7 +84,6 @@ $transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 
     .v-input__append-inner {
       margin-top: 0 !important;
-      // height: 40px;
       height: 56px;
       .v-input__icon {
         align-self: center;

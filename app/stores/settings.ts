@@ -17,7 +17,6 @@ export const useSettings = defineStore("settings", () => {
     );
   });
 
-  // Chart options
   const renderer = ref<Renderer>(Renderer.Canvas);
   const connected = ref(true);
   const ppi = ref(96);

@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>();
 const { t } = useI18n();
 const map = ref<L.Map>();
-const activeGeomanLayer = ref<L.Polygon | L.Circle>();
+const activeGeomanLayer = ref<L.GeoJSON | L.Polygon | L.Circle>();
 const gpsLocation = ref<L.LatLng>();
 
 const nearMe = ref(false);
@@ -37,7 +37,6 @@ onMounted(() => {
     map.value?.invalidateSize();
 
     if (props.modelValue) {
-      // @ts-expect-error - this should not be needed
       activeGeomanLayer.value = L.geoJSON(props.modelValue);
       if (map.value)
         activeGeomanLayer.value?.addTo(map.value);
@@ -50,8 +49,7 @@ function loadMap() {
   map.value = L.map("map", {
     center: [58.5, 25.5],
     zoom: 5,
-    // @ts-expect-error - gestureHandleing does not have types
-    gestureHandling: true,
+    ...{ gestureHandling: true },
     fullscreenControl: true,
   });
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -59,42 +57,29 @@ function loadMap() {
   })
     .addTo(map.value);
 
-  // @ts-expect-error - nearMe does not have types
-  L.Control.NearMe = L.Control.extend({
-    onAdd(map: any) {
-      const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+  const nearMeControl = new L.Control({ position: "topleft" });
+  nearMeControl.onAdd = (map) => {
+    const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
 
-      const button = L.DomUtil.create("a", "icon-near-me", container);
-      button.href = "#";
-      button.id = "near-me";
-      button.style.fontSize = "1.5em";
-      button.style.color = "#333";
-      button.title = t("portal.map.nearMe");
-      container.onclick = function () {
-        if (nearMe.value) {
-          nearMe.value = false;
-          activeGeomanLayer.value?.remove();
-          activeGeomanLayer.value = undefined;
-          emit("update:modelValue", null);
-          return;
-        }
-        map.locate({ setView: true });
-      };
-      return container;
-    },
-    onRemove(_map: any) {
-      // Nothing to do here
-    },
-
-  });
-
-  // @ts-expect-error - nearMe does not have types
-  L.control.nearMe = function (opts) {
-  // @ts-expect-error - nearMe does not have types
-    return new L.Control.NearMe(opts);
+    const button = L.DomUtil.create("a", "icon-near-me", container);
+    button.href = "#";
+    button.id = "near-me";
+    button.style.fontSize = "1.5em";
+    button.style.color = "#333";
+    button.title = t("portal.map.nearMe");
+    container.onclick = function () {
+      if (nearMe.value) {
+        nearMe.value = false;
+        activeGeomanLayer.value?.remove();
+        activeGeomanLayer.value = undefined;
+        emit("update:modelValue", null);
+        return;
+      }
+      map.locate({ setView: true });
+    };
+    return container;
   };
-  // @ts-expect-error - nearMe does not have types
-  L.control.nearMe({ position: "topleft" }).addTo(map.value);
+  nearMeControl.addTo(map.value);
 }
 
 function handlePmCreate(

@@ -19,7 +19,6 @@ export const SERVICES = {
     description: "fond.description",
     href: "https://fond.egt.ee",
   },
-  // Divider
   fossiilid: {
     title: "fossiilid.title",
     description: "fossiilid.description",
@@ -35,7 +34,6 @@ export const SERVICES = {
     description: "frontStratigraphy.description",
     href: "https://stratotuup.ut.ee",
   },
-  // Divider
   geologicalSurvey: {
     title: "geologicalSurvey.title",
     description: "geologicalSurvey.description",
@@ -56,7 +54,6 @@ export const SERVICES = {
     description: "turba.description",
     href: "https://turba.geoloogia.info",
   },
-  // Divider
   geocase: {
     title: "geocase.title",
     description: "geocase.description",

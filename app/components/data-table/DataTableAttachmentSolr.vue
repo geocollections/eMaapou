@@ -24,13 +24,14 @@ function getAttachmentType(type: number) {
       return t("attachment.typeOther");
   }
 }
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
   <div>
-    <!-- @vue-ignore -->
     <BaseDataTable
-      v-bind="$attrs"
+      v-bind="tableAttrs"
       :item-to="(item) => localePath({ name: 'file-id', params: { id: item.id } })"
     >
       <template #item.id="{ item }">

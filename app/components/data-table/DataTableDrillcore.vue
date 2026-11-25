@@ -1,11 +1,12 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
   <BaseDataTable
-    v-bind="$attrs"
+    v-bind="tableAttrs"
     :item-to="(item) => localePath({ name: 'drillcore-id', params: { id: item.id } })"
   >
     <template #item.drillcore="{ item }">

@@ -2,12 +2,13 @@
 import isNil from "lodash/isNil";
 
 const localePath = useLocalePath();
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
   <BaseDataTable
-    v-bind="$attrs"
+    v-bind="tableAttrs"
     :item-to="(item) => localePath({ name: 'site-id', params: { id: item.id } })"
   >
     <template #item.id="{ item }">

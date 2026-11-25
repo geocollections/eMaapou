@@ -50,16 +50,6 @@ const emit = defineEmits<{
                 {{ $t("hints.exclude") }}
               </div>
             </div>
-            <!-- <div class="d-flex mb-1 align-center">
-              <code class="black--text font-weight-bold">+Eesti +Soome</code>
-              <div class="ml-2">{{ $t('hints.requireBoth') }}</div>
-            </div> -->
-            <!-- <div class="d-flex mb-1 align-center">
-              <code class="black--text font-weight-bold"
-                >+"Keila lade" -Bryozoa</code
-              >
-              <div class="ml-2">{{ $t('hints.combineOperators') }}</div>
-            </div> -->
           </VCol>
           <VCol cols="12">
             <div class="d-flex">

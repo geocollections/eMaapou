@@ -1,6 +1,9 @@
+<script setup lang="ts">
+const tableAttrs = useBaseDataTableAttrs();
+</script>
+
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.id="{ item }">
       <BaseLinkExternal
         v-if="item.id"
@@ -11,7 +14,6 @@
     </template>
 
     <template #item.formula="{ item }">
-      <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-if="item.formula_html" v-html="item.formula_html" />
       <div v-else>
         {{ item.formula }}

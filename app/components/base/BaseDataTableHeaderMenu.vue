@@ -30,11 +30,6 @@ const filteredHeaders = computed(() => {
 </script>
 
 <template>
-  <!-- NOTE: Using activator now for v-menu.
-    Using the #id based implementation broke BaseDataTableHeaderMenu when switching between tabs.
-    Right now the button does not appear immediately when page is loading.
-    This is something to do with transitions. https://github.com/vuetifyjs/vuetify/issues/10578
-  -->
   <VBtn
     variant="text"
     :icon="true"

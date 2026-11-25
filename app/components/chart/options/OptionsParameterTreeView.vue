@@ -105,24 +105,6 @@ function isParameterSelected(parameter: any) {
                 </VListItem>
               </template>
             </VVirtualScroll>
-          <!-- TODO: Reimplement treeview when vuetify 3 adds it -->
-          <!-- <v-treeview -->
-          <!--   style="max-height: 500px" -->
-          <!--   dense -->
-          <!--   selectable -->
-          <!--   :search="search" -->
-          <!--   return-object -->
-          <!--   :items="parameters" -->
-          <!--   :value="initialSelection" -->
-          <!--   @input="handleInput" -->
-          <!-- > -->
-          <!--   <template #label="{ item }"> -->
-          <!--     <div> -->
-          <!--       {{ $translate({ et: item.name, en: item.name_en }) }} -->
-          <!--       <v-chip small>{{ item.count }}</v-chip> -->
-          <!--     </div> -->
-          <!--   </template> -->
-          <!-- </v-treeview> -->
           </VCardText>
         </VCard>
       </VMenu>

@@ -1,6 +1,9 @@
+<script setup lang="ts">
+const tableAttrs = useBaseDataTableAttrs();
+</script>
+
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.analysis_method="{ item }">
       {{
         $translate({ et: item.analysis_method, en: item.analysis_method_en })

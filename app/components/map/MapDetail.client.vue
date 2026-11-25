@@ -41,6 +41,7 @@ const currentCenter = ref({
 
 const container = useTemplateRef<HTMLDivElement>("container");
 const map = shallowRef<L.Map>();
+const wheelZoomPosition = shallowRef<L.Point>();
 const {
   options: wheelZoomOptions,
   active: wheelZoomActive,
@@ -256,6 +257,17 @@ onMounted(() => {
       maxZoom: 10,
     });
 
+    if (props.clickToZoom) {
+      const instance = map.value;
+      const positionInstruction = () => {
+        if (!wheelZoomActive.value)
+          wheelZoomPosition.value = instance.latLngToContainerPoint(currentCenter.value);
+      };
+
+      instance.on("move resize", positionInstruction);
+      positionInstruction();
+    }
+
     mapResizeObserver = new ResizeObserver(() => {
       map.value?.invalidateSize({ pan: false });
     });
@@ -281,9 +293,13 @@ onBeforeUnmount(() => {
       }"
     >
       <button
-        v-if="clickToZoom && !wheelZoomActive"
+        v-if="clickToZoom && wheelZoomPosition && !wheelZoomActive"
         type="button"
-        class="specimen-map-zoom-instruction"
+        class="specimen-map-zoom-instruction -mt-5 -translate-y-full!"
+        :style="{
+          left: `${wheelZoomPosition.x}px`,
+          top: `${wheelZoomPosition.y}px`,
+        }"
         @click.stop="activateWheelZoom(map)"
       >
         {{ wheelZoomInstruction }}

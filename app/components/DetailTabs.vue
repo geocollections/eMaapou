@@ -88,17 +88,6 @@ function translateTitle(tab: HydratedTab) {
 .tabs {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  // &::after {
-  //   content: '';
-  //   width: 100%;
-  //   height: 1px;
-  //   background: black;
-  //   display: inline-block;
-  //   position: absolute;
-  //   background-color: var(--v-accent-darken1);
-  //   opacity: 0.2;
-  // }
-  // border-bottom: lightgray solid 1px;
 }
 
 .tab {
@@ -111,7 +100,6 @@ function translateTitle(tab: HydratedTab) {
 }
 
 .active-tab {
-  // font-weight: bold;
   color: rgb(var(--v-theme-accent-darken-3)) !important;
 
   &::after {

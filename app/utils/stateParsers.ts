@@ -2,8 +2,6 @@ import isNil from "lodash/isNil";
 import uniq from "lodash/uniq";
 import { z } from "zod";
 
-// Parsers that convert values to URL params
-
 export const stringValueParser = z
   .string()
   .transform(val => (val.length > 0

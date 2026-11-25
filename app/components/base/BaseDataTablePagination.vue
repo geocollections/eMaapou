@@ -115,7 +115,6 @@ function pageLimitRule(value: number) {
         :icon="mdiChevronLeft"
         @click="previous"
       />
-      <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
       <VBtn
         variant="text"
         class="text-no-wrap text-caption"
@@ -180,15 +179,12 @@ function pageLimitRule(value: number) {
 </template>
 
 <style lang="scss" scoped>
-// Removes arrows from number input
-/* Chrome, Safari, Edge, Opera */
 :deep(input::-webkit-outer-spin-button),
 :deep(input::-webkit-inner-spin-button) {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
 :deep(input[type="number"]) {
   appearance: textfield;
   -moz-appearance: textfield;

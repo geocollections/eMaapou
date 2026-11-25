@@ -158,13 +158,7 @@ function handleParameterFilterUpdate(value: ParameterValue[]) {
   handleUpdate();
 }
 
-async function suggestParameters({
-  query,
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  pagination,
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  values,
-}: {
+async function suggestParameters({ query }: {
   query: string;
   pagination: { page: number; perPage: number };
   values: ParameterValue[];

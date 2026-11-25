@@ -56,10 +56,6 @@ export default defineNuxtConfig({
   vuetify: {
     moduleOptions: {
       importComposables: false,
-      // ssrClientHints: {
-      // viewportSize: true,
-      // reloadOnFirstRequest: true,
-      // },
     },
     vuetifyOptions: {
       icons: {

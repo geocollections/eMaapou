@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import type { Specimen, SpecimenAttachmentLink, SpecimenFile, SpecimenIndexEntry, SpecimenPhoto } from "~/types/specimen";
 import { mdiSquareEditOutline } from "@mdi/js";
+import { fetchCataloguePages } from "~/utils/fetchCataloguePages";
 
 definePageMeta({ layout: "detail" });
 
@@ -10,143 +12,100 @@ const { $solrFetch, $translate, $apiFetch, $openEdit } = useNuxtApp();
 const specimensStore = useSpecimens();
 const { getQueryParams } = specimensStore;
 
-export interface Specimen {
-  id: number;
-  number: Nullable<string>;
-  date_collected: Nullable<string>;
-  date_collected_text: Nullable<string>;
-  old_number: Nullable<string>;
-  part: Nullable<string>;
-  depth: Nullable<number>;
-  remarks: Nullable<string>;
-  collector: Nullable<{
-    name?: string;
-    forename?: string;
-    surname?: string;
-  }>;
-  type: Nullable<{
-    value: string;
-    value_en: string;
-  }>;
-  classification: Nullable<{
-    name: string;
-    name_en: string;
-  }>;
-  locality: Nullable<{
-    id: number;
-    name: string;
-    name_en: string;
-    longitude: Nullable<number>;
-    latitude: Nullable<number>;
-    country: Nullable<{
-      name: string;
-      name_en: string;
-      iso_3166_1_alpha_2: string;
-    }>;
-  }>;
-  stratigraphy: Nullable<{
-    id: number;
-    name: string;
-    name_en: string;
-  }>;
-  stratigraphy_text: Nullable<string>;
-  lithostratigraphy: Nullable<{
-    id: number;
-    name: string;
-    name_en: string;
-  }>;
-  database: Nullable<{
-    id: number;
-    acronym: string;
-    name: string;
-    name_en: string;
-    url: string;
-  }>;
-  sample: Nullable<{
-    id: number;
-    number: string;
-  }>;
-  parent: Nullable<{
-    id: number;
-    number: string;
-  }>;
-  collection: Nullable<{
-    id: number;
-    number: string;
-    name: string;
-    name_en: string;
-  }>;
-  original_status: Nullable<{
-    id: number;
-    value: string;
-    value_en: string;
-  }>;
-  fossil: Nullable<{
-    id: number;
-    value: string;
-    value_en: string;
-  }>;
-}
+type LocalityFields = Pick<Specimen, "locality" | "locality_text">;
+
+const emptyLocality: LocalityFields = { locality: null, locality_text: null };
+const recordFields = [
+  "id",
+  "number",
+  "old_number",
+  "number_field",
+  "part",
+  "number_pieces",
+  "depth",
+  "depth_interval",
+  "sample_number",
+  "remarks_collecting",
+  "stratigraphy_text",
+  "collector_text",
+  "date_collected",
+  "date_collected_text",
+  "remarks",
+  "tags",
+  "locality_is_private",
+  "date_added",
+  "date_changed",
+  "collector.name",
+  "collector.forename",
+  "collector.surname",
+  "type.value",
+  "type.value_en",
+  "subtype.value",
+  "subtype.value_en",
+  "kind.value",
+  "kind.value_en",
+  "classification.name",
+  "classification.name_en",
+  "stratigraphy.id",
+  "stratigraphy.name",
+  "stratigraphy.name_en",
+  "lithostratigraphy.id",
+  "lithostratigraphy.name",
+  "lithostratigraphy.name_en",
+  "database.id",
+  "database.acronym",
+  "database.name",
+  "database.name_en",
+  "database.url",
+  "sample.id",
+  "sample.number",
+  "parent.id",
+  "parent.number",
+  "collection.id",
+  "collection.number",
+  "collection.name",
+  "collection.name_en",
+  "original_status.value",
+  "original_status.value_en",
+  "fossil.value",
+  "fossil.value_en",
+  "presence.value",
+  "presence.value_en",
+  "status.value",
+  "status.value_en",
+  "storage.name",
+  "accession.number",
+  "deaccession.number",
+].join(",");
+const attachmentFields = [
+  "id",
+  "filename",
+  "original_filename",
+  "title",
+  "title_en",
+  "description",
+  "description_en",
+  "image_number",
+  "image_width",
+  "image_height",
+  "image_scalebar",
+  "date_created",
+  "remarks",
+  "size_mb",
+  "specimen_image_attachment",
+];
 
 const { data } = await useAsyncData(
   () => `specimen-${route.params.id}`,
   async () => {
-    const specimen = await $apiFetch<Specimen>(`/specimens/${route.params.id}/`, {
+    const id = route.params.id;
+    const path = `/specimens/${id}/`;
+    const record = await $apiFetch<Omit<Specimen, keyof LocalityFields>>(path, {
       query: {
-        expand: "collector,classification,locality,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type",
-        fields: [
-          "id",
-          "number",
-          "date_collected",
-          "date_collected_text",
-          "old_number",
-          "part",
-          "depth",
-          "remarks",
-          "collector.name",
-          "collector.forename",
-          "collector.surname",
-          "type.value",
-          "type.value_en",
-          "classification.name",
-          "classification.name_en",
-          "locality.id",
-          "locality.name",
-          "locality.name_en",
-          "locality.longitude",
-          "locality.latitude",
-          "locality.country.name",
-          "locality.country.name_en",
-          "locality.country.iso_3166_1_alpha_2",
-          "stratigraphy.id",
-          "stratigraphy.name",
-          "stratigraphy.name_en",
-          "stratigraphy_text",
-          "lithostratigraphy.id",
-          "lithostratigraphy.name",
-          "lithostratigraphy.name_en",
-          "database.id",
-          "database.acronym",
-          "database.name",
-          "database.name_en",
-          "database.url",
-          "sample.id",
-          "sample.number",
-          "parent.id",
-          "parent.number",
-          "collection.id",
-          "collection.number",
-          "collection.name",
-          "collection.name_en",
-          "original_status.id",
-          "original_status.value",
-          "original_status.value_en",
-          "fossil.id",
-          "fossil.value",
-          "fossil.value_en",
-        ].join(","),
+        expand: "collector,classification,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type,subtype,kind,presence,status,storage,accession,deaccession",
+        fields: recordFields,
       },
-      onResponseError: (_error) => {
+      onResponseError: () => {
         showError({
           statusCode: 404,
           message: t("error.notFound"),
@@ -155,30 +114,116 @@ const { data } = await useAsyncData(
       },
     });
 
-    const specimenNameRes = await $solrFetch<SolrResponse>(
-      `/specimen`,
-      {
+    const [geography, indexedRecord, indexedFiles, attachmentLinks] = await Promise.allSettled([
+      record.locality_is_private
+        ? Promise.resolve(emptyLocality)
+        : $apiFetch<LocalityFields>(path, {
+            query: {
+              expand: "locality,locality.country",
+              fields: "locality_text,locality.id,locality.name,locality.name_en,locality.latitude,locality.longitude,locality.country.name,locality.country.name_en,locality.country.iso_3166_1_alpha_2",
+            },
+          }),
+      $solrFetch<SolrResponse<SpecimenIndexEntry>>("/specimen", {
         query: {
-          q: `id:${route.params.id}`,
+          q: `id:${id}`,
+          rows: 1,
+          fl: "specimen_full_name,taxon,taxon_full,taxon_id,fossilgroup,rock,rock_en,rock_txt,rock_id",
         },
-      },
-    );
-    const specimenAlt = specimenNameRes?.response.docs[0];
+      }),
+      fetchCataloguePages(async (start) => {
+        const { response } = await $solrFetch<SolrResponse<SpecimenFile>>("/attachment", {
+          query: {
+            q: `specimen_id:${id}`,
+            fq: ["-is_private:1", "-private:1"],
+            sort: "date_created_dt desc,date_created_free desc,stars desc,id_l desc",
+            rows: 100,
+            start,
+            fl: [
+              ...attachmentFields,
+              "agent",
+              "author_free",
+              "date_created_free",
+              "device_txt",
+              "format_value",
+            ].join(","),
+          },
+        });
+        return { results: response.docs, count: response.numFound };
+      }),
+      fetchCataloguePages(offset => $apiFetch<GeoloogiaListResponse<SpecimenAttachmentLink>>(`${path}attachments/`, {
+        query: {
+          offset,
+          limit: 100,
+          expand: "attachment,attachment.author,attachment.licence,attachment.mime_type",
+          fields: [
+            "remarks",
+            ...[
+              ...attachmentFields,
+              "author.name",
+              "author_text",
+              "date_created_text",
+              "device_text",
+              "licence.name",
+              "mime_type.content_type",
+            ].map(field => `attachment.${field}`),
+          ].join(","),
+        },
+      })),
+    ]);
 
-    const imagesRes = await $solrFetch<SolrResponse>("/attachment", {
-      query: {
-        q: "*",
-        fq: `specimen_id:${route.params.id} AND specimen_image_attachment:1`,
-        sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
-        rows: 20,
-        fields: "id,filename,image_number,agent,author_free,date_created,date_created_free",
-      },
-    });
+    const files = new Map<number, SpecimenFile>();
+    if (indexedFiles.status === "fulfilled") {
+      for (const file of indexedFiles.value)
+        files.set(Number(file.id), file);
+    }
+    if (attachmentLinks.status === "fulfilled") {
+      for (const { attachment, remarks } of attachmentLinks.value) {
+        if (!attachment)
+          continue;
+        const previous = files.get(Number(attachment.id));
+        files.set(Number(attachment.id), {
+          ...previous,
+          ...attachment,
+          agent: attachment.author?.name || previous?.agent,
+          author_free: attachment.author_text || previous?.author_free,
+          date_created_free: attachment.date_created_text || previous?.date_created_free,
+          device_txt: attachment.device_text || previous?.device_txt,
+          licence: attachment.licence?.name || previous?.licence,
+          format_value: attachment.mime_type?.content_type || previous?.format_value,
+          remarks: [
+            ...new Set([attachment.remarks || previous?.remarks, remarks].filter(Boolean)),
+          ].join("\n"),
+        });
+      }
+    }
+
+    const images: SpecimenPhoto[] = [];
+    const otherFiles: SpecimenFile[] = [];
+    for (const file of files.values()) {
+      if (file.specimen_image_attachment === 1 && file.filename)
+        images.push({ ...file, filename: file.filename });
+      else
+        otherFiles.push(file);
+    }
 
     return {
-      specimen,
-      specimenAlt,
-      images: imagesRes.response.docs,
+      specimen: {
+        ...record,
+        ...(geography.status === "fulfilled"
+          ? geography.value
+          : emptyLocality),
+      },
+      specimenAlt: indexedRecord.status === "fulfilled"
+        ? indexedRecord.value.response.docs[0] ?? null
+        : null,
+      images,
+      otherFiles,
+      hasSupplementaryError: [
+        geography,
+        indexedRecord,
+        indexedFiles,
+        attachmentLinks,
+      ].some(result => result.status === "rejected"),
     };
   },
   {
@@ -186,6 +231,8 @@ const { data } = await useAsyncData(
       specimen: null,
       specimenAlt: null,
       images: [],
+      otherFiles: [],
+      hasSupplementaryError: false,
     }),
   },
 );
@@ -193,8 +240,8 @@ const { data } = await useAsyncData(
 const isRock = computed(() => !!data.value.specimenAlt?.rock);
 const isTaxon = computed(() => !!data.value.specimenAlt?.taxon);
 const title = computed(
-  () =>
-    `${data.value.specimen?.database?.acronym} ${data.value.specimen?.number}`,
+  () => [data.value.specimen?.database?.acronym, data.value.specimen?.number].filter(Boolean).join(" ")
+    || data.value.specimenAlt?.specimen_full_name || String(route.params.id),
 );
 const titleAlt = computed(() => {
   if (data.value.specimenAlt?.rock) {
@@ -283,6 +330,8 @@ useSeoMeta({
         specimen: data.specimen,
         specimenAlt: data.specimenAlt,
         images: data.images,
+        otherFiles: data.otherFiles,
+        hasSupplementaryError: data.hasSupplementaryError,
       }"
     />
   </TemplateDetail>

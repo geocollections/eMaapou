@@ -269,7 +269,6 @@ useHead({
               stroke-width="1"
               stroke-dasharray="2 6"
             />
-            <!-- A branching tree with leaf shaped species markers -->
             <path
               d="M171 154c-3-19-2-35 0-49 2-13-4-20-15-29M171 121c10-13 22-19 38-24 13-4 18-12 18-25M168 137c-12-7-25-11-39-13-12-2-19-9-21-20M172 105c2-13 10-22 20-29 8-6 10-14 7-24"
               class="stroke-portal-link/55"

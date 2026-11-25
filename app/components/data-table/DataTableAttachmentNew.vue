@@ -10,11 +10,12 @@ function openOverlay(image: AttachmentImage) {
 }
 const localePath = useLocalePath();
 const img = useImage();
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.file="{ item }">
       <ThumbnailAttachment
         v-if="item"

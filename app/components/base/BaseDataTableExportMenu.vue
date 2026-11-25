@@ -115,20 +115,6 @@ function handleExport() {
               {{ t("portal.tableExport.export") }}
             </VBtn>
           </div>
-
-        <!-- <VList> -->
-        <!--   <VListItem @click="handleExportCsv"> -->
-        <!--     <VListItemTitle>CSV</VListItemTitle> -->
-        <!--   </VListItem> -->
-        <!-- <VListItem @click="handleExportExcel"> -->
-        <!--   <VListItemTitle>XLSX (Excel)</VListItemTitle> -->
-        <!-- </VListItem> -->
-        <!-- <VListItem @click="handleClipboard"> -->
-        <!--   <VListItemTitle> -->
-        <!--     {{ $t("common.clipboard") }} -->
-        <!--   </VListItemTitle> -->
-        <!-- </VListItem> -->
-        <!-- </VList> -->
         </VCard>
       </VMenu>
     </ClientOnly>

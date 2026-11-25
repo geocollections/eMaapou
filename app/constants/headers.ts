@@ -248,7 +248,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       value: "sample_number",
       show: true,
       apiFieldValue: "sample_number,sample_id_l",
-      sortField: ["sample_number", "sample_id_l"], // TODO: need to combine these two fields in Solr index
+      sortField: ["sample_number", "sample_id_l"],
       ...narrowColumn,
     },
     locality: {
@@ -256,7 +256,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       value: "locality",
       show: true,
       apiFieldValue: "locality,locality_id_sl,site,site_id_sl",
-      sortField: ["locality", "site"], // TODO: need to combine these two fields in Solr index, not sure how it should be done. Can one document have both fields defined?
+      sortField: ["locality", "site"],
       ...wideColumn,
     },
     stratigraphy: {
@@ -353,7 +353,6 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
     "stratigraphy",
     "lithostratigraphy",
     "depth",
-    // "depth_interval",
     "rock",
     "reference",
     "dataset_id",
@@ -2550,11 +2549,6 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       sortField: ["current"],
       ...narrowColumn,
     },
-    // pages: {
-    //   title: 'stratigraphyReference.pages',
-    //   value: 'pages',
-    //   show: true,
-    // },
   },
   allIds: [
     "rock",

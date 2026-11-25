@@ -23,7 +23,6 @@ const heroImage
 const photoAvailable = ref(true);
 const heroPhoto = ref<HTMLImageElement | null>(null);
 onMounted(() => {
-  // Handle a failed image request that completed before hydration.
   if (heroPhoto.value?.complete && !heroPhoto.value.naturalWidth)
     photoAvailable.value = false;
 });

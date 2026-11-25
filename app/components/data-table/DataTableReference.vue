@@ -4,11 +4,12 @@ import { mdiFilePdfBox } from "@mdi/js";
 function openPDF(link: string) {
   window.open(link, "_blank", "height=800, width=800");
 }
+
+const tableAttrs = useBaseDataTableAttrs();
 </script>
 
 <template>
-  <!-- @vue-ignore -->
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable v-bind="tableAttrs">
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.id"

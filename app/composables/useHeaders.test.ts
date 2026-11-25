@@ -1,5 +1,4 @@
 import type { Headers } from "#imports";
-// @vitest-environment nuxt
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, expect, it } from "vitest";
 
