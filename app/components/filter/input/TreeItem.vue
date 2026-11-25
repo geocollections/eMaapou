@@ -13,7 +13,7 @@ const emit = defineEmits<{
   select: [node: TreeNode];
 }>();
 
-const { t } = useI18n({ useScope: "local" });
+const { t } = useI18n();
 
 const selected = computed(() => {
   return props.selectedValues.includes(props.node.value);
@@ -95,15 +95,8 @@ async function handleAddSiblings() {
         variant="link"
         @click="handleAddSiblings"
       >
-        {{ t('more') }}
+        {{ t('portal.common.loadMore') }}
       </UButton>
     </ul>
   </li>
 </template>
-
-<i18n lang="yaml">
-et:
-  more: Näita rohkem
-en:
-  more: Load more
-</i18n>

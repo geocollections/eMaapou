@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
+import type { ParameterValue } from "~/composables/useFilter";
 import { mdiClose } from "@mdi/js";
 import cloneDeep from "lodash/cloneDeep";
 import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
 import isNull from "lodash/isNull";
-import type { ParameterValue } from "~/composables/useFilter";
-import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 const props = withDefaults(defineProps<{
   modelValue: ParameterValue[];
@@ -24,11 +24,10 @@ const props = withDefaults(defineProps<{
 }>(), {
   disableRemove: false,
   disableAdd: false,
-  label: "Parameter",
 });
 
 const emit = defineEmits<{
-  "update:model-value": [value: ParameterValue[]];
+  "update:modelValue": [value: ParameterValue[]];
 }>();
 
 const { t } = useI18n();
@@ -85,40 +84,48 @@ function handleParameter(value: ParameterValue["parameter"], i: number) {
 
   if (isEqual(props.modelValue, internalValue.value))
     return;
-  emit("update:model-value", internalValue.value);
+  emit("update:modelValue", internalValue.value);
 }
 
 function handleAdd() {
   internalValue.value = [
     ...internalValue.value,
-    { value: [null, null], parameter: null },
+    {
+      value: [null, null],
+      parameter: null,
+    },
   ];
 }
 function handleRemove(i: number) {
   // if (internalValue.value.length <= 1) {
   //   internalValue.value = [{ parameter: null, value: [null, null] }];
-  //   emit("update:model-value", internalValue.value);
+  //   emit("update:modelValue", internalValue.value);
   //   return;
   // }
   const cloneItems = cloneDeep(internalValue.value);
   cloneItems.splice(i, 1);
   internalValue.value = cloneItems;
-  emit("update:model-value", internalValue.value);
+  emit("update:modelValue", internalValue.value);
 }
 function handleClear() {
-  internalValue.value = [{ parameter: null, value: [null, null] }];
-  emit("update:model-value", internalValue.value);
+  internalValue.value = [
+    {
+      parameter: null,
+      value: [null, null],
+    },
+  ];
+  emit("update:modelValue", internalValue.value);
 }
 function handleEnter() {
   if (isEqual(props.modelValue, internalValue.value))
     return;
-  emit("update:model-value", internalValue.value);
+  emit("update:modelValue", internalValue.value);
 }
 function handleFocus(focus: boolean) {
   if (focus)
     return;
 
-  emit("update:model-value", internalValue.value);
+  emit("update:modelValue", internalValue.value);
 }
 
 function handleSearch(newQuery: string) {
@@ -186,7 +193,7 @@ function valueString(value: ParameterValue["value"]) {
       class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px; "
     >
-      {{ label }}
+      {{ label ?? t('portal.parameterFilter.parameter') }}
     </VExpansionPanelTitle>
     <div
       v-if="validFilters.length > 0 && !isPanelOpen"

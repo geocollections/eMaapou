@@ -11,7 +11,6 @@ const props = withDefaults(
     step?: number;
   }>(),
   {
-    fieldLabels: () => ({ min: "min", max: "max" }),
     intervalLabels: "intervals.default",
     numberType: "int",
     step: 1,
@@ -21,7 +20,7 @@ const emit = defineEmits<{
   "update:modelValue": [value: [null | number, null | number]];
 }>();
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const errorId = useId();
 function parseInput(input: string) {
   if (isEmpty(input))
@@ -46,11 +45,9 @@ watch(
 );
 
 const invalidRange = computed(() => internalValue.value[0] !== null && internalValue.value[1] !== null && internalValue.value[0] > internalValue.value[1]);
-const rangeError = computed(() => locale.value === "et"
-  ? "Miinimum ei tohi olla maksimumist suurem."
-  : props.title === t("filters.depth")
-    ? "Minimum depth must not exceed maximum depth."
-    : "Minimum must not exceed maximum.");
+const rangeError = computed(() => props.title === t("filters.depth")
+  ? t("portal.rangeFilter.invalidDepth")
+  : t("portal.rangeFilter.invalidRange"));
 
 function handleEnter() {
   if (invalidRange.value)
@@ -114,7 +111,7 @@ useFilterFocus(open, input);
       />
     </template>
     <div class="portal-filter-pair">
-      <UFormField :label="fieldLabels.min" :error="invalidRange">
+      <UFormField :label="fieldLabels?.min ?? t('portal.rangeFilter.minimum')" :error="invalidRange">
         <UInput
           ref="input"
           :model-value="String(internalValue[0] ?? '')"
@@ -128,7 +125,7 @@ useFilterFocus(open, input);
           @keydown.enter.prevent.stop="handleEnter"
           @blur="handleEnter"
         />
-      </UFormField><UFormField :label="fieldLabels.max" :error="invalidRange">
+      </UFormField><UFormField :label="fieldLabels?.max ?? t('portal.rangeFilter.maximum')" :error="invalidRange">
         <UInput
           :model-value="String(internalValue[1] ?? '')"
           :aria-invalid="invalidRange"
