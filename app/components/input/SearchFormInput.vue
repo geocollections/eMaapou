@@ -4,7 +4,7 @@ import { mdiClose } from "@mdi/js";
 defineProps<{ modelValue: string }>();
 
 const emit = defineEmits<{
-  "update:model-value": [value: string];
+  "update:modelValue": [value: string];
 }>();
 </script>
 
@@ -20,6 +20,6 @@ const emit = defineEmits<{
     :placeholder="$t('common.searchAlt')"
     clearable
     :clear-icon="mdiClose"
-    @update:model-value="emit('update:model-value', $event)"
+    @update:model-value="emit('update:modelValue', $event)"
   />
 </template>
