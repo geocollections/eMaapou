@@ -46,7 +46,7 @@ function handleEnd() {
             <NuxtImg
               :src="item.filename"
               provider="geocollections"
-              :modifiers="{ size: 'medium' }"
+              :modifiers="{ size: 'small' }"
               height="175"
               class="portal-image-thumbnail"
             />

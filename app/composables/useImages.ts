@@ -188,5 +188,5 @@ export function usePhotoArchiveImageFunction() {
 
 export function useCollectionImage() {
   const image = useImage();
-  return (filename: string, size: "small" | "medium" | "large" = "medium") => image(filename, { size }, { provider: "geocollections" });
+  return (filename: string, size: "small" | "medium" | "large" = "small") => image(filename, { size }, { provider: "geocollections" });
 }

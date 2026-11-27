@@ -149,7 +149,7 @@ function getPosition(index: number, page: number, perPage: number) {
                     <NuxtImg
                       :src="box.image"
                       provider="geocollections"
-                      :modifiers="{ size: 'medium' }"
+                      :modifiers="{ size: 'small' }"
                       class="rounded"
                       style="width: 100%; max-width: 1000px; max-height: 800px"
                     />
