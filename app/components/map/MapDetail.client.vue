@@ -295,7 +295,7 @@ onBeforeUnmount(() => {
       <button
         v-if="clickToZoom && wheelZoomPosition && !wheelZoomActive"
         type="button"
-        class="specimen-map-zoom-instruction -mt-5 -translate-y-full!"
+        class="specimen-map-zoom-instruction"
         :style="{
           left: `${wheelZoomPosition.x}px`,
           top: `${wheelZoomPosition.y}px`,
