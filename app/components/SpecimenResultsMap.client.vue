@@ -113,7 +113,7 @@ const pointPage = ref(1);
 let markers: L.LayerGroup | undefined;
 let locationPopup: L.Popup | undefined;
 const { data: pointData, status: pointStatus, refresh: refreshRecords } = await useSolrFetch<{
-  response: { numFound: number; docs: { id: string; specimen_full_name: string; taxon?: string; locality?: string; locality_en?: string }[] };
+  response: { numFound: number; docs: { id: string; specimen_full_name: string; taxon?: string; locality_id?: string | number; locality?: string; locality_en?: string }[] };
 }>("/specimen", {
   key: `specimen-map-records-${useId()}`,
   query: computed(() => ({
@@ -123,7 +123,7 @@ const { data: pointData, status: pointStatus, refresh: refreshRecords } = await 
       limit: 25,
       offset: (pointPage.value - 1) * 25,
       sort: "id_l asc",
-      fields: "id,specimen_full_name,taxon,locality,locality_en",
+      fields: "id,specimen_full_name,taxon,locality_id,locality,locality_en",
     },
   })),
   immediate: false,
@@ -150,10 +150,11 @@ watch([pointStatus, mapHeight], async () => {
   if (selectedLocation.value)
     locationPopup?.update();
 });
-function locationName(location: MapLocation) {
-  return (locale.value === "et"
-    ? location.name
-    : location.nameEn || location.name) || (t("portal.specimenMap.location"));
+function locationName({ name, nameEn }: Pick<MapLocation, "name" | "nameEn">) {
+  const nameInLocale = locale.value === "et"
+    ? name || nameEn
+    : nameEn || name;
+  return nameInLocale || t("portal.specimenMap.location");
 }
 function markerRadius(count: number) {
   if (count <= 10)
@@ -438,18 +439,29 @@ onBeforeUnmount(() => map?.remove());
               {{ controls.retry }}
             </UButton>
           </div>
-          <ULink
+          <div
             v-for="item in pointStatus === 'success' ? pointData?.response.docs : []"
             :key="item.id"
-            :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
-            class="specimen-map-records__item"
+            class="grid gap-0.5"
           >
-            <div class="specimen-map-records__label">
-              <span>{{ item.specimen_full_name || item.id }}</span>
-              <span v-if="item.taxon">{{ item.taxon }}</span>
-            </div>
-            <UIcon name="i-lucide-arrow-right" class="specimen-map-records__arrow" />
-          </ULink>
+            <ULink
+              :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
+              class="specimen-map-records__item"
+            >
+              <div class="specimen-map-records__label">
+                <span>{{ item.specimen_full_name || item.id }}</span>
+                <span v-if="item.taxon">{{ item.taxon }}</span>
+              </div>
+              <UIcon name="i-lucide-arrow-right" class="specimen-map-records__arrow" />
+            </ULink>
+            <ULink
+              v-if="item.locality_id && !selectedLocation.localityId"
+              :to="localePath({ name: 'locality-id', params: { id: item.locality_id } })"
+              class="header-focus mx-2 mb-1 w-fit text-xs text-portal-link! underline underline-offset-2"
+            >
+              {{ locationName({ name: item.locality, nameEn: item.locality_en }) }}
+            </ULink>
+          </div>
         </div>
         <PortalPagination
           v-if="selectedLocation.count > 25"
