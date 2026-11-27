@@ -676,6 +676,10 @@
     "description": "Estonian Geoscience Literature Database",
     "landingCard": "references"
   },
+  "maavara": {
+    "title": "Estonian mineral construction materials",
+    "description": "Data on Estonia’s mineral construction materials"
+  },
   "gmre": {
     "title": "Geology of Estonia",
     "description": "Book by Raukas & Teedumäe (eds), 1997"
