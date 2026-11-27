@@ -232,10 +232,6 @@ const specimenFields = computed(() => {
       value: catalogueValue(specimen.presence),
     },
     {
-      label: t("storage.storage"),
-      value: specimen.storage?.name,
-    },
-    {
       label: t("portal.specimenDetail.accessionNumber"),
       value: specimen.accession?.number,
     },

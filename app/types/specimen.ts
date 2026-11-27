@@ -57,7 +57,6 @@ export interface Specimen {
   remarks: Nullable<string>;
   tags: Nullable<string>;
   presence: Nullable<CatalogueValue>;
-  storage: Nullable<{ name: string }>;
   status: Nullable<CatalogueValue>;
   original_status: Nullable<CatalogueValue>;
   accession: Nullable<NumberedRecord>;
