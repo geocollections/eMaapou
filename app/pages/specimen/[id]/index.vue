@@ -1052,6 +1052,7 @@ const mapOverlays = computed(() => {
               <NuxtImg
                 :src="activeImage.filename"
                 provider="geocollections"
+                :modifiers="{ size: 'small' }"
                 :alt="titleAlt || identifiedTaxon || specimen.number || undefined"
                 width="900"
                 height="600"
@@ -1093,6 +1094,7 @@ const mapOverlays = computed(() => {
                 <NuxtImg
                   :src="image.filename"
                   provider="geocollections"
+                  :modifiers="{ size: 'small' }"
                   alt=""
                   width="180"
                   height="180"
@@ -1343,6 +1345,7 @@ const mapOverlays = computed(() => {
             <NuxtImg
               :src="localityPreview.filename"
               provider="geocollections"
+              :modifiers="{ size: 'small' }"
               alt=""
               width="96"
               height="96"
@@ -1616,6 +1619,7 @@ const mapOverlays = computed(() => {
             <NuxtImg
               :src="record.preview.filename"
               provider="geocollections"
+              :modifiers="{ size: 'small' }"
               alt=""
               width="96"
               height="96"
