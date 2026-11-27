@@ -42,10 +42,8 @@ const copy = computed(() => ({
   services: t("portal.home.services"),
   allServices: t("portal.home.allServices"),
   external: t("portal.home.external"),
-  externalNote: t("portal.home.externalNote"),
   repositoryText: t("portal.home.repositoryText"),
   literatureText: t("portal.home.literatureText"),
-  workbenchText: t("portal.home.workbenchText"),
 }));
 const categories = computed(() => [
   {
@@ -84,19 +82,19 @@ const categories = computed(() => [
 ]);
 const featuredServices = computed(() => [
   {
-    id: "doi",
-    service: SERVICES.doi,
-    description: copy.value.repositoryText,
-  },
-  {
     id: "kirjandus",
     service: SERVICES.kirjandus,
     description: copy.value.literatureText,
   },
   {
-    id: "sarv",
-    service: SERVICES.sarv,
-    description: copy.value.workbenchText,
+    id: "maavara",
+    service: SERVICES.maavara,
+    description: t(SERVICES.maavara.description),
+  },
+  {
+    id: "doi",
+    service: SERVICES.doi,
+    description: copy.value.repositoryText,
   },
 ]);
 async function search() {
@@ -285,66 +283,22 @@ useSeoMeta({
               >
                 {{ copy.services }}
               </h2>
-              <UPopover
-                :content="{ align: 'end', sideOffset: 8, collisionPadding: 16 }"
-                :ui="{
-                  content:
-                    'header-panel z-[1200] w-[min(600px,calc(100vw-32px))]',
-                }"
+              <UButton
+                :to="localePath({ name: 'services' })"
+                color="neutral"
+                variant="ghost"
+                class="header-focus min-h-11 gap-1 rounded-portal-control px-0 text-sm font-medium text-portal-link hover:bg-transparent hover:underline"
               >
-                <UButton
-                  color="neutral"
-                  variant="ghost"
-                  class="header-focus min-h-11 gap-1 rounded-portal-control px-0 text-sm font-medium text-portal-link hover:bg-transparent hover:underline"
+                {{ copy.allServices }}
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  class="size-4"
                 >
-                  {{ copy.allServices
-                  }}<svg
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    class="size-4"
-                  >
-                    <path :d="mdiChevronRight" /></svg>
-                </UButton>
-                <template #content>
-                  <nav
-                    class="max-h-[min(480px,calc(100dvh-96px))] overflow-y-auto p-5"
-                    :aria-label="copy.allServices"
-                  >
-                    <h3
-                      class="mb-2 text-base font-semibold text-portal-heading"
-                    >
-                      {{ copy.allServices }}
-                    </h3>
-                    <p class="mb-4 text-sm leading-relaxed">
-                      {{ copy.externalNote }}
-                    </p>
-                    <ul
-                      class="grid list-none gap-x-4 gap-y-1 p-0 sm:grid-cols-2"
-                    >
-                      <li v-for="id in SERVICES.ids" :key="id">
-                        <ULink
-                          raw
-                          :href="SERVICES[id].href"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="header-focus flex min-h-11 items-center gap-2 rounded-portal-control px-2 py-2 text-sm text-portal-link hover:bg-portal-selected"
-                        >
-                          <span class="min-w-0 flex-1">{{
-                            $t(SERVICES[id].title)
-                          }}</span><svg
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            aria-hidden="true"
-                            class="size-4 shrink-0"
-                          >
-                            <path :d="mdiOpenInNew" /></svg><span class="sr-only">({{ copy.external }})</span>
-                        </ULink>
-                      </li>
-                    </ul>
-                  </nav>
-                </template>
-              </UPopover>
+                  <path :d="mdiChevronRight" />
+                </svg>
+              </UButton>
             </div>
           </template>
           <ul class="m-0 list-none space-y-1 p-0">

@@ -48,7 +48,7 @@ onKeyStroke(["ArrowLeft", "ArrowRight"], (event) => {
       <div v-if="largePreview" class="portal-photo-preview-content">
         <img
           v-if="current"
-          :src="source(current.filename, 'large')"
+          :src="source(current.filename, 'medium')"
           :alt="String(current.info?.title ?? current.id)"
           class="portal-photo-preview-image"
         >
@@ -63,7 +63,7 @@ onKeyStroke(["ArrowLeft", "ArrowRight"], (event) => {
       <template v-else>
         <img
           v-if="current"
-          :src="source(current.filename, 'large')"
+          :src="source(current.filename, 'medium')"
           :alt="String(current.info?.title ?? current.id)"
           class="portal-photo-image"
         ><slot

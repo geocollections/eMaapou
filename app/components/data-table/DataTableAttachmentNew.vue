@@ -22,13 +22,6 @@ const tableAttrs = useBaseDataTableAttrs();
         :src="
           img(
             `${item.filename}`,
-            { size: 'large' },
-            { provider: 'geocollections' },
-          )
-        "
-        :preview-src="
-          img(
-            `${item.filename}`,
             { size: 'small' },
             { provider: 'geocollections' },
           )

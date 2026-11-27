@@ -68,8 +68,15 @@ function currentSearch() {
   };
 }
 const appliedSearch = shallowRef(currentSearch());
+interface CoordinateBucket {
+  val: number;
+  count: number;
+  name?: { buckets?: { val: string }[] };
+  nameEn?: { buckets?: { val: string }[] };
+  localityIds?: { buckets?: { val: string; count: number }[] };
+}
 const { data: mapData, status: mapStatus, refresh: refreshMap } = await useSolrFetch<{
-  facets?: { locations?: { buckets?: { val: number; longitudes?: { buckets?: { val: number; count: number; name?: { buckets?: { val: string }[] }; nameEn?: { buckets?: { val: string }[] } }[] } }[] } };
+  facets?: { locations?: { buckets?: { val: number; longitudes?: { buckets?: CoordinateBucket[] } }[] } };
 }>("/specimen", {
   query: computed(() => ({
     json: {
@@ -94,6 +101,7 @@ const { data: mapData, status: mapStatus, refresh: refreshMap } = await useSolrF
               facet: {
                 name: { type: "terms", field: "locality", limit: 1 },
                 nameEn: { type: "terms", field: "locality_en", limit: 1 },
+                localityIds: { type: "terms", field: "locality_id_s", limit: 1 },
               },
               limit: 1000,
               sort: "count desc",
@@ -110,10 +118,14 @@ const mapLocations = computed<MapLocation[]>(() => {
   const locations: MapLocation[] = [];
   for (const latitude of mapData.value?.facets?.locations?.buckets ?? []) {
     for (const longitude of latitude.longitudes?.buckets ?? []) {
+      const locality = longitude.localityIds?.buckets?.[0];
       locations.push({
         latitude: latitude.val,
         longitude: longitude.val,
         count: longitude.count,
+        localityId: locality?.count === longitude.count
+          ? locality.val
+          : undefined,
         name: longitude.name?.buckets?.[0]?.val,
         nameEn: longitude.nameEn?.buckets?.[0]?.val,
       });

@@ -140,7 +140,7 @@ defineExpose({
           <NuxtImg
             :src="image.filename"
             provider="geocollections"
-            :modifiers="{ size: 'large' }"
+            :modifiers="{ size: 'medium' }"
             class="rounded"
             style="max-height: 80vh; max-width: 100%; object-fit: contain"
           />

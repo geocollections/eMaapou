@@ -681,6 +681,10 @@
     "description": "Eesti maapõue kirjanduse andmebaas",
     "landingCard": "kirjet"
   },
+  "maavara": {
+    "title": "Eesti mineraalsed ehitustoormed",
+    "description": "Eesti mineraalsete ehitustoormete andmed"
+  },
   "gmre": {
     "title": "Eesti Geoloogia",
     "description": "Raamat: Raukas ja Teedumäe (toim), 1997"

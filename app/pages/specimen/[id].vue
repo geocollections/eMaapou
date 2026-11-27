@@ -73,7 +73,6 @@ const recordFields = [
   "presence.value_en",
   "status.value",
   "status.value_en",
-  "storage.name",
   "accession.number",
   "deaccession.number",
 ].join(",");
@@ -102,7 +101,7 @@ const { data } = await useAsyncData(
     const path = `/specimens/${id}/`;
     const record = await $apiFetch<Omit<Specimen, keyof LocalityFields>>(path, {
       query: {
-        expand: "collector,classification,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type,subtype,kind,presence,status,storage,accession,deaccession",
+        expand: "collector,classification,collection,sample,parent,database,stratigraphy,lithostratigraphy,original_status,fossil,type,subtype,kind,presence,status,accession,deaccession",
         fields: recordFields,
       },
       onResponseError: () => {

@@ -7,7 +7,6 @@ import {
 
 const props = defineProps<{
   src: string;
-  previewSrc: string;
   type: Nullable<string>;
 }>();
 
@@ -23,9 +22,8 @@ const isVideo = computed(() => props.type?.startsWith("video"));
 <template>
   <div class="py-2 d-flex justify-center">
     <ThumbnailImage
-      v-if="isImage && src && previewSrc"
+      v-if="isImage && src"
       :src="src"
-      :preview-src="previewSrc"
       @click="emit('click:image')"
     />
     <VIcon

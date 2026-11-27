@@ -551,7 +551,7 @@
 
 @utility portal-map-icon { @apply size-8 min-h-0 justify-center rounded-portal-control p-0; }
 @utility specimen-map-count { @apply pointer-events-none absolute top-3 right-3 z-800 rounded-portal-control border border-portal-border bg-portal-background! text-portal-heading!; }
-@utility specimen-map-zoom-instruction { @apply absolute top-1/2 left-1/2 z-700 w-max max-w-[calc(100%-5rem)] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-portal-control border border-portal-border bg-portal-background/95 px-3 py-2 text-center text-sm text-portal-heading shadow-portal-dropdown hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus; }
+@utility specimen-map-zoom-instruction { @apply absolute top-1/2 left-1/2 z-700 -mt-5 w-max max-w-[calc(100%-5rem)] -translate-x-1/2 -translate-y-full cursor-pointer rounded-portal-control border border-portal-border bg-portal-background/95 px-3 py-2 text-center text-sm text-portal-heading shadow-portal-dropdown hover:bg-portal-subtle focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-portal-focus; }
 
 @utility portal-range-error { @apply mt-2 text-sm text-error; }
 @utility portal-record-cards { @apply hidden; @media (max-width: 700px) { @apply grid gap-3 p-3; } }

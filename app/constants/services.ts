@@ -9,6 +9,11 @@ export const SERVICES = {
     description: "kirjandus.description",
     href: "https://kirjandus.geoloogia.info",
   },
+  maavara: {
+    title: "maavara.title",
+    description: "maavara.description",
+    href: "https://maavara.geoloogia.info",
+  },
   gmre: {
     title: "gmre.title",
     description: "gmre.description",
