@@ -407,7 +407,18 @@ onBeforeUnmount(() => map?.remove());
         :aria-busy="pointStatus === 'pending'"
       >
         <header class="specimen-map-records__heading">
-          <h3>{{ locationName(selectedLocation) }}</h3>
+          <h3>
+            <ULink
+              v-if="selectedLocation.localityId"
+              :to="localePath({ name: 'locality-id', params: { id: selectedLocation.localityId } })"
+              class="header-focus text-portal-link! underline underline-offset-2"
+            >
+              {{ locationName(selectedLocation) }}
+            </ULink>
+            <template v-else>
+              {{ locationName(selectedLocation) }}
+            </template>
+          </h3>
           <div class="specimen-map-records__meta">
             <span>{{ controls.records }}: {{ selectedLocation.count.toLocaleString(locale) }}</span>
             <span>{{ selectedLocation.latitude.toFixed(4) }}, {{ selectedLocation.longitude.toFixed(4) }}</span>

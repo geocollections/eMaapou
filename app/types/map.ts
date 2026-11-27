@@ -9,6 +9,7 @@ export interface MapMarker {
 }
 
 export interface MapLocation {
+  localityId?: string;
   name?: string;
   nameEn?: string;
   latitude: number;
